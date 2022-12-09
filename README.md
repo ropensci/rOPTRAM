@@ -6,8 +6,13 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-`rOPTRAM` implements the Optical Trapezoid Model to derive soil moisture
-from satellite images. See Sadeghi et al. (2017)
+`rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) to derive soil
+moisture based on the linear relation between a vegetation index,
+i.e. NDVI, and Land Surface Temperature (LST).
+
+The Short Wave Infra-red (SWIR) band is used as a proxy for LST.
+
+See Sadeghi et al. (2017)
 
 ## Installation
 

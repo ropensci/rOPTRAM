@@ -7,7 +7,7 @@
 CalculateSoilMoisture(img_date)
 }
 \arguments{
-\item{string, }{img_date}
+\item{img_date, }{string, image date of Sentinel 2 acquisition}
 }
 \value{
 rast, soil moisture grid

@@ -7,7 +7,7 @@
 CalculateSTR(BOA_dir)
 }
 \arguments{
-\item{BOA_dir}{}
+\item{BOA_dir, }{string, the path to the \code{sen2r} Bottom of Atmosphere bands}
 }
 \value{
 list of string, the path to transformed raster

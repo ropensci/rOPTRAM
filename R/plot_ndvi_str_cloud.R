@@ -1,8 +1,9 @@
 #' Create scatter plot of STR-NDVI point cloud,
 #' with dry and wet trapezoid lines
 #'
-#' @param full_df
-#' @param coeffs
+#' @param full_df, data.frame of NDVI and STR pixel values
+#' @param coeffs, list of floats, the slope and intercept
+#'   of wet and dry regression lines
 #'
 #' @return None
 #' @export

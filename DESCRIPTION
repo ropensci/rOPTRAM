@@ -3,7 +3,11 @@ Title: Derive soil moisture using the OPTRAM algorithm
 Version: 0.0.0.9000
 Authors@R: person("Micha", "Silver", , "silverm@post.bgu.ac.il", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-1128-1325"))
-Description: Follows:
+Description: The OPtical TRapezoid Model (OPTRAM) derives soil moisture
+  based on the linear relation between a vegetation index
+  and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band
+  is used as a proxy for LST.
+  See:
   Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
   The optical trapezoid model:
   A novel approach to remote sensing of soil moisture 
@@ -13,7 +17,7 @@ Description: Follows:
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports:
     ggplot2,
     stats,

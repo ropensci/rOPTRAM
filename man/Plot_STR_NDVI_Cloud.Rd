@@ -8,7 +8,10 @@ with dry and wet trapezoid lines}
 Plot_STR_NDVI_Cloud(full_df, coeffs)
 }
 \arguments{
-\item{coeffs}{}
+\item{full_df, }{data.frame of NDVI and STR pixel values}
+
+\item{coeffs, }{list of floats, the slope and intercept
+of wet and dry regression lines}
 }
 \value{
 None
