@@ -4,10 +4,11 @@
 #' @param full_df
 #' @param coeffs
 #'
-#' @return
+#' @return None
 #' @export
-#'
+#' @importFrom ggplot2 ggplot ggsave
 #' @examples
+#' print("Running plot_ndvi_str_cloud.R")
 #'
 Plot_STR_NDVI_Cloud <- function(full_df, coeffs){
   i_dry <- coeffs$intercept_dry

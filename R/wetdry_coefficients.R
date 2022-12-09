@@ -1,13 +1,15 @@
 #' Derive coefficients of slope and intercept
 #' for both wet and dry trapezoid lines
 #'
-#' @param full_df
-#' @param step
+#' @param full_df, data.frame of STR and NDVI values
+#' @param step, float
 #'
-#' @return
+#' @return list of float, coefficients of wet-dry trapezoid
 #' @export
+#' @importFrom stats complete.cases lm quantile
+#' @importFrom utils read.csv write.csv
+#' @examples print("Running wetdry_coefficients.R")
 #'
-#' @examples
 WetDry_Coefficients <- function(full_df, step=0.001){
   # Derive slope and intercept to two sides of trapezoid
   # Based on:

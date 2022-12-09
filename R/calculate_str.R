@@ -3,10 +3,10 @@
 #'
 #' @param BOA_dir
 #'
-#' @return
+#' @return list of string, the path to transformed raster
 #' @export
 #'
-#' @examples
+#' @examples print("Running calculate_str.R")
 
 CalculateSTR <- function(BOA_dir){
 
@@ -41,4 +41,5 @@ CalculateSTR <- function(BOA_dir){
     return(outpath)
   })
   print(unlist(STR_out_list))
+  return(STR_out_list)
 }

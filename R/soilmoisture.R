@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-
+#' print("Running soilmoisture.R")
 
 CalculateSoilMoisture <- function(img_date){
   # based on STR and two STR_dry and STR_wet bands

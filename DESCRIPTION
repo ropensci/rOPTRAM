@@ -1,11 +1,20 @@
 Package: OPTRAM
-Title: What the Package Does (One Line, Title Case)
+Title: Derive soil moisture using the OPTRAM algorithm
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R: person("Micha", "Silver", , "silverm@post.bgu.ac.il", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-1128-1325"))
+Description: Follows:
+  Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
+  The optical trapezoid model:
+  A novel approach to remote sensing of soil moisture 
+  applied to Sentinel-2 and Landsat-8 observations.
+  Remote Sensing of Environment 198, 52–68,
+  https://doi.org/10.1016/j.rse.2017.05.041
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
+Imports:
+    ggplot2,
+    stats,
+    utils

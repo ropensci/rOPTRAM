@@ -1,12 +1,14 @@
 #' Prepare dataframe of pairs NDVI and STR values
 #'
-#' @param STR_dir
-#' @param NDVI_dir
+#' @param STR_dir, path to STR raster file
+#' @param NDVI_dir, path to NDVI raster file
 #'
-#' @return
+#' @return full_df, data.frame
 #' @export
 #'
 #' @examples
+#' print("Running ndvi_str_dataframe.R")
+#'
 NDVI_STR_DataFrame <- function(STR_dir, NDVI_dir){
 
   STR_file_list <- list.files(path=STR_dir, full.names = TRUE)
