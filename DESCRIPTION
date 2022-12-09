@@ -1,4 +1,4 @@
-Package: OPTRAM
+Package: rOPTRAM
 Title: Derive soil moisture using the OPTRAM algorithm
 Version: 0.0.0.9000
 Authors@R: person("Micha", "Silver", , "silverm@post.bgu.ac.il", role = c("aut", "cre"),
