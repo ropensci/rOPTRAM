@@ -6,8 +6,6 @@
 #'
 #' @return list of float, coefficients of wet-dry trapezoid
 #' @export
-#' @importFrom stats complete.cases lm quantile
-#' @importFrom utils read.csv write.csv
 #' @examples print("Running wetdry_coefficients.R")
 #'
 WetDry_Coefficients <- function(full_df, step=0.001){
@@ -22,7 +20,7 @@ WetDry_Coefficients <- function(full_df, step=0.001){
 
   # Create series of values for NDVI
   # Get min/max values from NDVI data, slightly smaller than full range
-  NDVI_min_max <- round(quantile(full_df$NDVI, c(0.5, 0.95)) , 2)
+  NDVI_min_max <- round(stats::quantile(full_df$NDVI, c(0.5, 0.95)) , 2)
   NDVI_series <- seq(NDVI_min_max[[1]], NDVI_min_max[[2]], step)
   print(paste("NDVI series length:", length(NDVI_series)))
   STR_NDVI_list <- lapply(NDVI_series, function(i){
@@ -36,7 +34,7 @@ WetDry_Coefficients <- function(full_df, step=0.001){
       return(NA)
     }
     # Remove lower than 10% and more than 90% quartile of STR values
-    Qs <- quantile(interval_df$STR, c(0.1, 0.9), na.rm=TRUE)
+    Qs <- stats::quantile(interval_df$STR, c(0.1, 0.9), na.rm=TRUE)
     interval_df <- interval_df[interval_df$STR<=Qs[[2]] &
                                  interval_df$STR>=Qs[[1]],]
     # Now, with outliers removed, find min (dry) and max (wet)
@@ -51,20 +49,71 @@ WetDry_Coefficients <- function(full_df, step=0.001){
   # Bind all interval results into one long DF
   STR_NDVI_list <- STR_NDVI_list[ !is.na(STR_NDVI_list) ]
   STR_NDVI_df <- do.call(rbind, STR_NDVI_list)
-  write.csv(STR_NDVI_df,
+  utils::write.csv(STR_NDVI_df,
             file.path(Output_dir, "STR_NDVI_df.csv"),
             row.names = FALSE)
   # Run linear regression between STR and NDVI
   # to determine the intercept and slope for both wet and dry data
-  wet_fit <- lm(STR_wet ~ NDVI, data=STR_NDVI_df)
-  dry_fit <- lm(STR_dry ~ NDVI, data=STR_NDVI_df)
+  wet_fit <- stats::lm(STR_wet ~ NDVI, data=STR_NDVI_df)
+  dry_fit <- stats::lm(STR_dry ~ NDVI, data=STR_NDVI_df)
   i_wet <- wet_fit$coefficients[[1]]
   s_wet <- wet_fit$coefficients[[2]]
   i_dry <- dry_fit$coefficients[[1]]
   s_dry <- dry_fit$coefficients[[2]]
   coeffs <- data.frame("intercept_dry"=i_dry, "slope_dry"=s_dry,
                        "intercept_wet"=i_wet, "slope_wet"=s_wet)
-  write.csv(coeffs, coeffs_file, row.names=FALSE)
+  utils::write.csv(coeffs, coeffs_file, row.names=FALSE)
 
   return(coeffs)
 }
+
+
+#' Create scatter plot of STR-NDVI point cloud,
+#' with dry and wet trapezoid lines
+#'
+#' @param full_df, data.frame of NDVI and STR pixel values
+#' @param coeffs, list of floats, the slope and intercept
+#'   of wet and dry regression lines
+#'
+#' @return None
+#' @export
+#' @import ggplot2
+#' @examples
+#' print("Running plot_ndvi_str_cloud.R")
+#'
+Plot_STR_NDVI_Cloud <- function(full_df, coeffs){
+  i_dry <- coeffs$intercept_dry
+  s_dry <- coeffs$slope_dry
+  i_wet <- coeffs$intercept_wet
+  s_wet <- coeffs$slope_wet
+  # We don't need the whole 18 M points! get a subset
+  sample_idx <- sample(full_df$x, nrow(full_df)*0.2)
+  plot_df <- full_df[sample_idx,]
+  x_min <- min(plot_df$NDVI)*0.9
+  x_max <- max(plot_df$NDVI)*1.05
+  y_min <- 0.1
+  y_max <- max(plot_df$STR[plot_df$NDVI>=x_min])*1.05
+  ggplot(plot_df) +
+    geom_point(aes(x=NDVI, y=STR), alpha = 0.05, size=1) +
+    # Wet edge
+    geom_abline(intercept = i_wet, slope = s_wet,
+                color = "#2E94B9", size = 1.0) +
+    # Dry edge
+    geom_abline(intercept = i_dry, slope = s_dry,
+                color = "#FD5959", size = 1.0) +
+    # Set gradient color
+    scale_color_gradient(low="#FD5959",
+                         high="#2E94B9") +
+    expand_limits(y=c(y_min, y_max), x=c(x_min, x_max)) +
+    labs(x="SAVI", y="SWIR Transformed") +
+    ggtitle("Trapezoid Plot") +
+    # Set theme
+    theme_bw() +
+    theme(axis.title = element_text(size=14),
+          axis.text = element_text(size=12),
+          plot.title = element_text(size=18))
+
+  ggsave(file.path(Output_dir, "trapezoid_plot.png"),
+                  width=10, height=7)
+}
+

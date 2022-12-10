@@ -6,19 +6,22 @@ Authors@R: person("Micha", "Silver", , "silverm@post.bgu.ac.il", role = c("aut",
 Description: The OPtical TRapezoid Model (OPTRAM) derives soil moisture
   based on the linear relation between a vegetation index
   and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band
-  is used as a proxy for LST.
-  See:
+  is used as a proxy for LST. See:
   Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
   The optical trapezoid model:
   A novel approach to remote sensing of soil moisture 
   applied to Sentinel-2 and Landsat-8 observations.
   Remote Sensing of Environment 198, 52–68,
-  https://doi.org/10.1016/j.rse.2017.05.041
-License: MIT + file LICENSE
+  https://doi.org/10.1016/j.rse.2017.05.041 .
+License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports:
     ggplot2,
     stats,
-    utils
+    terra,
+    utils,
+    dplyr
+Suggests:
+    sen2r

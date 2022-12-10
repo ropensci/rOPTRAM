@@ -27,18 +27,18 @@ CalculateSoilMoisture <- function(img_date){
     print(paste("No NDVI file:", NDVI_file, "Exiting..."))
     return(NULL)
   }
-  NDVI <- rast(NDVI_file)
+  NDVI <- terra::rast(NDVI_file)
   STR_file <- list.files(STR_dir, pattern=img_str, full.names=TRUE)
-  STR <- rast(STR_file)
+  STR <- terra::rast(STR_file)
 
-  coeffs <- read.csv(coeffs_file)
+  coeffs <- utils::read.csv(coeffs_file)
   i_dry <- coeffs$intercept_dry
   s_dry <- coeffs$slope_dry
   i_wet <- coeffs$intercept_wet
   s_wet <- coeffs$slope_wet
   W <- (i_dry + s_dry*NDVI - STR) / (i_dry - i_wet +  (s_dry-s_wet)*NDVI)
   outfile <- paste0("soil_moisture_", img_date, ".tif")
-  writeRaster(W, file.path(GIS_dir, outfile),
+  terra::writeRaster(W, file.path(GIS_dir, outfile),
               NAflag=-9999.0, overwrite=TRUE)
   return(W)
 }

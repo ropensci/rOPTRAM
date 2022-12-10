@@ -14,7 +14,7 @@ NDVI_STR_DataFrame <- function(STR_dir, NDVI_dir){
   STR_file_list <- list.files(path=STR_dir, full.names = TRUE)
   STR_df_list <- lapply(STR_file_list, function(f){
     date_str <- unlist(strsplit(basename(f), split="_", fixed=TRUE))[2]
-    STR <- rast(f)
+    STR <- terra::rast(f)
     STR_1_df <- as.data.frame(STR, xy=TRUE)
     names(STR_1_df) <- c("x", "y", "STR")
     STR_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
@@ -29,7 +29,7 @@ NDVI_STR_DataFrame <- function(STR_dir, NDVI_dir){
   NDVI_df_list <- lapply(NDVI_file_list, function(f){
     # Get image date
     date_str <- unlist(strsplit(basename(f), split="_", fixed=TRUE))[2]
-    NDVI <- rast(f)
+    NDVI <- terra::rast(f)
     # Revert to original scale
     NDVI <- NDVI/10000.0
     NDVI_1_df <- as.data.frame(NDVI, xy=TRUE)
@@ -42,8 +42,8 @@ NDVI_STR_DataFrame <- function(STR_dir, NDVI_dir){
   saveRDS(NDVI_df, ndvi_df_file)
   print(paste("Saved:", nrow(NDVI_df), "rows to:", ndvi_df_file))
 
-  full_df <- full_join(STR_df, NDVI_df)
-  full_df <- full_df[complete.cases(full_df),]
+  full_df <- dplyr::full_join(STR_df, NDVI_df)
+  full_df <- full_df[stats::complete.cases(full_df),]
   print(paste("Full data joined leaving", nrow(full_df), "rows"))
   return(full_df)
 }

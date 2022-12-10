@@ -23,11 +23,11 @@ CalculateSTR <- function(BOA_dir){
   # s2_file: string, full path to multiband geotiff
   #   band 11 is the SWIR
   # Returns:
-  #   STR: rast object, the SWIR transformed raster
+  #   STR: terra rast object, the SWIR transformed raster
 
   BOA_list <- list.files(BOA_dir, full.names = T)
   STR_out_list <- lapply(BOA_list, function(t) {
-    stk <- rast(t)
+    stk <- terra::rast(t)
     SWIR_DN <-  stk[[11]]
     # back to native scale
     SWIR <-  SWIR_DN / 10000
@@ -37,7 +37,7 @@ CalculateSTR <- function(BOA_dir){
     STR <- (1 - SWIR)^2 / (2*SWIR)
     outfile <- gsub("BOA", replacement = "STR", x = basename(t))
     outpath <- file.path(STR_dir, outfile)
-    writeRaster(STR, filename = outpath, overwrite=TRUE)
+    terra::writeRaster(STR, filename = outpath, overwrite=TRUE)
     return(outpath)
   })
   print(unlist(STR_out_list))
