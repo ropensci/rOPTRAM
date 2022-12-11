@@ -10,7 +10,7 @@
 
 CalculateSoilMoisture <- function(img_date){
   # based on STR and two STR_dry and STR_wet bands
-  #  W = (STR - STR_dry) / (STR_wet - STR_dry)
+  # W = (STR - STR_dry) / (STR_wet - STR_dry)
   # W = (i_dry + s_dry * NDVI - STR) / (i_dry − i_wet +  (s_dry−s_wet) * NDVI)
 
   #

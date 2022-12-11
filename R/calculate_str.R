@@ -1,4 +1,3 @@
-
 #' Create SWIR transformed reflectance
 #'
 #' @param BOA_dir, string, the path to the `sen2r` Bottom of Atmosphere bands
