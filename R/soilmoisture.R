@@ -1,6 +1,6 @@
 #' Calculate soil moisture grid
 #'
-#' @param img_date, string, image date of Sentinel 2 acquisition
+#' @param img_date: string, image date of Sentinel 2 acquisition
 #'
 #' @return rast, soil moisture grid
 #' @export
