@@ -9,7 +9,7 @@
 #' @examples
 #' print("Running ndvi_str_dataframe.R")
 #'
-NDVI_STR_DataFrame <- function(STR_dir, NDVI_dir){
+ndvi_str_dataframe <- function(STR_dir, NDVI_dir){
 
   STR_file_list <- list.files(path=STR_dir, full.names = TRUE)
   STR_df_list <- lapply(STR_file_list, function(f){

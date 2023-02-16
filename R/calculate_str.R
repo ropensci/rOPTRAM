@@ -7,7 +7,7 @@
 #'
 #' @examples print("Running calculate_str.R")
 
-CalculateSTR <- function(BOA_dir){
+calculate_str <- function(BOA_dir){
 
   # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
   # The optical trapezoid model:

@@ -8,7 +8,7 @@
 #' @export
 #' @examples print("Running wetdry_coefficients.R")
 #'
-WetDry_Coefficients <- function(full_df, step=0.001){
+wetdry_coefficients <- function(full_df, step=0.001){
   # Derive slope and intercept to two sides of trapezoid
   # Based on:
   # https://github.com/teerathrai/OPTRAM
@@ -81,7 +81,7 @@ WetDry_Coefficients <- function(full_df, step=0.001){
 #' @examples
 #' print("Running plot_ndvi_str_cloud.R")
 #'
-Plot_STR_NDVI_Cloud <- function(full_df, coeffs){
+plot_ndvi_str_cloud <- function(full_df, coeffs){
   i_dry <- coeffs$intercept_dry
   s_dry <- coeffs$slope_dry
   i_wet <- coeffs$intercept_wet
