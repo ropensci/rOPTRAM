@@ -116,4 +116,3 @@ plot_ndvi_str_cloud <- function(full_df, coeffs){
   ggsave(file.path(Output_dir, "trapezoid_plot.png"),
                   width=10, height=7)
 }
-
