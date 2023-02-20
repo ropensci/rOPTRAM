@@ -25,4 +25,6 @@ Imports:
     dplyr,
     tools
 Suggests:
-    sen2r
+    sen2r,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

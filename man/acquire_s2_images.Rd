@@ -4,22 +4,56 @@
 \alias{acquire_s2_images}
 \title{Acquire Sentinel 2 images at a given location and date range}
 \usage{
-acquire_s2_images(aoi, from_date, to_date, output_dir = tempdir())
+acquire_s2_images(
+  aoi,
+  from_date,
+  to_date,
+  scipub_user,
+  scihub_pass,
+  max_cloud = 15,
+  timeperiod = "full",
+  output_dir = tempdir(),
+  list_indices = c("NDVI", "SAVI")
+)
 }
 \arguments{
-\item{aoi:}{sf object, polygon boundary of area of interest}
+\item{aoi:}{string, full path to polygon spatial file of boundary of area of interest}
 
 \item{from_date:}{string, represents start of date range, formatted as "YYYY-MM-DD"}
 
 \item{to_date:}{string, end of date range, formatted as "YYYY-MM-DD"}
+
+\item{max_cloud:}{integer, maximum cloud cover percent. Default 15.}
+
+\item{scihub_user:}{string, username on Copernicus scihub}
+
+\item{scihub_pass:}{string, password for access to Copernicus scihub}
+
+\item{timeperiod:string, }{either "full" for the whole date range,
+or "seasonal" for only months specified, but over the full date range.}
+
+\item{output_dir:}{string, path to save downloaded, and processed imagery}
+
+\item{list_indices:}{vector of strings, which indicies to prepare. Default c("NDVI", "SAVI")}
 }
 \value{
 output_path: string, path to downloaded files
 }
 \description{
-Acquire Sentinel 2 images at a given location and date range
+Use the \code{sen2r} package to acquire, preprocess and crop, Sentinel 2 satellite imagery.
+L. Ranghetti, M. Boschetti, F. Nutini, L. Busetto (2020)
+sen2r: An R toolbox for automatically downloading and preprocessing Sentinel-2 satellite data
+Computers & Geosciences, 139, 104473
+doi: 10.1016/j.cageo.2020.104473
+URL: https://sen2r.ranghetti.info/.
+The package prepares vegetation indicies, cropped to an area of interest.
 }
 \examples{
-print("acquire_s2_images.R")
-
+from_date <- "2018-12-01"
+to_date <- "2019-04-30" 
+aoi <- "extdata/migda_9.gpkg"
+s2_file_list <- acquire_s2_images(aoi,
+                                 from_date, to_date,
+                                 scipub = file.path("~", "apihub.txt"),
+                                 list_indices="MSAVI2")
 }

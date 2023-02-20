@@ -32,7 +32,6 @@
 
 acquire_s2_images <- function(aoi,
                             from_date, to_date,
-                            max_cloud,
                             scipub_user, scihub_pass,
                             max_cloud = 15,
                             timeperiod = "full",
