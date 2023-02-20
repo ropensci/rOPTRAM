@@ -22,6 +22,7 @@ Imports:
     stats,
     terra,
     utils,
-    dplyr
+    dplyr,
+    tools
 Suggests:
     sen2r
