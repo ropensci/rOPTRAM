@@ -1,0 +1,15 @@
+citHeader("To cite rOPTRAM in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "Derive soil moisture using the OPTRAM algorithm",
+  author   = "Micha Silver",
+  journal  = ,
+  year     = ,
+  volume   = ,
+  number   = ,
+  pages    = ,
+  url      = ,
+  textVersion = paste(
+    "Derive soil moisture using the OPTRAM algorithm")
+)
