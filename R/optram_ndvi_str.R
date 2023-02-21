@@ -28,7 +28,7 @@ optram_ndvi_str <- function(STR_dir, NDVI_dir){
   STR_df <- do.call(rbind, STR_df_list)
   str_df_file <- file.path(Output_dir, "STR_data.rds")
   saveRDS(STR_df, str_df_file)
-  print(paste("Saved:", nrow(STR_df), "rows to:", str_df_file))
+  message("Saved:", nrow(STR_df), "rows to:", str_df_file)
 
   NDVI_file_list <- list.files(path=NDVI_dir, full.names = TRUE)
   NDVI_df_list <- lapply(NDVI_file_list, function(f){
@@ -45,10 +45,10 @@ optram_ndvi_str <- function(STR_dir, NDVI_dir){
   NDVI_df <- do.call(rbind, NDVI_df_list)
   ndvi_df_file <- file.path(Output_dir, "NDVI_data.rds")
   saveRDS(NDVI_df, ndvi_df_file)
-  print(paste("Saved:", nrow(NDVI_df), "rows to:", ndvi_df_file))
+  message("Saved:", nrow(NDVI_df), "rows to:", ndvi_df_file)
 
   full_df <- dplyr::full_join(STR_df, NDVI_df)
   full_df <- full_df[stats::complete.cases(full_df),]
-  print(paste("Full data joined leaving", nrow(full_df), "rows"))
+  message("Full data joined leaving", nrow(full_df), "rows")
   return(full_df)
 }

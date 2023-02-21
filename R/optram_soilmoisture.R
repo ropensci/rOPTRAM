@@ -23,7 +23,7 @@ optram_calculate_soil_moisture <- function(img_date, coeffs_file){
   img_str <- gsub("-", "", img_date)
   NDVI_file <- list.files(NDVI_dir, pattern=img_str, full.names=TRUE)
   if (! file.exists(NDVI_file)) {
-    print(paste("No NDVI file:", NDVI_file, "Exiting..."))
+    warning("No NDVI file:", NDVI_file, "Exiting...")
     return(NULL)
   }
   NDVI <- terra::rast(NDVI_file)

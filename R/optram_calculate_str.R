@@ -39,6 +39,6 @@ optram_calculate_str <- function(BOA_dir){
     terra::writeRaster(STR, filename = outpath, overwrite=TRUE)
     return(outpath)
   })
-  print(unlist(STR_out_list))
+  message(unlist(STR_out_list))
   return(STR_out_list)
 }

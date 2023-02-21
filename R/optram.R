@@ -17,8 +17,8 @@
 #' @return coeffs_files: string, full path to saved CSV of wet-dry coefficients
 #' @export
 #' @examples
-#' print("Running prepare_s2_vi_str.R")
-optram_prepare_coeffs <- function(aoi,  
+#' print("Running optram_prepare_coeffs.R")
+optram <- function(aoi,  
                           vi = 'NDVI',
                           output_dir = tempdir()) {
     # Loop over the downloaded S2 folders (dates), create NDVI and STR indices for each

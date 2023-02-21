@@ -1,4 +1,4 @@
-#' Function to handle Sentinel imagery in original Copernicus SAFE format
+#' @title Handle Sentinel imagery in original Copernicus SAFE format
 #'
 #' @description
 #' This function prepares vegetation index and STR rasters
@@ -10,8 +10,9 @@
 #' @return output_files:list, full paths to saved Geotif files
 #' @export
 #' @examples
-#' print("Running prepare_s2_vi_str.R")
-prepare_s2_vi_str <- function(safe_dir,
+#' print("Running optram_prepare_safe_vi_str.R")
+#' 
+optram_prepare_safe_vi_str <- function(safe_dir,
                           aoi,  
                           vi = 'NDVI',
                           output_dir = tempdir()) {

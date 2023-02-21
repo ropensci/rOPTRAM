@@ -71,8 +71,10 @@ optram_wetdry_coefficients <- function(full_df, step=0.001){
 }
 
 
-#' Create scatter plot of STR-NDVI point cloud,
-#' with dry and wet trapezoid lines
+#' @title Create scatter plot of STR-NDVI point cloud,
+#' 
+#' @description 
+#' Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
 #'
 #' @param full_df, data.frame of NDVI and STR pixel values
 #' @param coeffs, list of floats, the slope and intercept

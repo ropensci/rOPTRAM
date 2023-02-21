@@ -66,7 +66,7 @@ optram_acquire_s2 <- function(aoi,
     } else {
         tryCatch({terra::vect(aoi)},
                   error = function(e) {
-                    print(paste(aoi, ":is not a recognized spatial format"))
+                    warning(aoi, ":is not a recognized spatial format")
                     return(NULL) }
         )
     }
