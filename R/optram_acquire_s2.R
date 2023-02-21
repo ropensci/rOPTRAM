@@ -25,12 +25,12 @@
 #' from_date <- "2018-12-01"
 #' to_date <- "2019-04-30" 
 #' aoi <- "extdata/migda_9.gpkg"
-#' s2_file_list <- acquire_s2_images(aoi,
+#' s2_file_list <- optram_acquire_s2(aoi,
 #'                                  from_date, to_date,
 #'                                  scipub = file.path("~", "apihub.txt"),
 #'                                  list_indices="MSAVI2")
 
-acquire_s2_images <- function(aoi,
+optram_acquire_s2 <- function(aoi,
                             from_date, to_date,
                             scipub_user, scihub_pass,
                             max_cloud = 15,

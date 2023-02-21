@@ -1,14 +1,17 @@
-#' Derive coefficients of slope and intercept
-#' for both wet and dry trapezoid lines
+#' @title Derive coefficients of slope and intercept
+#' 
+#' @description Derive slope and intercept coefficients
+#' for both wet and dry trapezoid lines.
+#' Write coefficients to a CSV file (as input to `optram_soilmoisture()` function)
 #'
 #' @param full_df, data.frame of STR and NDVI values
 #' @param step, float
 #'
 #' @return list of float, coefficients of wet-dry trapezoid
 #' @export
-#' @examples print("Running wetdry_coefficients.R")
+#' @examples print("Running optram_wetdry_coefficients.R")
 #'
-wetdry_coefficients <- function(full_df, step=0.001){
+optram_wetdry_coefficients <- function(full_df, step=0.001){
   # Derive slope and intercept to two sides of trapezoid
   # Based on:
   # https://github.com/teerathrai/OPTRAM
@@ -22,7 +25,7 @@ wetdry_coefficients <- function(full_df, step=0.001){
   # Get min/max values from NDVI data, slightly smaller than full range
   NDVI_min_max <- round(stats::quantile(full_df$NDVI, c(0.5, 0.95)) , 2)
   NDVI_series <- seq(NDVI_min_max[[1]], NDVI_min_max[[2]], step)
-  print(paste("NDVI series length:", length(NDVI_series)))
+  message("NDVI series length:", length(NDVI_series))
   STR_NDVI_list <- lapply(NDVI_series, function(i){
     # Set NDVI value at midpoint of each interval
     ndvi_val <- i + step/2.0

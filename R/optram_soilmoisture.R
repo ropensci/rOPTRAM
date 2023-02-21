@@ -1,14 +1,14 @@
-#' Calculate soil moisture grid
+#' @title Calculate soil moisture grid
 #'
 #' @param img_date: string, image date of Sentinel 2 acquisition
-#'
+#' @param coeffs_file: string, full path to csv file of wet-dry coefficients
 #' @return rast, soil moisture grid
 #' @export
 #'
 #' @examples
-#' print("Running calculate_soil_moisture.R")
+#' print("Running optram_calculate_soil_moisture.R")
 
-calculate_soil_moisture <- function(img_date){
+optram_calculate_soil_moisture <- function(img_date, coeffs_file){
   # based on STR and two STR_dry and STR_wet bands
   # W = (STR - STR_dry) / (STR_wet - STR_dry)
   # W = (i_dry + s_dry * NDVI - STR) / (i_dry − i_wet +  (s_dry−s_wet) * NDVI)

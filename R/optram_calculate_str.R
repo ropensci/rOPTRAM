@@ -1,13 +1,13 @@
-#' Create SWIR transformed reflectance
+#' @title Create SWIR transformed reflectance
 #'
 #' @param BOA_dir, string, the path to the `sen2r` Bottom of Atmosphere bands
 #'
 #' @return list of string, the path to transformed raster
 #' @export
 #'
-#' @examples print("Running calculate_str.R")
+#' @examples print("Running optram_calculate_str.R")
 
-calculate_str <- function(BOA_dir){
+optram_calculate_str <- function(BOA_dir){
 
   # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
   # The optical trapezoid model:
