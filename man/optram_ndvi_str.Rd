@@ -4,12 +4,14 @@
 \alias{optram_ndvi_str}
 \title{Prepare dataframe of pairs NDVI and STR values}
 \usage{
-optram_ndvi_str(STR_dir, NDVI_dir)
+optram_ndvi_str(STR_list, NDVI_list, output_dir = tempdir())
 }
 \arguments{
-\item{STR_dir, }{path to STR raster files}
+\item{STR_list:}{list of paths to STR raster files}
 
-\item{NDVI_dir, }{path to NDVI raster files}
+\item{NDVI_list:}{list of paths to NDVI raster files}
+
+\item{output_dir:}{string, path to save data.frames (in RDS format)}
 }
 \value{
 full_df, data.frame

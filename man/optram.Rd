@@ -4,17 +4,36 @@
 \alias{optram}
 \title{Prepare Sentinel imagery for soil moisture prediction using OPTRAM.}
 \usage{
-optram(aoi, vi = "NDVI", output_dir = tempdir())
+optram(
+  aoi,
+  vi = "NDVI",
+  from_date,
+  to_date,
+  max_cloud = 15,
+  scihub_user = NULL,
+  scihub_pass = NULL,
+  output_dir = tempdir()
+)
 }
 \arguments{
 \item{aoi:}{string, full path to polygon spatial file of area of interest}
 
 \item{vi:}{string, which VI to prepare, either 'NVDI' or 'SAVI'}
 
-\item{coeffs_file:}{string, where to save coeffs_file, default is tempdir()}
+\item{from_date:}{string, the start of the date range, Formatted as "YYYY-MM-DD"}
+
+\item{to_date:}{the end of the date range.}
+
+\item{max_cloud:}{integer, maximum percent cloud cover, Default 15.}
+
+\item{scihub_user:}{string, username on Copernicus Sentinel Hub}
+
+\item{scihub_pass:}{string, password on Sentinel hub}
+
+\item{coeffs_path:}{string, directory to save coeffs_file, default is tempdir()}
 }
 \value{
-coeffs_files: string, full path to saved CSV of wet-dry coefficients
+coeffs_file: string, full path to saved CSV of wet-dry coefficients
 }
 \description{
 The main wrapper function to download, and preprocess Sentinel 2 imagery
@@ -29,5 +48,5 @@ Remote Sensing of Environment 198, 52–68,
 https://doi.org/10.1016/j.rse.2017.05.041 .
 }
 \examples{
-print("Running optram_prepare_coeffs.R")
+print("Running optram.R")
 }

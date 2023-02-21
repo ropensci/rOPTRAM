@@ -8,12 +8,12 @@ optram_acquire_s2(
   aoi,
   from_date,
   to_date,
-  scipub_user,
-  scihub_pass,
+  scihub_user = NULL,
+  scihub_pass = NULL,
   max_cloud = 15,
   timeperiod = "full",
   output_dir = tempdir(),
-  list_indices = c("NDVI", "SAVI")
+  list_indicies = c("NDVI", "SAVI")
 )
 }
 \arguments{
@@ -23,7 +23,7 @@ optram_acquire_s2(
 
 \item{to_date:}{string, end of date range, formatted as "YYYY-MM-DD"}
 
-\item{max_cloud:}{integer, maximum cloud cover percent. Default 15.}
+\item{max_cloud:}{integer, maximum percent of cloud cover. Default 15.}
 
 \item{scihub_user:}{string, username on Copernicus scihub}
 
@@ -34,7 +34,7 @@ or "seasonal" for only months specified, but over the full date range.}
 
 \item{output_dir:}{string, path to save downloaded, and processed imagery}
 
-\item{list_indices:}{vector of strings, which indicies to prepare. Default c("NDVI", "SAVI")}
+\item{list_indicies:}{vector of strings, which indicies to prepare. Default c("NDVI", "SAVI")}
 }
 \value{
 output_path: string, path to downloaded files
@@ -48,12 +48,24 @@ doi: 10.1016/j.cageo.2020.104473
 URL: https://sen2r.ranghetti.info/.
 The package prepares vegetation indicies, cropped to an area of interest.
 }
+\note{
+Access to Copernicus Sentinel Hub requires registration. If you have already
+registered, and saved your credentials into the default "~/.sen2r/apihub.txt" file,
+then you can leave the scihub_user and scihub_pass empty.
+If your credentials are \strong{not} yet stored, then
+\itemize{
+\item register on the Scihub website:
+\item https://scihub.copernicus.eu/userguide/SelfRegistration
+\item enter your user and pass parameters in this function call,
+and they will be stored into the default location.
+}
+}
 \examples{
 from_date <- "2018-12-01"
-to_date <- "2019-04-30" 
-aoi <- "extdata/migda_9.gpkg"
+to_date <- "2019-04-30"
+aoi <- "inst/extdata/migda_9.gpkg"
 s2_file_list <- optram_acquire_s2(aoi,
                                  from_date, to_date,
                                  scipub = file.path("~", "apihub.txt"),
-                                 list_indices="MSAVI2")
+                                 list_indicies="MSAVI2")
 }

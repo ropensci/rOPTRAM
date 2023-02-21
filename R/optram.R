@@ -7,21 +7,53 @@
 #' See:
 #'   Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
 #'   The optical trapezoid model:
-#'   A novel approach to remote sensing of soil moisture 
+#'   A novel approach to remote sensing of soil moisture
 #'   applied to Sentinel-2 and Landsat-8 observations.
 #'   Remote Sensing of Environment 198, 52–68,
 #'   https://doi.org/10.1016/j.rse.2017.05.041 .
 #' @param aoi: string, full path to polygon spatial file of area of interest
 #' @param vi: string, which VI to prepare, either 'NVDI' or 'SAVI'
-#' @param coeffs_file: string, where to save coeffs_file, default is tempdir()
-#' @return coeffs_files: string, full path to saved CSV of wet-dry coefficients
+#' @param from_date: string, the start of the date range, Formatted as "YYYY-MM-DD"
+#' @param to_date: the end of the date range.
+#' @param max_cloud: integer, maximum percent cloud cover, Default 15.
+#' @param scihub_user: string, username on Copernicus Sentinel Hub
+#' @param scihub_pass: string, password on Sentinel hub
+#' @param coeffs_path: string, directory to save coeffs_file, default is tempdir()
+#'
+#' @return coeffs_file: string, full path to saved CSV of wet-dry coefficients
 #' @export
 #' @examples
-#' print("Running optram_prepare_coeffs.R")
-optram <- function(aoi,  
-                          vi = 'NDVI',
-                          output_dir = tempdir()) {
+#' print("Running optram.R")
+optram <- function(aoi,
+                   vi = 'NDVI',
+                   from_date, to_date,
+                   max_cloud = 15,
+                   # NULL creds assumes that credentials are already
+                   # stored in "~/.sen2r/apihub.txt"
+                   scihub_user = NULL,
+                   scihub_pass = NULL,
+                   output_dir = tempdir()) {
     # Loop over the downloaded S2 folders (dates), create NDVI and STR indices for each
     # and crop to aoi
-    return(output_files)
+    s2_list <- rOPTRAM::optram_acquire_s2(aoi,
+                    from_date, to_date,
+                    max_cloud = max_cloud,
+                    scihub_user = scihub_user,
+                    scihub_pass = scihub_pass,
+                    list_indicies = vi,
+                    output_dir = output_dir)
+
+    # Get full output directories for both BOA and NDVI
+    s2_dirs <- unlist(lapply(s2_list, dirname))
+    BOA_dir <- s2_dirs[grep("BOA", s2_dirs, fixed = TRUE)][1]
+    VI_dir <- s2_dirs[grep(vi, s2_dirs, fixed = TRUE)][1]
+
+    # Calculate SWIR Tranformed Reflectance
+    STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
+    VI_list <- list.files(path=VI_dir, full.names = TRUE)
+    vi_str_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list)
+    coeffs <- rOPTRAM::optram_wetdry_coefficients(vi_str_df,
+                                                  output_dir = output_dir)
+
+    return(coeffs)
 }

@@ -4,20 +4,20 @@
 #' and Swir Transformed Reflectance, for a time series of images.
 #' Prepare data.frame of all pairs of values
 #' (as input for the `optram_wetdry_coefficients()` function)
-#' 
-#' @param STR_dir, path to STR raster files
-#' @param NDVI_dir, path to NDVI raster files
 #'
+#' @param STR_list: list of paths to STR raster files
+#' @param NDVI_list: list of paths to NDVI raster files
+#' @param output_dir: string, path to save data.frames (in RDS format)
 #' @return full_df, data.frame
 #' @export
 #'
 #' @examples
 #' print("Running optram_ndvi_str.R")
 #'
-optram_ndvi_str <- function(STR_dir, NDVI_dir){
+optram_ndvi_str <- function(STR_list, NDVI_list,
+                            output_dir = tempdir()){
 
-  STR_file_list <- list.files(path=STR_dir, full.names = TRUE)
-  STR_df_list <- lapply(STR_file_list, function(f){
+  STR_df_list <- lapply(STR_list, function(f){
     date_str <- unlist(strsplit(basename(f), split="_", fixed=TRUE))[2]
     STR <- terra::rast(f)
     STR_1_df <- as.data.frame(STR, xy=TRUE)
@@ -26,12 +26,12 @@ optram_ndvi_str <- function(STR_dir, NDVI_dir){
     return(STR_1_df)
   })
   STR_df <- do.call(rbind, STR_df_list)
-  str_df_file <- file.path(Output_dir, "STR_data.rds")
+  str_df_file <- file.path(output_dir, "STR_data.rds")
   saveRDS(STR_df, str_df_file)
-  message("Saved:", nrow(STR_df), "rows to:", str_df_file)
+  message("Saved: ", nrow(STR_df), " rows to: ", str_df_file)
 
-  NDVI_file_list <- list.files(path=NDVI_dir, full.names = TRUE)
-  NDVI_df_list <- lapply(NDVI_file_list, function(f){
+
+  NDVI_df_list <- lapply(NDVI_list, function(f){
     # Get image date
     date_str <- unlist(strsplit(basename(f), split="_", fixed=TRUE))[2]
     NDVI <- terra::rast(f)
@@ -43,12 +43,12 @@ optram_ndvi_str <- function(STR_dir, NDVI_dir){
     return(NDVI_1_df)
   })
   NDVI_df <- do.call(rbind, NDVI_df_list)
-  ndvi_df_file <- file.path(Output_dir, "NDVI_data.rds")
+  ndvi_df_file <- file.path(output_dir, "NDVI_data.rds")
   saveRDS(NDVI_df, ndvi_df_file)
-  message("Saved:", nrow(NDVI_df), "rows to:", ndvi_df_file)
+  message("Saved: ", nrow(NDVI_df), " rows to: ", ndvi_df_file)
 
   full_df <- dplyr::full_join(STR_df, NDVI_df)
   full_df <- full_df[stats::complete.cases(full_df),]
-  message("Full data joined leaving", nrow(full_df), "rows")
+  message("Full data joined leaving: ", nrow(full_df), " rows")
   return(full_df)
 }

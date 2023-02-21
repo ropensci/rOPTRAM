@@ -4,19 +4,22 @@
 \alias{plot_ndvi_str_cloud}
 \title{Create scatter plot of STR-NDVI point cloud,}
 \usage{
-plot_ndvi_str_cloud(full_df, coeffs)
+plot_ndvi_str_cloud(full_df, coeffs, output_dir = tempdir())
 }
 \arguments{
 \item{full_df, }{data.frame of NDVI and STR pixel values}
 
 \item{coeffs, }{list of floats, the slope and intercept
 of wet and dry regression lines}
+
+\item{output_dir:}{string, directory to save plot png file.}
 }
 \value{
 None
 }
 \description{
 Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
+over scatterplot of multi-temporal STR and NDVI pixel values
 }
 \examples{
 print("Running plot_ndvi_str_cloud.R")

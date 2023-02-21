@@ -4,12 +4,21 @@
 \alias{optram_wetdry_coefficients}
 \title{Derive coefficients of slope and intercept}
 \usage{
-optram_wetdry_coefficients(full_df, step = 0.001)
+optram_wetdry_coefficients(
+  full_df,
+  output_dir = tempdir(),
+  step = 0.001,
+  save_plot = TRUE
+)
 }
 \arguments{
-\item{full_df, }{data.frame of STR and NDVI values}
-
 \item{step, }{float}
+
+\item{full_df:}{data.frame of STR and NDVI values}
+
+\item{output_dir:}{string, directory to save coefficients CSV file}
+
+\item{save_plot:}{boolean, If TRUE (default) save scatterplot to output_dir}
 }
 \value{
 list of float, coefficients of wet-dry trapezoid

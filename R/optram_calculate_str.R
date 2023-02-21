@@ -24,8 +24,8 @@ optram_calculate_str <- function(BOA_dir){
   # Returns:
   #   STR: terra rast object, the SWIR transformed raster
 
-  BOA_list <- list.files(BOA_dir, full.names = T)
-  STR_out_list <- lapply(BOA_list, function(t) {
+  BOA_list <- list.files(BOA_dir, full.names = TRUE)
+  STR_list <- lapply(BOA_list, function(t) {
     stk <- terra::rast(t)
     SWIR_DN <-  stk[[11]]
     # back to native scale
@@ -35,10 +35,12 @@ optram_calculate_str <- function(BOA_dir){
     # SWIR <- (SWIR_irr/10) * solar_irradiance_12
     STR <- (1 - SWIR)^2 / (2*SWIR)
     outfile <- gsub("BOA", replacement = "STR", x = basename(t))
-    outpath <- file.path(STR_dir, outfile)
+    outpath <- file.path(BOA_dir, outfile)
     terra::writeRaster(STR, filename = outpath, overwrite=TRUE)
     return(outpath)
   })
-  message(unlist(STR_out_list))
-  return(STR_out_list)
+  STR_list <- unlist(STR_list)
+  message("Prepared STR files:")
+  print(STR_list)
+  return(STR_list)
 }

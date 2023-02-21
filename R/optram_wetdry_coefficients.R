@@ -1,17 +1,21 @@
 #' @title Derive coefficients of slope and intercept
-#' 
+#'
 #' @description Derive slope and intercept coefficients
 #' for both wet and dry trapezoid lines.
 #' Write coefficients to a CSV file (as input to `optram_soilmoisture()` function)
 #'
-#' @param full_df, data.frame of STR and NDVI values
+#' @param full_df: data.frame of STR and NDVI values
+#' @param output_dir: string, directory to save coefficients CSV file
 #' @param step, float
-#'
+#' @param save_plot: boolean, If TRUE (default) save scatterplot to output_dir
 #' @return list of float, coefficients of wet-dry trapezoid
 #' @export
 #' @examples print("Running optram_wetdry_coefficients.R")
 #'
-optram_wetdry_coefficients <- function(full_df, step=0.001){
+optram_wetdry_coefficients <- function(full_df,
+                                       output_dir = tempdir(),
+                                       step=0.001,
+                                       save_plot = TRUE) {
   # Derive slope and intercept to two sides of trapezoid
   # Based on:
   # https://github.com/teerathrai/OPTRAM
@@ -23,7 +27,7 @@ optram_wetdry_coefficients <- function(full_df, step=0.001){
 
   # Create series of values for NDVI
   # Get min/max values from NDVI data, slightly smaller than full range
-  NDVI_min_max <- round(stats::quantile(full_df$NDVI, c(0.5, 0.95)) , 2)
+  NDVI_min_max <- round(stats::quantile(full_df$NDVI, c(0.2, 0.98)) , 2)
   NDVI_series <- seq(NDVI_min_max[[1]], NDVI_min_max[[2]], step)
   message("NDVI series length:", length(NDVI_series))
   STR_NDVI_list <- lapply(NDVI_series, function(i){
@@ -37,7 +41,7 @@ optram_wetdry_coefficients <- function(full_df, step=0.001){
       return(NA)
     }
     # Remove lower than 10% and more than 90% quartile of STR values
-    Qs <- stats::quantile(interval_df$STR, c(0.1, 0.9), na.rm=TRUE)
+    Qs <- stats::quantile(interval_df$STR, c(0.02, 0.98), na.rm=TRUE)
     interval_df <- interval_df[interval_df$STR<=Qs[[2]] &
                                  interval_df$STR>=Qs[[1]],]
     # Now, with outliers removed, find min (dry) and max (wet)
@@ -53,7 +57,7 @@ optram_wetdry_coefficients <- function(full_df, step=0.001){
   STR_NDVI_list <- STR_NDVI_list[ !is.na(STR_NDVI_list) ]
   STR_NDVI_df <- do.call(rbind, STR_NDVI_list)
   utils::write.csv(STR_NDVI_df,
-            file.path(Output_dir, "STR_NDVI_df.csv"),
+            file.path(output_dir, "STR_NDVI_df.csv"),
             row.names = FALSE)
   # Run linear regression between STR and NDVI
   # to determine the intercept and slope for both wet and dry data
@@ -65,20 +69,27 @@ optram_wetdry_coefficients <- function(full_df, step=0.001){
   s_dry <- dry_fit$coefficients[[2]]
   coeffs <- data.frame("intercept_dry"=i_dry, "slope_dry"=s_dry,
                        "intercept_wet"=i_wet, "slope_wet"=s_wet)
-  utils::write.csv(coeffs, coeffs_file, row.names=FALSE)
+  utils::write.csv(coeffs,
+            file.path(output_dir, "coefficients.csv"),
+            row.names=FALSE)
 
+  if (save_plot) {
+    rOPTRAM::plot_ndvi_str_cloud(full_df, coeffs)
+  }
   return(coeffs)
 }
 
 
 #' @title Create scatter plot of STR-NDVI point cloud,
-#' 
-#' @description 
+#'
+#' @description
 #' Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
+#' over scatterplot of multi-temporal STR and NDVI pixel values
 #'
 #' @param full_df, data.frame of NDVI and STR pixel values
 #' @param coeffs, list of floats, the slope and intercept
 #'   of wet and dry regression lines
+#' @param output_dir: string, directory to save plot png file.
 #'
 #' @return None
 #' @export
@@ -86,26 +97,32 @@ optram_wetdry_coefficients <- function(full_df, step=0.001){
 #' @examples
 #' print("Running plot_ndvi_str_cloud.R")
 #'
-plot_ndvi_str_cloud <- function(full_df, coeffs){
+plot_ndvi_str_cloud <- function(full_df,
+                                coeffs,
+                                output_dir = tempdir()){
   i_dry <- coeffs$intercept_dry
   s_dry <- coeffs$slope_dry
   i_wet <- coeffs$intercept_wet
   s_wet <- coeffs$slope_wet
-  # We don't need the whole 18 M points! get a subset
-  sample_idx <- sample(full_df$x, nrow(full_df)*0.2)
-  plot_df <- full_df[sample_idx,]
+  # We don't need Millions of points! get a subset
+  if (length(full_df$x) > 10000){
+    sample_idx <- sample(full_df$x, 10000)
+    plot_df <- full_df[sample_idx,]
+  } else {
+    plot_df <- full_df
+  }
   x_min <- min(plot_df$NDVI)*0.9
   x_max <- max(plot_df$NDVI)*1.05
   y_min <- 0.1
-  y_max <- max(plot_df$STR[plot_df$NDVI>=x_min])*1.05
-  ggplot(plot_df) +
+  y_max <- max(plot_df$STR)*1.05
+  ggplot2::ggplot(plot_df) +
     geom_point(aes(x=NDVI, y=STR), alpha = 0.05, size=1) +
     # Wet edge
     geom_abline(intercept = i_wet, slope = s_wet,
-                color = "#2E94B9", size = 1.0) +
+                color = "#2E94B9", linewidth = 1.0) +
     # Dry edge
     geom_abline(intercept = i_dry, slope = s_dry,
-                color = "#FD5959", size = 1.0) +
+                color = "#FD5959", linewidth = 1.0) +
     # Set gradient color
     scale_color_gradient(low="#FD5959",
                          high="#2E94B9") +
@@ -118,6 +135,7 @@ plot_ndvi_str_cloud <- function(full_df, coeffs){
           axis.text = element_text(size=12),
           plot.title = element_text(size=18))
 
-  ggsave(file.path(Output_dir, "trapezoid_plot.png"),
-                  width=10, height=7)
+  plot_path <- file.path(output_dir, "trapezoid_plot.png")
+  ggsave(plot_path, width=10, height=7)
+  message("Scatterplot saved to: ", plot_path)
 }
