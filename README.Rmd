@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 # rOPTRAM
 
 <!-- badges: start -->
+[![Project Status: WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
 
 `rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) 

@@ -14,6 +14,8 @@ Description: The OPtical TRapezoid Model (OPTRAM) derives soil moisture
   Remote Sensing of Environment 198, 52–68,
   https://doi.org/10.1016/j.rse.2017.05.041 .
 License: GPL (>= 3) + file LICENSE
+URL: https://gitlab.com/rsl-bidr/roptram.git
+BugReports: https://gitlab.com/rsl-bidr/
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
