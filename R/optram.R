@@ -33,6 +33,12 @@ optram <- function(aoi,
                    scihub_user = NULL,
                    scihub_pass = NULL,
                    output_dir = tempdir()) {
+
+    # Make sure we have access to scihub
+    optram_func <- as.character(match.call()[[1]])
+    if (!check_scihub_access(scihub_user, scihub_pass, optram_func)) {
+      return(NULL)
+    }
     # Loop over the downloaded S2 folders (dates), create NDVI and STR indices for each
     # and crop to aoi
     s2_list <- rOPTRAM::optram_acquire_s2(aoi,

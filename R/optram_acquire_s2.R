@@ -1,4 +1,4 @@
-#' Acquire Sentinel 2 images at a given location and date range
+#' @title Acquire Sentinel 2 images at a given location and date range
 #'
 #' @description Use the `sen2r` package to acquire, preprocess and crop, Sentinel 2 satellite imagery.
 #' L. Ranghetti, M. Boschetti, F. Nutini, L. Busetto (2020)
@@ -52,39 +52,9 @@ optram_acquire_s2 <- function(
     # Download Sentinel 2 images during the requested date range,
     # and clip to the area of interest
     # Pre flight checks...
-    if (!require(sen2r)) {
-        warning("This function requires the `sen2r` package.", "\n",
-        "Please install that package before running `acquire_s2_images.R`")
-        return(NULL)
-    }
-    # Check for stored credentials (by default in "~/.sen2r/apihub.txt")
-    if (!sen2r::is_scihub_configured()) {
-      if (!is.null(scihub_user) && ! is.null(scihub_pass)){
-        # If credentials have never preciously been been stored,
-        # check the user supplied values, to be sure they are valid.
-        if(sen2r::check_scihub_login(scihub_user, scihub_pass)) {
-            sen2r_path <- file.path("~", ".sen2r")
-            if (!dir.exists(sen2r_path)) {
-                dir.create(sen2r_path)
-            }
-            # store valid credentials into "apihub.txt" for future
-            apihub_path <- file.path(sen2r_path, "apihub.txt")
-            sen2r::write_scihub_login(scihub_user, scihub_pass, apihub_path = apihub_path)
-        } else {
-            warning("Login credentials not accepted by ESA Sentinel Hub",
-            "\n", "Please verify Sentinel Hub login credentials.")
-            return(NULL)
-        }
-      } else {
-        # No stored credentials, and no values passed in by user.
-        # Print message and exit.
-        warning("ESA Sentinel Hub requires authentication", "\n",
-                "Please register at:", "\n",
-                "https://scihub.copernicus.eu/userguide/SelfRegistration",
-                "then rerun this function, specifying both:", "\n",
-                "scihub_user, and scihub_pass")
-        return(NULL)
-      }
+    optram_func <- as.character(match.call()[[1]])
+    if (!check_scihub_access(scihub_user, scihub_pass, optram_func)) {
+      return(NULL)
     }
     if (!file.exists(aoi)) {
         warning("An area_of_interest polygon shapefile is required",
