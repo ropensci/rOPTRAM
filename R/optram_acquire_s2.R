@@ -8,7 +8,7 @@
 #' URL: https://sen2r.ranghetti.info/.
 #' The package prepares vegetation indicies, cropped to an area of interest.
 #'
-#' @param aoi: string, full path to polygon spatial file of boundary of area of interest
+#' @param aoi_file: string, full path to polygon spatial file of boundary of area of interest
 #' @param from_date: string, represents start of date range, formatted as "YYYY-MM-DD"
 #' @param to_date: string, end of date range, formatted as "YYYY-MM-DD"
 #' @param max_cloud: integer, maximum percent of cloud cover. Default 15.
@@ -42,7 +42,7 @@
 #'                                  list_indicies="MSAVI2")
 
 optram_acquire_s2 <- function(
-    aoi,
+    aoi_file,
     from_date, to_date,
     scihub_user = NULL, scihub_pass = NULL,
     max_cloud = 15,
@@ -67,7 +67,7 @@ optram_acquire_s2 <- function(
         )
     }
     # Checks OK, proceed to download
-    aoi_name <- tools::file_path_sans_ext(basename(aoi))
+    aoi_name <- tools::file_path_sans_ext(basename(aoi_file))
     aoi_name <- gsub(x = aoi_name, pattern = " ", replacement = "")
     aoi_name <- gsub(x = aoi_name, pattern = "\\.", replacement = "")
     aoi_name <- gsub(x = aoi_name, pattern = "_", replacement = "")
@@ -85,7 +85,7 @@ optram_acquire_s2 <- function(
         # in rOPTRAM: "list_indicies"
         list_indices = list_indicies,
         resampling = "bilinear",
-        extent = aoi,
+        extent = aoi_file,
         extent_name = aoi_name,
         extent_as_mask = TRUE,
         path_l2a = output_dir,

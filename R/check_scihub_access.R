@@ -7,7 +7,7 @@
 #' @param optram_func: string, which function called this check
 #' 
 #' (Not exported)
-#' @return boolean: access to scihub using sen2r is possible
+#' @return boolean: whether access to scihub using sen2r is possible
 #' 
 
 check_scihub_access <- function(scihub_user = NULL,
