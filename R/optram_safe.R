@@ -1,7 +1,8 @@
 #' @title Handle Sentinel imagery in original Copernicus SAFE format
 #'
 #' @description
-#' Use this function to prepares vegetation index and STR rasters 
+#' Use this function to prepares vegetation index and
+#' SWIR Transformed Reflectance (STR) rasters
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
 #' Unzip the downloaded Sentinel 2 files and do not change the folder structure
@@ -9,15 +10,15 @@
 #' @param safe_dir: string, full path to containing folder of downloaded (unzipped)
 #' Sentinel 2 data in original SAFE format
 #' @param aoi_file: string, path to boundary polygon spatial file of area of interest
-#' @param vi: string, which VI to prepare, either 'NVDI' or 'SAVI'
-#' @param output_dir: string, where to save Geotiff, default is tempdir()
-#' 
+#' @param vi: string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
+#' @param output_dir: string, where to save VI and STR and Geotiff, default is tempdir()
+#'
 #' @return output_files:list, full paths to saved Geotif files
 #' @export
 #' @examples
 #' print("Running optram_prepare_safe_vi_str.R")
 #' 
-optram_prepare_safe_vi_str <- function(safe_dir,
+optram_safe <- function(safe_dir,
                           aoi_file,
                           vi = 'NDVI',
                           output_dir = tempdir()) {
@@ -37,7 +38,20 @@ optram_prepare_safe_vi_str <- function(safe_dir,
         message("No image data folders in any SAFE directory")
         return(NULL)
     }
+    R10m_list <- img_list[grepl(pattern = "R10m$"), img_list, fixed = TRUE]
+    R20m_list <- img_list[grepl(pattern = "R20m$"), img_list, fixed = TRUE]
 
+    # We should have the same number of 10m resolution and 20m resolution directories.
+    # One for each image date.
+    # Just to make sure...
+    if (length(R10m_list != length(R20m_list))) {
+        warning("Some data seems to be missing:", "\n",
+                "There are: ", length(R10m_list), "10 meter resolution folders.", "\n",
+                "and: ", length(R20m_list), "20 meter resolution folders.")
+        return(NULL)
+    }
+
+    # Loop thru image directories and prepare VI and STR
     # Find coordinate reference system of this Sentinel data
     # Then read boundary polygon and reproject to Sentinel
     if (require("xml2")) {
@@ -67,4 +81,36 @@ optram_prepare_safe_vi_str <- function(safe_dir,
     swir_list <- img_list[grepl(pattern = "R20m$")]
 
     return(output_files)
+}
+
+#' @title Calculate NDVI or SAVI from bottom of atmosphere images
+#'
+#' @description
+#' Use this function to prepare vegetation index from SAFE imagery
+#' when you have already downloaded Sentinel 2 image files in advance
+#' (without using `sen2r`).
+#' 
+#' @param red: terra SpatRaster of red band, already clipped to AOI
+#' @param nir: terra SpatRaster of nir band, already clipped to AOI
+#' @param vi: string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
+#' @param output_dir: string, where to save VI and STR and Geotiff, default is tempdir()
+#'
+#' @return output_files:list, full paths to saved Geotif files
+#' (not exported)
+#' @examples
+#' print("Running optram_prepare_safe_vi_str.R")
+#' 
+calculate_vi <- function(red, nir, vi = "NDVI", output_dir = tempdir()) {
+    if (vi = "NDVI") {
+        return((nir - red) / (nir + red))
+    } else if (vi = "SAVI") {
+        return((1.5 * (nir - red)) / (nir + red + 0.5) )
+    } else if (vi == "MSAVI") {
+        return((2 * nir + 1 – sqrt((2 * NIR + 1)^2 – 8 * (nir - red))) / 2)
+    } else {
+        warning("Unrecognized vi: ", vi)
+        return(NULL)
+    }
+}
+
 }
