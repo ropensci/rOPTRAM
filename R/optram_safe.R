@@ -99,18 +99,16 @@ optram_safe <- function(safe_dir,
 #' (not exported)
 #' @examples
 #' print("Running optram_prepare_safe_vi_str.R")
-#' 
+#'
 calculate_vi <- function(red, nir, vi = "NDVI", output_dir = tempdir()) {
-    if (vi = "NDVI") {
+    if (vi == "NDVI") {
         return((nir - red) / (nir + red))
-    } else if (vi = "SAVI") {
+    } else if (vi == "SAVI") {
         return((1.5 * (nir - red)) / (nir + red + 0.5) )
     } else if (vi == "MSAVI") {
-        return((2 * nir + 1 – sqrt((2 * NIR + 1)^2 – 8 * (nir - red))) / 2)
+        return((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 8 * (nir - red))) / 2)
     } else {
         warning("Unrecognized vi: ", vi)
         return(NULL)
     }
-}
-
 }

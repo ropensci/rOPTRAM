@@ -24,9 +24,8 @@ Imports:
     ggplot2,
     stats,
     terra,
-    tools
-    utils,
-
+    tools,
+    utils
 Suggests:
     sen2r,
     testthat (>= 3.0.0),

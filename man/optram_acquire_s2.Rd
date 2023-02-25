@@ -5,7 +5,7 @@
 \title{Acquire Sentinel 2 images at a given location and date range}
 \usage{
 optram_acquire_s2(
-  aoi,
+  aoi_file,
   from_date,
   to_date,
   scihub_user = NULL,
@@ -17,7 +17,7 @@ optram_acquire_s2(
 )
 }
 \arguments{
-\item{aoi:}{string, full path to polygon spatial file of boundary of area of interest}
+\item{aoi_file:}{string, full path to polygon spatial file of boundary of area of interest}
 
 \item{from_date:}{string, represents start of date range, formatted as "YYYY-MM-DD"}
 

@@ -5,7 +5,7 @@
 \title{Prepare Sentinel imagery for soil moisture prediction using OPTRAM.}
 \usage{
 optram(
-  aoi,
+  aoi_file,
   vi = "NDVI",
   from_date,
   to_date,
@@ -16,7 +16,7 @@ optram(
 )
 }
 \arguments{
-\item{aoi:}{string, full path to polygon spatial file of area of interest}
+\item{aoi_file:}{string, full path to polygon spatial file of area of interest}
 
 \item{vi:}{string, which VI to prepare, either 'NVDI' or 'SAVI'}
 
