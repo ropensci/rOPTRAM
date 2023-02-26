@@ -4,7 +4,7 @@
 \alias{calculate_vi}
 \title{Calculate NDVI or SAVI from bottom of atmosphere images}
 \usage{
-calculate_vi(red, nir, vi = "NDVI", output_dir = tempdir())
+calculate_vi(img_stk, vi = "NDVI", output_dir = tempdir())
 }
 \arguments{
 \item{red:}{terra SpatRaster of red band, already clipped to AOI}

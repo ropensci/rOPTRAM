@@ -17,69 +17,62 @@
 #' @export
 #' @examples
 #' print("Running optram_prepare_safe_vi_str.R")
-#' 
+#'
 optram_safe <- function(safe_dir,
-                          aoi_file,
-                          vi = 'NDVI',
-                          output_dir = tempdir()) {
+                         aoi_file,
+                        vi = 'NDVI',
+                        output_dir = tempdir()) {
     # Loop over the downloaded S2 folders (dates), create NDVI and STR indices for each
     # and crop to aoi
     safe_list <- list.dirs(safe_dir, full.names = TRUE, recursive = TRUE)
     safe_list <- safe_list[grepl(pattern = "SAFE$", x = safe_list)]
+    band_ids <- c(
+    #"AOT_10m", #Coastal blue
+    "B02_10m", #blue
+    "B03_10m", #green
+    "B04_10m", #red
+    "B08_10m", #NIR wide
+    #"B05_20m", #rededge
+    #"B06_20m", #rededge
+    #"B07_20m", #rededge
+    #"B8A_20m", #NIR narrow
+    "B11_20m", #SWIR 1600
+    "B12_20m"  #SWIR 2200
+    )
+    # Get Area of interest
+    aoi <- vect(aoi_file)
+
     if (length(safe_list) == 0) {
         message("No Sentinel 2 SAFE folders in: ", safe_dir, " directory", "\n",
         "Please check download folder.", "\n", "Exiting...")
         return(NULL)
     }
-    img_list <- safe_list[grepl(pattern = "IMG_DATA", safe_list, fixed = TRUE)]
-    # ignore the 60 meter resolution
-    img_list <- img_list[!grepl(pattern = "R60m$", x = img_list)]
-    if (length(img_list) == 0) {
-        message("No image data folders in any SAFE directory")
-        return(NULL)
-    }
-    R10m_list <- img_list[grepl(pattern = "R10m$"), img_list, fixed = TRUE]
-    R20m_list <- img_list[grepl(pattern = "R20m$"), img_list, fixed = TRUE]
-
-    # We should have the same number of 10m resolution and 20m resolution directories.
-    # One for each image date.
-    # Just to make sure...
-    if (length(R10m_list != length(R20m_list))) {
-        warning("Some data seems to be missing:", "\n",
-                "There are: ", length(R10m_list), "10 meter resolution folders.", "\n",
-                "and: ", length(R20m_list), "20 meter resolution folders.")
-        return(NULL)
-    }
-
-    # Loop thru image directories and prepare VI and STR
-    # Find coordinate reference system of this Sentinel data
-    # Then read boundary polygon and reproject to Sentinel
-    if (require("xml2")) {
-        # Get Sentinel CRS from metadata
-        mtd_files <- list.files(safe_dir,
-                                recursive = TRUE,
-                                full.names = TRUE,
-                                pattern = "MTD_TL.xml$")
+    derived_rasters <- lapply(safe_list, function(s){
+        xml_file <- list.files(safe_list[s], pattern = "MTD.*xml$", full.names = TRUE)
+        xml <- xml2::read_xml(xml_file)
+        img_nodes <- xml2::xml_find_all(xml, ".//IMAGE_FILE")
+        img_nodes <- img_nodes[!grepl(pattern = "R60m", img_nodes)]
+        
+        # Get CRS for this SAFE dataset, and reproject AOI 
+        mtd_files <- list.files(s, pattern = "MTD_TL.xml$",
+                                recursive = TRUE, full.names = TRUE, )
+        if (! file.exists(mtd_file)) {
+            warning("No metadata file in SAFE dir: ", s, "Skipping...")
+            break()
+        } 
         mtd <- xml2::read_xml(mtd_files[1])
         epsg_code <- xml2::xml_text(xml2::xml_find_first(mtd, ".//HORIZONTAL_CS_CODE"))
-    } else {
-        # Read in one S2 data file, and get CRS from that raster
+        aoi <- terra::project(aoi, epsg_code)
 
-    }
-    # Read boundary polygon and tranform to the Sentinel CRS
-    aoi <- terra::vect(aoi_file)
-    aoi <- terra::project(aoi, epsg_code)
-    
-    vis_list <- list.files(path = img_list[grepl(pattern = "R10m$", x = img_list)])
-    aoi  <- terra::vect(aoi_file)
-    red_list <- lapply(vis_list, function(j) {
-        red_file <- grep("_B04_", vis_list[j], ignore.case = FALSE, perl = FALSE)
-        red <- terra::rast(red_file)
-        red <- terra::mask(terra::crop(red), red)
+        # Read in jp2 files
+        img_list <- lapply(band_ids, function(b){
+            img_node <- img_nodes[grepl(pattern = b, img_nodes, fixed = TRUE)]
+            img_file <- paste0(xml2::xml_text(img_node), ".jp2")
+            r <- terra::rast(img_file, win = aoi)
+        })
+        img_stk <- terra::rast(img_list)
+        # Get VI and STR from this stack
     })
-    green_list <- 
-    swir_list <- img_list[grepl(pattern = "R20m$")]
-
     return(output_files)
 }
 
@@ -100,7 +93,7 @@ optram_safe <- function(safe_dir,
 #' @examples
 #' print("Running optram_prepare_safe_vi_str.R")
 #'
-calculate_vi <- function(red, nir, vi = "NDVI", output_dir = tempdir()) {
+calculate_vi <- function(img_stk, vi = "NDVI", output_dir = tempdir()) {
     if (vi == "NDVI") {
         return((nir - red) / (nir + red))
     } else if (vi == "SAVI") {
