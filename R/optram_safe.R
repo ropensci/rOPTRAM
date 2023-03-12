@@ -22,8 +22,8 @@ optram_safe <- function(safe_dir,
                         aoi_file,
                         vi = 'NDVI',
                         output_dir = tempdir()) {
-    # Loop over the downloaded S2 folders (dates), create NDVI and STR indices for each
-    # and crop to aoi
+    # Loop over the downloaded S2 folders (dates),
+    # create NDVI and STR indices for each and crop to aoi
     safe_list <- list.dirs(safe_dir, full.names = TRUE, recursive = TRUE)
     safe_list <- safe_list[grepl(pattern = "SAFE$", x = safe_list)]
     band_ids <- c(
@@ -48,7 +48,7 @@ optram_safe <- function(safe_dir,
         return(NULL)
     }
 
-    derived_rasters <- lapply(safe_list, function(s){
+    derived_rasters <- lapply(safe_list, function(s) {
         xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
         xml <- xml2::read_xml(xml_file)
         img_nodes <- xml2::xml_find_all(xml, ".//IMAGE_FILE")
@@ -60,7 +60,7 @@ optram_safe <- function(safe_dir,
         if (! file.exists(mtd_file)) {
             warning("No metadata file in SAFE dir: ", s, "Skipping...")
             break()
-        } 
+        }
         mtd <- xml2::read_xml(mtd_files[1])
         epsg_code <- xml2::xml_text(xml2::xml_find_first(mtd, ".//HORIZONTAL_CS_CODE"))
         aoi <- terra::project(aoi, epsg_code)
@@ -88,6 +88,37 @@ optram_safe <- function(safe_dir,
     })
 
     # Get VI and STR from this list of raster stacks
-    vi <- rOPTRAM::calculate_vi(img_stk, vi, redband = 3, nirband = 4)
-}
+    vi_str_list <- lapply(1:length(derived_rasters), function(x) {
+        # Each item in the derived_rasters list is a raster stack, with 6 bands
+        # R-G-B-NIR, SWIR 1600, SWIR 2200
+        stk <- derived_rasters[x]
 
+        # Use the metadata file from SAFE directory name to get image date
+        s <- safe_list[x]
+        mtd_file <- list.files(s, pattern = "MTD_TL.*xml$",
+                                recursive = TRUE, full.names = TRUE, )
+        if (! file.exists(mtd_file)) {
+            warning("No metadata file in SAFE dir: ", s, "Skipping...")
+            break()
+        }
+        datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtd, ".//SENSING_TIME")))
+        #datetime <- strptime(datestr, format = "%FT%X", tz = "UTC")
+
+        veg_idx <- rOPTRAM::calculate_vi(stk, vi, redband = 3, nirband = 4)
+        veg_df <- terra::as.data.frame(veg_idx, xy = TRUE)
+        # Add image date to dataframe
+        veg_df['Date'] <- datestr
+        STR <- rOPTRAM::calculate_str(stk, swirband = 5)
+        STR_df <- terra::as.data.frame(str, xy = TRUE)
+
+        full_df <- dplyr::full_join(STR_df, veg_df)
+        full_df <- full_df[stats::complete.cases(full_df),]
+        return(full_df)
+    })
+    full_vi_str <- do.call(rbind, vi_str_list)
+
+    # Now continue with regular process
+    coeffs <- rOPTRAM::optram_wetdry_coefficients(full_vi_str, output_dir)
+
+    return(coeffs)
+}
