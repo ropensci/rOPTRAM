@@ -19,7 +19,7 @@
 #' print("Running optram_prepare_safe_vi_str.R")
 #'
 optram_safe <- function(safe_dir,
-                         aoi_file,
+                        aoi_file,
                         vi = 'NDVI',
                         output_dir = tempdir()) {
     # Loop over the downloaded S2 folders (dates), create NDVI and STR indices for each
@@ -40,21 +40,22 @@ optram_safe <- function(safe_dir,
     "B12_20m"  #SWIR 2200
     )
     # Get Area of interest
-    aoi <- vect(aoi_file)
+    aoi <- terra::vect(aoi_file)
 
     if (length(safe_list) == 0) {
         message("No Sentinel 2 SAFE folders in: ", safe_dir, " directory", "\n",
         "Please check download folder.", "\n", "Exiting...")
         return(NULL)
     }
+
     derived_rasters <- lapply(safe_list, function(s){
-        xml_file <- list.files(safe_list[s], pattern = "MTD.*xml$", full.names = TRUE)
+        xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
         xml <- xml2::read_xml(xml_file)
         img_nodes <- xml2::xml_find_all(xml, ".//IMAGE_FILE")
         img_nodes <- img_nodes[!grepl(pattern = "R60m", img_nodes)]
         
         # Get CRS for this SAFE dataset, and reproject AOI 
-        mtd_files <- list.files(s, pattern = "MTD_TL.xml$",
+        mtd_file <- list.files(s, pattern = "MTD_TL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )
         if (! file.exists(mtd_file)) {
             warning("No metadata file in SAFE dir: ", s, "Skipping...")
@@ -68,40 +69,25 @@ optram_safe <- function(safe_dir,
         img_list <- lapply(band_ids, function(b){
             img_node <- img_nodes[grepl(pattern = b, img_nodes, fixed = TRUE)]
             img_file <- paste0(xml2::xml_text(img_node), ".jp2")
-            r <- terra::rast(img_file, win = aoi)
+            img_path <- file.path(s, img_file)
+            r <- terra::rast(img_path, win = terra::ext(aoi))
         })
-        img_stk <- terra::rast(img_list)
-        # Get VI and STR from this stack
+        # Make a rast obj to save the high resolution extent
+        img_10m <- terra::rast()
+        img_10m_list <- lapply(img_list, function(i) {
+            if (all.equal.list(terra::res(i))) {
+                img_10m  <<- i 
+                return(i)
+            } else {
+                return(terra::resample(i, img_10m,
+                                      method = "bilinear", threads = TRUE))
+            }
+        })
+        img_stk <- terra::rast(img_10m_list)
+        return(img_stk)
     })
-    return(output_files)
+
+    # Get VI and STR from this list of raster stacks
+    vi <- rOPTRAM::calculate_vi(img_stk, vi, redband = 3, nirband = 4)
 }
 
-#' @title Calculate NDVI or SAVI from bottom of atmosphere images
-#'
-#' @description
-#' Use this function to prepare vegetation index from SAFE imagery
-#' when you have already downloaded Sentinel 2 image files in advance
-#' (without using `sen2r`).
-#' 
-#' @param red: terra SpatRaster of red band, already clipped to AOI
-#' @param nir: terra SpatRaster of nir band, already clipped to AOI
-#' @param vi: string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
-#' @param output_dir: string, where to save VI and STR and Geotiff, default is tempdir()
-#'
-#' @return output_files:list, full paths to saved Geotif files
-#' (not exported)
-#' @examples
-#' print("Running optram_prepare_safe_vi_str.R")
-#'
-calculate_vi <- function(img_stk, vi = "NDVI", output_dir = tempdir()) {
-    if (vi == "NDVI") {
-        return((nir - red) / (nir + red))
-    } else if (vi == "SAVI") {
-        return((1.5 * (nir - red)) / (nir + red + 0.5) )
-    } else if (vi == "MSAVI") {
-        return((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 8 * (nir - red))) / 2)
-    } else {
-        warning("Unrecognized vi: ", vi)
-        return(NULL)
-    }
-}
