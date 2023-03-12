@@ -77,22 +77,58 @@ check_scihub_access <- function(scihub_user = NULL,
 #' @param nirband: integer, number of NIR band
 #' @param vi: string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'
 #'
-#' @return output_files:list, full paths to saved Geotif files
+#' @return SpatRaster of vegetation index
 #' (not exported)
 #' @examples
-#' print("Running optram_prepare_safe_vi_str.R")
-#'
+
 calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
     nir <- img_stk[[nirband]]
     red <- img_stk[[redband]]
     if (vi == "NDVI") {
-        return((nir - red) / (nir + red))
+        res_rast <- ((nir - red) / (nir + red))
     } else if (vi == "SAVI") {
-        return((1.5 * (nir - red)) / (nir + red + 0.5) )
+        res_rast <- ((1.5 * (nir - red)) / (nir + red + 0.5) )
     } else if (vi == "MSAVI") {
-        return((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 8 * (nir - red))) / 2)
+        res_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 8 * (nir - red))) / 2)
     } else {
         warning("Unrecognized index: ", vi)
-        return(NULL)
+        res_rast <- NULL
     }
+    names(res_rast) <- vi
+    return(res_rast)
+}
+
+
+#' @title Calculate STR from SWIR band of bottom of atmosphere images
+#'
+#' @description
+#' Use this function to prepare STR from SAFE imagery
+#' when you have already downloaded Sentinel 2 image files in advance
+#' (without using `sen2r`).
+#' 
+#' @param img_stk: terra SpatRaster, multiband stack of images, already clipped to aoi
+#' @param swirband: integer, number of red band
+#'
+#' @return SpatRaster of STR band
+#' (not exported)
+
+calculate_str <- function(img_stk, swirband = 5) {
+  # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
+  # The optical trapezoid model:
+  # A novel approach to remote sensing of soil moisture
+  # applied to Sentinel-2 and Landsat-8 observations.
+  # Remote Sensing of Environment 198, 52–68.
+  # https://doi.org/10.1016/j.rse.2017.05.041
+  #
+  # STR = (1−SWIR)^2 / 2*SWIR
+  #
+    SWIR_DN <-  img_stk[[swirband]]
+    # back to native scale
+    SWIR <-  SWIR_DN / 10000
+    # Convert from Solar irradiance
+    # solar_irradiance_12 <- 87.25
+    # SWIR <- (SWIR_irr/10) * solar_irradiance_12
+    STR <- (1 - SWIR)^2 / (2*SWIR)
+    names(STR) <- "STR"
+    return(STR)
 }

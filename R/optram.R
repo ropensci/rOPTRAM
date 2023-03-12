@@ -62,6 +62,6 @@ optram <- function(aoi_file,
     vi_str_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list)
     coeffs <- rOPTRAM::optram_wetdry_coefficients(vi_str_df,
                                                   output_dir = output_dir)
-
+                                                  
     return(coeffs)
 }
