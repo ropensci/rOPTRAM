@@ -79,7 +79,6 @@ check_scihub_access <- function(scihub_user = NULL,
 #'
 #' @return SpatRaster of vegetation index
 #' (not exported)
-#' @examples
 
 calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
     nir <- img_stk[[nirband]]

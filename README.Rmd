@@ -44,6 +44,13 @@ if (! require("remotes")) {
 }
 remotes::install_gitlab("rsl-bidr/roptram")
 ```
+#### Suggested prerequisites
+
+This package works with the R package `sen2r`.
+To install that package you will need some system dependencies. 
+On Debian and derivitives please install in advance:
+- jq libv8-dev libjq-dev
+- libprotobuf-dev protobuf-compiler
 
 ## Example
 
