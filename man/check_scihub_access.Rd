@@ -11,16 +11,16 @@ check_scihub_access(
 )
 }
 \arguments{
-\item{scihub_user:}{string, scihub username}
+\item{scihub_user, }{string, scihub username}
 
-\item{scihub_pass:}{string, scihub password}
+\item{scihub_pass, }{string, scihub password}
 
-\item{optram_func:}{string, which function called this check
+\item{optram_func, }{string, which function called this check
 
 (Not exported)}
 }
 \value{
-boolean: whether access to scihub using sen2r is possible
+boolean, whether access to scihub using sen2r is possible
 }
 \description{
 Verify that sen2r is installed,

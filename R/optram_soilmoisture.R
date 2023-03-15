@@ -1,10 +1,10 @@
 #' @title Calculate soil moisture grid
-#'
-#' @param img_date: string, image date of Sentinel 2 acquisition
-#' @param coeffs_file: string, full path to csv file of wet-dry coefficients
+#' @param img_date, string, image date of Sentinel 2 acquisition
+#' @param coeffs_file, string, full path to csv file of wet-dry coefficients
+#' @param output_dir, string, full path to output directory 
+#'  for saving soil moisture raster
 #' @return rast, soil moisture grid
 #' @export
-#'
 #' @examples
 #' print("Running optram_calculate_soil_moisture.R")
 

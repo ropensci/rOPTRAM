@@ -1,17 +1,15 @@
 #' @title Derive coefficients of slope and intercept
-#'
 #' @description Derive slope and intercept coefficients
 #' for both wet and dry trapezoid lines.
 #' Write coefficients to a CSV file (as input to `optram_soilmoisture()` function)
-#'
-#' @param full_df: data.frame of STR and NDVI values
-#' @param output_dir: string, directory to save coefficients CSV file
+#' @param full_df, data.frame of STR and NDVI values
+#' @param output_dir, string, directory to save coefficients CSV file
 #' @param step, float
-#' @param save_plot: boolean, If TRUE (default) save scatterplot to output_dir
-#' @return list of float, coefficients of wet-dry trapezoid
+#' @param save_plot, boolean, If TRUE (default) save scatterplot to output_dir
+#' @return coeffs, list of float, coefficients of wet-dry trapezoid
 #' @export
 #' @examples print("Running optram_wetdry_coefficients.R")
-#'
+
 optram_wetdry_coefficients <- function(full_df,
                                        output_dir = tempdir(),
                                        step=0.001,
@@ -30,7 +28,7 @@ optram_wetdry_coefficients <- function(full_df,
 
   # Avoid "no visible binding for global variable" NOTE
   VI_min_max <- VI_series <- VI_STR_list <- VI_STR_df <- NULL
-  Qs <- str_max <- str_min <- interval_df <- VI_STR_df1
+  Qs <- str_max <- str_min <- interval_df <- VI_STR_df1 <- NULL
   
   VI_min_max <- round(stats::quantile(full_df$NDVI, c(0.2, 0.98)) , 2)
   VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], step)
@@ -86,28 +84,26 @@ optram_wetdry_coefficients <- function(full_df,
 
 
 #' @title Create scatter plot of STR-NDVI point cloud,
-#'
 #' @description
 #' Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
 #' over scatterplot of multi-temporal STR and NDVI pixel values
-#'
 #' @param full_df, data.frame of NDVI and STR pixel values
 #' @param coeffs, list of floats, the slope and intercept
 #'   of wet and dry regression lines
-#' @param output_dir: string, directory to save plot png file.
-#'
+#' @param output_dir, string, directory to save plot png file.
 #' @return None
 #' @export
 #' @import ggplot2
 #' @examples
 #' print("Running plot_ndvi_str_cloud.R")
-#'
+
 plot_ndvi_str_cloud <- function(full_df,
                                 coeffs,
                                 output_dir = tempdir()){
   # Avoid "no visible binding for global variable" NOTE
   i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
   x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- NULL
+  NDVI <- STR <- NULL
 
   i_dry <- coeffs$intercept_dry
   s_dry <- coeffs$slope_dry

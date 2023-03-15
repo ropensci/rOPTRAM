@@ -7,11 +7,11 @@
 optram_ndvi_str(STR_list, VI_list, output_dir = tempdir())
 }
 \arguments{
-\item{STR_list:}{list of paths to STR raster files}
+\item{STR_list, }{list of paths to STR raster files}
 
-\item{NDVI_list:}{list of paths to NDVI raster files}
+\item{VI_list, }{list of paths to NDVI raster files}
 
-\item{output_dir:}{string, path to save data.frames (in RDS format)}
+\item{output_dir, }{string, path to save data.frames (in RDS format)}
 }
 \value{
 full_df, data.frame
@@ -24,5 +24,4 @@ Prepare data.frame of all pairs of values
 }
 \examples{
 print("Running optram_ndvi_str.R")
-
 }

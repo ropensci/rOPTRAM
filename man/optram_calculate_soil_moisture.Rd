@@ -4,12 +4,15 @@
 \alias{optram_calculate_soil_moisture}
 \title{Calculate soil moisture grid}
 \usage{
-optram_calculate_soil_moisture(img_date, coeffs_file, output_dir = tempfir())
+optram_calculate_soil_moisture(img_date, coeffs_file, output_dir = tempdir())
 }
 \arguments{
-\item{img_date:}{string, image date of Sentinel 2 acquisition}
+\item{img_date, }{string, image date of Sentinel 2 acquisition}
 
-\item{coeffs_file:}{string, full path to csv file of wet-dry coefficients}
+\item{coeffs_file, }{string, full path to csv file of wet-dry coefficients}
+
+\item{output_dir, }{string, full path to output directory
+for saving soil moisture raster}
 }
 \value{
 rast, soil moisture grid

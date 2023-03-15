@@ -1,5 +1,4 @@
 #' @title Prepare Sentinel imagery for soil moisture prediction using OPTRAM.
-#'
 #' @description
 #' The main wrapper function to download, and preprocess Sentinel 2 imagery
 #' then prepare the OPTRAM trapezoid to derive slope and intercept
@@ -11,16 +10,15 @@
 #'   applied to Sentinel-2 and Landsat-8 observations.
 #'   Remote Sensing of Environment 198, 52–68,
 #'   https://doi.org/10.1016/j.rse.2017.05.041 .
-#' @param aoi_file: string, full path to polygon spatial file of area of interest
-#' @param vi: string, which VI to prepare, either 'NVDI' or 'SAVI'
-#' @param from_date: string, the start of the date range, Formatted as "YYYY-MM-DD"
-#' @param to_date: the end of the date range.
-#' @param max_cloud: integer, maximum percent cloud cover, Default 15.
-#' @param scihub_user: string, username on Copernicus Sentinel Hub
-#' @param scihub_pass: string, password on Sentinel hub
-#' @param coeffs_path: string, directory to save coeffs_file, default is tempdir()
-#'
-#' @return coeffs_file: string, full path to saved CSV of wet-dry coefficients
+#' @param aoi_file, string, full path to polygon spatial file of area of interest
+#' @param vi, string, which VI to prepare, either 'NVDI' or 'SAVI'
+#' @param from_date, string, the start of the date range, Formatted as "YYYY-MM-DD"
+#' @param to_date, the end of the date range.
+#' @param max_cloud, integer, maximum percent cloud cover, Default 15.
+#' @param scihub_user, string, username on Copernicus Sentinel Hub
+#' @param scihub_pass, string, password on Sentinel hub
+#' @param output_dir, string, directory to save coeffs_file, default is tempdir()
+#' @return coeffs_file, string, full path to saved CSV of wet-dry coefficients
 #' @export
 #' @examples
 #' print("Running optram.R")

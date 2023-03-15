@@ -7,16 +7,16 @@
 calculate_vi(img_stk, vi = "NDVI", redband = 3, nirband = 4)
 }
 \arguments{
-\item{img_stk:}{terra SpatRaster, multiband stack of images, already clipped to aoi}
+\item{img_stk, }{terra SpatRaster, multiband stack of images, already clipped to aoi}
 
-\item{redband:}{integer, number of red band}
+\item{vi, }{string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'}
 
-\item{nirband:}{integer, number of NIR band}
+\item{redband, }{integer, number of red band}
 
-\item{vi:}{string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'}
+\item{nirband, }{integer, number of NIR band}
 }
 \value{
-SpatRaster of vegetation index
+res_rast, SpatRaster of vegetation index
 (not exported)
 }
 \description{

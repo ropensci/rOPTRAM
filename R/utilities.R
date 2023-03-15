@@ -2,12 +2,12 @@
 #' @description
 #' Verify that sen2r is installed,
 #' and check credentials for access to Sentinel Hub
-#' @param scihub_user: string, scihub username
-#' @param scihub_pass: string, scihub password
-#' @param optram_func: string, which function called this check
+#' @param scihub_user, string, scihub username
+#' @param scihub_pass, string, scihub password
+#' @param optram_func, string, which function called this check
 #' 
 #' (Not exported)
-#' @return boolean: whether access to scihub using sen2r is possible
+#' @return boolean, whether access to scihub using sen2r is possible
 #' 
 
 check_scihub_access <- function(scihub_user = NULL,
@@ -74,12 +74,12 @@ check_scihub_access <- function(scihub_user = NULL,
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
 #' 
-#' @param img_stk: terra SpatRaster, multiband stack of images, already clipped to aoi
-#' @param redband: integer, number of red band
-#' @param nirband: integer, number of NIR band
-#' @param vi: string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'
+#' @param img_stk, terra SpatRaster, multiband stack of images, already clipped to aoi
+#' @param redband, integer, number of red band
+#' @param nirband, integer, number of NIR band
+#' @param vi, string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'
 #'
-#' @return SpatRaster of vegetation index
+#' @return res_rast, SpatRaster of vegetation index
 #' (not exported)
 
 calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
@@ -110,10 +110,10 @@ calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
 #' 
-#' @param img_stk: terra SpatRaster, multiband stack of images, already clipped to aoi
-#' @param swirband: integer, number of red band
+#' @param img_stk, terra SpatRaster, multiband stack of images, already clipped to aoi
+#' @param swirband, integer, number of red band
 #'
-#' @return SpatRaster of STR band
+#' @return STR, SpatRaster of STR band
 #' (not exported)
 
 calculate_str <- function(img_stk, swirband = 5) {

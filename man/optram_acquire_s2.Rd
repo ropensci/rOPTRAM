@@ -17,27 +17,27 @@ optram_acquire_s2(
 )
 }
 \arguments{
-\item{aoi_file:}{string, full path to polygon spatial file of boundary of area of interest}
+\item{aoi_file, }{string, full path to polygon spatial file of boundary of area of interest}
 
-\item{from_date:}{string, represents start of date range, formatted as "YYYY-MM-DD"}
+\item{from_date, }{string, represents start of date range, formatted as "YYYY-MM-DD"}
 
-\item{to_date:}{string, end of date range, formatted as "YYYY-MM-DD"}
+\item{to_date, }{string, end of date range, formatted as "YYYY-MM-DD"}
 
-\item{max_cloud:}{integer, maximum percent of cloud cover. Default 15.}
+\item{scihub_user, }{string, username on Copernicus scihub}
 
-\item{scihub_user:}{string, username on Copernicus scihub}
+\item{scihub_pass, }{string, password for access to Copernicus scihub}
 
-\item{scihub_pass:}{string, password for access to Copernicus scihub}
+\item{max_cloud, }{integer, maximum percent of cloud cover. Default 15.}
 
-\item{timeperiod:string, }{either "full" for the whole date range,
+\item{timeperiod, }{string, either "full" for the whole date range,
 or "seasonal" for only months specified, but over the full date range.}
 
-\item{output_dir:}{string, path to save downloaded, and processed imagery}
+\item{output_dir, }{string, path to save downloaded, and processed imagery}
 
-\item{list_indicies:}{vector of strings, which indicies to prepare. Default c("NDVI", "SAVI")}
+\item{list_indicies, }{vector of strings, which indicies to prepare. Default c("NDVI", "SAVI")}
 }
 \value{
-output_path: string, path to downloaded files
+output_path, string, path to downloaded files
 }
 \description{
 Use the \code{sen2r} package to acquire, preprocess and crop, Sentinel 2 satellite imagery.

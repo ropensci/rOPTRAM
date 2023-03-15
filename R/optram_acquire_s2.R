@@ -1,5 +1,4 @@
 #' @title Acquire Sentinel 2 images at a given location and date range
-#'
 #' @description Use the `sen2r` package to acquire, preprocess and crop, Sentinel 2 satellite imagery.
 #' L. Ranghetti, M. Boschetti, F. Nutini, L. Busetto (2020)
 #' sen2r: An R toolbox for automatically downloading and preprocessing Sentinel-2 satellite data
@@ -7,21 +6,18 @@
 #' doi: 10.1016/j.cageo.2020.104473
 #' URL: https://sen2r.ranghetti.info/.
 #' The package prepares vegetation indicies, cropped to an area of interest.
-#'
-#' @param aoi_file: string, full path to polygon spatial file of boundary of area of interest
-#' @param from_date: string, represents start of date range, formatted as "YYYY-MM-DD"
-#' @param to_date: string, end of date range, formatted as "YYYY-MM-DD"
-#' @param max_cloud: integer, maximum percent of cloud cover. Default 15.
-#' @param scihub_user: string, username on Copernicus scihub
-#' @param scihub_pass: string, password for access to Copernicus scihub
-#' @param timeperiod:string, either "full" for the whole date range,
+#' @param aoi_file, string, full path to polygon spatial file of boundary of area of interest
+#' @param from_date, string, represents start of date range, formatted as "YYYY-MM-DD"
+#' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
+#' @param max_cloud, integer, maximum percent of cloud cover. Default 15.
+#' @param scihub_user, string, username on Copernicus scihub
+#' @param scihub_pass, string, password for access to Copernicus scihub
+#' @param timeperiod, string, either "full" for the whole date range,
 #' or "seasonal" for only months specified, but over the full date range.
-#' @param output_dir: string, path to save downloaded, and processed imagery
-#' @param list_indicies: vector of strings, which indicies to prepare. Default c("NDVI", "SAVI")
-#'
-#' @return output_path: string, path to downloaded files
+#' @param output_dir, string, path to save downloaded, and processed imagery
+#' @param list_indicies, vector of strings, which indicies to prepare. Default c("NDVI", "SAVI")
+#' @return output_path, string, path to downloaded files
 #' @export
-#'
 #' @note
 #' Access to Copernicus Sentinel Hub requires registration. If you have already
 #' registered, and saved your credentials into the default "~/.sen2r/apihub.txt" file,
@@ -31,8 +27,6 @@
 #' - https://scihub.copernicus.eu/userguide/SelfRegistration
 #' - enter your user and pass parameters in this function call,
 #'   and they will be stored into the default location.
-#'
-
 #' @examples
 #' \dontrun{
 #' from_date <- "2018-12-01"

@@ -7,12 +7,12 @@
 calculate_str(img_stk, swirband = 5)
 }
 \arguments{
-\item{img_stk:}{terra SpatRaster, multiband stack of images, already clipped to aoi}
+\item{img_stk, }{terra SpatRaster, multiband stack of images, already clipped to aoi}
 
-\item{swirband:}{integer, number of red band}
+\item{swirband, }{integer, number of red band}
 }
 \value{
-SpatRaster of STR band
+STR, SpatRaster of STR band
 (not exported)
 }
 \description{

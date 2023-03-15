@@ -7,17 +7,17 @@
 optram_safe(safe_dir, aoi_file, vi = "NDVI", output_dir = tempdir())
 }
 \arguments{
-\item{safe_dir:}{string, full path to containing folder of downloaded (unzipped)
+\item{safe_dir, }{string, full path to containing folder of downloaded (unzipped)
 Sentinel 2 data in original SAFE format}
 
-\item{aoi_file:}{string, path to boundary polygon spatial file of area of interest}
+\item{aoi_file, }{string, path to boundary polygon spatial file of area of interest}
 
-\item{vi:}{string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'}
+\item{vi, }{string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'}
 
-\item{output_dir:}{string, where to save VI and STR and Geotiff, default is tempdir()}
+\item{output_dir, }{string, where to save VI and STR and Geotiff, default is tempdir()}
 }
 \value{
-output_files:list, full paths to saved Geotif files
+output_files, list, full paths to saved Geotif files
 }
 \description{
 Use this function to prepares vegetation index and
@@ -28,5 +28,4 @@ Unzip the downloaded Sentinel 2 files and do not change the folder structure
 }
 \examples{
 print("Running optram_prepare_safe_vi_str.R")
-
 }

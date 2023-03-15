@@ -7,16 +7,16 @@
 optram_prepare_other_vi_str(img_dir, aoi, vi = "NDVI", output_dir = tempdir())
 }
 \arguments{
-\item{img_dir:}{string, full path directory of downloaded images (assumes Geotif)}
+\item{img_dir, }{string, full path directory of downloaded images (assumes Geotif)}
 
-\item{aoi:}{string, full path to polygon spatial file of area of interest}
+\item{aoi, }{string, full path to polygon spatial file of area of interest}
 
-\item{vi:}{string, which VI to prepare, 'NVDI', 'SAVI', etc.}
+\item{vi, }{string, which VI to prepare, 'NVDI', 'SAVI', etc.}
 
-\item{output_dir:}{string, where to save Geotiff, default is tempdir()}
+\item{output_dir, }{string, where to save Geotiff, default is tempdir()}
 }
 \value{
-output_files:list, full paths to saved Geotif files
+output_files, list, full paths to saved Geotif files
 }
 \description{
 This function prepares vegetation index and STR rasters

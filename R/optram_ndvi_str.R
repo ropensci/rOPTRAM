@@ -1,19 +1,16 @@
 #' @title Prepare dataframe of pairs NDVI and STR values
-#'
 #' @description Collect all pixel values of both vegetation index,
 #' and Swir Transformed Reflectance, for a time series of images.
 #' Prepare data.frame of all pairs of values
 #' (as input for the `optram_wetdry_coefficients()` function)
-#'
-#' @param STR_list: list of paths to STR raster files
-#' @param VI_list: list of paths to NDVI raster files
-#' @param output_dir: string, path to save data.frames (in RDS format)
+#' @param STR_list, list of paths to STR raster files
+#' @param VI_list, list of paths to NDVI raster files
+#' @param output_dir, string, path to save data.frames (in RDS format)
 #' @return full_df, data.frame
 #' @export
-#'
 #' @examples
 #' print("Running optram_ndvi_str.R")
-#'
+
 optram_ndvi_str <- function(STR_list, VI_list,
                             output_dir = tempdir()){
 

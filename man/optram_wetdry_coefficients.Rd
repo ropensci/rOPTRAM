@@ -12,16 +12,16 @@ optram_wetdry_coefficients(
 )
 }
 \arguments{
+\item{full_df, }{data.frame of STR and NDVI values}
+
+\item{output_dir, }{string, directory to save coefficients CSV file}
+
 \item{step, }{float}
 
-\item{full_df:}{data.frame of STR and NDVI values}
-
-\item{output_dir:}{string, directory to save coefficients CSV file}
-
-\item{save_plot:}{boolean, If TRUE (default) save scatterplot to output_dir}
+\item{save_plot, }{boolean, If TRUE (default) save scatterplot to output_dir}
 }
 \value{
-list of float, coefficients of wet-dry trapezoid
+coeffs, list of float, coefficients of wet-dry trapezoid
 }
 \description{
 Derive slope and intercept coefficients
@@ -30,5 +30,4 @@ Write coefficients to a CSV file (as input to \code{optram_soilmoisture()} funct
 }
 \examples{
 print("Running optram_wetdry_coefficients.R")
-
 }

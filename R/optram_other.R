@@ -1,13 +1,12 @@
 #' @title Handle third party imagery with red, NIR and SWIR bands
-#'
 #' @description
 #' This function prepares vegetation index and STR rasters
 #' from other (non-Sentinel) image files downloaded in advance.
-#' @param img_dir: string, full path directory of downloaded images (assumes Geotif)
-#' @param aoi: string, full path to polygon spatial file of area of interest
-#' @param vi: string, which VI to prepare, 'NVDI', 'SAVI', etc.
-#' @param output_dir: string, where to save Geotiff, default is tempdir()
-#' @return output_files:list, full paths to saved Geotif files
+#' @param img_dir, string, full path directory of downloaded images (assumes Geotif)
+#' @param aoi, string, full path to polygon spatial file of area of interest
+#' @param vi, string, which VI to prepare, 'NVDI', 'SAVI', etc.
+#' @param output_dir, string, where to save Geotiff, default is tempdir()
+#' @return output_files, list, full paths to saved Geotif files
 #' @export
 #' @examples
 #' print("Running prepare_other_vi_str.R")

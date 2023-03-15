@@ -12,7 +12,7 @@ plot_ndvi_str_cloud(full_df, coeffs, output_dir = tempdir())
 \item{coeffs, }{list of floats, the slope and intercept
 of wet and dry regression lines}
 
-\item{output_dir:}{string, directory to save plot png file.}
+\item{output_dir, }{string, directory to save plot png file.}
 }
 \value{
 None
@@ -23,5 +23,4 @@ over scatterplot of multi-temporal STR and NDVI pixel values
 }
 \examples{
 print("Running plot_ndvi_str_cloud.R")
-
 }

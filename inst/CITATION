@@ -1,7 +1,7 @@
 citHeader("To cite rOPTRAM in publications use:")
 
 citEntry(
-  entry    = "Software",
+  entry    = "Misc",
   title    = "Derive soil moisture using the OPTRAM algorithm",
   author   = "Micha Silver",
   year     = 2023,

@@ -16,24 +16,24 @@ optram(
 )
 }
 \arguments{
-\item{aoi_file:}{string, full path to polygon spatial file of area of interest}
+\item{aoi_file, }{string, full path to polygon spatial file of area of interest}
 
-\item{vi:}{string, which VI to prepare, either 'NVDI' or 'SAVI'}
+\item{vi, }{string, which VI to prepare, either 'NVDI' or 'SAVI'}
 
-\item{from_date:}{string, the start of the date range, Formatted as "YYYY-MM-DD"}
+\item{from_date, }{string, the start of the date range, Formatted as "YYYY-MM-DD"}
 
-\item{to_date:}{the end of the date range.}
+\item{to_date, }{the end of the date range.}
 
-\item{max_cloud:}{integer, maximum percent cloud cover, Default 15.}
+\item{max_cloud, }{integer, maximum percent cloud cover, Default 15.}
 
-\item{scihub_user:}{string, username on Copernicus Sentinel Hub}
+\item{scihub_user, }{string, username on Copernicus Sentinel Hub}
 
-\item{scihub_pass:}{string, password on Sentinel hub}
+\item{scihub_pass, }{string, password on Sentinel hub}
 
-\item{coeffs_path:}{string, directory to save coeffs_file, default is tempdir()}
+\item{output_dir, }{string, directory to save coeffs_file, default is tempdir()}
 }
 \value{
-coeffs_file: string, full path to saved CSV of wet-dry coefficients
+coeffs_file, string, full path to saved CSV of wet-dry coefficients
 }
 \description{
 The main wrapper function to download, and preprocess Sentinel 2 imagery

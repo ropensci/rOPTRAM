@@ -1,23 +1,20 @@
 #' @title Handle Sentinel imagery in original Copernicus SAFE format
-#'
 #' @description
 #' Use this function to prepares vegetation index and
 #' SWIR Transformed Reflectance (STR) rasters
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
 #' Unzip the downloaded Sentinel 2 files and do not change the folder structure
-#' 
-#' @param safe_dir: string, full path to containing folder of downloaded (unzipped)
+#' @param safe_dir, string, full path to containing folder of downloaded (unzipped)
 #' Sentinel 2 data in original SAFE format
-#' @param aoi_file: string, path to boundary polygon spatial file of area of interest
-#' @param vi: string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
-#' @param output_dir: string, where to save VI and STR and Geotiff, default is tempdir()
-#'
-#' @return output_files:list, full paths to saved Geotif files
+#' @param aoi_file, string, path to boundary polygon spatial file of area of interest
+#' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
+#' @param output_dir, string, where to save VI and STR and Geotiff, default is tempdir()
+#' @return output_files, list, full paths to saved Geotif files
 #' @export
 #' @examples
 #' print("Running optram_prepare_safe_vi_str.R")
-#'
+
 optram_safe <- function(safe_dir,
                         aoi_file,
                         vi = 'NDVI',
@@ -117,7 +114,7 @@ optram_safe <- function(safe_dir,
         # Add image date to dataframe
         VI_df['Date'] <- datestr
         STR <- rOPTRAM::calculate_str(stk, swirband = 5)
-        STR_df <- terra::as.data.frame(str, xy = TRUE)
+        STR_df <- terra::as.data.frame(STR, xy = TRUE)
 
         full_df <- dplyr::full_join(STR_df, VI_df)
         full_df <- full_df[stats::complete.cases(full_df),]
