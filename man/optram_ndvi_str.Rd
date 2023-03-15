@@ -4,7 +4,7 @@
 \alias{optram_ndvi_str}
 \title{Prepare dataframe of pairs NDVI and STR values}
 \usage{
-optram_ndvi_str(STR_list, NDVI_list, output_dir = tempdir())
+optram_ndvi_str(STR_list, VI_list, output_dir = tempdir())
 }
 \arguments{
 \item{STR_list:}{list of paths to STR raster files}

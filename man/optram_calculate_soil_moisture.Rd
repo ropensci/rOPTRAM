@@ -4,7 +4,7 @@
 \alias{optram_calculate_soil_moisture}
 \title{Calculate soil moisture grid}
 \usage{
-optram_calculate_soil_moisture(img_date, coeffs_file)
+optram_calculate_soil_moisture(img_date, coeffs_file, output_dir = tempfir())
 }
 \arguments{
 \item{img_date:}{string, image date of Sentinel 2 acquisition}

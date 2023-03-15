@@ -24,6 +24,9 @@ optram_calculate_str <- function(BOA_dir){
   # Returns:
   #   STR: terra rast object, the SWIR transformed raster
 
+  # Avoid "no visible binding for global variable" NOTE
+  BOA_list <- STR_list <- SWIR_DN <- SWIR <- STR <- outfile <- outpath <- NULL
+  
   BOA_list <- list.files(BOA_dir, full.names = TRUE)
   STR_list <- lapply(BOA_list, function(t) {
     stk <- terra::rast(t)

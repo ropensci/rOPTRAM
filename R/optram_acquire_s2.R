@@ -32,7 +32,9 @@
 #' - enter your user and pass parameters in this function call,
 #'   and they will be stored into the default location.
 #'
+
 #' @examples
+#' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2019-04-30"
 #' aoi <- "inst/extdata/migda_9.gpkg"
@@ -40,6 +42,7 @@
 #'                                  from_date, to_date,
 #'                                  scipub = file.path("~", "apihub.txt"),
 #'                                  list_indicies="MSAVI2")
+#' }
 
 optram_acquire_s2 <- function(
     aoi_file,
@@ -56,16 +59,20 @@ optram_acquire_s2 <- function(
     if (!check_scihub_access(scihub_user, scihub_pass, optram_func)) {
       return(NULL)
     }
-    if (!file.exists(aoi)) {
+    if (!file.exists(aoi_file)) {
         warning("An area_of_interest polygon shapefile is required",
         "\n", "Please prepare the area_of_interest boundary file.")
     } else {
-        tryCatch({terra::vect(aoi)},
+        tryCatch({terra::vect(aoi_file)},
                   error = function(e) {
-                    warning(aoi, ":is not a recognized spatial format")
+                    warning(aoi_file, ": is not a recognized spatial format")
                     return(NULL) }
         )
     }
+
+    # Avoid "no visible binding for global variable" NOTE
+    aoi_name  <- result_list <- NULL
+    
     # Checks OK, proceed to download
     aoi_name <- tools::file_path_sans_ext(basename(aoi_file))
     aoi_name <- gsub(x = aoi_name, pattern = " ", replacement = "")

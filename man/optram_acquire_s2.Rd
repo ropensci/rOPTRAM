@@ -61,6 +61,7 @@ and they will be stored into the default location.
 }
 }
 \examples{
+\dontrun{
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 aoi <- "inst/extdata/migda_9.gpkg"
@@ -68,4 +69,5 @@ s2_file_list <- optram_acquire_s2(aoi,
                                  from_date, to_date,
                                  scipub = file.path("~", "apihub.txt"),
                                  list_indicies="MSAVI2")
+}
 }

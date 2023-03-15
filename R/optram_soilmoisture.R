@@ -8,25 +8,33 @@
 #' @examples
 #' print("Running optram_calculate_soil_moisture.R")
 
-optram_calculate_soil_moisture <- function(img_date, coeffs_file){
+optram_calculate_soil_moisture <- function(
+  img_date, coeffs_file, output_dir = tempdir()){
   # based on STR and two STR_dry and STR_wet bands
   # W = (STR - STR_dry) / (STR_wet - STR_dry)
-  # W = (i_dry + s_dry * NDVI - STR) / (i_dry − i_wet +  (s_dry−s_wet) * NDVI)
+  # W = (i_dry + s_dry * VI - STR) / (i_dry − i_wet +  (s_dry−s_wet) * VI)
   #
   # Parameters:
   #   coeffs: array of float, dry and wet coefficients
   #   STR_stack: rast of STR rasters
-  #   NDVI: rast, the NDVI raster
+  #   VI: rast, the NDVI or SAVI raster
   #   img_date: string, which date was used
   # Returns:
   #   W: rast, the moisture raster
+
+  # Avoid "no visible binding for global variable" NOTE
+  img_str <- VI_file <- VI_dir <- VI <- NULL
+  STR_dir <- STR_file <- STR <- coeffs <- NULL
+  
+  i_dry <- i_wet <- s_dry <- s_wet <- W <- outfile <-  NULL
+
   img_str <- gsub("-", "", img_date)
-  NDVI_file <- list.files(NDVI_dir, pattern=img_str, full.names=TRUE)
-  if (! file.exists(NDVI_file)) {
-    warning("No NDVI file:", NDVI_file, "Exiting...")
+  VI_file <- list.files(VI_dir, pattern=img_str, full.names=TRUE)
+  if (! file.exists(VI_file)) {
+    warning("No NDVI file:", VI_file, "Exiting...")
     return(NULL)
   }
-  NDVI <- terra::rast(NDVI_file)
+  VI <- terra::rast(VI_file)
   STR_file <- list.files(STR_dir, pattern=img_str, full.names=TRUE)
   STR <- terra::rast(STR_file)
 
@@ -35,9 +43,9 @@ optram_calculate_soil_moisture <- function(img_date, coeffs_file){
   s_dry <- coeffs$slope_dry
   i_wet <- coeffs$intercept_wet
   s_wet <- coeffs$slope_wet
-  W <- (i_dry + s_dry*NDVI - STR) / (i_dry - i_wet +  (s_dry-s_wet)*NDVI)
+  W <- (i_dry + s_dry*VI - STR) / (i_dry - i_wet +  (s_dry-s_wet)*VI)
   outfile <- paste0("soil_moisture_", img_date, ".tif")
-  terra::writeRaster(W, file.path(GIS_dir, outfile),
+  terra::writeRaster(W, file.path(output_dir, outfile),
               NAflag=-9999.0, overwrite=TRUE)
   return(W)
 }

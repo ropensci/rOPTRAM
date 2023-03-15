@@ -13,6 +13,8 @@
 check_scihub_access <- function(scihub_user = NULL,
                                 scihub_pass = NULL,
                                 optram_func = "optram") {
+    # Avoid "no visible binding for global variable" NOTE
+    is_online <- site <- NULL
     # First check for internet connection
     is_online <- function() {
         site = "http://example.com/"
@@ -81,6 +83,9 @@ check_scihub_access <- function(scihub_user = NULL,
 #' (not exported)
 
 calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
+    # Avoid "no visible binding for global variable" NOTE
+    nir <- red <- res_rast <- NULL
+
     nir <- img_stk[[nirband]]
     red <- img_stk[[redband]]
     if (vi == "NDVI") {

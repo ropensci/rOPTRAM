@@ -11,10 +11,12 @@
 #' @export
 #' @examples
 #' print("Running prepare_other_vi_str.R")
+
 optram_prepare_other_vi_str <- function(img_dir,
                           aoi,  
                           vi = 'NDVI',
                           output_dir = tempdir()) {
+    output_files <- NULL
     # Loop over the download folder (dates), create NDVI and STR indices for each
     # and crop to aoi
     return(output_files)

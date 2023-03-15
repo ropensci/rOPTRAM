@@ -27,10 +27,15 @@ optram_wetdry_coefficients <- function(full_df,
 
   # Create series of values for NDVI
   # Get min/max values from NDVI data, slightly smaller than full range
-  NDVI_min_max <- round(stats::quantile(full_df$NDVI, c(0.2, 0.98)) , 2)
-  NDVI_series <- seq(NDVI_min_max[[1]], NDVI_min_max[[2]], step)
-  message("NDVI series length:", length(NDVI_series))
-  STR_NDVI_list <- lapply(NDVI_series, function(i){
+
+  # Avoid "no visible binding for global variable" NOTE
+  VI_min_max <- VI_series <- VI_STR_list <- VI_STR_df <- NULL
+  Qs <- str_max <- str_min <- interval_df <- VI_STR_df1
+  
+  VI_min_max <- round(stats::quantile(full_df$NDVI, c(0.2, 0.98)) , 2)
+  VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], step)
+  message("NDVI series length:", length(VI_series))
+  STR_VI_list <- lapply(VI_series, function(i){
     # Set NDVI value at midpoint of each interval
     ndvi_val <- i + step/2.0
 
@@ -48,21 +53,21 @@ optram_wetdry_coefficients <- function(full_df,
     # Within each interval
     str_max <- max(interval_df$STR, na.rm = TRUE)
     str_min <- min(interval_df$STR, na.rm = TRUE)
-    str_ndvi_df1 <- data.frame("NDVI" = ndvi_val,
+    VI_STR_df1 <- data.frame("NDVI" = ndvi_val,
                                "STR_wet" = str_max,
                                "STR_dry" = str_min)
-    return(str_ndvi_df1)
+    return(VI_STR_df1)
   })
   # Bind all interval results into one long DF
-  STR_NDVI_list <- STR_NDVI_list[ !is.na(STR_NDVI_list) ]
-  STR_NDVI_df <- do.call(rbind, STR_NDVI_list)
-  utils::write.csv(STR_NDVI_df,
-            file.path(output_dir, "STR_NDVI_df.csv"),
+  VI_STR_list <- VI_STR_list[ !is.na(VI_STR_list) ]
+  VI_STR_df <- do.call(rbind, VI_STR_list)
+  utils::write.csv(VI_STR_df,
+            file.path(output_dir, "VI_STR_df.csv"),
             row.names = FALSE)
   # Run linear regression between STR and NDVI
   # to determine the intercept and slope for both wet and dry data
-  wet_fit <- stats::lm(STR_wet ~ NDVI, data=STR_NDVI_df)
-  dry_fit <- stats::lm(STR_dry ~ NDVI, data=STR_NDVI_df)
+  wet_fit <- stats::lm(STR_wet ~ NDVI, data=VI_STR_df)
+  dry_fit <- stats::lm(STR_dry ~ NDVI, data=VI_STR_df)
   i_wet <- wet_fit$coefficients[[1]]
   s_wet <- wet_fit$coefficients[[2]]
   i_dry <- dry_fit$coefficients[[1]]
@@ -100,6 +105,10 @@ optram_wetdry_coefficients <- function(full_df,
 plot_ndvi_str_cloud <- function(full_df,
                                 coeffs,
                                 output_dir = tempdir()){
+  # Avoid "no visible binding for global variable" NOTE
+  i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
+  x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- NULL
+
   i_dry <- coeffs$intercept_dry
   s_dry <- coeffs$slope_dry
   i_wet <- coeffs$intercept_wet

@@ -24,6 +24,7 @@
 #' @export
 #' @examples
 #' print("Running optram.R")
+
 optram <- function(aoi_file,
                    vi = 'NDVI',
                    from_date, to_date,
@@ -34,6 +35,9 @@ optram <- function(aoi_file,
                    scihub_pass = NULL,
                    output_dir = tempdir()) {
 
+  # Avoid "no visible binding for global variable" NOTE
+  s2_list <- s2_dirs <- BOA_dir <- NULL
+  VI_dir <- VI_list <- VI_STR_df <- coeffs <- NULL
     # Make sure we have access to scihub
     optram_func <- as.character(match.call()[[1]])
     if (!check_scihub_access(scihub_user, scihub_pass, optram_func)) {
@@ -59,8 +63,8 @@ optram <- function(aoi_file,
     # Calculate SWIR Tranformed Reflectance
     STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
     VI_list <- list.files(path=VI_dir, full.names = TRUE)
-    vi_str_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list)
-    coeffs <- rOPTRAM::optram_wetdry_coefficients(vi_str_df,
+    VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list)
+    coeffs <- rOPTRAM::optram_wetdry_coefficients(VI_STR_df,
                                                   output_dir = output_dir)
                                                   
     return(coeffs)
