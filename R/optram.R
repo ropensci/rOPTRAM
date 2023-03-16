@@ -34,13 +34,15 @@ optram <- function(aoi_file,
                    output_dir = tempdir()) {
 
   # Avoid "no visible binding for global variable" NOTE
-  s2_list <- s2_dirs <- BOA_dir <- NULL
+  access_ok <- s2_list <- s2_dirs <- BOA_dir <- NULL
   VI_dir <- VI_list <- VI_STR_df <- coeffs <- NULL
-    # Make sure we have access to scihub
-    optram_func <- as.character(match.call()[[1]])
-    if (!check_scihub_access(scihub_user, scihub_pass, optram_func)) {
+  
+  # Make sure we have access to scihub
+  optram_func <- as.character(match.call()[[1]])
+  access_ok <- rOPTRAM::check_scihub_access(scihub_user, scihub_pass, optram_func)
+  if (! access_ok) {
       return(NULL)
-    }
+  }
 
     # Loop over the downloaded S2 folders (dates),
     # create NDVI and STR indices for each and crop to aoi

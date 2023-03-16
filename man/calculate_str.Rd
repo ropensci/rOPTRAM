@@ -13,7 +13,6 @@ calculate_str(img_stk, swirband = 5)
 }
 \value{
 STR, SpatRaster of STR band
-(not exported)
 }
 \description{
 Use this function to prepare STR from SAFE imagery

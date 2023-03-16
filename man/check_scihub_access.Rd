@@ -15,9 +15,7 @@ check_scihub_access(
 
 \item{scihub_pass, }{string, scihub password}
 
-\item{optram_func, }{string, which function called this check
-
-(Not exported)}
+\item{optram_func, }{string, which function called this check}
 }
 \value{
 boolean, whether access to scihub using sen2r is possible

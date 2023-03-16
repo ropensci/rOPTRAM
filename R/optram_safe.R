@@ -63,7 +63,7 @@ optram_safe <- function(safe_dir,
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtd_file)) {
             warning("No metadata file in SAFE dir: ", s, "Skipping...")
-            break()
+            return(NULL)
         }
         mtd <- xml2::read_xml(mtd_file)
         epsg_code <- xml2::xml_text(xml2::xml_find_first(mtd, ".//HORIZONTAL_CS_CODE"))
@@ -96,6 +96,9 @@ optram_safe <- function(safe_dir,
         # Each item in the derived_rasters list is a raster stack, with 6 bands
         # R-G-B-NIR, SWIR 1600, SWIR 2200
         stk <- derived_rasters[x]
+        if (is.null(stk)) {
+            return(NULL)
+        }
 
         # Use the metadata file from SAFE directory name to get image date
         s <- safe_list[x]
@@ -103,7 +106,7 @@ optram_safe <- function(safe_dir,
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtd_file)) {
             warning("No metadata file in SAFE dir: ", s, "Skipping...")
-            break()
+            return(NULL)
         }
         mtd <- xml2::read_xml(mtd_file)
         datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtd, ".//SENSING_TIME")))

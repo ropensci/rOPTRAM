@@ -1,14 +1,14 @@
 #' @title Check access to Sentinel Hub, using sen2r
+#' 
 #' @description
 #' Verify that sen2r is installed,
 #' and check credentials for access to Sentinel Hub
 #' @param scihub_user, string, scihub username
 #' @param scihub_pass, string, scihub password
 #' @param optram_func, string, which function called this check
-#' 
-#' (Not exported)
+#'
+#' @export
 #' @return boolean, whether access to scihub using sen2r is possible
-#' 
 
 check_scihub_access <- function(scihub_user = NULL,
                                 scihub_pass = NULL,
@@ -28,7 +28,7 @@ check_scihub_access <- function(scihub_user = NULL,
     }
 
     # Is sen2r installed?
-    if (!require(sen2r)) {
+    if (system.file(package='sen2r') == "") {
         warning("This function requires the `sen2r` package.", "\n",
         "Please install that package first before running", optram_func)
         return(FALSE)
@@ -67,39 +67,39 @@ check_scihub_access <- function(scihub_user = NULL,
     }
 }
 
-#' @title Calculate NDVI or SAVI from bottom of atmosphere images
+#' @title Calculate NDVI, SAVI or MSAVI from bottom of atmosphere images
 #'
 #' @description
 #' Use this function to prepare vegetation index from SAFE imagery
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
-#' 
+#'
 #' @param img_stk, terra SpatRaster, multiband stack of images, already clipped to aoi
 #' @param redband, integer, number of red band
 #' @param nirband, integer, number of NIR band
 #' @param vi, string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'
 #'
-#' @return res_rast, SpatRaster of vegetation index
-#' (not exported)
+#' @export
+#' @return vi_rast, SpatRaster of vegetation index
 
 calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
     # Avoid "no visible binding for global variable" NOTE
-    nir <- red <- res_rast <- NULL
+    nir <- red <- vi_rast <- NULL
 
     nir <- img_stk[[nirband]]
     red <- img_stk[[redband]]
     if (vi == "NDVI") {
-        res_rast <- ((nir - red) / (nir + red))
+        vi_rast <- ((nir - red) / (nir + red))
     } else if (vi == "SAVI") {
-        res_rast <- ((1.5 * (nir - red)) / (nir + red + 0.5) )
+        vi_rast <- ((1.5 * (nir - red)) / (nir + red + 0.5) )
     } else if (vi == "MSAVI") {
-        res_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 8 * (nir - red))) / 2)
+        vi_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 8 * (nir - red))) / 2)
     } else {
         warning("Unrecognized index: ", vi)
-        res_rast <- NULL
+        vi_rast <- NULL
     }
-    names(res_rast) <- vi
-    return(res_rast)
+    names(vi_rast) <- vi
+    return(vi_rast)
 }
 
 
@@ -109,12 +109,11 @@ calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
 #' Use this function to prepare STR from SAFE imagery
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
-#' 
+#'
 #' @param img_stk, terra SpatRaster, multiband stack of images, already clipped to aoi
 #' @param swirband, integer, number of red band
-#'
+#' @export 
 #' @return STR, SpatRaster of STR band
-#' (not exported)
 
 calculate_str <- function(img_stk, swirband = 5) {
   # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.

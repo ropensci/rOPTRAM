@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities.R
 \name{calculate_vi}
 \alias{calculate_vi}
-\title{Calculate NDVI or SAVI from bottom of atmosphere images}
+\title{Calculate NDVI, SAVI or MSAVI from bottom of atmosphere images}
 \usage{
 calculate_vi(img_stk, vi = "NDVI", redband = 3, nirband = 4)
 }
@@ -16,8 +16,7 @@ calculate_vi(img_stk, vi = "NDVI", redband = 3, nirband = 4)
 \item{nirband, }{integer, number of NIR band}
 }
 \value{
-res_rast, SpatRaster of vegetation index
-(not exported)
+vi_rast, SpatRaster of vegetation index
 }
 \description{
 Use this function to prepare vegetation index from SAFE imagery
