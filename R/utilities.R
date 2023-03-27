@@ -16,13 +16,16 @@ check_scihub_access <- function(scihub_user = NULL,
     # Avoid "no visible binding for global variable" NOTE
     is_online <- site <- NULL
     # First check for internet connection
-    is_online <- function() {
-        site = "http://example.com/"
-        tryCatch({readLines(site, n=1)
-                  return(TRUE) },
-                  error = function(e) return(FALSE))
+    is_online <- function(site = "http://example.com/") {
+        tryCatch({
+            readLines(site, n = 1)
+            TRUE
+        },
+        # warning = function(w) invokeRestart("muffleWarning"),
+        error = function(e) FALSE)
     }
-    if (!is_online) {
+
+    if (!is_online()) {
         warning("No internet connection. Downloading data is not currently possible")
         return(FALSE)
     }
