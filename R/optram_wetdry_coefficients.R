@@ -136,18 +136,18 @@ plot_ndvi_str_cloud <- function(full_df,
     geom_abline(intercept = i_dry, slope = s_dry,
                 color = "#FD5959", linewidth = 1.0) +
     # Set gradient color
-    scale_color_gradient(low="#FD5959",
-                         high="#2E94B9") +
+    scale_color_gradient(low = "#FD5959",
+                         high = "#2E94B9") +
     expand_limits(y=c(y_min, y_max), x=c(x_min, x_max)) +
     labs(x="Vegetation Index", y="SWIR Transformed") +
-    ggtitle(paste("Trapezoid Plot - ", aoi_name) +
+    ggtitle(paste("Trapezoid Plot - ", aoi_name)) +
     # Set theme
     theme_bw() +
-    theme(axis.title = element_text(size=14),
-          axis.text = element_text(size=12),
-          plot.title = element_text(size=18))
+    theme(axis.title = element_text(size = 14),
+          axis.text = element_text(size = 12),
+          plot.title = element_text(size = 18))
 
   plot_path <- file.path(output_dir, "trapezoid_plot.png")
-  ggsave(plot_path, width=10, height=7)
+  ggsave(plot_path, width = 10, height = 7)
   message("Scatterplot saved to: ", plot_path)
 }
