@@ -129,7 +129,7 @@ plot_ndvi_str_cloud <- function(full_df,
   aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
   ggplot2::ggplot(plot_df) +
     geom_point(aes(x=NDVI, y=STR),
-               color = "#0070000b", alpha = 0.15, size = 1) +
+               color = "#0070000b", alpha = 0.05, size = 1) +
     # Wet edge
     geom_abline(intercept = i_wet, slope = s_wet,
                 color = "#2E94B9", linewidth = 1.0) +

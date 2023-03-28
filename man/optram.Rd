@@ -12,6 +12,7 @@ optram(
   max_cloud = 15,
   scihub_user = NULL,
   scihub_pass = NULL,
+  remove_safe = "yes",
   output_dir = tempdir()
 )
 }
@@ -29,6 +30,9 @@ optram(
 \item{scihub_user, }{string, username on Copernicus Sentinel Hub}
 
 \item{scihub_pass, }{string, password on Sentinel hub}
+
+\item{remove_safe, }{string, "yes" or "no", whether to delete downloaded
+SAFE directories after processing. Default "yes"}
 
 \item{output_dir, }{string, directory to save coeffs_file, default is tempdir()}
 }
