@@ -6,7 +6,7 @@
 \usage{
 optram(
   aoi_file,
-  vi = "NDVI",
+  vidx = "NDVI",
   from_date,
   to_date,
   max_cloud = 15,
@@ -18,7 +18,7 @@ optram(
 \arguments{
 \item{aoi_file, }{string, full path to polygon spatial file of area of interest}
 
-\item{vi, }{string, which VI to prepare, either 'NVDI' or 'SAVI'}
+\item{vidx, }{string, which VI to prepare, either 'NVDI' or 'SAVI'}
 
 \item{from_date, }{string, the start of the date range, Formatted as "YYYY-MM-DD"}
 

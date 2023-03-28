@@ -6,13 +6,16 @@
 \usage{
 optram_wetdry_coefficients(
   full_df,
+  aoi_file,
   output_dir = tempdir(),
-  step = 0.001,
+  step = 0.01,
   save_plot = TRUE
 )
 }
 \arguments{
 \item{full_df, }{data.frame of STR and NDVI values}
+
+\item{aoi_file, }{string, full path to AOI file (used to add title to plot)}
 
 \item{output_dir, }{string, directory to save coefficients CSV file}
 

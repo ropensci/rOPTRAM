@@ -13,6 +13,8 @@ plot_ndvi_str_cloud(full_df, coeffs, output_dir = tempdir())
 of wet and dry regression lines}
 
 \item{output_dir, }{string, directory to save plot png file.}
+
+\item{aoi_file, }{string, full path to AOI file}
 }
 \value{
 None
