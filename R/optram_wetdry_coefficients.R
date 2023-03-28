@@ -104,7 +104,8 @@ optram_wetdry_coefficients <- function(full_df,
 
 plot_ndvi_str_cloud <- function(full_df,
                                 coeffs,
-                                output_dir = tempdir()){
+                                aoi_file,
+                                output_dir = tempdir()) {
   # Avoid "no visible binding for global variable" NOTE
   i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
   x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- NULL
@@ -147,7 +148,7 @@ plot_ndvi_str_cloud <- function(full_df,
           axis.text = element_text(size = 12),
           plot.title = element_text(size = 18))
 
-  plot_path <- file.path(output_dir, "trapezoid_plot.png")
+  plot_path <- file.path(output_dir, paste0("trapezoid_", aoi_name, ".png")
   ggsave(plot_path, width = 10, height = 7)
   message("Scatterplot saved to: ", plot_path)
 }
