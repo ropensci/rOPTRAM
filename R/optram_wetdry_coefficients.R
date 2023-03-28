@@ -33,7 +33,7 @@ optram_wetdry_coefficients <- function(full_df,
   VI_min_max <- round(stats::quantile(full_df$NDVI, c(0.2, 0.98)) , 2)
   VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], step)
   message("NDVI series length:", length(VI_series))
-  STR_VI_list <- lapply(VI_series, function(i){
+  VI_STR_list <- lapply(VI_series, function(i){
     # Set NDVI value at midpoint of each interval
     ndvi_val <- i + step/2.0
 
