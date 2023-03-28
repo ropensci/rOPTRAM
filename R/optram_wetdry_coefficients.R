@@ -123,7 +123,8 @@ plot_ndvi_str_cloud <- function(full_df,
   y_min <- 0.1
   y_max <- max(plot_df$STR)*1.05
   ggplot2::ggplot(plot_df) +
-    geom_point(aes(x=NDVI, y=STR), alpha = 0.15, size=1) +
+    geom_point(aes(x=NDVI, y=STR),
+               color = "green", alpha = 0.15, size = 1) +
     # Wet edge
     geom_abline(intercept = i_wet, slope = s_wet,
                 color = "#2E94B9", linewidth = 1.0) +
@@ -134,7 +135,7 @@ plot_ndvi_str_cloud <- function(full_df,
     scale_color_gradient(low="#FD5959",
                          high="#2E94B9") +
     expand_limits(y=c(y_min, y_max), x=c(x_min, x_max)) +
-    labs(x="SAVI", y="SWIR Transformed") +
+    labs(x="Vegetation Index", y="SWIR Transformed") +
     ggtitle("Trapezoid Plot") +
     # Set theme
     theme_bw() +
