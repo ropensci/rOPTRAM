@@ -12,7 +12,7 @@
 
 optram_wetdry_coefficients <- function(full_df,
                                        output_dir = tempdir(),
-                                       step=0.001,
+                                       step=0.01,
                                        save_plot = TRUE) {
   # Derive slope and intercept to two sides of trapezoid
   # Based on:
@@ -30,7 +30,7 @@ optram_wetdry_coefficients <- function(full_df,
   VI_min_max <- VI_series <- VI_STR_list <- VI_STR_df <- NULL
   Qs <- str_max <- str_min <- interval_df <- VI_STR_df1 <- NULL
   
-  VI_min_max <- round(stats::quantile(full_df$NDVI, c(0.2, 0.98)) , 2)
+  VI_min_max <- round(stats::quantile(full_df$NDVI, c(0.2, 0.98)), 2)
   VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], step)
   message("NDVI series length:", length(VI_series))
   VI_STR_list <- lapply(VI_series, function(i){
@@ -43,8 +43,8 @@ optram_wetdry_coefficients <- function(full_df,
     if (nrow(interval_df) < 4) {
       return(NA)
     }
-    # Remove lower than 10% and more than 90% quartile of STR values
-    Qs <- stats::quantile(interval_df$STR, c(0.02, 0.98), na.rm=TRUE)
+    # Remove lower than 2% and more than 98% quartile of STR values
+    Qs <- stats::quantile(interval_df$STR, c(0.01, 0.99), na.rm=TRUE)
     interval_df <- interval_df[interval_df$STR<=Qs[[2]] &
                                  interval_df$STR>=Qs[[1]],]
     # Now, with outliers removed, find min (dry) and max (wet)
@@ -123,7 +123,7 @@ plot_ndvi_str_cloud <- function(full_df,
   y_min <- 0.1
   y_max <- max(plot_df$STR)*1.05
   ggplot2::ggplot(plot_df) +
-    geom_point(aes(x=NDVI, y=STR), alpha = 0.05, size=1) +
+    geom_point(aes(x=NDVI, y=STR), alpha = 0.15, size=1) +
     # Wet edge
     geom_abline(intercept = i_wet, slope = s_wet,
                 color = "#2E94B9", linewidth = 1.0) +
