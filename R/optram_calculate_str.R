@@ -42,6 +42,6 @@ optram_calculate_str <- function(BOA_dir){
   })
   STR_list <- unlist(STR_list)
   message("Prepared: ", length(STR_list), " STR files")
-  # print(STR_list)
+  #print(STR_list)
   return(STR_list)
 }

@@ -77,7 +77,9 @@ optram_wetdry_coefficients <- function(full_df,
             row.names=FALSE)
 
   if (save_plot) {
-    rOPTRAM::plot_ndvi_str_cloud(full_df, coeffs)
+    rOPTRAM::plot_ndvi_str_cloud(full_df,
+                                coeffs,
+                                output_dir = output_dir)
   }
   return(coeffs)
 }
