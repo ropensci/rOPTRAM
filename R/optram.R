@@ -18,6 +18,8 @@
 #' @param scihub_user, string, username on Copernicus Sentinel Hub
 #' @param scihub_pass, string, password on Sentinel hub
 #' @param output_dir, string, directory to save coeffs_file, default is tempdir()
+#' @param remove_safe, string, "yes" or "no", whether to delete downloaded
+#' SAFE directories after processing. Default "yes"
 #' @return coeffs_file, string, full path to saved CSV of wet-dry coefficients
 #' @export
 #' @examples
@@ -31,6 +33,7 @@ optram <- function(aoi_file,
                    # stored in "~/.sen2r/apihub.txt"
                    scihub_user = NULL,
                    scihub_pass = NULL,
+                   remove_safe = "yes",
                    output_dir = tempdir()) {
 
   # Avoid "no visible binding for global variable" NOTE
@@ -53,6 +56,7 @@ optram <- function(aoi_file,
                     scihub_user = scihub_user,
                     scihub_pass = scihub_pass,
                     list_indicies = vidx,
+                    remove_safe = remove_safe,
                     output_dir = output_dir)
 
     # Get full output directories for both BOA and NDVI

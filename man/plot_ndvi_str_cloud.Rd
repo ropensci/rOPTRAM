@@ -4,7 +4,7 @@
 \alias{plot_ndvi_str_cloud}
 \title{Create scatter plot of STR-NDVI point cloud,}
 \usage{
-plot_ndvi_str_cloud(full_df, coeffs, output_dir = tempdir())
+plot_ndvi_str_cloud(full_df, coeffs, aoi_file, output_dir = tempdir())
 }
 \arguments{
 \item{full_df, }{data.frame of NDVI and STR pixel values}
@@ -12,9 +12,9 @@ plot_ndvi_str_cloud(full_df, coeffs, output_dir = tempdir())
 \item{coeffs, }{list of floats, the slope and intercept
 of wet and dry regression lines}
 
-\item{output_dir, }{string, directory to save plot png file.}
-
 \item{aoi_file, }{string, full path to AOI file}
+
+\item{output_dir, }{string, directory to save plot png file.}
 }
 \value{
 None

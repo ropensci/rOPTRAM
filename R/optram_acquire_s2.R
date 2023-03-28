@@ -16,6 +16,8 @@
 #' or "seasonal" for only months specified, but over the full date range.
 #' @param output_dir, string, path to save downloaded, and processed imagery
 #' @param list_indicies, vector of strings, which indicies to prepare. Default c("NDVI", "SAVI")
+#' @param remove_safe, string, "yes" or "no": whether to delete downloaded SAFE directories
+#' after processing, default "yes"
 #' @return output_path, string, path to downloaded files
 #' @export
 #' @note
@@ -45,6 +47,7 @@ optram_acquire_s2 <- function(
     max_cloud = 15,
     timeperiod = "full",
     output_dir = tempdir(),
+    remove_safe = "yes",
     list_indicies = c("NDVI","SAVI")) {
     # Download Sentinel 2 images during the requested date range,
     # and clip to the area of interest
@@ -74,7 +77,7 @@ optram_acquire_s2 <- function(
         param_list = config_file,
         gui = FALSE,
         server = c("scihub", "gcloud"),
-        rm_safe = "yes",
+        rm_safe = remove_safe,
         max_cloud_safe = max_cloud,
         timewindow = c(from_date, to_date),
         timeperiod = timeperiod,
