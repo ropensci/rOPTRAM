@@ -126,7 +126,8 @@ optram_safe <- function(safe_dir,
     full_VI_STR <- do.call(rbind, VI_STR_list)
 
     # Now continue with regular process
-    coeffs <- rOPTRAM::optram_wetdry_coefficients(full_VI_STR, output_dir)
+    coeffs <- rOPTRAM::optram_wetdry_coefficients(full_VI_STR,
+                                                  aoi_file, output_dir)
 
     return(coeffs)
 }

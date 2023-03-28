@@ -5,14 +5,16 @@
 #' @param full_df, data.frame of STR and NDVI values
 #' @param output_dir, string, directory to save coefficients CSV file
 #' @param step, float
+#' @param aoi_file, string, full path to AOI file (used to add title to plot)
 #' @param save_plot, boolean, If TRUE (default) save scatterplot to output_dir
 #' @return coeffs, list of float, coefficients of wet-dry trapezoid
 #' @export
 #' @examples print("Running optram_wetdry_coefficients.R")
 
 optram_wetdry_coefficients <- function(full_df,
+                                       aoi_file,
                                        output_dir = tempdir(),
-                                       step=0.01,
+                                       step=0.01, 
                                        save_plot = TRUE) {
   # Derive slope and intercept to two sides of trapezoid
   # Based on:
@@ -78,7 +80,7 @@ optram_wetdry_coefficients <- function(full_df,
 
   if (save_plot) {
     rOPTRAM::plot_ndvi_str_cloud(full_df,
-                                coeffs,
+                                coeffs, aoi_file = aoi_file,
                                 output_dir = output_dir)
   }
   return(coeffs)
@@ -92,6 +94,7 @@ optram_wetdry_coefficients <- function(full_df,
 #' @param full_df, data.frame of NDVI and STR pixel values
 #' @param coeffs, list of floats, the slope and intercept
 #'   of wet and dry regression lines
+#' @param aoi_file, string, full path to AOI file
 #' @param output_dir, string, directory to save plot png file.
 #' @return None
 #' @export
@@ -122,9 +125,10 @@ plot_ndvi_str_cloud <- function(full_df,
   x_max <- max(plot_df$NDVI)*1.05
   y_min <- 0.1
   y_max <- max(plot_df$STR)*1.05
+  aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
   ggplot2::ggplot(plot_df) +
     geom_point(aes(x=NDVI, y=STR),
-               color = "green", alpha = 0.15, size = 1) +
+               color = "#0070000b", alpha = 0.15, size = 1) +
     # Wet edge
     geom_abline(intercept = i_wet, slope = s_wet,
                 color = "#2E94B9", linewidth = 1.0) +
@@ -136,7 +140,7 @@ plot_ndvi_str_cloud <- function(full_df,
                          high="#2E94B9") +
     expand_limits(y=c(y_min, y_max), x=c(x_min, x_max)) +
     labs(x="Vegetation Index", y="SWIR Transformed") +
-    ggtitle("Trapezoid Plot") +
+    ggtitle(paste("Trapezoid Plot - ", aoi_name) +
     # Set theme
     theme_bw() +
     theme(axis.title = element_text(size=14),

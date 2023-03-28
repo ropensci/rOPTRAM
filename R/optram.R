@@ -65,6 +65,7 @@ optram <- function(aoi_file,
     VI_list <- list.files(path = VI_dir, full.names = TRUE)
     VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list)
     coeffs <- rOPTRAM::optram_wetdry_coefficients(VI_STR_df,
+                                                  aoi_file = aoi_file,
                                                   output_dir = output_dir)
                                                   
     return(coeffs)

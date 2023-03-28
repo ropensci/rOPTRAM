@@ -66,14 +66,8 @@ optram_acquire_s2 <- function(
 
     # Avoid "no visible binding for global variable" NOTE
     aoi_name  <- result_list <- NULL
-    
     # Checks OK, proceed to download
-    aoi_name <- tools::file_path_sans_ext(basename(aoi_file))
-    aoi_name <- gsub(x = aoi_name, pattern = " ", replacement = "")
-    aoi_name <- gsub(x = aoi_name, pattern = "\\.", replacement = "")
-    aoi_name <- gsub(x = aoi_name, pattern = "_", replacement = "")
-    aoi_name <- tools::toTitleCase(aoi_name)
-
+    aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
     # Get generic config json 
     config_file <- system.file("extdata", "s2_config.json", package = "rOPTRAM")
     result_list <- sen2r::sen2r(

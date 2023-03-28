@@ -138,3 +138,24 @@ calculate_str <- function(img_stk, swirband = 5) {
     names(STR) <- "STR"
     return(STR)
 }
+
+
+#' @title Get name string for AIO from the full file name
+#'
+#' @description
+#' Extract a string from the full path to AIO file
+#'
+#' @param aoi_file, string, full path to AOI file
+#' @export 
+#' @return aoi_name, string
+
+aoi_to_name <- function(aoi_file) {
+
+    aoi_name <- NULL
+    aoi_name <- tools::file_path_sans_ext(basename(aoi_file))
+    aoi_name <- gsub(x = aoi_name, pattern = " ", replacement = "")
+    aoi_name <- gsub(x = aoi_name, pattern = "\\.", replacement = "")
+    aoi_name <- gsub(x = aoi_name, pattern = "_", replacement = "")
+ 
+    return(aoi_name)
+}
