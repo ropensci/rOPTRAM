@@ -11,7 +11,7 @@
 #'   Remote Sensing of Environment 198, 52–68,
 #'   https://doi.org/10.1016/j.rse.2017.05.041 .
 #' @param aoi_file, string, full path to polygon spatial file of area of interest
-#' @param vi, string, which VI to prepare, either 'NVDI' or 'SAVI'
+#' @param vidx, string, which VI to prepare, either 'NVDI' or 'SAVI'
 #' @param from_date, string, the start of the date range, Formatted as "YYYY-MM-DD"
 #' @param to_date, the end of the date range.
 #' @param max_cloud, integer, maximum percent cloud cover, Default 15.
@@ -24,7 +24,7 @@
 #' print("Running optram.R")
 
 optram <- function(aoi_file,
-                   vi = 'NDVI',
+                   vidx = 'NDVI',
                    from_date, to_date,
                    max_cloud = 15,
                    # NULL creds assumes that credentials are already
@@ -52,17 +52,17 @@ optram <- function(aoi_file,
                     max_cloud = max_cloud,
                     scihub_user = scihub_user,
                     scihub_pass = scihub_pass,
-                    list_indicies = vi,
+                    list_indicies = vidx,
                     output_dir = output_dir)
 
     # Get full output directories for both BOA and NDVI
-    s2_dirs <- unlist(lapply(s2_list, dirname))
+    s2_dirs <- list.dirs(output_dir,  full.names = TRUE)
     BOA_dir <- s2_dirs[grep("BOA", s2_dirs, fixed = TRUE)][1]
-    VI_dir <- s2_dirs[grep(vi, s2_dirs, fixed = TRUE)][1]
+    VI_dir <- s2_dirs[grep(vidx, s2_dirs, fixed = TRUE)][1]
 
     # Calculate SWIR Tranformed Reflectance
     STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
-    VI_list <- list.files(path=VI_dir, full.names = TRUE)
+    VI_list <- list.files(path = VI_dir, full.names = TRUE)
     VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list)
     coeffs <- rOPTRAM::optram_wetdry_coefficients(VI_STR_df,
                                                   output_dir = output_dir)
