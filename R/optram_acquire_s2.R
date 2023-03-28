@@ -73,12 +73,15 @@ optram_acquire_s2 <- function(
     aoi_name <- gsub(x = aoi_name, pattern = "\\.", replacement = "")
     aoi_name <- gsub(x = aoi_name, pattern = "_", replacement = "")
     aoi_name <- tools::toTitleCase(aoi_name)
+
+    # Get generic config json 
+    config_file <- system.file("extdata", "s2_config.json", package = "rOPTRAM")
     result_list <- sen2r::sen2r(
+        param_list = config_file,
         gui = FALSE,
         server = c("scihub", "gcloud"),
         rm_safe = "yes",
         max_cloud_safe = max_cloud,
-        overwrite = TRUE,
         timewindow = c(from_date, to_date),
         timeperiod = timeperiod,
         list_prods = "BOA",
@@ -91,6 +94,7 @@ optram_acquire_s2 <- function(
         extent_as_mask = TRUE,
         path_l2a = output_dir,
         path_out = output_dir,
+        path_indices = output_dir,
         thumbnails = FALSE
       )
     return(result_list)
