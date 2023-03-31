@@ -1,5 +1,6 @@
 #' @title Calculate soil moisture grid
-#' @description  
+#' @description Prepare soil moisture grid from STR and VI images for a single date
+#' using the derived slope and intercept coefficients 
 #' @param VI_dir, string, full path to directory holding the VI rasters
 #' @param STR_dir, string, full path to directory holding the STR rasters
 #' @param img_date, string, image date of single Sentinel 2 acquisition
@@ -12,7 +13,8 @@
 #' print("Running optram_calculate_soil_moisture.R")
 
 optram_calculate_soil_moisture <- function(
-  VI_dir, STR_dir, img_date,
+  img_date,
+  VI_dir, STR_dir,
   coeffs_file, output_dir = tempdir()){
   # based on STR and two STR_dry and STR_wet bands
   # W = (STR - STR_dry) / (STR_wet - STR_dry)
