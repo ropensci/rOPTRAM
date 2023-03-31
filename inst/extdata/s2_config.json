@@ -5,7 +5,7 @@
   "online": [true],
   "server": ["gcloud", "scihub"],
   "order_lta": [true],
-  "downloader": ["aria2"],
+  "downloader": ["aria2c"],
   "overwrite_safe": [false],
   "rm_safe": ["no"],
   "max_cloud_safe": [100],

@@ -78,7 +78,7 @@ optram_acquire_s2 <- function(
         gui = FALSE,
         server = c("scihub", "gcloud"),
         rm_safe = remove_safe,
-        max_cloud_safe = max_cloud,
+        max_mask = max_cloud,
         timewindow = c(from_date, to_date),
         timeperiod = timeperiod,
         list_prods = "BOA",
