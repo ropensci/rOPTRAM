@@ -23,7 +23,8 @@ optram_calculate_str <- function(BOA_dir){
 
   # Avoid "no visible binding for global variable" NOTE
   BOA_list <- STR_list <- SWIR_DN <- SWIR <- STR <- outfile <- outpath <- NULL
-  BOA_list <- list.files(BOA_dir, full.names = TRUE)
+  BOA_list <- list.files(BOA_dir,
+                        pattern = ".tif$", full.names = TRUE)
   # Get only the original BOA files, in case STR have already been calculated
   BOA_list <- BOA_list[grep("_BOA_", BOA_list)]
   STR_list <- lapply(BOA_list, function(t) {
