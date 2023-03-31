@@ -42,6 +42,7 @@ optram_calculate_soil_moisture <- function(
     return(NULL)
   }
   VI <- terra::rast(VI_file)
+  VI  <- VI / 10000
   STR_file <- list.files(STR_dir,
                         pattern = paste0(img_str, ".*STR"),
                         full.names = TRUE)
