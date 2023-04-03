@@ -122,14 +122,21 @@ plot_ndvi_str_cloud <- function(full_df,
   } else {
     plot_df <- full_df
   }
-  x_min <- min(plot_df$NDVI)*0.9
-  x_max <- max(plot_df$NDVI)*1.05
+  # NDVI (x) axis limits
+  #x_min <- min(plot_df$NDVI)*0.9
+  #x_max <- max(plot_df$NDVI)*1.05
+  # Set fixed plot limits
+  x_min <- 0.0
+  x_max <- 0.9
+  # STR (y) axis limits
   y_min <- 0.1
-  y_max <- max(plot_df$STR)*1.05
+  y_max <- 3.6
+  #y_max <- max(plot_df$STR)*1.05
+
   aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
   ggplot2::ggplot(plot_df) +
     geom_point(aes(x=NDVI, y=STR),
-               color = "#0070000b", alpha = 0.05, size = 1) +
+               color = "#0070000b", alpha = 0.2, size = 1) +
     # Wet edge
     geom_abline(intercept = i_wet, slope = s_wet,
                 color = "#2E94B9", linewidth = 1.0) +
