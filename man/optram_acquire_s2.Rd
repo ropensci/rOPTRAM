@@ -10,7 +10,7 @@ optram_acquire_s2(
   to_date,
   scihub_user = NULL,
   scihub_pass = NULL,
-  max_cloud = 15,
+  max_cloud = 10,
   timeperiod = "full",
   output_dir = tempdir(),
   remove_safe = "yes",

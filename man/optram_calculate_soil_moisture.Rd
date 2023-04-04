@@ -28,7 +28,8 @@ for saving soil moisture raster}
 rast, soil moisture grid
 }
 \description{
-Calculate soil moisture grid
+Prepare soil moisture grid from STR and VI images for a single date
+using the derived slope and intercept coefficients
 }
 \examples{
 print("Running optram_calculate_soil_moisture.R")
