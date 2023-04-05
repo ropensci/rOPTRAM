@@ -3,21 +3,22 @@
 #' of ground truth soil moisture data, typically from TDR sensors.
 #' The CSV data file represents measurements over a time series, for one location.
 #' The predicted soil moisture values from the model are extracted at the sensor location
-#' from a time series of model prediction rasters 
+#' from a time series of OPTRAM model prediction rasters.
 #' (derived from the `optram_calculate soil_miosture()` function)
 #' The ground truth measurements are correlated with the model predictions
-#' and an optional regression line is plotted
+#' and an optional scatterplot with regression line are plotted.
 #' @param data_file, string, full path to CSV file of in situ measurements. See Note below.
 #' @param model_output_dir, string, path to directory of rasters from:
 #' `optram_calculate soil_moisture()` function
 #' @param TDR_file, string, full path to spatial file of TDR sensor.
-#'  Either geopackage, shapefile, geojson
+#'  Either geopackage, shapefile, or other spatial data format.
 #' @param TDR_layer, string, layer name of TDR location
-#'  (in case the spatial file is geopackage). 
+#'  (required only if the spatial file is geopackage).
 #' @param output_dir, string, where to save data.frame of soil moisture values
 #' and (optional) plot.
 #' @param show_plot, boolean, whether to prepare regression plot, default FALSE
 #' @return sm_df, data.frame of soil moisture values, in situ and predicted
+#' This data is also saved to and *.rds file.
 #' @export
 #' @examples 
 #' #' print("Running optram_validate.R")
@@ -66,6 +67,9 @@ optram_validate <- function(data_file,
     # Time delta for this TDR location
     diff_secs <- 60 * (-0.28 * lat)
 
+    # Reproject the tdr locations to the CRS of the soil moisture rasters
+    sm_1 <- terra::rast(model_output_list[1])
+    tdr <- terra::project(tdr, sm_1)
     # The data file is assumed to be formatted with two columns
     # The first contains date time (UTC time zone) as "YYYY-MM-DD HH:MM:SSZ"
     # The second column contains Volumetric water content in %
@@ -73,15 +77,24 @@ optram_validate <- function(data_file,
     names(tdr_data) <- c("datetime", "vol_water_content")
     # Loop over time series of soil moisture rasters
     sm_df_list <- lapply(model_output_list, function(f) {
+        # Check that the TDR locations is actually within the extent
+        # of the soil moisture raster
+        sm <- terra::rast(f)
+        overlap <- terra::intersect(tdr, terra::ext(sm))
+        if (is.na(geom(overlap)[1])) {
+            return(NULL)
+        }
         # Assumes that the file names of soil moisture rasters follows
         # `optram_calculate_soil_moisture()`: "soil_moisture_YYYY-MM-DD.tif"
         f_base <- tools::file_path_sans_ext(basename(f))
         date_str <- unlist(strsplit(f_base, "_"))[3]
+        # THe local mean solar time for Seninel is 10:30 UTC
+        # Add (subtract) the difference based on latitude
         sm_date <- as.POSIXct(paste(date_str, "10:30:00"), tz="UTC") + diff_secs
         # Get TDR data for this date
         idx <- findInterval(sm_date, tdr_data$datetime)
         sm_tdr <- tdr_data$vol_water_content[idx]
-        sm <- terra::rast(f)
+
         sm_model <- terra::extract(sm, tdr)
         # Get date of image, and construct datetime
         sm_df_1 <- data.frame("Date_Time" = sm_date,
@@ -90,8 +103,13 @@ optram_validate <- function(data_file,
         return(sm_df_1)
     })
     sm_df <- do.call(rbind, sm_df_list)
-    optram_correlation <- stats::cor(sm_df$SM_TDR, sm_df$SM_Model)
-    print(paste("OPTRAM correlation: ", optram_correlation))
+    if (nrow(sm_df) == 0) {
+        warning(
+            "No overlap between TDR locations and soil moisture raster",
+            "\nExiting...")
+    }
+    optram_r.squared <- stats::cor(sm_df$SM_TDR, sm_df$SM_Model)^2
+    print(paste("OPTRAM correlation (R^2): ", optram_r.squared))
 
     if (show_plot) {
         plot_correlation(sm_df, output_dir)
