@@ -27,6 +27,7 @@ Imports:
     tools,
     utils
 Suggests:
+    geojsonio,
     sen2r,
     testthat (>= 3.0.0),
     xml2
