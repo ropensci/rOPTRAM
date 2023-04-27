@@ -6,7 +6,7 @@
 \usage{
 optram(
   aoi_file,
-  vidx = "NDVI",
+  veg_index = "NDVI",
   from_date,
   to_date,
   max_cloud = 15,
@@ -19,7 +19,7 @@ optram(
 \arguments{
 \item{aoi_file, }{string, full path to polygon spatial file of area of interest}
 
-\item{vidx, }{string, which VI to prepare, either 'NVDI' or 'SAVI'}
+\item{veg_index, }{string, which index to use. Default "NDVI"}
 
 \item{from_date, }{string, the start of the date range, Formatted as "YYYY-MM-DD"}
 
@@ -51,6 +51,28 @@ applied to Sentinel-2 and Landsat-8 observations.
 Remote Sensing of Environment 198, 52–68,
 https://doi.org/10.1016/j.rse.2017.05.041 .
 }
+\note{
+Access to Copernicus Sentinel Hub requires registration.
+If you have already registered, and saved your credentials
+in the default "~/.sen2r/apihub.txt" file,
+then you can leave the scihub_user and scihub_pass empty.
+If your credentials are \strong{not} yet stored, then
+\itemize{
+\item register on the Scihub website:
+\item https://scihub.copernicus.eu/userguide/SelfRegistration
+\item enter your user and pass parameters in this function call,
+and they will be stored into the default location.
+}
+}
 \examples{
-print("Running optram.R")
+\dontrun{
+from_date <- "2018-12-01"
+to_date <- "2019-04-30"
+aoi <- "inst/extdata/migda_9.gpkg"
+coeffs <- optram(aoi,
+                 from_date, to_date,
+                 veg_index = c("SAVI"),
+                 scihub_user = "userxxx", scihub_pass = "secretxyz"
+                 )
+}
 }

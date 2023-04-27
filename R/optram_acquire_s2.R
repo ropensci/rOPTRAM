@@ -15,14 +15,15 @@
 #' @param timeperiod, string, either "full" for the whole date range,
 #' or "seasonal" for only months specified, but over the full date range.
 #' @param output_dir, string, path to save downloaded, and processed imagery
-#' @param list_indicies, vector of strings, which indicies to prepare. Default c("NDVI", "SAVI")
+#' @param list_indicies, vector of strings, which indicies to prepare.
+#'    Default c("NDVI", "SAVI")
 #' @param remove_safe, string, "yes" or "no": whether to delete downloaded SAFE directories
 #' after processing, default "yes"
 #' @return output_path, string, path to downloaded files
 #' @export
 #' @note
 #' Access to Copernicus Sentinel Hub requires registration. If you have already
-#' registered, and saved your credentials into the default "~/.sen2r/apihub.txt" file,
+#' registered, and saved your credentials into the default "library(sen2r)" file,
 #' then you can leave the scihub_user and scihub_pass empty.
 #' If your credentials are **not** yet stored, then
 #' - register on the Scihub website:
@@ -33,67 +34,69 @@
 #' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2019-04-30"
-#' aoi <- "inst/extdata/migda_9.gpkg"
+#' aoi <- "inst/extdata/migda_aoi.gpkg"
 #' s2_file_list <- optram_acquire_s2(aoi,
 #'                                  from_date, to_date,
-#'                                  scipub = file.path("~", "apihub.txt"),
+#'                                  scihub_user = "userxxx",
+#'                                  scihub_pass = "secretxyz"
+#'                                  timeperiod = "full",
 #'                                  list_indicies="MSAVI2")
 #' }
 
 optram_acquire_s2 <- function(
-    aoi_file,
-    from_date, to_date,
-    scihub_user = NULL, scihub_pass = NULL,
-    max_cloud = 10,
-    timeperiod = "full",
-    output_dir = tempdir(),
-    remove_safe = "yes",
-    list_indicies = c("NDVI","SAVI")) {
-    # Download Sentinel 2 images during the requested date range,
-    # and clip to the area of interest
-    # Pre flight checks...
-    optram_func <- as.character(match.call()[[1]])
-    if (!check_scihub_access(scihub_user, scihub_pass, optram_func)) {
-      return(NULL)
-    }
-    if (!file.exists(aoi_file)) {
-        warning("An area_of_interest polygon shapefile is required",
-        "\n", "Please prepare the area_of_interest boundary file.")
-    } else {
-        tryCatch({terra::vect(aoi_file)},
-                  error = function(e) {
-                    warning(aoi_file, ": is not a recognized spatial format")
-                    return(NULL) }
-        )
-    }
-
-    # Avoid "no visible binding for global variable" NOTE
-    aoi_name  <- result_list <- NULL
-    # Checks OK, proceed to download
-    aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
-    # Get generic config json 
-    config_file <- system.file("extdata", "s2_config.json", package = "rOPTRAM")
-    result_list <- sen2r::sen2r(
-        param_list = config_file,
-        gui = FALSE,
-        server = c("scihub", "gcloud"),
-        rm_safe = remove_safe,
-        max_cloud_safe = max_cloud * 1.5,
-        max_mask = max_cloud,
-        timewindow = c(from_date, to_date),
-        timeperiod = timeperiod,
-        list_prods = "BOA",
-        # param name in `sen2r` is "list_indices"
-        # in rOPTRAM: "list_indicies"
-        list_indices = list_indicies,
-        resampling = "bilinear",
-        extent = aoi_file,
-        extent_name = aoi_name,
-        extent_as_mask = TRUE,
-        path_l2a = output_dir,
-        path_out = output_dir,
-        path_indices = output_dir,
-        thumbnails = FALSE
+      aoi_file,
+      from_date, to_date,
+      scihub_user = NULL, scihub_pass = NULL,
+      max_cloud = 10,
+      timeperiod = "full",
+      output_dir = tempdir(),
+      remove_safe = "yes",
+      list_indicies = c("NDVI", "SAVI")) {
+  # Download Sentinel 2 images during the requested date range,
+  # and clip to the area of interest
+  # Pre flight checks...
+  optram_func <- as.character(match.call()[[1]])
+  if (!check_scihub_access(scihub_user, scihub_pass, optram_func)) {
+    return(NULL)
+  }
+  if (!file.exists(aoi_file)) {
+      warning("An area_of_interest polygon shapefile is required",
+      "\n", "Please prepare the area_of_interest boundary file.")
+  } else {
+      tryCatch({terra::vect(aoi_file)},
+                error = function(e) {
+                  warning(aoi_file, ": is not a recognized spatial format")
+                  return(NULL) }
       )
-    return(result_list)
+  }
+
+  # Avoid "no visible binding for global variable" NOTE
+  aoi_name  <- result_list <- NULL
+  # Checks OK, proceed to download
+  aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
+  # Get generic config json 
+  config_file <- system.file("extdata", "s2_config.json", package = "rOPTRAM")
+  result_list <- sen2r::sen2r(
+      param_list = config_file,
+      gui = FALSE,
+      server = c("scihub", "gcloud"),
+      rm_safe = remove_safe,
+      max_cloud_safe = max_cloud * 1.5,
+      max_mask = max_cloud,
+      timewindow = c(from_date, to_date),
+      timeperiod = timeperiod,
+      list_prods = "BOA",
+      # param name in `sen2r` is "list_indices"
+      # in rOPTRAM: "list_indicies"
+      list_indices = list_indicies,
+      resampling = "bilinear",
+      extent = aoi_file,
+      extent_name = aoi_name,
+      extent_as_mask = TRUE,
+      path_l2a = output_dir,
+      path_out = output_dir,
+      path_indices = output_dir,
+      thumbnails = FALSE
+    )
+  return(result_list)
 }

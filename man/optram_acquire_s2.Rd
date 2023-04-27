@@ -38,7 +38,8 @@ or "seasonal" for only months specified, but over the full date range.}
 \item{remove_safe, }{string, "yes" or "no": whether to delete downloaded SAFE directories
 after processing, default "yes"}
 
-\item{list_indicies, }{vector of strings, which indicies to prepare. Default c("NDVI", "SAVI")}
+\item{list_indicies, }{vector of strings, which indicies to prepare.
+Default c("NDVI", "SAVI")}
 }
 \value{
 output_path, string, path to downloaded files
@@ -54,7 +55,7 @@ The package prepares vegetation indicies, cropped to an area of interest.
 }
 \note{
 Access to Copernicus Sentinel Hub requires registration. If you have already
-registered, and saved your credentials into the default "~/.sen2r/apihub.txt" file,
+registered, and saved your credentials into the default "library(sen2r)" file,
 then you can leave the scihub_user and scihub_pass empty.
 If your credentials are \strong{not} yet stored, then
 \itemize{
@@ -68,10 +69,12 @@ and they will be stored into the default location.
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-aoi <- "inst/extdata/migda_9.gpkg"
+aoi <- "inst/extdata/migda_aoi.gpkg"
 s2_file_list <- optram_acquire_s2(aoi,
                                  from_date, to_date,
-                                 scipub = file.path("~", "apihub.txt"),
+                                 scihub_user = "userxxx",
+                                 scihub_pass = "secretxyz"
+                                 timeperiod = "full",
                                  list_indicies="MSAVI2")
 }
 }

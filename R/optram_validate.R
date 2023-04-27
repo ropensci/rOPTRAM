@@ -81,7 +81,7 @@ optram_validate <- function(data_file,
         # of the soil moisture raster
         sm <- terra::rast(f)
         overlap <- terra::intersect(tdr, terra::ext(sm))
-        if (is.na(geom(overlap)[1])) {
+        if (is.na(terra::geom(overlap)[1])) {
             return(NULL)
         }
         # Assumes that the file names of soil moisture rasters follows
@@ -142,7 +142,7 @@ plot_correlation <- function(sm_df, output_dir) {
                       strftime(max_date, "%Y%m%d"), sep="_")
     png_path <- file.path(output_dir, paste0(png_file, ".png"))
 
-    pl <- ggplot2::ggplot(sm_df, aes(x=SM_TDR, y=SM_Model)) +
+    pl <- ggplot2::ggplot(sm_df, aes(x = SM_TDR, y = SM_Model)) +
         geom_point(color = "blue") +
         geom_smooth(method = "lm", se = TRUE)
         xlab("TDR measured soil moisture [%]") +

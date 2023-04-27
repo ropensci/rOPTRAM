@@ -11,7 +11,7 @@
 #'   Remote Sensing of Environment 198, 52–68,
 #'   https://doi.org/10.1016/j.rse.2017.05.041 .
 #' @param aoi_file, string, full path to polygon spatial file of area of interest
-#' @param vidx, string, which VI to prepare, either 'NVDI' or 'SAVI'
+#' @param veg_index, string, which index to use. Default "NDVI"
 #' @param from_date, string, the start of the date range, Formatted as "YYYY-MM-DD"
 #' @param to_date, the end of the date range.
 #' @param max_cloud, integer, maximum percent cloud cover, Default 15.
@@ -19,14 +19,34 @@
 #' @param scihub_pass, string, password on Sentinel hub
 #' @param output_dir, string, directory to save coeffs_file, default is tempdir()
 #' @param remove_safe, string, "yes" or "no", whether to delete downloaded
-#' SAFE directories after processing. Default "yes"
+#'      SAFE directories after processing. Default "yes"
 #' @return coeffs_file, string, full path to saved CSV of wet-dry coefficients
+#' @note
+#' Access to Copernicus Sentinel Hub requires registration.
+#' If you have already registered, and saved your credentials
+#' in the default "~/.sen2r/apihub.txt" file,
+#' then you can leave the scihub_user and scihub_pass empty.
+#' If your credentials are **not** yet stored, then
+#' - register on the Scihub website:
+#' - https://scihub.copernicus.eu/userguide/SelfRegistration
+#' - enter your user and pass parameters in this function call,
+#'   and they will be stored into the default location.
 #' @export
 #' @examples
-#' print("Running optram.R")
+#' \dontrun{
+#' from_date <- "2018-12-01"
+#' to_date <- "2019-04-30"
+#' aoi <- "inst/extdata/migda_9.gpkg"
+#' coeffs <- optram(aoi,
+#'                  from_date, to_date,
+#'                  veg_index = c("SAVI"),
+#'                  scihub_user = "userxxx", scihub_pass = "secretxyz"
+#'                  )
+#' }
+
 
 optram <- function(aoi_file,
-                   vidx = 'NDVI',
+                   veg_index = 'NDVI',
                    from_date, to_date,
                    max_cloud = 15,
                    # NULL creds assumes that credentials are already
@@ -38,7 +58,7 @@ optram <- function(aoi_file,
 
   # Avoid "no visible binding for global variable" NOTE
   access_ok <- s2_list <- s2_dirs <- BOA_dir <- NULL
-  VI_dir <- VI_list <- VI_STR_df <- coeffs <- NULL
+  VI_dir <- VI_list <- VI_STR_df <- coeffs  <- veg_index <- NULL
 
   # Make sure we have access to scihub
   optram_func <- as.character(match.call()[[1]])
@@ -56,14 +76,14 @@ optram <- function(aoi_file,
                     max_cloud = max_cloud,
                     scihub_user = scihub_user,
                     scihub_pass = scihub_pass,
-                    list_indicies = vidx,
+                    list_indices = veg_index,
                     remove_safe = remove_safe,
                     output_dir = output_dir)
 
     # Get full output directories for both BOA and NDVI
     s2_dirs <- list.dirs(output_dir,  full.names = TRUE)
     BOA_dir <- s2_dirs[grep("BOA", s2_dirs, fixed = TRUE)][1]
-    VI_dir <- s2_dirs[grep(vidx, s2_dirs, fixed = TRUE)][1]
+    VI_dir <- s2_dirs[grep(veg_index, s2_dirs, fixed = TRUE)][1]
 
     # Calculate SWIR Tranformed Reflectance
     STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)

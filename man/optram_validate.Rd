@@ -20,10 +20,10 @@ optram_validate(
 \verb{optram_calculate soil_moisture()} function}
 
 \item{TDR_file, }{string, full path to spatial file of TDR sensor.
-Either geopackage, shapefile, geojson}
+Either geopackage, shapefile, or other spatial data format.}
 
 \item{TDR_layer, }{string, layer name of TDR location
-(in case the spatial file is geopackage).}
+(required only if the spatial file is geopackage).}
 
 \item{output_dir, }{string, where to save data.frame of soil moisture values
 and (optional) plot.}
@@ -32,16 +32,17 @@ and (optional) plot.}
 }
 \value{
 sm_df, data.frame of soil moisture values, in situ and predicted
+This data is also saved to and *.rds file.
 }
 \description{
 Validation of the OPTRAM model is performed by reading a CSV file
 of ground truth soil moisture data, typically from TDR sensors.
 The CSV data file represents measurements over a time series, for one location.
 The predicted soil moisture values from the model are extracted at the sensor location
-from a time series of model prediction rasters
+from a time series of OPTRAM model prediction rasters.
 (derived from the \verb{optram_calculate soil_miosture()} function)
 The ground truth measurements are correlated with the model predictions
-and an optional regression line is plotted
+and an optional scatterplot with regression line are plotted.
 }
 \note{
 The data file should contain two columns:

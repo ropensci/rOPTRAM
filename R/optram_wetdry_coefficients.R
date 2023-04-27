@@ -21,7 +21,7 @@ optram_wetdry_coefficients <- function(full_df,
   # https://github.com/teerathrai/OPTRAM
   #
   # Parameters:
-  #   full_df: data.frame, table of NDVIU and STR values
+  #   full_df: data.frame, table of NDVI and STR values
   # Returns:
   #   coeffs: array of floats, slope & intercept for both wet and dry lines
 
