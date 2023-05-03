@@ -5,14 +5,12 @@
 #' and check credentials for access to Sentinel Hub
 #' @param scihub_user, string, scihub username
 #' @param scihub_pass, string, scihub password
-#' @param optram_func, string, which function called this check
 #'
 #' @export
 #' @return boolean, whether access to scihub using sen2r is possible
 
 check_scihub_access <- function(scihub_user = NULL,
-                                scihub_pass = NULL,
-                                optram_func = "optram") {
+                                scihub_pass = NULL) {
     # Avoid "no visible binding for global variable" NOTE
     is_online <- site <- NULL
     # First check for internet connection
@@ -26,14 +24,14 @@ check_scihub_access <- function(scihub_user = NULL,
     }
 
     if (!is_online()) {
-        warning("No internet connection. Downloading data is not currently possible")
+        message("No internet connection. Downloading data is not currently possible")
         return(FALSE)
     }
 
     # Is sen2r installed?
     if (system.file(package='sen2r') == "") {
-        warning("This function requires the `sen2r` package.", "\n",
-        "Please install that package first before running", optram_func)
+        message("This function requires the `sen2r` package.", "\n",
+        "Please install that package first before running function")
         return(FALSE)
     }
     # Check for stored credentials (by default in "~/.sen2r/apihub.txt")
@@ -53,17 +51,17 @@ check_scihub_access <- function(scihub_user = NULL,
                 sen2r::write_scihub_login(scihub_user, scihub_pass, apihub_path = apihub_path)
                 return(TRUE)
             } else {
-                warning("Login credentials not accepted by ESA Sentinel Hub",
+                message("Login credentials not accepted by ESA Sentinel Hub",
                 "\n", "Please verify Sentinel Hub login credentials.")
                 return(FALSE)
             }
         } else {
             # No stored credentials, and no values passed in by user.
             # Print message and exit.
-            warning("ESA Sentinel Hub requires authentication", "\n",
+            message("ESA Sentinel Hub requires authentication", "\n",
                     "Please register at:", "\n",
                     "https://scihub.copernicus.eu/userguide/SelfRegistration",
-                    "then rerun function: ", optram_func, " specifying both:", "\n",
+                    "then rerun function specifying both:", "\n",
                     "scihub_user, and scihub_pass")
             return(FALSE)
         }

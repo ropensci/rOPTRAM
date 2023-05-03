@@ -47,5 +47,5 @@
   "log": [null],
   "parallel": [true],
   "processing_order": ["by_groups"],
-  "pkg_version": ["1.5.3"]
+  "pkg_version": ["1.5.4"]
 }

@@ -4,18 +4,12 @@
 \alias{check_scihub_access}
 \title{Check access to Sentinel Hub, using sen2r}
 \usage{
-check_scihub_access(
-  scihub_user = NULL,
-  scihub_pass = NULL,
-  optram_func = "optram"
-)
+check_scihub_access(scihub_user = NULL, scihub_pass = NULL)
 }
 \arguments{
 \item{scihub_user, }{string, scihub username}
 
 \item{scihub_pass, }{string, scihub password}
-
-\item{optram_func, }{string, which function called this check}
 }
 \value{
 boolean, whether access to scihub using sen2r is possible

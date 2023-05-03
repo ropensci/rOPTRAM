@@ -55,21 +55,41 @@ optram_acquire_s2 <- function(
   # Download Sentinel 2 images during the requested date range,
   # and clip to the area of interest
   # Pre flight checks...
-  optram_func <- as.character(match.call()[[1]])
-  if (!check_scihub_access(scihub_user, scihub_pass, optram_func)) {
-    return(NULL)
-  }
-  if (!file.exists(aoi_file)) {
-      warning("An area_of_interest polygon shapefile is required",
+  if (is.null(aoi_file) || !file.exists(aoi_file)) {
+      message("An area_of_interest polygon shapefile is required",
       "\n", "Please prepare the area_of_interest boundary file.")
+      return(NULL)
   } else {
-      tryCatch({terra::vect(aoi_file)},
-                error = function(e) {
-                  warning(aoi_file, ": is not a recognized spatial format")
-                  return(NULL) }
-      )
+    aoi_result <- try(suppressWarnings(sf::st_read(aoi_file)))
+    if (inherits(aoi_result, "try-error")) {
+        message("Cannot read: ", aoi_file)
+        return(NULL)
+    } else if (! inherits(aoi_result, "sf")) {
+        message(aoi_file, " is not a recognized spatial format")
+        return(NULL)
+    }
   }
 
+  # Scihub API credentials?
+  scihub_ok <- check_scihub_access(scihub_user, scihub_pass)
+  # Is 'gsutil' installed
+  gsutil_path <- Sys.which("gsutil")
+  gcloud_ok <- sen2r::check_gcloud(gsutil_path)
+
+  if (scihub_ok && gcloud_ok) {
+    servers <- c("scihub", "gcloud")
+  } else if (scihub_ok) {
+    message("Using only Sentinel scihub")
+    servers <- c("scihub")
+  } else if (gcloud_ok) {
+    message("Using only gcloud")
+    servers <- c("gcloud")
+  } else {
+    warning("No access to Sentinel or Google cloud",
+            "\nExiting")
+    return(NULL)
+  }
+  
   # Avoid "no visible binding for global variable" NOTE
   aoi_name  <- result_list <- NULL
   # Checks OK, proceed to download
@@ -79,7 +99,7 @@ optram_acquire_s2 <- function(
   result_list <- sen2r::sen2r(
       param_list = config_file,
       gui = FALSE,
-      server = c("scihub", "gcloud"),
+      server = servers,
       rm_safe = remove_safe,
       max_cloud_safe = max_cloud * 1.5,
       max_mask = max_cloud,

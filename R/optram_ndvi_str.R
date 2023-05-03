@@ -17,7 +17,12 @@ optram_ndvi_str <- function(STR_list, VI_list,
   # Avoid "no visible binding for global variable" NOTE
   date_str <- STR <- STR_1_df <- STR_df <- STR_df_file <- NULL
   VI_df_list <- VI_df <- VI_df_1 <- NULL
-  
+
+  if (length(STR_list) == 0 || length(VI_list) == 0) {
+    warning("No raster files in directories")
+    return(NULL)
+  }
+
   STR_df_list <- lapply(STR_list, function(f){
     date_str <- unlist(strsplit(basename(f), split = "_", fixed = TRUE))[2]
     STR <- terra::rast(f)

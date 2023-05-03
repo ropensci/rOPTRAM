@@ -1,3 +1,29 @@
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
+skip_if_not_installed("sen2r")
+
+test_that("Missing AOI file input", {
+  from_date <- "2023-03-01"
+  to_date  <- "2023-04-30"
+  aoi_file <- NULL
+  expect_null(optram_acquire_s2(aoi_file, from_date, to_date))
+})
+
+test_that("AOI file is not spatial", {
+  from_date <- "2023-03-01"
+  to_date  <- "2023-04-30"
+  aoi_file <- system.file("extdata", "Migda_9_SM.csv", package = "rOPTRAM")
+  expect_null(optram_acquire_s2(aoi_file, from_date, to_date))
+})
+
+
+test_that("API access to scihub not available", {
+  from_date <- "2023-03-01"
+  to_date <- "2023-04-30"
+  aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+  gsutil_path <- Sys.which("gsutil")
+  gsutil_ok <- sen2r::check_gcloud(gsutil_path)
+  scihub_user <- scihub_pass <- NULL
+  scihub_ok <- check_scihub_access(scihub_user, scihub_pass)
+  if (!gsutil_ok && !scihub_ok) {
+    expect_null(optram_acquire_s2(aoi_file, from_date, to_date))
+  }
 })
