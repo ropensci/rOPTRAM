@@ -63,7 +63,7 @@ optram <- function(aoi_file,
   # Make sure we have access to scihub
   optram_func <- as.character(match.call()[[1]])
   access_ok <- rOPTRAM::check_scihub_access(scihub_user,
-                                            scihub_pass, optram_func)
+                                            scihub_pass)
   if (! access_ok) {
       return(NULL)
   }
