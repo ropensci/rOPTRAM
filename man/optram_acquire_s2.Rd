@@ -14,7 +14,7 @@ optram_acquire_s2(
   timeperiod = "full",
   output_dir = tempdir(),
   remove_safe = "yes",
-  list_indicies = c("NDVI", "SAVI")
+  veg_index = "NDVI"
 )
 }
 \arguments{
@@ -38,8 +38,8 @@ or "seasonal" for only months specified, but over the full date range.}
 \item{remove_safe, }{string, "yes" or "no": whether to delete downloaded SAFE directories
 after processing, default "yes"}
 
-\item{list_indicies, }{vector of strings, which indicies to prepare.
-Default c("NDVI", "SAVI")}
+\item{veg_index, }{string, which index to prepare. Default "NDVI".
+Can be "NDVI", "SAVI", "MSAVI", etc}
 }
 \value{
 output_path, string, path to downloaded files

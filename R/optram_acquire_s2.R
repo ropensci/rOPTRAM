@@ -51,7 +51,7 @@ optram_acquire_s2 <- function(
       timeperiod = "full",
       output_dir = tempdir(),
       remove_safe = "yes",
-      veg_index = "NDVI" {
+      veg_index = "NDVI") {
   # Download Sentinel 2 images during the requested date range,
   # and clip to the area of interest
   # Pre flight checks...
