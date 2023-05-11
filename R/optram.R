@@ -58,7 +58,7 @@ optram <- function(aoi_file,
 
   # Avoid "no visible binding for global variable" NOTE
   access_ok <- s2_list <- s2_dirs <- BOA_dir <- NULL
-  VI_dir <- VI_list <- VI_STR_df <- coeffs  <- veg_index <- NULL
+  VI_dir <- VI_list <- VI_STR_df <- coeffs  <- NULL
 
   # Make sure we have access to scihub
   access_ok <- rOPTRAM::check_scihub_access(scihub_user,
