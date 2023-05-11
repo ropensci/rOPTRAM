@@ -61,7 +61,6 @@ optram <- function(aoi_file,
   VI_dir <- VI_list <- VI_STR_df <- coeffs  <- veg_index <- NULL
 
   # Make sure we have access to scihub
-  optram_func <- as.character(match.call()[[1]])
   access_ok <- rOPTRAM::check_scihub_access(scihub_user,
                                             scihub_pass)
   if (! access_ok) {
@@ -82,7 +81,7 @@ optram <- function(aoi_file,
 
     # Get full output directories for both BOA and NDVI
     s2_dirs <- list.dirs(output_dir,  full.names = TRUE)
-    BOA_dir <- s2_dirs[grep("BOA", s2_dirs, fixed = TRUE)][1]
+    BOA_dir <- s2_dirs[grep(pattern = "BOA", x = s2_dirs, fixed = TRUE)][1]
     VI_dir <- s2_dirs[grep(pattern = veg_index, x = s2_dirs, fixed = TRUE)][1]
 
     # Calculate SWIR Tranformed Reflectance
