@@ -76,7 +76,7 @@ optram <- function(aoi_file,
                     max_cloud = max_cloud,
                     scihub_user = scihub_user,
                     scihub_pass = scihub_pass,
-                    list_indicies = veg_index,
+                    veg_index = veg_index,
                     remove_safe = remove_safe,
                     output_dir = output_dir)
 
