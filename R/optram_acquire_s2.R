@@ -15,8 +15,8 @@
 #' @param timeperiod, string, either "full" for the whole date range,
 #' or "seasonal" for only months specified, but over the full date range.
 #' @param output_dir, string, path to save downloaded, and processed imagery
-#' @param list_indicies, vector of strings, which indicies to prepare.
-#'    Default c("NDVI", "SAVI")
+#' @param veg_index, string, which index to prepare. Default "NDVI".
+#'  Can be "NDVI", "SAVI", "MSAVI", etc
 #' @param remove_safe, string, "yes" or "no": whether to delete downloaded SAFE directories
 #' after processing, default "yes"
 #' @return output_path, string, path to downloaded files
@@ -51,7 +51,7 @@ optram_acquire_s2 <- function(
       timeperiod = "full",
       output_dir = tempdir(),
       remove_safe = "yes",
-      list_indicies = c("NDVI", "SAVI")) {
+      veg_index = "NDVI" {
   # Download Sentinel 2 images during the requested date range,
   # and clip to the area of interest
   # Pre flight checks...
@@ -106,9 +106,9 @@ optram_acquire_s2 <- function(
       timewindow = c(from_date, to_date),
       timeperiod = timeperiod,
       list_prods = "BOA",
-      # param name in `sen2r` is "list_indices"
-      # in rOPTRAM: "list_indicies"
-      list_indices = list_indicies,
+      # param name in `sen2r` is "list_indices" (vector)
+      # in rOPTRAM: "veg_index" (single character string)
+      list_indices = veg_index,
       resampling = "bilinear",
       extent = aoi_file,
       extent_name = aoi_name,
