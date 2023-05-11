@@ -83,7 +83,7 @@ optram <- function(aoi_file,
     # Get full output directories for both BOA and NDVI
     s2_dirs <- list.dirs(output_dir,  full.names = TRUE)
     BOA_dir <- s2_dirs[grep("BOA", s2_dirs, fixed = TRUE)][1]
-    VI_dir <- s2_dirs[grep(veg_index, s2_dirs, fixed = TRUE)][1]
+    VI_dir <- s2_dirs[grep(pattern = veg_index, x = s2_dirs, fixed = TRUE)][1]
 
     # Calculate SWIR Tranformed Reflectance
     STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)

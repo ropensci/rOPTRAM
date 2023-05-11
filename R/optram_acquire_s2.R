@@ -105,10 +105,10 @@ optram_acquire_s2 <- function(
       max_mask = max_cloud,
       timewindow = c(from_date, to_date),
       timeperiod = timeperiod,
-      list_prods = "BOA",
+      list_prods = c("BOA"),
       # param name in `sen2r` is "list_indices" (vector)
       # in rOPTRAM: "veg_index" (single character string)
-      list_indices = veg_index,
+      list_indices = c(veg_index),
       resampling = "bilinear",
       extent = aoi_file,
       extent_name = aoi_name,
