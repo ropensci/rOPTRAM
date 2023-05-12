@@ -6,7 +6,7 @@
 #' @param STR_list, list of paths to STR raster files
 #' @param VI_list, list of paths to NDVI raster files
 #' @param output_dir, string, path to save data.frames (in RDS format)
-#' @return full_df, data.frame
+#' @return full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
 #' @export
 #' @examples
 #' print("Running optram_ndvi_str.R")
@@ -32,9 +32,6 @@ optram_ndvi_str <- function(STR_list, VI_list,
     return(STR_1_df)
   })
   STR_df <- do.call(rbind, STR_df_list)
-  STR_df_file <- file.path(output_dir, "STR_data.rds")
-  saveRDS(STR_df, STR_df_file)
-  message("Saved: ", nrow(STR_df), " rows to: ", STR_df_file)
 
   VI_df_list <- lapply(VI_list, function(f){
     # Get image date
@@ -48,12 +45,13 @@ optram_ndvi_str <- function(STR_list, VI_list,
     return(VI_1_df)
   })
   VI_df <- do.call(rbind, VI_df_list)
-  VI_df_file <- file.path(output_dir, "VI_data.rds")
-  saveRDS(VI_df, VI_df_file)
-  message("Saved: ", nrow(VI_df), " rows to: ", VI_df_file)
 
+  # Merge VI and STR pixel data
   full_df <- dplyr::full_join(STR_df, VI_df)
   full_df <- full_df[stats::complete.cases(full_df),]
-  message("Full data joined leaving: ", nrow(full_df), " rows")
+  df_file <- file.path(output_dir, "STR_VI_data.rds")
+  saveRDS(full_df, df_file)
+  message("Saved: ", nrow(full_df), " rows of STR-VI data to: ", df_file)
+
   return(full_df)
 }

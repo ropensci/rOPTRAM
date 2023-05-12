@@ -89,15 +89,16 @@ optram_acquire_s2 <- function(
             "\nExiting")
     return(NULL)
   }
-  
+ 
   # Avoid "no visible binding for global variable" NOTE
   aoi_name  <- result_list <- NULL
   # Checks OK, proceed to download
   aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
   # Make sure output_dir exists
   if (!dir.exists(output_dir)) {
-    dir.create(output_dir)
+    dir.create(output_dir, recursive = TRUE)
   }
+
   # Get generic config json 
   config_file <- system.file("extdata", "s2_config.json", package = "rOPTRAM")
   result_list <- sen2r::sen2r(
