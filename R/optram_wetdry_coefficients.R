@@ -116,11 +116,16 @@ plot_ndvi_str_cloud <- function(full_df,
   i_wet <- coeffs$intercept_wet
   s_wet <- coeffs$slope_wet
   # We don't need Millions of points! get a subset
-  if (length(full_df$x) > 10000){
-    sample_idx <- sample(full_df$x, 10000)
-    plot_df <- full_df[sample_idx,]
-  } else {
+  num_rows <- nrow(full_df)
+  
+  if (num_rows < 100000){
     plot_df <- full_df
+  }
+  else {
+    sig <- signif(num_rows, 1)
+    samp_num <- num_rows * (sig / sqrt(sig**2 + num_rows**2))
+    sample_idx <- sample(num_rows, samp_num)
+    plot_df <- full_df[sample_idx,]
   }
   # NDVI (x) axis limits
   #x_min <- min(plot_df$NDVI)*0.9
