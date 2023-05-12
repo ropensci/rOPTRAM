@@ -13,7 +13,8 @@ optram(
   scihub_user = NULL,
   scihub_pass = NULL,
   remove_safe = "yes",
-  output_dir = tempdir()
+  S2_output_dir = tempdir(),
+  data_output_dir = tempdir()
 )
 }
 \arguments{
@@ -34,7 +35,11 @@ optram(
 \item{remove_safe, }{string, "yes" or "no", whether to delete downloaded
 SAFE directories after processing. Default "yes"}
 
-\item{output_dir, }{string, directory to save coeffs_file, default is tempdir()}
+\item{S2_output_dir, }{string, directory to save downloaded S2
+and the derived products, defaults to tempdir()}
+
+\item{data_output_dir, }{string, path to save coeffs_file
+and STR-VI data.frame, default is tempdir()}
 }
 \value{
 coeffs_file, string, full path to saved CSV of wet-dry coefficients
@@ -63,6 +68,10 @@ If your credentials are \strong{not} yet stored, then
 \item enter your user and pass parameters in this function call,
 and they will be stored into the default location.
 }
+
+Output can be separated:
+Sentinel downloads and products are saved to S2_output_dir.
+Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
 }
 \examples{
 \dontrun{

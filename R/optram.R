@@ -34,6 +34,10 @@
 #' - https://scihub.copernicus.eu/userguide/SelfRegistration
 #' - enter your user and pass parameters in this function call,
 #'   and they will be stored into the default location.
+#' 
+#' Output can be separated:
+#' Sentinel downloads and products are saved to S2_output_dir.
+#' Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
 #' @export
 #' @examples
 #' \dontrun{

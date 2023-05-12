@@ -14,7 +14,7 @@ optram_ndvi_str(STR_list, VI_list, output_dir = tempdir())
 \item{output_dir, }{string, path to save data.frames (in RDS format)}
 }
 \value{
-full_df, data.frame
+full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
 }
 \description{
 Collect all pixel values of both vegetation index,
