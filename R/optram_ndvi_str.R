@@ -49,9 +49,9 @@ optram_ndvi_str <- function(STR_list, VI_list,
   # Merge VI and STR pixel data
   full_df <- dplyr::full_join(STR_df, VI_df)
   full_df <- full_df[stats::complete.cases(full_df),]
-  df_file <- file.path(output_dir, "STR_VI_data.rds")
+  df_file <- file.path(output_dir, "VI_STR_data.rds")
   saveRDS(full_df, df_file)
-  message("Saved: ", nrow(full_df), " rows of STR-VI data to: ", df_file)
+  message("Saved: ", nrow(full_df), " rows of VI-STR data to: ", df_file)
 
   return(full_df)
 }
