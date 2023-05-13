@@ -127,6 +127,7 @@ plot_ndvi_str_cloud <- function(full_df,
     sample_idx <- sample(num_rows, samp_num)
     plot_df <- full_df[sample_idx,]
   }
+  num_rows_plotted <- nrow(plot_df)
   # NDVI (x) axis limits
   #x_min <- min(plot_df$NDVI)*0.9
   #x_max <- max(plot_df$NDVI)*1.05
@@ -162,5 +163,5 @@ plot_ndvi_str_cloud <- function(full_df,
 
   plot_path <- file.path(output_dir, paste0("trapezoid_", aoi_name, ".png"))
   ggsave(plot_path, width = 10, height = 7)
-  message("Scatterplot saved to: ", plot_path)
+  message("Scatterplot of: ", num_rows_plotted, "pixels.\n  Saved to: ", plot_path)
 }
