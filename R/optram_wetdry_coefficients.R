@@ -74,6 +74,9 @@ optram_wetdry_coefficients <- function(full_df,
   s_dry <- dry_fit$coefficients[[2]]
   coeffs <- data.frame("intercept_dry"=i_dry, "slope_dry"=s_dry,
                        "intercept_wet"=i_wet, "slope_wet"=s_wet)
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir)
+  }
   utils::write.csv(coeffs,
             file.path(output_dir, "coefficients.csv"),
             row.names=FALSE)
