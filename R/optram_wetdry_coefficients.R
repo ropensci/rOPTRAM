@@ -122,8 +122,9 @@ plot_ndvi_str_cloud <- function(full_df,
     plot_df <- full_df
   }
   else {
-    sig <- signif(num_rows, 1)
-    samp_num <- num_rows * (sig / sqrt(sig**2 + num_rows**2))
+    places <- ceiling(log10(num_rows))
+    divisor <- 10**(places - log10(100000))
+    samp_num <- num_rows  / divisor
     sample_idx <- sample(num_rows, samp_num)
     plot_df <- full_df[sample_idx,]
   }
@@ -142,7 +143,7 @@ plot_ndvi_str_cloud <- function(full_df,
   aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
   ggplot2::ggplot(plot_df) +
     geom_point(aes(x=NDVI, y=STR),
-               color = "#0070000b", alpha = 0.2, size = 1) +
+               color = "#0070000b", alpha = 0.1, size = 0.1) +
     # Wet edge
     geom_abline(intercept = i_wet, slope = s_wet,
                 color = "#2E94B9", linewidth = 1.0) +
