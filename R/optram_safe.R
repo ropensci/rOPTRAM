@@ -72,8 +72,8 @@ optram_safe <- function(safe_dir,
 
         # Read in jp2 files
         img_list <- lapply(band_ids, function(b){
-            img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
-            img_file <- paste0(xml2::xml_text(img_node), ".jp2")
+            img_path <- img_paths[grepl(pattern = b, img_paths, fixed = TRUE)]
+            img_file <- paste0(img_path, ".jp2")
             img_path <- file.path(s, img_file)
             r <- terra::rast(img_path, win = terra::ext(aoi))
         })
