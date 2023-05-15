@@ -75,7 +75,8 @@ optram_safe <- function(safe_dir,
             img_path <- img_paths[grepl(pattern = b, img_paths, fixed = TRUE)]
             img_file <- paste0(img_path, ".jp2")
             img_path <- file.path(s, img_file)
-            r <- terra::rast(img_path, win = terra::ext(aoi))
+            rst <- terra::rast(img_path, win = terra::ext(aoi))
+            return(rst)
         })
         # Make a rast obj to save the high resolution extent
         img_10m <- terra::rast()
