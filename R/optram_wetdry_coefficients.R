@@ -61,6 +61,11 @@ optram_wetdry_coefficients <- function(full_df,
   # Bind all interval results into one long DF
   VI_STR_list <- VI_STR_list[ !is.na(VI_STR_list) ]
   VI_STR_df <- do.call(rbind, VI_STR_list)
+
+  # Save STR and VI values to CSV
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  }
   utils::write.csv(VI_STR_df,
             file.path(output_dir, "VI_STR_df.csv"),
             row.names = FALSE)
@@ -74,6 +79,7 @@ optram_wetdry_coefficients <- function(full_df,
   s_dry <- dry_fit$coefficients[[2]]
   coeffs <- data.frame("intercept_dry"=i_dry, "slope_dry"=s_dry,
                        "intercept_wet"=i_wet, "slope_wet"=s_wet)
+  # Save coordinates to CSV
   utils::write.csv(coeffs,
             file.path(output_dir, "coefficients.csv"),
             row.names=FALSE)
