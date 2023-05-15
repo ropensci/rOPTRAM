@@ -21,8 +21,8 @@ optram_safe <- function(safe_dir,
                         output_dir = tempdir()) {
 
     # Avoid "no visible binding for global variable" NOTE
-    safe_list <- band_ids <- aoi <- derived_rasters <- NULL
-    xml_file <- img_nodes <- mtd_file <- mtd <- epsg_code <- NULL
+    safe_list <- band_ids <- aoi <- derived_rasters <- xml_file <- NULL
+    img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- epsg_code <- NULL
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
     STR <- STR_df <- full_df <- NULL
     
