@@ -115,14 +115,16 @@ plot_ndvi_str_cloud <- function(full_df,
   s_dry <- coeffs$slope_dry
   i_wet <- coeffs$intercept_wet
   s_wet <- coeffs$slope_wet
+
   # We don't need Millions of points! get a subset
   num_rows <- nrow(full_df)
-  
-  if (num_rows < 100000){
+  if (num_rows < 200000) {
     plot_df <- full_df
   }
   else {
-    places <- ceiling(log10(num_rows))
+    # This trick drops the num of plotted points 
+    # by orders of magnitude, keeping total below 1M
+    places <- log10(num_rows)
     divisor <- 10**(places - log10(100000))
     samp_num <- num_rows  / divisor
     sample_idx <- sample(num_rows, samp_num)

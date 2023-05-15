@@ -10,7 +10,7 @@
 #' @param aoi_file, string, path to boundary polygon spatial file of area of interest
 #' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
 #' @param output_dir, string, where to save VI and STR and Geotiff, default is tempdir()
-#' @return output_files, list, full paths to saved Geotif files
+#' @return coeffs, list, the derived trapezoid coefficients
 #' @export
 #' @examples
 #' print("Running optram_prepare_safe_vi_str.R")
@@ -57,7 +57,8 @@ optram_safe <- function(safe_dir,
         xml <- xml2::read_xml(xml_file)
         img_nodes <- xml2::xml_find_all(xml, ".//IMAGE_FILE")
         img_nodes <- img_nodes[!grepl(pattern = "R60m", img_nodes)]
-        
+        img_paths <- xml2::xml_contents(img_nodes)
+
         # Get CRS for this SAFE dataset, and reproject AOI 
         mtd_file <- list.files(s, pattern = "MTD_TL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
@@ -71,7 +72,7 @@ optram_safe <- function(safe_dir,
 
         # Read in jp2 files
         img_list <- lapply(band_ids, function(b){
-            img_node <- img_nodes[grepl(pattern = b, img_nodes, fixed = TRUE)]
+            img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
             img_file <- paste0(xml2::xml_text(img_node), ".jp2")
             img_path <- file.path(s, img_file)
             r <- terra::rast(img_path, win = terra::ext(aoi))
