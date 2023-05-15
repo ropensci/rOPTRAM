@@ -98,7 +98,7 @@ optram_safe <- function(safe_dir,
     VI_STR_list <- lapply(1:length(derived_rasters), function(x) {
         # Each item in the derived_rasters list is a raster stack, with 6 bands
         # R-G-B-NIR, SWIR 1600, SWIR 2200
-        stk <- derived_rasters[x]
+        stk <- derived_rasters[[x]]
         if (is.null(stk)) {
             return(NULL)
         }
