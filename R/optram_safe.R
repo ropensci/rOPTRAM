@@ -32,16 +32,16 @@ optram_safe <- function(safe_dir,
     safe_list <- safe_list[grepl(pattern = "SAFE$", x = safe_list)]
     band_ids <- c(
     #"AOT_10m", #Coastal blue
-    "B02_10m", #blue
-    "B03_10m", #green
-    "B04_10m", #red
-    "B08_10m", #NIR wide
+    "B02", #blue
+    "B03", #green
+    "B04", #red
+    "B08", #NIR wide
     #"B05_20m", #rededge
     #"B06_20m", #rededge
     #"B07_20m", #rededge
     #"B8A_20m", #NIR narrow
-    "B11_20m", #SWIR 1600
-    "B12_20m"  #SWIR 2200
+    "B11", #SWIR 1600
+    "B12"  #SWIR 2200
     )
     # Get Area of interest
     aoi <- terra::vect(aoi_file)
