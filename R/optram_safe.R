@@ -52,6 +52,10 @@ optram_safe <- function(safe_dir,
         return(NULL)
     }
 
+    # Prepare file name parts for saving rasters
+    s_parts <- unlist(strsplit(basename(s), "_"))
+    aoi_name <- aoi_to_name(aoi_file)
+    
     derived_rasters <- lapply(safe_list, function(s) {
         xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
         xml <- xml2::read_xml(xml_file)
@@ -91,6 +95,15 @@ optram_safe <- function(safe_dir,
             }
         })
         img_stk <- terra::rast(img_10m_list)
+        
+        # Save to BOA dir
+        BOA_dir <- file.path(output_dir, "BOA")
+        if (!dir.exists(BOA_dir)) {
+            dir.create(BOA_dir, recursive = TRUE)
+        }
+        # Create filename
+        BOA_file <- paste0(s_parts[1], s_parts[3], s_parts[5], aoi_name, "_BOA_10.tif")
+        terra::writeRaster(img_stk, file.path(BOA_dir, BOA_file))
         return(img_stk)
     })
 
@@ -119,15 +132,31 @@ optram_safe <- function(safe_dir,
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr
+        
         STR <- rOPTRAM::calculate_str(stk, swirband = 5)
         STR_df <- terra::as.data.frame(STR, xy = TRUE)
-
         full_df <- dplyr::full_join(STR_df, VI_df)
         full_df <- full_df[stats::complete.cases(full_df),]
+ 
+        # Save rasters
+        # Save VI to new NDVI_dir
+        NDVI_dir <- file.path(output_dir, "NDVI")
+        if (!dir.exists(NDVI_dir)) {
+            dir.create(NDVI_dir)
+        }
+        VI_file <- paste0(s_parts[1], s_parts[3], s_parts[5], aoi_name, "_NDVI_10.tif")
+        terra::writeRaster(VI_idx, file.path(NDVI_dir, VI_file))
+        # Save STR to BOA_dir
+        STR_file <- paste0(s_parts[1], s_parts[3], s_parts[5], aoi_name, "_STR_10.tif")
+        terra::writeRaster(STR, file.path(BOA_dir, STR_file))
+
         return(full_df)
     })
     full_VI_STR <- do.call(rbind, VI_STR_list)
-
+    # SAve full data.frame to work_dir
+    full_df_path <- file.path(output_dir, "VI_STR_data.rds")
+    saveRDS(full_VI_STR, full_df_path)
+    message("VI-STR data saved to: ", full_df_path)
     # Now continue with regular process
     coeffs <- rOPTRAM::optram_wetdry_coefficients(full_VI_STR,
                                                   aoi_file, output_dir)
