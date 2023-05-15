@@ -79,14 +79,15 @@ optram_safe <- function(safe_dir,
             return(rst)
         })
         # Make a rast obj to save the high resolution extent
-        img_10m <- terra::rast()
+        # The first raster in the list is blue, 10m. Use for reampling
+        img_10m <- img_list[[1]]
         img_10m_list <- lapply(img_list, function(i) {
-            if (all.equal.list(terra::res(i))) {
-                img_10m  <<- i 
+            if (terra::res(i) == c(10, 10)) {
                 return(i)
             } else {
                 return(terra::resample(i, img_10m,
-                                      method = "bilinear", threads = TRUE))
+                                      method = "bilinear",
+                                      threads = TRUE))
             }
         })
         img_stk <- terra::rast(img_10m_list)
