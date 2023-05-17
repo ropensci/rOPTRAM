@@ -71,6 +71,11 @@ optram_safe <- function(safe_dir,
         dir.create(NDVI_dir)
     }
 
+    STR_dir <- file.path(S2_output_dir, "STR")
+    if (!dir.exists(STR_dir)) {
+        dir.create(STR_dir)
+    }
+    
     derived_rasters <- lapply(safe_list, function(s) {
         xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
         xml <- xml2::read_xml(xml_file)
@@ -159,7 +164,7 @@ optram_safe <- function(safe_dir,
         STR_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "STR_10.tif", sep = "_")
         terra::writeRaster(STR,
-                        file.path(BOA_dir, STR_file), overwrite = TRUE)
+                        file.path(STR_dir, STR_file), overwrite = TRUE)
 
         return(full_df)
     })

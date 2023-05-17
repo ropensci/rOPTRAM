@@ -18,7 +18,7 @@
 #' @param scihub_user, string, username on Copernicus Sentinel Hub
 #' @param scihub_pass, string, password on Sentinel hub
 #' @param S2_output_dir, string, directory to save downloaded S2 
-#'  and the derived products, defaults to tempdir() 
+#'  and the derived products, defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file 
 #'  and STR-VI data.frame, default is tempdir()
 #' @param remove_safe, string, "yes" or "no", whether to delete downloaded
@@ -90,10 +90,12 @@ optram <- function(aoi_file,
     # Get full output directories for both BOA and NDVI
     s2_dirs <- list.dirs(S2_output_dir,  full.names = TRUE)
     BOA_dir <- s2_dirs[grep(pattern = "BOA", x = s2_dirs, fixed = TRUE)][1]
+    STR_dir <- s2_dirs[grep(pattern = "STR", x = s2_dirs, fixed = TRUE)][1]
     VI_dir <- s2_dirs[grep(pattern = veg_index, x = s2_dirs, fixed = TRUE)][1]
 
+
     # Calculate SWIR Tranformed Reflectance
-    STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
+    STR_list <- rOPTRAM::optram_calculate_str(STR_dir)
     VI_list <- list.files(path = VI_dir, full.names = TRUE)
     VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)
     coeffs <- rOPTRAM::optram_wetdry_coefficients(VI_STR_df,

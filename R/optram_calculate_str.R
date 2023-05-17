@@ -40,7 +40,11 @@ optram_calculate_str <- function(BOA_dir){
     # SWIR <- (SWIR_irr/10) * solar_irradiance_12
     STR <- (1 - SWIR)^2 / (2*SWIR)
     outfile <- gsub("BOA", replacement = "STR", x = basename(t))
-    outpath <- file.path(BOA_dir, outfile)
+    outdir <- gsub("BOA", replacement = "STR", x=t)
+    if (!dir.exists(outdir)) {
+      dir.create(outdir)
+    }
+    outpath <- file.path(outdir, outfile)
     terra::writeRaster(STR, filename = outpath, overwrite=TRUE)
     return(outpath)
   })
