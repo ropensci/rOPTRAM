@@ -107,7 +107,8 @@ optram_safe <- function(safe_dir,
         }
         # Create filename
         BOA_file <- paste0(s_parts[1], s_parts[3], s_parts[5], aoi_name, "_BOA_10.tif")
-        terra::writeRaster(img_stk, file.path(BOA_dir, BOA_file))
+        terra::writeRaster(img_stk,
+                         file.path(BOA_dir, BOA_file), overwrite = TRUE)
         return(img_stk)
     })
 
