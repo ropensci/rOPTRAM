@@ -56,8 +56,6 @@ optram_safe <- function(safe_dir,
         return(NULL)
     }
 
-    # Prepare file name parts for saving rasters
-    s_parts <- unlist(strsplit(basename(safe_list[1]), "_"))
     aoi_name <- aoi_to_name(aoi_file)
     
     # Prepare output directories
@@ -75,7 +73,7 @@ optram_safe <- function(safe_dir,
     if (!dir.exists(STR_dir)) {
         dir.create(STR_dir)
     }
-    
+
     derived_rasters <- lapply(safe_list, function(s) {
         xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
         xml <- xml2::read_xml(xml_file)
@@ -117,6 +115,8 @@ optram_safe <- function(safe_dir,
         img_stk <- terra::rast(img_10m_list)
         # Save to BOA dir
         # Create filename
+        # Prepare file name parts for saving rasters
+        s_parts <- unlist(strsplit(basename(s), "_"))
         BOA_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "BOA_10.tif", sep = "_")
         terra::writeRaster(img_stk,
@@ -135,6 +135,8 @@ optram_safe <- function(safe_dir,
 
         # Use the metadata file from SAFE directory name to get image date
         s <- safe_list[x]
+        # Prepare file name parts for saving rasters
+        s_parts <- unlist(strsplit(basename(s), "_"))
         mtd_file <- list.files(s, pattern = "MTD_TL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtd_file)) {
@@ -156,6 +158,8 @@ optram_safe <- function(safe_dir,
         full_df <- full_df[stats::complete.cases(full_df),]
 
         # Save VI to NDVI_dir
+           # Prepare file name parts for saving rasters
+        s_parts <- unlist(strsplit(basename(safe_list[x]), "_"))
         VI_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "NDVI_10.tif", sep = "_")
         terra::writeRaster(VI_idx,
