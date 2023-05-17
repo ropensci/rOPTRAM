@@ -9,7 +9,10 @@
 #' Sentinel 2 data in original SAFE format
 #' @param aoi_file, string, path to boundary polygon spatial file of area of interest
 #' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
-#' @param output_dir, string, where to save VI and STR and Geotiff, default is tempdir()
+#' @param S2_output_dir, string, directory to save downloaded S2 
+#'      and the derived products, defaults to tempdir()
+#' @param data_output_dir, string, path to save coeffs_file 
+#'      and STR-VI data.frame, default is tempdir()
 #' @return coeffs, list, the derived trapezoid coefficients
 #' @export
 #' @examples
@@ -18,7 +21,8 @@
 optram_safe <- function(safe_dir,
                         aoi_file,
                         vi = 'NDVI',
-                        output_dir = tempdir()) {
+                        S2_output_dir = tempdir(),
+                        data_output_dir = tempdir()) {
 
     # Avoid "no visible binding for global variable" NOTE
     safe_list <- band_ids <- aoi <- derived_rasters <- xml_file <- NULL
@@ -97,7 +101,7 @@ optram_safe <- function(safe_dir,
         img_stk <- terra::rast(img_10m_list)
         
         # Save to BOA dir
-        BOA_dir <- file.path(output_dir, "BOA")
+        BOA_dir <- file.path(S2_output_dir, "BOA")
         if (!dir.exists(BOA_dir)) {
             dir.create(BOA_dir, recursive = TRUE)
         }
@@ -140,7 +144,7 @@ optram_safe <- function(safe_dir,
  
         # Save rasters
         # Save VI to new NDVI_dir
-        NDVI_dir <- file.path(output_dir, "NDVI")
+        NDVI_dir <- file.path(S2_output_dir, "NDVI")
         if (!dir.exists(NDVI_dir)) {
             dir.create(NDVI_dir)
         }
@@ -154,12 +158,13 @@ optram_safe <- function(safe_dir,
     })
     full_VI_STR <- do.call(rbind, VI_STR_list)
     # SAve full data.frame to work_dir
-    full_df_path <- file.path(output_dir, "VI_STR_data.rds")
+    full_df_path <- file.path(data_output_dir, "VI_STR_data.rds")
     saveRDS(full_VI_STR, full_df_path)
     message("VI-STR data saved to: ", full_df_path)
     # Now continue with regular process
     coeffs <- rOPTRAM::optram_wetdry_coefficients(full_VI_STR,
-                                                  aoi_file, output_dir)
+                                                  aoi_file,
+                                                  data_output_dir)
 
     return(coeffs)
 }
