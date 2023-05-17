@@ -57,9 +57,20 @@ optram_safe <- function(safe_dir,
     }
 
     # Prepare file name parts for saving rasters
-    s_parts <- unlist(strsplit(basename(safe_dir), "_"))
+    s_parts <- unlist(strsplit(basename(safe_list[1]), "_"))
     aoi_name <- aoi_to_name(aoi_file)
     
+    # Prepare output directories
+    BOA_dir <- file.path(S2_output_dir, "BOA")
+    if (!dir.exists(BOA_dir)) {
+         dir.create(BOA_dir, recursive = TRUE)
+    }
+    
+    NDVI_dir <- file.path(S2_output_dir, "NDVI")
+    if (!dir.exists(NDVI_dir)) {
+        dir.create(NDVI_dir)
+    }
+
     derived_rasters <- lapply(safe_list, function(s) {
         xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
         xml <- xml2::read_xml(xml_file)
@@ -99,14 +110,10 @@ optram_safe <- function(safe_dir,
             }
         })
         img_stk <- terra::rast(img_10m_list)
-        
         # Save to BOA dir
-        BOA_dir <- file.path(S2_output_dir, "BOA")
-        if (!dir.exists(BOA_dir)) {
-            dir.create(BOA_dir, recursive = TRUE)
-        }
         # Create filename
-        BOA_file <- paste0(s_parts[1], s_parts[3], s_parts[5], aoi_name, "_BOA_10.tif")
+        BOA_file <- paste(s_parts[1], s_parts[3], s_parts[5],
+                        aoi_name, "BOA_10.tif", sep = "_")
         terra::writeRaster(img_stk,
                          file.path(BOA_dir, BOA_file), overwrite = TRUE)
         return(img_stk)
@@ -142,18 +149,15 @@ optram_safe <- function(safe_dir,
         STR_df <- terra::as.data.frame(STR, xy = TRUE)
         full_df <- dplyr::full_join(STR_df, VI_df)
         full_df <- full_df[stats::complete.cases(full_df),]
- 
-        # Save rasters
-        # Save VI to new NDVI_dir
-        NDVI_dir <- file.path(S2_output_dir, "NDVI")
-        if (!dir.exists(NDVI_dir)) {
-            dir.create(NDVI_dir)
-        }
-        VI_file <- paste0(s_parts[1], s_parts[3], s_parts[5], aoi_name, "_NDVI_10.tif")
+
+        # Save VI to NDVI_dir
+        VI_file <- paste(s_parts[1], s_parts[3], s_parts[5],
+                        aoi_name, "NDVI_10.tif", sep = "_")
         terra::writeRaster(VI_idx,
                          file.path(NDVI_dir, VI_file), overwrite = TRUE)
         # Save STR to BOA_dir
-        STR_file <- paste0(s_parts[1], s_parts[3], s_parts[5], aoi_name, "_STR_10.tif")
+        STR_file <- paste(s_parts[1], s_parts[3], s_parts[5],
+                        aoi_name, "STR_10.tif", sep = "_")
         terra::writeRaster(STR,
                         file.path(BOA_dir, STR_file), overwrite = TRUE)
 
