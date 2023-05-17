@@ -4,7 +4,13 @@
 \alias{optram_safe}
 \title{Handle Sentinel imagery in original Copernicus SAFE format}
 \usage{
-optram_safe(safe_dir, aoi_file, vi = "NDVI", output_dir = tempdir())
+optram_safe(
+  safe_dir,
+  aoi_file,
+  vi = "NDVI",
+  S2_output_dir = tempdir(),
+  data_output_dir = tempdir()
+)
 }
 \arguments{
 \item{safe_dir, }{string, full path to containing folder of downloaded (unzipped)
@@ -14,10 +20,14 @@ Sentinel 2 data in original SAFE format}
 
 \item{vi, }{string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'}
 
-\item{output_dir, }{string, where to save VI and STR and Geotiff, default is tempdir()}
+\item{S2_output_dir, }{string, directory to save downloaded S2
+and the derived products, defaults to tempdir()}
+
+\item{data_output_dir, }{string, path to save coeffs_file
+and STR-VI data.frame, default is tempdir()}
 }
 \value{
-output_files, list, full paths to saved Geotif files
+coeffs, list, the derived trapezoid coefficients
 }
 \description{
 Use this function to prepares vegetation index and

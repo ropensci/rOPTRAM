@@ -149,10 +149,12 @@ optram_safe <- function(safe_dir,
             dir.create(NDVI_dir)
         }
         VI_file <- paste0(s_parts[1], s_parts[3], s_parts[5], aoi_name, "_NDVI_10.tif")
-        terra::writeRaster(VI_idx, file.path(NDVI_dir, VI_file))
+        terra::writeRaster(VI_idx,
+                         file.path(NDVI_dir, VI_file), overwrite = TRUE)
         # Save STR to BOA_dir
         STR_file <- paste0(s_parts[1], s_parts[3], s_parts[5], aoi_name, "_STR_10.tif")
-        terra::writeRaster(STR, file.path(BOA_dir, STR_file))
+        terra::writeRaster(STR,
+                        file.path(BOA_dir, STR_file), overwrite = TRUE)
 
         return(full_df)
     })

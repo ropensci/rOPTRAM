@@ -13,7 +13,8 @@ optram_calculate_soil_moisture(
 )
 }
 \arguments{
-\item{img_date, }{string, image date of single Sentinel 2 acquisition}
+\item{img_date, }{string, image date of single Sentinel 2 acquisition
+formatted as "YYYY-MM-DD"}
 
 \item{VI_dir, }{string, full path to directory holding the VI rasters}
 
