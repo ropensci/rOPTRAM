@@ -53,7 +53,7 @@ optram_safe <- function(safe_dir,
     }
 
     # Prepare file name parts for saving rasters
-    s_parts <- unlist(strsplit(basename(s), "_"))
+    s_parts <- unlist(strsplit(basename(safe_dir), "_"))
     aoi_name <- aoi_to_name(aoi_file)
     
     derived_rasters <- lapply(safe_list, function(s) {
