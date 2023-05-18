@@ -87,15 +87,14 @@ optram <- function(aoi_file,
                     remove_safe = remove_safe,
                     output_dir = S2_output_dir)
 
-    # Get full output directories for both BOA and NDVI
+    # Get full output directories for BOA, STR and NDVI
     s2_dirs <- list.dirs(S2_output_dir,  full.names = TRUE)
-    BOA_dir <- s2_dirs[grep(pattern = "BOA", x = s2_dirs, fixed = TRUE)][1]
-    STR_dir <- s2_dirs[grep(pattern = "STR", x = s2_dirs, fixed = TRUE)][1]
-    VI_dir <- s2_dirs[grep(pattern = veg_index, x = s2_dirs, fixed = TRUE)][1]
-
+    BOA_dir <- s2_dirs[basename(s2_dirs) == "BOA"]
+    STR_dir <- s2_dirs[basename(s2_dirs) == "STR"]
+    VI_dir <- s2_dirs[basename(s2_dirs) == veg_index]
 
     # Calculate SWIR Tranformed Reflectance
-    STR_list <- rOPTRAM::optram_calculate_str(STR_dir)
+    STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
     VI_list <- list.files(path = VI_dir, full.names = TRUE)
     VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)
     coeffs <- rOPTRAM::optram_wetdry_coefficients(VI_STR_df,
