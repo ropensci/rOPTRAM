@@ -9,8 +9,8 @@
 #' Sentinel 2 data in original SAFE format
 #' @param aoi_file, string, path to boundary polygon spatial file of area of interest
 #' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
-#' @param S2_output_dir, string, directory to save downloaded S2 
-#'      and the derived products, defaults to tempdir()
+#' @param S2_output_dir, string, directory to save the derived products,
+#'      defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file 
 #'      and STR-VI data.frame, default is tempdir()
 #' @return coeffs, list, the derived trapezoid coefficients
