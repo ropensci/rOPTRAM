@@ -173,5 +173,5 @@ plot_ndvi_str_cloud <- function(full_df,
 
   plot_path <- file.path(output_dir, paste0("trapezoid_", aoi_name, ".png"))
   ggsave(plot_path, width = 10, height = 7)
-  message("Scatterplot of: ", num_rows_plotted, "pixels.\n  Saved to: ", plot_path)
+  message("Scatterplot of: ", num_rows_plotted, " pixels \n Saved to: ", plot_path)
 }
