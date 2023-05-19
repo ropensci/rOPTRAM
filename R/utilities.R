@@ -116,7 +116,7 @@ calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
 #' @export 
 #' @return STR, SpatRaster of STR band
 
-calculate_str <- function(img_stk, swirband = 5) {
+calculate_str <- function(img_stk, swirband = 12) {
   # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
   # The optical trapezoid model:
   # A novel approach to remote sensing of soil moisture

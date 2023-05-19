@@ -17,7 +17,7 @@ optram_calculate_str <- function(BOA_dir){
   #
   # Parameters:
   # s2_file: string, full path to multiband geotiff
-  #   band 11 is the SWIR
+  #   band 11 (1600 nm) or 12 (2200) are the SWIR
   # Returns:
   #   STR: terra rast object, the SWIR transformed raster
 
@@ -32,7 +32,8 @@ optram_calculate_str <- function(BOA_dir){
   if (length(BOA_list) == 0) return(NULL)
   STR_list <- lapply(BOA_list, function(t) {
     stk <- terra::rast(t)
-    SWIR_DN <-  stk[[11]]
+    # Use band no. 12 = 2200 nm
+    SWIR_DN <-  stk[[12]]
     # back to native scale
     SWIR <-  SWIR_DN / 10000
     # Convert from Solar irradiance
