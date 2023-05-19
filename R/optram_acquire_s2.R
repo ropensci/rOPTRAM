@@ -30,6 +30,17 @@
 #' - https://scihub.copernicus.eu/userguide/SelfRegistration
 #' - enter your user and pass parameters in this function call,
 #'   and they will be stored into the default location.
+#' 
+#' This function calls `sen2r()` from the {sen2r} package. This function
+#' acquires Sentinel 2 imagery, clips to aoi,
+#' and prepares multiband output rasters, save to the `output_dir`.
+#' Only L2A (atmospherically corrected) images are acquired, and therefore:
+#'  - only one NIR band, B08 is used. The lower res B8A is not used
+#'  - furthermore, the cirrus band B09 is not relevant for BOA level
+#'  - so band 10 is the SWIR refelctance at 1600 nm,
+#'    and band 11 is reflectance at 2200 nm.
+#' 
+#'  
 #' @examples
 #' \dontrun{
 #' from_date <- "2018-12-01"

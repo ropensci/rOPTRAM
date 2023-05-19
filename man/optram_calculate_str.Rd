@@ -15,6 +15,20 @@ list of string, the path to transformed raster
 \description{
 Create SWIR transformed reflectance
 }
+\note{
+This function follows:
+Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
+The optical trapezoid model:
+A novel approach to remote sensing of soil moisture
+applied to Sentinel-2 and Landsat-8 observations.
+Remote Sensing of Environment 198, 52–68.
+https://doi.org/10.1016/j.rse.2017.05.041
+
+SWIR Transformed Reflectance is calculated as
+STR = (1−SWIR)^2 / 2*SWIR
+
+SWIR is band 11 (2200 nm) from \code{sen2r()} since band B09 is not processed
+}
 \examples{
 print("Running optram_calculate_str.R")
 }

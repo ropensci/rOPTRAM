@@ -14,14 +14,14 @@ optram_safe(
 }
 \arguments{
 \item{safe_dir, }{string, full path to containing folder of downloaded (unzipped)
-Sentinel 2 data in original SAFE format}
+Sentinel 2 data in original SAFE format, after atompheric correction (L2A)}
 
 \item{aoi_file, }{string, path to boundary polygon spatial file of area of interest}
 
 \item{vi, }{string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'}
 
-\item{S2_output_dir, }{string, directory to save downloaded S2
-and the derived products, defaults to tempdir()}
+\item{S2_output_dir, }{string, directory to save the derived products,
+defaults to tempdir()}
 
 \item{data_output_dir, }{string, path to save coeffs_file
 and STR-VI data.frame, default is tempdir()}
@@ -34,7 +34,10 @@ Use this function to prepares vegetation index and
 SWIR Transformed Reflectance (STR) rasters
 when you have already downloaded Sentinel 2 image files in advance
 (without using \code{sen2r}).
-Unzip the downloaded Sentinel 2 files and do not change the folder structure
+Unzip the downloaded Sentinel 2 files and do not change the folder structure.
+THis function assumes that atmospheric correction has been applied.
+i.e. using the SNAP L2A_Process,
+or the  \code{sen2cor()} function from the {sen2r} R package.
 }
 \examples{
 print("Running optram_prepare_safe_vi_str.R")

@@ -4,7 +4,7 @@
 \alias{calculate_str}
 \title{Calculate STR from SWIR band of bottom of atmosphere images}
 \usage{
-calculate_str(img_stk, swirband = 5)
+calculate_str(img_stk, swirband = 12)
 }
 \arguments{
 \item{img_stk, }{terra SpatRaster, multiband stack of images, already clipped to aoi}

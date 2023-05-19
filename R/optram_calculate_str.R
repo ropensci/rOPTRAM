@@ -1,25 +1,25 @@
 #' @title Create SWIR transformed reflectance
 #' @param BOA_dir, string, the path to the `sen2r` Bottom of Atmosphere bands
 #' @return list of string, the path to transformed raster
+#' @note
+#' This function follows:
+#' Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
+#'  The optical trapezoid model:
+#'  A novel approach to remote sensing of soil moisture
+#'  applied to Sentinel-2 and Landsat-8 observations.
+#'  Remote Sensing of Environment 198, 52–68.
+#'  https://doi.org/10.1016/j.rse.2017.05.041
+#'
+#' SWIR Transformed Reflectance is calculated as
+#'  STR = (1−SWIR)^2 / 2*SWIR
+#'
+#'  SWIR is band 11 (2200 nm) from `sen2r()` since band B09 is not processed
+#'
 #' @export
 #' @examples print("Running optram_calculate_str.R")
 
 optram_calculate_str <- function(BOA_dir){
-
-  # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
-  # The optical trapezoid model:
-  # A novel approach to remote sensing of soil moisture
-  # applied to Sentinel-2 and Landsat-8 observations.
-  # Remote Sensing of Environment 198, 52–68.
-  # https://doi.org/10.1016/j.rse.2017.05.041
-  #
-  # STR = (1−SWIR)^2 / 2*SWIR
-  #
-  # Parameters:
-  # s2_file: string, full path to multiband geotiff
-  #   band 11 (1600 nm) or 12 (2200) are the SWIR
-  # Returns:
-  #   STR: terra rast object, the SWIR transformed raster
+  # Returns: STR, terra rast object, the SWIR Transformed Raster
 
   # Avoid "no visible binding for global variable" NOTE
   BOA_list <- STR_list <- SWIR_DN <- SWIR <- STR <- outfile <- outpath <- NULL
@@ -32,8 +32,8 @@ optram_calculate_str <- function(BOA_dir){
   if (length(BOA_list) == 0) return(NULL)
   STR_list <- lapply(BOA_list, function(t) {
     stk <- terra::rast(t)
-    # Use band no. 12 = 2200 nm
-    SWIR_DN <-  stk[[12]]
+    # Use band no. 11 = 2200 nm
+    SWIR_DN <-  stk[[11]]
     # back to native scale
     SWIR <-  SWIR_DN / 10000
     # Convert from Solar irradiance
