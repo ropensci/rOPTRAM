@@ -4,9 +4,12 @@
 #' SWIR Transformed Reflectance (STR) rasters
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
-#' Unzip the downloaded Sentinel 2 files and do not change the folder structure
+#' Unzip the downloaded Sentinel 2 files and do not change the folder structure.
+#' THis function assumes that atmospheric correction has been applied.
+#' i.e. using the SNAP L2A_Process,
+#' or the  `sen2cor()` function from the {sen2r} R package.
 #' @param safe_dir, string, full path to containing folder of downloaded (unzipped)
-#' Sentinel 2 data in original SAFE format
+#' Sentinel 2 data in original SAFE format, after atompheric correction (L2A)
 #' @param aoi_file, string, path to boundary polygon spatial file of area of interest
 #' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
@@ -34,18 +37,19 @@ optram_safe <- function(safe_dir,
     # create NDVI and STR indices for each and crop to aoi
     safe_list <- list.dirs(safe_dir, full.names = TRUE, recursive = TRUE)
     safe_list <- safe_list[grepl(pattern = "SAFE$", x = safe_list)]
+    # The strings below are used to select the needed bands from Sentinel
     band_ids <- c(
-    #"AOT_10m", #Coastal blue
-    "B02", #blue
-    "B03", #green
-    "B04", #red
-    "B08", #NIR wide
-    #"B05_20m", #rededge
-    #"B06_20m", #rededge
-    #"B07_20m", #rededge
-    #"B8A_20m", #NIR narrow
-    "B11", #SWIR 1600
-    "B12"  #SWIR 2200
+        #"AOT_10m", #Coastal blue
+        "B02_10m", #blue
+        "B03_10m", #green
+        "B04_10m", #red
+        "B08_10m", #NIR wide
+        #"B05_20m", #rededge
+        #"B06_20m", #rededge
+        #"B07_20m", #rededge
+        #"B8A_20m", #NIR narrow
+        "B11_20m", #SWIR 1600
+        "B12_20m"  #SWIR 2200
     )
     # Get Area of interest
     aoi <- terra::vect(aoi_file)
