@@ -17,6 +17,7 @@
 #' @examples
 #' print("Running optram_prepare_landsat_vi_str.R")
 #' I started with LANDSAT here
+#'
 optram_landsat <- function(landsat_dir,
                         aoi_file,
                         vi = 'NDVI',
