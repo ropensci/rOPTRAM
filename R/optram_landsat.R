@@ -10,13 +10,13 @@
 #' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
 #' @param LC_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
-#' @param data_output_dir, string, path to save coeffs_file 
+#' @param data_output_dir, string, path to save coeffs_file
 #'      and STR-VI data.frame, default is tempdir()
 #' @return coeffs, list, the derived trapezoid coefficients
 #' @export
 #' @examples
 #' print("Running optram_prepare_landsat_vi_str.R")
-
+#' I started with LANDSAT here
 optram_landsat <- function(landsat_dir,
                         aoi_file,
                         vi = 'NDVI',
@@ -28,7 +28,7 @@ optram_landsat <- function(landsat_dir,
     img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- epsg_code <- NULL
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
     STR <- STR_df <- full_df <- NULL
-    
+
     # Loop over the downloaded LC folders (dates),
     # create NDVI and STR indices for each and crop to aoi
 
@@ -61,13 +61,13 @@ optram_landsat <- function(landsat_dir,
     }
 
     aoi_name <- aoi_to_name(aoi_file)
-    
+
     # Prepare output directories
     BOA_dir <- file.path(LC_output_dir, "BOA")
     if (!dir.exists(BOA_dir)) {
          dir.create(BOA_dir, recursive = TRUE)
     }
-    
+
     NDVI_dir <- file.path(LC_output_dir, "NDVI")
     if (!dir.exists(NDVI_dir)) {
         dir.create(NDVI_dir)
@@ -86,7 +86,7 @@ optram_landsat <- function(landsat_dir,
         img_nodes <- img_nodes[!grepl(pattern = "R60m", img_nodes)]
         img_paths <- xml2::xml_contents(img_nodes)
 
-        # Get CRS for this landsat dataset, and reproject AOI 
+        # Get CRS for this landsat dataset, and reproject AOI
         mtd_file <- list.files(s, pattern = "MTD_TL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtd_file)) {
@@ -144,7 +144,7 @@ optram_landsat <- function(landsat_dir,
         }
 
         # Use the metadata file from landsat directory name to get image date
-        
+
 # TODO: How to extract image date from metadata?
         s <- landsat_list[x]
         # Prepare file name parts for saving rasters
@@ -163,7 +163,7 @@ optram_landsat <- function(landsat_dir,
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr
-        
+
         STR <- rOPTRAM::calculate_str(stk, swirband = 5)
         STR_df <- terra::as.data.frame(STR, xy = TRUE)
         full_df <- dplyr::full_join(STR_df, VI_df)
