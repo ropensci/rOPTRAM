@@ -17,21 +17,21 @@
 #' @examples
 
 #' @param landsat_dir, string, full path to containing folder of downloaded (unzipped)
-landsat_dir = "C:/Users/Natalya/Downloads/landsat_oPTRAM"
+#landsat_dir = "C:/Users/Natalya/Downloads/landsat_oPTRAM"
 
 #' @param aoi_file, string, path to boundary polygon spatial file of area of interest
-aoi_file <- "D:/rOPTRAM/aoi"
+#aoi_file <- "D:/rOPTRAM/aoi"
 
 #' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
-vi = "NDVI"
+#vi = "NDVI"
 
 #' @param LC_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
-LC_output_dir = "D:/rOPTRAM/derived_products"
+#LC_output_dir = "D:/rOPTRAM/derived_products"
 
 #' @param data_output_dir, string, path to save coeffs_file
 #'      and STR-VI data.frame, default is tempdir()
-data_output_dir = "D:/rOPTRAM/output"
+#data_output_dir = "D:/rOPTRAM/output"
 
 #' @return coeffs, list, the derived trapezoid coefficients
 
@@ -55,7 +55,7 @@ optram_landsat <- function(landsat_dir,
     landsat_list <- landsat_list[grepl(pattern = "L*_02_T1", x = landsat_list)]
 # MS:
 # The list.dirs() function takes a 'pattern=' argument. So above two lines can be:
-  landsat_list <- list.dirs(landsat_dir,
+    landsat_list <- list.dirs(landsat_dir,
                             pattern = "L.*_02_T.*TIF$",
                             full.names = TRUE, recursive = TRUE)
 
@@ -147,57 +147,57 @@ optram_landsat <- function(landsat_dir,
           band_ids <- band_L57
         }
        img_list <- lapply(band_ids, function(b){
-            # img_path - full names in only one landsat folder
-            # img_path <- img_paths[grepl(pattern = b, img_path, fixed = TRUE)]
-            # filter only sr bands
-         img_path <- dir(s)[grepl(pattern = "*_SR_B[0-9]*.TIF$", x = dir(s))]
-            # read the first raster in the list to take crs
-                  rstt <- terra::rast(file.path(s, img_path)[1])
-                  epsg_code <- paste("EPSG:",
-                            (as.character(terra::crs(rstt, describe=T)[3])))
-                  aoi <- terra::vect(aoi_file)
-                  aoi <- terra::project(aoi, epsg_code)
-img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
-
-#MS: Are you going to use static values for gain and offset?
-# or read from the XML metadata?
-      gain <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
-      offset <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
-      gain <- as.numeric(gain)
-      offset <- as.numeric(offset)
-#        aoi <- terra::project(aoi, epsg_code)
-
-      # Read in tifs
-      if (grepl("LC08", s) | grepl("LC09", s)) {
-        band_ids <- band_L89
-      }
-      if (grepl("LE07", s) | grepl("LT05", s)) {
-        band_ids <- band_L57
-      }
-      img_list <- lapply(band_ids, function(b){
           # img_path - full names in only one landsat folder
           # img_path <- img_paths[grepl(pattern = b, img_path, fixed = TRUE)]
           # filter only sr bands
           img_path <- dir(s)[grepl(pattern = "*_SR_B[0-9]*.TIF$", x = dir(s))]
           # read the first raster in the list to take crs
           rstt <- terra::rast(file.path(s, img_path)[1])
-
-          # MS: Maybe better to use
-          # epsg_code <- terra::crs(rstt, describe=T)$code
           epsg_code <- paste("EPSG:",
                             (as.character(terra::crs(rstt, describe=T)[3])))
           aoi <- terra::vect(aoi_file)
           aoi <- terra::project(aoi, epsg_code)
           img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
 
+#MS: Are you going to use static values for gain and offset?
+# or read from the XML metadata?
+          gain <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
+          offset <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
+          gain <- as.numeric(gain)
+          offset <- as.numeric(offset)
+#         aoi <- terra::project(aoi, epsg_code)
+
+        # Read in tifs
+          if (grepl("LC08", s) | grepl("LC09", s)) {
+            band_ids <- band_L89
+          }
+          if (grepl("LE07", s) | grepl("LT05", s)) {
+            band_ids <- band_L57
+          }
+          img_list <- lapply(band_ids, function(b){
+            # img_path - full names in only one landsat folder
+            # img_path <- img_paths[grepl(pattern = b, img_path, fixed = TRUE)]
+            # filter only sr bands
+            img_path <- dir(s)[grepl(pattern = "*_SR_B[0-9]*.TIF$", x = dir(s))]
+            # read the first raster in the list to take crs
+            rstt <- terra::rast(file.path(s, img_path)[1])
+
+          # MS: Maybe better to use
+          # epsg_code <- terra::crs(rstt, describe=T)$code
+          epsg_code <- paste("EPSG:",
+                          (as.character(terra::crs(rstt, describe=T)[3])))
+          aoi <- terra::vect(aoi_file)
+          aoi <- terra::project(aoi, epsg_code)
+          img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
+
 # TODO: what file extension of original Landsat imagery
-#           img_file <- paste0(img_path, ".jp2")
-            img_path <- file.path(s, img_path)
-            rst <- terra::rast(img_path, win = terra::ext(aoi))
-            return(rst)
-        })# enf-of-img_list is working. the result is img_list
-        # Make a rast obj to save the high resolution extent
-        # The first raster in the list is blue, 10m. Use for reampling
+#         img_file <- paste0(img_path, ".jp2")
+          img_path <- file.path(s, img_path)
+          rst <- terra::rast(img_path, win = terra::ext(aoi))
+          return(rst)
+        })  # end-of-img_list is working. the result is img_list
+          # Make a rast obj to save the high resolution extent
+          # The first raster in the list is blue, 10m. Use for reampling
 # TODO: What resolution? 30m... For Landsat I don't need this function.
 #        img_10m <- img_list[[1]]
 #        img_10m_list <- lapply(img_list, function(i) {
@@ -224,7 +224,7 @@ img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
         terra::writeRaster(img_stk,
                          file.path(BOA_dir, BOA_file), overwrite = TRUE)
         return(img_stk)
-  }) # till this point it is working, except FUN "aoi_to_name"
+    }) # till this point it is working, except FUN "aoi_to_name"
 
 
     # Get VI and STR from this list of raster stacks
@@ -263,7 +263,7 @@ img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
         return(NULL)
       }
 #extract time, date and create datetime
-              mtl <- xml2::read_xml(mtl_file)
+        mtl <- xml2::read_xml(mtl_file)
         timestr <- xml2::xml_text(xml2::xml_find_first(mtl, ".//SCENE_CENTER_TIME"))
         datestr <- xml2::xml_text(xml2::xml_find_first(mtl, ".//DATE_ACQUIRED"))
 
@@ -313,8 +313,8 @@ img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
     coeffs <- rOPTRAM::optram_wetdry_coefficients(full_VI_STR,
                                                   aoi_file,
                                                   data_output_dir)
-
     return(coeffs)
+    }
 }
 
 
