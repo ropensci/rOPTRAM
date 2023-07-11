@@ -41,8 +41,10 @@ remotes::install_gitlab("rsl-bidr/roptram")
 
 This package works with the R package `sen2r`. To install that package
 you will need some system dependencies. On Debian and derivitives please
-install in advance: - jq libv8-dev libjq-dev - libprotobuf-dev
-protobuf-compiler
+install in advance:
+
+- jq libv8-dev libjq-dev
+- libprotobuf-dev protobuf-compiler
 
 Install the google cloud CLI to allow acquiring images directly from
 Google. For installation instructions see:
@@ -50,11 +52,13 @@ Google. For installation instructions see:
 
 ## Example
 
-This is a basic example which shows how to: - retrieve Sentinel 2
-imagery for a specific area of interest - covering a date range -
-preprocess the imagery to obtain a vegetation index and STR band - use
-these to derive coefficients of slope and intercept for the OPTRAM
-trapezoid
+This is a basic example which shows how to:
+
+- retrieve Sentinel 2 imagery for a specific area of interest
+- covering a date range
+- preprocess the imagery to obtain a vegetation index and STR band
+- use these to derive coefficients of slope and intercept for the OPTRAM
+  trapezoid
 
 ``` r
 library(rOPTRAM)
@@ -87,13 +91,13 @@ trapezoid.
 
 ## Meta
 
--   Please report any issues on
-    [gitlab](https://gitlab.com/rsl-bidr/roptram/-/issues)
--   Anyone interested in collaborating is invited to “sign up” by
-    contacting the maintainers.
--   This package is released with a [Contributor Code of
-    Conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md).
-    By contributing to this project, you agree to abide by its terms.
+- Please report any issues on
+  [gitlab](https://gitlab.com/rsl-bidr/roptram/-/issues)
+- Anyone interested in collaborating is invited to “sign up” by
+  contacting the maintainers.
+- This package is released with a [Contributor Code of
+  Conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md).
+  By contributing to this project, you agree to abide by its terms.
 
 <div id="refs" class="references csl-bib-body hanging-indent">
 
