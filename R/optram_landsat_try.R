@@ -182,8 +182,6 @@ optram_landsat <- function(landsat_dir,
             # read the first raster in the list to take crs
             rstt <- terra::rast(file.path(s, img_path)[1])
 
-          # MS: Maybe better to use
-          # epsg_code <- terra::crs(rstt, describe=T)$code
           epsg_code <- paste("EPSG:",
                           (as.character(terra::crs(rstt, describe=T)[3])))
           aoi <- terra::vect(aoi_file)
@@ -196,8 +194,8 @@ optram_landsat <- function(landsat_dir,
           rst <- terra::rast(img_path, win = terra::ext(aoi))
           return(rst)
         })  # end-of-img_list is working. the result is img_list
-          # Make a rast obj to save the high resolution extent
-          # The first raster in the list is blue, 10m. Use for reampling
+            # Make a rast obj to save the high resolution extent
+            # The first raster in the list is blue, 10m. Use for reampling
 # TODO: What resolution? 30m... For Landsat I don't need this function.
 #        img_10m <- img_list[[1]]
 #        img_10m_list <- lapply(img_list, function(i) {
@@ -275,9 +273,8 @@ optram_landsat <- function(landsat_dir,
 #      VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
       # Add image date to dataframe
 #      VI_df['Date'] <- datestr
-#?????????????????????????????????????? from this point all called programs are unknown
-# Error in loadNamespace(x) : there is no package called ‘rOPTRAM’
-              VI_idx <- rOPTRAM::calculate_vi(stk, vi, redband = 1, nirband = 2)
+
+      VI_idx <- rOPTRAM::calculate_vi(stk, vi, redband = 1, nirband = 2)
       VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
       # Add image date to dataframe
       VI_df['Date'] <- datestr
@@ -314,7 +311,7 @@ optram_landsat <- function(landsat_dir,
                                                   aoi_file,
                                                   data_output_dir)
     return(coeffs)
-    }
+    })
 }
 
 
