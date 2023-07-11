@@ -10,8 +10,10 @@ data_output_dir = "D:/rOPTRAM/output"
 
 #' @return coeffs, list, the derived trapezoid coefficients
 
-optram_landsat (landsat_dir,
+coeffs <- optram_landsat(landsat_dir,
                 aoi_file,
                 vi = 'NDVI',
                 LC_output_dir,
                 data_output_dir)
+
+print(coeffs)
