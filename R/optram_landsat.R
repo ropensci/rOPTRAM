@@ -10,11 +10,16 @@
 #' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
 #' @param LC_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
+<<<<<<< HEAD
 #' @param data_output_dir, string, path to save coeffs_file
+=======
+#' @param data_output_dir, string, path to save coeffs_file 
+>>>>>>> e845c170dee6803f6f8c5b6c99be97ec04c09e64
 #'      and STR-VI data.frame, default is tempdir()
 #' @return coeffs, list, the derived trapezoid coefficients
 #' @export
 #' @examples
+<<<<<<< HEAD
 
 #' @param landsat_dir, string, full path to containing folder of downloaded (unzipped)
 landsat_dir = "C:/Users/Natalya/Downloads/landsat_oPTRAM"
@@ -34,6 +39,9 @@ LC_output_dir = "D:/rOPTRAM/derived_products"
 data_output_dir = "D:/rOPTRAM/output"
 
 #' @return coeffs, list, the derived trapezoid coefficients
+=======
+#' print("Running optram_prepare_landsat_vi_str.R")
+>>>>>>> e845c170dee6803f6f8c5b6c99be97ec04c09e64
 
 optram_landsat <- function(landsat_dir,
                         aoi_file,
@@ -46,12 +54,17 @@ optram_landsat <- function(landsat_dir,
     img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- epsg_code <- NULL
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
     STR <- STR_df <- full_df <- NULL
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> e845c170dee6803f6f8c5b6c99be97ec04c09e64
     # Loop over the downloaded LC folders (dates),
     # create NDVI and STR indices for each and crop to aoi
 
 # TODO: How to recognize folder of Landsat imagery?
     landsat_list <- list.dirs(landsat_dir, full.names = TRUE, recursive = TRUE)
+<<<<<<< HEAD
 #   landsat_list <- landsat_list[grepl(pattern = "landsat$", x = landsat_list)]
     landsat_list <- landsat_list[grepl(pattern = "L*_02_T1", x = landsat_list)]
     # The strings below are used to select the needed bands from Sentinel
@@ -62,6 +75,12 @@ optram_landsat <- function(landsat_dir,
     offset <- -0.2
 
     #TODO: Which bands?
+=======
+    landsat_list <- landsat_list[grepl(pattern = "landsat$", x = landsat_list)]
+    # The strings below are used to select the needed bands from Sentinel
+
+#TODO: Which bands?
+>>>>>>> e845c170dee6803f6f8c5b6c99be97ec04c09e64
     band_ids <- c(
         #"AOT_10m", #Coastal blue
         "B02_10m", #blue
@@ -85,13 +104,21 @@ optram_landsat <- function(landsat_dir,
     }
 
     aoi_name <- aoi_to_name(aoi_file)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> e845c170dee6803f6f8c5b6c99be97ec04c09e64
     # Prepare output directories
     BOA_dir <- file.path(LC_output_dir, "BOA")
     if (!dir.exists(BOA_dir)) {
          dir.create(BOA_dir, recursive = TRUE)
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> e845c170dee6803f6f8c5b6c99be97ec04c09e64
     NDVI_dir <- file.path(LC_output_dir, "NDVI")
     if (!dir.exists(NDVI_dir)) {
         dir.create(NDVI_dir)
@@ -110,7 +137,11 @@ optram_landsat <- function(landsat_dir,
         img_nodes <- img_nodes[!grepl(pattern = "R60m", img_nodes)]
         img_paths <- xml2::xml_contents(img_nodes)
 
+<<<<<<< HEAD
         # Get CRS for this landsat dataset, and reproject AOI
+=======
+        # Get CRS for this landsat dataset, and reproject AOI 
+>>>>>>> e845c170dee6803f6f8c5b6c99be97ec04c09e64
         mtd_file <- list.files(s, pattern = "MTD_TL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtd_file)) {
@@ -168,7 +199,11 @@ optram_landsat <- function(landsat_dir,
         }
 
         # Use the metadata file from landsat directory name to get image date
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> e845c170dee6803f6f8c5b6c99be97ec04c09e64
 # TODO: How to extract image date from metadata?
         s <- landsat_list[x]
         # Prepare file name parts for saving rasters
@@ -187,7 +222,11 @@ optram_landsat <- function(landsat_dir,
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> e845c170dee6803f6f8c5b6c99be97ec04c09e64
         STR <- rOPTRAM::calculate_str(stk, swirband = 5)
         STR_df <- terra::as.data.frame(STR, xy = TRUE)
         full_df <- dplyr::full_join(STR_df, VI_df)

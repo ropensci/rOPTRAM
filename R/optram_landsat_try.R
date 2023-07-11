@@ -53,6 +53,11 @@ optram_landsat <- function(landsat_dir,
 # TODO: How to recognize folder of Landsat imagery? Landsat_list - folders with images
     landsat_list <- list.dirs(landsat_dir, full.names = TRUE, recursive = TRUE)
     landsat_list <- landsat_list[grepl(pattern = "L*_02_T1", x = landsat_list)]
+# MS:
+# The list.dirs() function takes a 'pattern=' argument. So above two lines can be:
+  landsat_list <- list.dirs(landsat_dir,
+                            pattern = "L.*_02_T.*TIF$",
+                            full.names = TRUE, recursive = TRUE)
 
 # https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
 #  meanwhile scaling is set: gain and offset. There is extraction from metadata down
@@ -153,6 +158,37 @@ optram_landsat <- function(landsat_dir,
                   aoi <- terra::vect(aoi_file)
                   aoi <- terra::project(aoi, epsg_code)
 img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
+
+#MS: Are you going to use static values for gain and offset?
+# or read from the XML metadata?
+      gain <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
+      offset <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
+      gain <- as.numeric(gain)
+      offset <- as.numeric(offset)
+#        aoi <- terra::project(aoi, epsg_code)
+
+      # Read in tifs
+      if (grepl("LC08", s) | grepl("LC09", s)) {
+        band_ids <- band_L89
+      }
+      if (grepl("LE07", s) | grepl("LT05", s)) {
+        band_ids <- band_L57
+      }
+      img_list <- lapply(band_ids, function(b){
+          # img_path - full names in only one landsat folder
+          # img_path <- img_paths[grepl(pattern = b, img_path, fixed = TRUE)]
+          # filter only sr bands
+          img_path <- dir(s)[grepl(pattern = "*_SR_B[0-9]*.TIF$", x = dir(s))]
+          # read the first raster in the list to take crs
+          rstt <- terra::rast(file.path(s, img_path)[1])
+
+          # MS: Maybe better to use
+          # epsg_code <- terra::crs(rstt, describe=T)$code
+          epsg_code <- paste("EPSG:",
+                            (as.character(terra::crs(rstt, describe=T)[3])))
+          aoi <- terra::vect(aoi_file)
+          aoi <- terra::project(aoi, epsg_code)
+          img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
 
 # TODO: what file extension of original Landsat imagery
 #           img_file <- paste0(img_path, ".jp2")
