@@ -15,9 +15,26 @@
 #' @return coeffs, list, the derived trapezoid coefficients
 #' @export
 #' @examples
-#' print("Running optram_prepare_landsat_vi_str.R")
-#' I started with LANDSAT here
-#'
+
+#' @param landsat_dir, string, full path to containing folder of downloaded (unzipped)
+landsat_dir = "C:/Users/Natalya/Downloads/landsat_oPTRAM"
+
+#' @param aoi_file, string, path to boundary polygon spatial file of area of interest
+aoi_file <- "D:/rOPTRAM/aoi"
+
+#' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
+vi = "NDVI"
+
+#' @param LC_output_dir, string, directory to save the derived products,
+#'      defaults to tempdir()
+LC_output_dir = "D:/rOPTRAM/derived_products"
+
+#' @param data_output_dir, string, path to save coeffs_file
+#'      and STR-VI data.frame, default is tempdir()
+data_output_dir = "D:/rOPTRAM/output"
+
+#' @return coeffs, list, the derived trapezoid coefficients
+
 optram_landsat <- function(landsat_dir,
                         aoi_file,
                         vi = 'NDVI',
@@ -35,10 +52,16 @@ optram_landsat <- function(landsat_dir,
 
 # TODO: How to recognize folder of Landsat imagery?
     landsat_list <- list.dirs(landsat_dir, full.names = TRUE, recursive = TRUE)
-    landsat_list <- landsat_list[grepl(pattern = "landsat$", x = landsat_list)]
+#   landsat_list <- landsat_list[grepl(pattern = "landsat$", x = landsat_list)]
+    landsat_list <- landsat_list[grepl(pattern = "L*_02_T1", x = landsat_list)]
     # The strings below are used to select the needed bands from Sentinel
 
-#TODO: Which bands?
+# https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
+#  scaling: gain and offset
+    gain <- 0.0000275
+    offset <- -0.2
+
+    #TODO: Which bands?
     band_ids <- c(
         #"AOT_10m", #Coastal blue
         "B02_10m", #blue
