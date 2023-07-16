@@ -20,10 +20,10 @@
 #landsat_dir = "C:/Users/Natalya/Downloads/landsat_oPTRAM"
 
 #' @param aoi_file, string, path to boundary polygon spatial file of area of interest
-#???????????????????????????????????????????????????
-# What is correct: only path, or path with the name?
-# 1. aoi_file <- "D:/rOPTRAM/aoi" # aoi_name = "aoi"
-# 2. aoi_file <- "D:/rOPTRAM/aoi/migda_perimeter.shp" # aoi_name = "migdaperimeter"
+
+#  path with the name?
+#  aoi_file <- "D:/rOPTRAM/aoi/migda_perimeter.shp" # aoi_name = "migdaperimeter"
+# *.gpkg all works
 
 #' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
 #vi = "NDVI"
@@ -67,10 +67,9 @@
 #                           full.names = TRUE, recursive = TRUE)
 # N:
 # this is working:
-    landsat_list <- list.dirs(landsat_dir)[grepl("L*_02_T1",list.dirs(landsat_dir))]
-
-# https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
-# There is extraction from metadata down
+# parameter Tier 1 and Tier 2.
+# Landsat Collection 1 | U.S. Geological Survey (usgs.gov)
+    landsat_list <- list.dirs(landsat_dir)[grepl("L*_02_*",list.dirs(landsat_dir))]
 
     # The strings below are used to select the needed bands from Landsat
     # L89 - bands for LANDSAT 8/9
@@ -121,11 +120,10 @@
 
 # TODO: How to get list of image bands from metadata
     # derived_rasters FUN uses landsat images folders. Output is derived_rasters
-    #s <- landsat_list # only to check this FUN
-    # s=s[1] # for test only
 
     derived_rasters <- lapply(landsat_list, function(s) {
         # Get CRS for this landsat dataset, and reproject AOI
+# s=landsat_list[1]
         mtl_file <- list.files(s, pattern = "MTL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtl_file)) {
@@ -133,12 +131,6 @@
             return(NULL)
         }
         mtl <- xml2::read_xml(mtl_file)
-        # epsg will be taken from the first image.
-        # take gain and offset.
-        gain <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
-        offset <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
-        gain <- as.numeric(gain)
-        offset <- as.numeric(offset)
         # Read in tifs
         if (grepl("LC08", s) | grepl("LC09", s)) {
           band_ids <- band_L89
@@ -149,13 +141,16 @@
        img_list <- lapply(band_ids, function(b){
           # img_path - full names in only one landsat folder
           # filter only sr bands
+#b=band_ids
           img_path <- dir(s)[grepl(pattern = "*_SR_B[0-9]*.TIF$", x = dir(s))]
-
           img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
 
 #MS: Are you going to use static values for gain and offset?
 # or read from the XML metadata?
 #N: values for gain and offset are read from the XML metadata
+          # take gain and offset.
+          # https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
+          # There is extraction from metadata: gain and offset
           gain <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
           offset <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
           gain <- as.numeric(gain)
