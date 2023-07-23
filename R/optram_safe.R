@@ -157,7 +157,7 @@ optram_safe <- function(safe_dir,
         #datetime <- strptime(datestr, format = "%FT%X", tz = "UTC")
 
         VI_idx <- rOPTRAM::calculate_vi(stk, vi,
-                                        redband = 3, nirband = 4, overwrite = overwrite)  
+                                        redband = 3, nirband = 4)  
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr
