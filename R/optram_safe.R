@@ -145,6 +145,18 @@ optram_safe <- function(safe_dir,
         return(img_stk)
     })
 
+    # Get index of rows for sampling
+    # Use the first raster (first date) in derived rasters
+    # Get the red band (band 3) from that stack
+    r <- terra::rast(derived_rasters[[1]][3])
+    r_df <- as.data.frame(r, xy = TRUE)
+    if (nrow(r_df) > max_tbl-size) {
+        samp_size <- max_tbl_size / length(STR_list)
+        idx <- sample(nrow(r_df), samp_size)
+    } else {
+        idx <- seq(1, nrow(r_df))
+    }
+
     # Get VI and STR from this list of raster stacks
     VI_STR_list <- lapply(1:length(derived_rasters), function(x) {
         # Each item in the derived_rasters list is a raster stack, with 6 bands
@@ -173,19 +185,19 @@ optram_safe <- function(safe_dir,
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr
+        # Get the subset sample using the idx values from above
+        VI_df <- VI_df[idx, ]
 
         STR <- rOPTRAM::calculate_str(stk, swirband = 5)
         STR_df <- terra::as.data.frame(STR, xy = TRUE)
+        # Get the subset sample using the idx values from above
+        STR_df <- STR_df[idx, ]
+
         full_df <- dplyr::full_join(STR_df, VI_df)
         full_df <- full_df[stats::complete.cases(full_df),]
-        # get sample of rows to keep total length
-        # of data.frame within max_tbl_size
-        samp_size <- max_tbl_size / length(derived_rasters)
-        if (nrow(full_df) > samp_size) {
-            full_df <- dplyr::slice_sample(full_df, n = samp_size)
-        }
+
         # Save VI to NDVI_dir
-           # Prepare file name parts for saving rasters
+        # Prepare file name parts for saving rasters
         s_parts <- unlist(strsplit(basename(safe_list[x]), "_"))
         VI_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "NDVI_10.tif", sep = "_")
