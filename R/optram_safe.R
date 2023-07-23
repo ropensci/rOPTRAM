@@ -175,6 +175,7 @@ optram_safe <- function(safe_dir,
         if (!file.exists(VI_file) || overwrite == TRUE) {
             terra::writeRaster(VI_idx,
                          file.path(NDVI_dir, VI_file), overwrite = TRUE)
+        }
         # Save STR to BOA_dir
         STR_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "STR_10.tif", sep = "_")

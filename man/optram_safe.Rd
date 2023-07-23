@@ -9,6 +9,7 @@ optram_safe(
   aoi_file,
   vi = "NDVI",
   S2_output_dir = tempdir(),
+  overwrite = TRUE,
   data_output_dir = tempdir()
 )
 }
@@ -22,6 +23,9 @@ Sentinel 2 data in original SAFE format, after atompheric correction (L2A)}
 
 \item{S2_output_dir, }{string, directory to save the derived products,
 defaults to tempdir()}
+
+\item{overwrite, }{boolean, overwrite derived products that already were created,
+defaults to TRUE}
 
 \item{data_output_dir, }{string, path to save coeffs_file
 and STR-VI data.frame, default is tempdir()}
