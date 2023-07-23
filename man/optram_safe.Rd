@@ -10,7 +10,8 @@ optram_safe(
   viname = "NDVI",
   S2_output_dir = tempdir(),
   overwrite = TRUE,
-  data_output_dir = tempdir()
+  data_output_dir = tempdir(),
+  max_tbl_size = 5e+06
 )
 }
 \arguments{
@@ -29,6 +30,9 @@ defaults to TRUE}
 
 \item{data_output_dir, }{string, path to save coeffs_file
 and STR-VI data.frame, default is tempdir()}
+
+\item{max_tbl_size, }{numeric, maximum size of VI/STR dta.frame.
+default is 5,000,000 rows}
 }
 \value{
 coeffs, list, the derived trapezoid coefficients
@@ -39,9 +43,17 @@ SWIR Transformed Reflectance (STR) rasters
 when you have already downloaded Sentinel 2 image files in advance
 (without using \code{sen2r}).
 Unzip the downloaded Sentinel 2 files and do not change the folder structure.
-THis function assumes that atmospheric correction has been applied.
+This function assumes that atmospheric correction has been applied.
 i.e. using the SNAP L2A_Process,
 or the  \code{sen2cor()} function from the {sen2r} R package.
+}
+\note{
+Use the \code{max_tbl_size} parameter to limit the total number of rows in the VI-STR data.frame.
+When the area of interest is large, or the time range of datasets is long,
+the total size of the data.frame can grow beyond the capacity of computation resources.
+This parameter limits the size of the table by sampling a number of data points
+from each time slot. The sample size is determined based on \code{max_tbl_size}
+and the total number of time slots in the full time range.
 }
 \examples{
 print("Running optram_prepare_safe_vi_str.R")

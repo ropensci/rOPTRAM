@@ -4,7 +4,12 @@
 \alias{optram_ndvi_str}
 \title{Prepare dataframe of pairs NDVI and STR values}
 \usage{
-optram_ndvi_str(STR_list, VI_list, output_dir = tempdir())
+optram_ndvi_str(
+  STR_list,
+  VI_list,
+  output_dir = tempdir(),
+  max_tbl_size = 5e+06
+)
 }
 \arguments{
 \item{STR_list, }{list of paths to STR raster files}
@@ -12,6 +17,9 @@ optram_ndvi_str(STR_list, VI_list, output_dir = tempdir())
 \item{VI_list, }{list of paths to NDVI raster files}
 
 \item{output_dir, }{string, path to save data.frames (in RDS format)}
+
+\item{max_tbl_size, }{numeric, maximum size of NDVI-STR data.frame
+default set to 5e+6}
 }
 \value{
 full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
@@ -21,6 +29,13 @@ Collect all pixel values of both vegetation index,
 and Swir Transformed Reflectance, for a time series of images.
 Prepare data.frame of all pairs of values
 (as input for the \code{optram_wetdry_coefficients()} function)
+}
+\note{
+Use the \code{max_tbl_size} parameter to limit size of the NDVI-STR data.frame
+With a large area of interest, and long time frame,
+the number of data points can overrun the computation resources.
+This parameter sets a total size of data.frame from the \code{max_tbl_size}
+parameter, together with the number of image time slots in the time range.
 }
 \examples{
 print("Running optram_ndvi_str.R")
