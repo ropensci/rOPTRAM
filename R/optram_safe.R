@@ -14,6 +14,8 @@
 #' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
+#' @param overwrite, boolean, overwrite derived products that already were created, 
+#'      defaults to TRUE
 #' @param data_output_dir, string, path to save coeffs_file 
 #'      and STR-VI data.frame, default is tempdir()
 #' @return coeffs, list, the derived trapezoid coefficients
@@ -25,6 +27,7 @@ optram_safe <- function(safe_dir,
                         aoi_file,
                         vi = 'NDVI',
                         S2_output_dir = tempdir(),
+                        overwrite = TRUE,
                         data_output_dir = tempdir()) {
 
     # Avoid "no visible binding for global variable" NOTE
@@ -124,7 +127,7 @@ optram_safe <- function(safe_dir,
         BOA_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "BOA_10.tif", sep = "_")
         terra::writeRaster(img_stk,
-                         file.path(BOA_dir, BOA_file), overwrite = TRUE)
+                         file.path(BOA_dir, BOA_file), overwrite = overwrite)
         return(img_stk)
     })
 
@@ -151,7 +154,8 @@ optram_safe <- function(safe_dir,
         datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtd, ".//SENSING_TIME")))
         #datetime <- strptime(datestr, format = "%FT%X", tz = "UTC")
 
-        VI_idx <- rOPTRAM::calculate_vi(stk, vi, redband = 3, nirband = 4)
+        VI_idx <- rOPTRAM::calculate_vi(stk, vi,
+                                        redband = 3, nirband = 4, overwrite = overwrite)  
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr
@@ -172,7 +176,7 @@ optram_safe <- function(safe_dir,
         STR_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "STR_10.tif", sep = "_")
         terra::writeRaster(STR,
-                        file.path(STR_dir, STR_file), overwrite = TRUE)
+                        file.path(STR_dir, STR_file), overwrite = overwrite)
 
         return(full_df)
     })
