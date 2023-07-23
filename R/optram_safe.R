@@ -5,7 +5,7 @@
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
 #' Unzip the downloaded Sentinel 2 files and do not change the folder structure.
-#' THis function assumes that atmospheric correction has been applied.
+#' This function assumes that atmospheric correction has been applied.
 #' i.e. using the SNAP L2A_Process,
 #' or the  `sen2cor()` function from the {sen2r} R package.
 #' @param safe_dir, string, full path to containing folder of downloaded (unzipped)
@@ -18,8 +18,17 @@
 #'      defaults to TRUE
 #' @param data_output_dir, string, path to save coeffs_file 
 #'      and STR-VI data.frame, default is tempdir()
+#' @param max_tbl_size, numeric, maximum size of VI/STR dta.frame.
+#'      default is 5,000,000 rows
 #' @return coeffs, list, the derived trapezoid coefficients
 #' @export
+#' @note 
+#' Use the `max_tbl_size` parameter to limit the total number of rows in the VI-STR data.frame.
+#' When the area of interest is large, or the time range of datasets is long, 
+#' the total size of the data.frame can grow beyond the capacity of computation resources.
+#' This parameter limits the size of the table by sampling a number of data points 
+#' from each time slot. The sample size is determined based on `max_tbl_size` 
+#' and the total number of time slots in the full time range.
 #' @examples
 #' print("Running optram_prepare_safe_vi_str.R")
 
@@ -28,7 +37,8 @@ optram_safe <- function(safe_dir,
                         viname = 'NDVI',
                         S2_output_dir = tempdir(),
                         overwrite = TRUE,
-                        data_output_dir = tempdir()) {
+                        data_output_dir = tempdir(),
+                        max_tbl_size = 5e+6) {
 
     # Avoid "no visible binding for global variable" NOTE
     safe_list <- band_ids <- aoi <- derived_rasters <- xml_file <- NULL
@@ -155,20 +165,25 @@ optram_safe <- function(safe_dir,
             return(NULL)
         }
         mtd <- xml2::read_xml(mtd_file)
-        datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtd, ".//SENSING_TIME")))
-        #datetime <- strptime(datestr, format = "%FT%X", tz = "UTC")
+        datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtd,
+                            ".//SENSING_TIME")))
 
         VI_idx <- rOPTRAM::calculate_vi(stk, viname,
                                         redband = 3, nirband = 4)  
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr
-        
+
         STR <- rOPTRAM::calculate_str(stk, swirband = 5)
         STR_df <- terra::as.data.frame(STR, xy = TRUE)
         full_df <- dplyr::full_join(STR_df, VI_df)
         full_df <- full_df[stats::complete.cases(full_df),]
-
+        # get sample of rows to keep total length
+        # of data.frame within max_tbl_size
+        samp_size <- max_tbl_size / length(derived_rasters)
+        if (nrow(full_df) > samp_size) {
+            full_df <- dplyr::slice_sample(full_df, n = samp_size)
+        }
         # Save VI to NDVI_dir
            # Prepare file name parts for saving rasters
         s_parts <- unlist(strsplit(basename(safe_list[x]), "_"))
