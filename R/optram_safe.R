@@ -126,8 +126,10 @@ optram_safe <- function(safe_dir,
         s_parts <- unlist(strsplit(basename(s), "_"))
         BOA_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "BOA_10.tif", sep = "_")
-        terra::writeRaster(img_stk,
-                         file.path(BOA_dir, BOA_file), overwrite = overwrite)
+        if (!file.exists(BOA_file) || overwrite == TRUE) {
+            terra::writeRaster(img_stk,
+                         file.path(BOA_dir, BOA_file), overwrite = TRUE)
+        }
         return(img_stk)
     })
 
@@ -170,14 +172,16 @@ optram_safe <- function(safe_dir,
         s_parts <- unlist(strsplit(basename(safe_list[x]), "_"))
         VI_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "NDVI_10.tif", sep = "_")
-        terra::writeRaster(VI_idx,
+        if (!file.exists(VI_file) || overwrite == TRUE) {
+            terra::writeRaster(VI_idx,
                          file.path(NDVI_dir, VI_file), overwrite = TRUE)
         # Save STR to BOA_dir
         STR_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "STR_10.tif", sep = "_")
+        if (!file.exists(STR_file) || overwrite == TRUE) {
         terra::writeRaster(STR,
-                        file.path(STR_dir, STR_file), overwrite = overwrite)
-
+                        file.path(STR_dir, STR_file), overwrite = TRUE)
+        }
         return(full_df)
     })
     full_VI_STR <- do.call(rbind, VI_STR_list)
