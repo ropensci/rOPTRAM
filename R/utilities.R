@@ -79,14 +79,11 @@ check_scihub_access <- function(scihub_user = NULL,
 #' @param redband, integer, number of red band
 #' @param nirband, integer, number of NIR band
 #' @param vi, string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'
-#' @param overwrite, boolean, whether to overwrite VI file if it exists.
-#'          defaults to TRUE
 #'
 #' @export
 #' @return vi_rast, SpatRaster of vegetation index
 
-calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4,
-                        overwrite = TRUE) {
+calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
     # Avoid "no visible binding for global variable" NOTE
     nir <- red <- vi_rast <- NULL
 
