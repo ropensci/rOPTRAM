@@ -4,14 +4,19 @@
 \alias{optram_prepare_other_vi_str}
 \title{Handle third party imagery with red, NIR and SWIR bands}
 \usage{
-optram_prepare_other_vi_str(img_dir, aoi, vi = "NDVI", output_dir = tempdir())
+optram_prepare_other_vi_str(
+  img_dir,
+  aoi,
+  viname = "NDVI",
+  output_dir = tempdir()
+)
 }
 \arguments{
 \item{img_dir, }{string, full path directory of downloaded images (assumes Geotif)}
 
 \item{aoi, }{string, full path to polygon spatial file of area of interest}
 
-\item{vi, }{string, which VI to prepare, 'NVDI', 'SAVI', etc.}
+\item{viname, }{string, which VI to prepare, 'NVDI', 'SAVI', etc.}
 
 \item{output_dir, }{string, where to save Geotiff, default is tempdir()}
 }

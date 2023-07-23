@@ -7,7 +7,7 @@
 optram_safe(
   safe_dir,
   aoi_file,
-  vi = "NDVI",
+  viname = "NDVI",
   S2_output_dir = tempdir(),
   overwrite = TRUE,
   data_output_dir = tempdir()
@@ -19,7 +19,7 @@ Sentinel 2 data in original SAFE format, after atompheric correction (L2A)}
 
 \item{aoi_file, }{string, path to boundary polygon spatial file of area of interest}
 
-\item{vi, }{string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'}
+\item{viname, }{string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'}
 
 \item{S2_output_dir, }{string, directory to save the derived products,
 defaults to tempdir()}

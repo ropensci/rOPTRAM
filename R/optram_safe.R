@@ -11,7 +11,7 @@
 #' @param safe_dir, string, full path to containing folder of downloaded (unzipped)
 #' Sentinel 2 data in original SAFE format, after atompheric correction (L2A)
 #' @param aoi_file, string, path to boundary polygon spatial file of area of interest
-#' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
+#' @param viname, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
 #' @param overwrite, boolean, overwrite derived products that already were created, 
@@ -25,7 +25,7 @@
 
 optram_safe <- function(safe_dir,
                         aoi_file,
-                        vi = 'NDVI',
+                        viname = 'NDVI',
                         S2_output_dir = tempdir(),
                         overwrite = TRUE,
                         data_output_dir = tempdir()) {
@@ -98,13 +98,15 @@ optram_safe <- function(safe_dir,
         mtd <- xml2::read_xml(mtd_file)
         epsg_code <- xml2::xml_text(xml2::xml_find_first(mtd, ".//HORIZONTAL_CS_CODE"))
         aoi <- terra::project(aoi, epsg_code)
+        aoi_ext <- terra::ext(aoi)
 
         # Read in jp2 files
         img_list <- lapply(band_ids, function(b){
             img_path <- img_paths[grepl(pattern = b, img_paths, fixed = TRUE)]
             img_file <- paste0(img_path, ".jp2")
             img_path <- file.path(s, img_file)
-            rst <- terra::rast(img_path, win = terra::ext(aoi))
+            rst <- terra::rast(img_path)
+            rst <- terra::crop(rst, aoi_ext)
             return(rst)
         })
         # Make a rast obj to save the high resolution extent
@@ -156,7 +158,7 @@ optram_safe <- function(safe_dir,
         datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtd, ".//SENSING_TIME")))
         #datetime <- strptime(datestr, format = "%FT%X", tz = "UTC")
 
-        VI_idx <- rOPTRAM::calculate_vi(stk, vi,
+        VI_idx <- rOPTRAM::calculate_vi(stk, viname,
                                         redband = 3, nirband = 4)  
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe

@@ -78,28 +78,28 @@ check_scihub_access <- function(scihub_user = NULL,
 #' @param img_stk, terra SpatRaster, multiband stack of images, already clipped to aoi
 #' @param redband, integer, number of red band
 #' @param nirband, integer, number of NIR band
-#' @param vi, string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'
+#' @param viname, string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'
 #'
 #' @export
 #' @return vi_rast, SpatRaster of vegetation index
 
-calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
+calculate_vi <- function(img_stk, viname = "NDVI", redband = 3, nirband = 4) {
     # Avoid "no visible binding for global variable" NOTE
     nir <- red <- vi_rast <- NULL
 
     nir <- img_stk[[nirband]]
     red <- img_stk[[redband]]
-    if (vi == "NDVI") {
+    if (viname == "NDVI") {
         vi_rast <- ((nir - red) / (nir + red))
-    } else if (vi == "SAVI") {
+    } else if (viname == "SAVI") {
         vi_rast <- ((1.5 * (nir - red)) / (nir + red + 0.5) )
-    } else if (vi == "MSAVI") {
+    } else if (viname == "MSAVI") {
         vi_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 8 * (nir - red))) / 2)
     } else {
-        warning("Unrecognized index: ", vi)
+        warning("Unrecognized index: ", viname)
         vi_rast <- NULL
     }
-    names(vi_rast) <- vi
+    names(vi_rast) <- viname
     return(vi_rast)
 }
 
