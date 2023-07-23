@@ -126,9 +126,9 @@ optram_safe <- function(safe_dir,
         s_parts <- unlist(strsplit(basename(s), "_"))
         BOA_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "BOA_10.tif", sep = "_")
-        if (!file.exists(BOA_file) || overwrite == TRUE) {
-            terra::writeRaster(img_stk,
-                         file.path(BOA_dir, BOA_file), overwrite = TRUE)
+        BOA_path <- file.path(BOA_dir, BOA_file)
+        if (!file.exists(BOA_path) || overwrite == TRUE) {
+            terra::writeRaster(img_stk, BOA_path, overwrite = TRUE)
         }
         return(img_stk)
     })
@@ -172,16 +172,16 @@ optram_safe <- function(safe_dir,
         s_parts <- unlist(strsplit(basename(safe_list[x]), "_"))
         VI_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "NDVI_10.tif", sep = "_")
-        if (!file.exists(VI_file) || overwrite == TRUE) {
-            terra::writeRaster(VI_idx,
-                         file.path(NDVI_dir, VI_file), overwrite = TRUE)
+        VI_path <- file.path(NDVI_dir, VI_file)
+        if (!file.exists(VI_path) || overwrite == TRUE) {
+            terra::writeRaster(VI_idx, VI_path, overwrite = TRUE)
         }
         # Save STR to BOA_dir
         STR_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "STR_10.tif", sep = "_")
-        if (!file.exists(STR_file) || overwrite == TRUE) {
-        terra::writeRaster(STR,
-                        file.path(STR_dir, STR_file), overwrite = TRUE)
+        STR_path <- file.path(STR_dir, STR_file)
+        if (!file.exists(STR_path) || overwrite == TRUE) {
+        terra::writeRaster(STR, STR_path, overwrite = TRUE)
         }
         return(full_df)
     })
