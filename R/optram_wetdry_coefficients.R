@@ -14,7 +14,7 @@
 optram_wetdry_coefficients <- function(full_df,
                                        aoi_file,
                                        output_dir = tempdir(),
-                                       step=0.01, 
+                                       step = 0.01,
                                        save_plot = TRUE) {
   # Derive slope and intercept to two sides of trapezoid
   # Based on:
@@ -87,7 +87,8 @@ optram_wetdry_coefficients <- function(full_df,
 
   if (save_plot) {
     rOPTRAM::plot_ndvi_str_cloud(full_df,
-                                coeffs, aoi_file = aoi_file,
+                                coeffs,
+                                aoi_file = aoi_file,
                                 output_dir = output_dir)
   }
   return(coeffs)
@@ -125,22 +126,18 @@ plot_ndvi_str_cloud <- function(full_df,
 
   # We don't need Millions of points! get a subset
   num_rows <- nrow(full_df)
-  if (num_rows < 200000) {
+  if (num_rows < 400000) {
     plot_df <- full_df
-  }
-  else {
+  } else {
     # This trick drops the num of plotted points 
-    # by orders of magnitude, keeping total below 1M
-    places <- log10(num_rows)
-    divisor <- 10**(places - log10(100000))
+    # by orders of magnitude
+    divisor <-  log2(num_rows)
     samp_num <- num_rows  / divisor
     sample_idx <- sample(num_rows, samp_num)
-    plot_df <- full_df[sample_idx,]
+    plot_df <- full_df[sample_idx, ]
   }
   num_rows_plotted <- nrow(plot_df)
   # NDVI (x) axis limits
-  #x_min <- min(plot_df$NDVI)*0.9
-  #x_max <- max(plot_df$NDVI)*1.05
   # Set fixed plot limits
   x_min <- 0.0
   x_max <- 0.9
