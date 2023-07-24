@@ -33,9 +33,13 @@ optram_ndvi_str <- function(STR_list, VI_list,
   }
 
   # Get index of rows for sampling
+  # Use the first raster (first date) list of STR rasters
+  # to determine index for random sampling
   r <- terra::rast(STR_list[1])
   r_df <- as.data.frame(r, xy = TRUE)
   if (nrow(r_df) > max_tbl-size) {
+    # Set sample size as:
+    # maximum table / number of dates in date range
     samp_size <- max_tbl_size / length(STR_list)
     idx <- sample(nrow(r_df), samp_size)
   } else {
@@ -48,6 +52,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     STR_1_df <- as.data.frame(STR, xy=TRUE)
     names(STR_1_df) <- c("x", "y", "STR")
     STR_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
+    # Keep only sampled rows
     STR_1_df <- STR_1_df[idx, ]
     return(STR_1_df)
   })
@@ -62,6 +67,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     VI_1_df <- as.data.frame(VI, xy=TRUE)
     names(VI_1_df) <- c("x", "y", "NDVI")
     VI_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
+    # Keep only sampled rows
     VI_1_df <- VI_1_df[idx, ]
     return(VI_1_df)
   })
