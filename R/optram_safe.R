@@ -147,11 +147,14 @@ optram_safe <- function(safe_dir,
 
     # Get index of rows for sampling
     # Use the first raster (first date) in derived rasters
-    # Use that to determine index for random sampling
-    r <- terra::rast(derived_rasters[[1]])
+    # Get the red band (3) and
+    # use that to determine index for random sampling
+    r <- derived_rasters[[1]][[3]]
     r_df <- as.data.frame(r, xy = TRUE)
-    if (nrow(r_df) > max_tbl-size) {
-        samp_size <- max_tbl_size / length(STR_list)
+    if (nrow(r_df) > max_tbl_size) {
+        # Set sample size as:
+        # maximum table / number of dates in date range
+        samp_size <- max_tbl_size / length(derived_rasters)
         idx <- sample(nrow(r_df), samp_size)
     } else {
         idx <- seq(1, nrow(r_df))
