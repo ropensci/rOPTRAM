@@ -113,10 +113,14 @@ calculate_vi <- function(img_stk, vi = "NDVI", redband = 3, nirband = 4) {
 #'
 #' @param img_stk, terra SpatRaster, multiband stack of images, already clipped to aoi
 #' @param swirband, integer, number of red band
-#' @export 
+#' @param scale_factor, integer, scaling factor for EO data source
+#'      default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)
+#' @export
+#' @note For Landsat images, scale_factor should be 1,
+#'      since Landsat metadata contains gain and offset for scaling image bands.
 #' @return STR, SpatRaster of STR band
 
-calculate_str <- function(img_stk, swirband = 12) {
+calculate_str <- function(img_stk, swirband = 12, scale_factor = 10000) {
   # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
   # The optical trapezoid model:
   # A novel approach to remote sensing of soil moisture
@@ -128,7 +132,7 @@ calculate_str <- function(img_stk, swirband = 12) {
   #
     SWIR_DN <-  img_stk[[swirband]]
     # back to native scale
-    SWIR <-  SWIR_DN / 10000
+    SWIR <-  SWIR_DN / scale_factor
     # Convert from Solar irradiance
     # solar_irradiance_12 <- 87.25
     # SWIR <- (SWIR_irr/10) * solar_irradiance_12
