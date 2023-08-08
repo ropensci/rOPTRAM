@@ -123,7 +123,11 @@
 
     derived_rasters <- lapply(landsat_list, function(s) {
         # Get CRS for this landsat dataset, and reproject AOI
-# s=landsat_list[1]
+      # s=landsat_list[1]
+      #mtl_file <- list.files(landsat_list[1], pattern = "MTL.*xml$",
+      #                       recursive = TRUE, full.names = TRUE, )[1]
+
+
         mtl_file <- list.files(s, pattern = "MTL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtl_file)) {
@@ -131,6 +135,15 @@
             return(NULL)
         }
         mtl <- xml2::read_xml(mtl_file)
+        #N: values for gain and offset are read from the XML metadata
+        # take gain and offset.
+        # https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
+        # There is extraction from metadata: gain and offset
+        gain <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
+        offset <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
+        gain <- as.numeric(gain)
+        offset <- as.numeric(offset)
+
         # Read in tifs
         if (grepl("LC08", s) | grepl("LC09", s)) {
           band_ids <- band_L89
@@ -147,14 +160,6 @@
 
 #MS: Are you going to use static values for gain and offset?
 # or read from the XML metadata?
-#N: values for gain and offset are read from the XML metadata
-          # take gain and offset.
-          # https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
-          # There is extraction from metadata: gain and offset
-          gain <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
-          offset <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
-          gain <- as.numeric(gain)
-          offset <- as.numeric(offset)
 
 # TODO: what file extension of original Landsat imagery
 #         img_file <- paste0(img_path, ".jp2")
