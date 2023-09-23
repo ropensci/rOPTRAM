@@ -44,7 +44,7 @@ optram_safe <- function(safe_dir,
     safe_list <- band_ids <- aoi <- derived_rasters <- xml_file <- NULL
     img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- epsg_code <- NULL
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
-    vi <- STR <- STR_df <- full_df <- NULL
+    STR <- STR_df <- full_df <- NULL
 
     # Pre flight checks...
     if (!check_aoi(aoi_file)) {
@@ -54,11 +54,6 @@ optram_safe <- function(safe_dir,
     if (is.null(safe_dir) || !dir.exists(safe_dir)) {
       warning("The directory of downloaded Landsat images is a required parameter.")
       return(NULL)
-    } else {
-        if (is.null(aoi_file) || !file.exists(aoi_file)) {
-            warning("The area of interest spatial file is a required parameter.")
-            return(NULL)
-        }
     }
 
     # Loop over the downloaded S2 folders (dates),
@@ -66,7 +61,8 @@ optram_safe <- function(safe_dir,
     safe_list <- list.dirs(safe_dir, full.names = TRUE, recursive = TRUE)
     safe_list <- safe_list[grepl(pattern = "SAFE$", x = safe_list)]
     if (length(safe_list) == 0) {
-        warning("No SAFE formatted files in: ", safe_dir)
+        message("No Sentinel 2 SAFE folders in: ", safe_dir, " directory", "\n",
+        "Please check download folder.", "\n", "Exiting...")
         return(NULL)
     }
 
@@ -86,13 +82,6 @@ optram_safe <- function(safe_dir,
     )
     # Get Area of interest
     aoi <- terra::vect(aoi_file)
-
-    if (length(safe_list) == 0) {
-        message("No Sentinel 2 SAFE folders in: ", safe_dir, " directory", "\n",
-        "Please check download folder.", "\n", "Exiting...")
-        return(NULL)
-    }
-
     aoi_name <- aoi_to_name(aoi_file)
     
     # Prepare output directories
@@ -203,9 +192,8 @@ optram_safe <- function(safe_dir,
         datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtd,
                             ".//SENSING_TIME")))
 
-        VI_idx <- rOPTRAM::calculate_vi(stk, vi,
-                                        redband = 3, nirband = 4,
-                                        overwrite = overwrite)  
+        VI_idx <- rOPTRAM::calculate_vi(stk, viname,
+                                        redband = 3, nirband = 4)
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr

@@ -68,11 +68,9 @@ check_scihub_access <- function(scihub_user = NULL,
     }
 }
 
-#' @title Check that aoi_file exists, and is a spatial file
-#'
+#' @title Check aoi_file
 #' @description
-#' Check that oai file exists, and is a spatial file
-#'
+#' Check that aoi file exists, and is a spatial file
 #' @param aoi_file, string
 #' @export
 #' @return boolean, TRUE when file exists, and is spatila
@@ -96,7 +94,6 @@ check_aoi <- function(aoi_file) {
 
 
 #' @title Calculate NDVI, SAVI or MSAVI from bottom of atmosphere images
-#'
 #' @description
 #' Use this function to prepare vegetation index from SAFE imagery
 #' when you have already downloaded Sentinel 2 image files in advance
@@ -106,7 +103,6 @@ check_aoi <- function(aoi_file) {
 #' @param redband, integer, number of red band
 #' @param nirband, integer, number of NIR band
 #' @param viname, string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'
-#'
 #' @export
 #' @return vi_rast, SpatRaster of vegetation index
 

@@ -32,6 +32,11 @@ optram_wetdry_coefficients <- function(full_df,
   VI_min_max <- VI_series <- VI_STR_list <- VI_STR_df <- NULL
   Qs <- str_max <- str_min <- interval_df <- VI_STR_df1 <- NULL
   
+  #  Pre-flight Check
+  if (!check_aoi(aoi_file)) {
+      return(NULL)
+    }
+  
   # Make sure no Inf or NA in full_df
   full_df <- full_df[is.finite(full_df$NDVI), ]
   VI_min_max <- round(stats::quantile(full_df$NDVI, c(0.2, 0.98)), 2)

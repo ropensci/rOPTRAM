@@ -7,7 +7,7 @@
 #' @param viname, string, which VI to prepare, 'NVDI', 'SAVI', etc.
 #' @param output_dir, string, where to save Geotiff, default is tempdir()
 #' @return output_files, list, full paths to saved Geotif files
-#' @export
+#' (not exported yet)
 #' @examples
 #' print("Running prepare_other_vi_str.R")
 
