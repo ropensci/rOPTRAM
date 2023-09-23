@@ -43,22 +43,88 @@ This package works with the R package `sen2r`. To install that package
 you will need some system dependencies. On Debian and derivitives please
 install in advance:
 
-- jq libv8-dev libjq-dev
-- libprotobuf-dev protobuf-compiler
+-   jq libv8-dev libjq-dev
+-   libprotobuf-dev protobuf-compiler
 
 Install the google cloud CLI to allow acquiring images directly from
 Google. For installation instructions see:
 <https://cloud.google.com/sdk/docs/install>
 
+## Available functions
+
+### Key functions
+
+#### optram()
+
+A main wrapper function to run the whole OPTRAM procedure. This function
+performs the following steps: - Acquire Sentinel 2 images covering the
+requested date range, and clipped to the input area of interest. This
+step relies on the sen2r package - Create the set of SWIR Tranformed
+Reflectance (STR) rasters; - Prepare a dataframe of NDVI and STR values
+for all pixels from all images; - Calculate the trapezoid wet and dry
+regression lines, and save coefficients to a CSV file. Returns: the set
+of four coefficients: wet slope, wet intercept, dry slope, and dry
+intercept.
+
+#### optram_acquire_s2()
+
+Acquire Sentinel 2 images covering the requested date range, and clipped
+to the input area of interest. Returns: a list of downloaded Sentinel 2
+images
+
+#### optram_calculate_str()
+
+Extracts the required bands and prepares the vegetation index and SWIR
+transformed relectance.
+
+#### optram_ndvi_str()
+
+Collects all pixel values from both the vegetation index and STR
+rasters, for all acquisition dates, and saves into a data.frame Returns:
+the full data.frame
+
+#### optram_wetdry_coefficients()
+
+Calculates the wet-dry trapezoid from the data.frame of NDVI and STR
+values, and obtains regression slope and intercept for both lines
+Returns: the set of four coefficients.
+
+#### optram_soil_moisture()
+
+Calculates soil moisture rasters for a time series of images, using the
+OPTRAM model coefficients from above procedure.
+
+### Additional options
+
+#### optram_landsat()
+
+Prepares the OPTRAM coefficients from a time series of Landsat images,
+(instead of Sentinel). This function requires that the images are
+downloaded in advance. Returns: the set of four coefficients.
+
+#### optram_safe()
+
+In case Sentinel images have been downloaded in advance, this function
+allows to prepare the STR and NDVI rasters, then calculate the trapezoid
+regression coefficients. It requires as input a directory containing the
+Sentinel 2 images in the original SAFE file format.
+
+#### optram_validate()
+
+Test the OPTRAM model predicted soil moisture against a table of in situ
+measurements. Calculates the coefficient of determination between in
+situ soil moisture measurements and the OPTRAM results. Optionally, a
+scatterplot is prepared.
+
 ## Example
 
 This is a basic example which shows how to:
 
-- retrieve Sentinel 2 imagery for a specific area of interest
-- covering a date range
-- preprocess the imagery to obtain a vegetation index and STR band
-- use these to derive coefficients of slope and intercept for the OPTRAM
-  trapezoid
+-   retrieve Sentinel 2 imagery for a specific area of interest
+-   covering a date range
+-   preprocess the imagery to obtain a vegetation index and STR band
+-   use these to derive coefficients of slope and intercept for the
+    OPTRAM trapezoid
 
 ``` r
 library(rOPTRAM)
@@ -91,13 +157,13 @@ trapezoid.
 
 ## Meta
 
-- Please report any issues on
-  [gitlab](https://gitlab.com/rsl-bidr/roptram/-/issues)
-- Anyone interested in collaborating is invited to “sign up” by
-  contacting the maintainers.
-- This package is released with a [Contributor Code of
-  Conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md).
-  By contributing to this project, you agree to abide by its terms.
+-   Please report any issues on
+    [gitlab](https://gitlab.com/rsl-bidr/roptram/-/issues)
+-   Anyone interested in collaborating is invited to “sign up” by
+    contacting the maintainers.
+-   This package is released with a [Contributor Code of
+    Conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md).
+    By contributing to this project, you agree to abide by its terms.
 
 <div id="refs" class="references csl-bib-body hanging-indent">
 
