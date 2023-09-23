@@ -22,7 +22,7 @@
 #'      default is 5,000,000 rows
 #' @return coeffs, list, the derived trapezoid coefficients
 #' @export
-#' @note 
+#' @note
 #' Use the `max_tbl_size` parameter to limit the total number of rows in the VI-STR data.frame.
 #' When the area of interest is large, or the time range of datasets is long, 
 #' the total size of the data.frame can grow beyond the capacity of computation resources.
@@ -45,11 +45,31 @@ optram_safe <- function(safe_dir,
     img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- epsg_code <- NULL
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
     vi <- STR <- STR_df <- full_df <- NULL
-    
+
+    # Pre flight checks...
+    if (!check_aoi(aoi_file)) {
+        return(NULL)
+    }
+
+    if (is.null(safe_dir) || !dir.exists(safe_dir)) {
+      warning("The directory of downloaded Landsat images is a required parameter.")
+      return(NULL)
+    } else {
+        if (is.null(aoi_file) || !file.exists(aoi_file)) {
+            warning("The area of interest spatial file is a required parameter.")
+            return(NULL)
+        }
+    }
+
     # Loop over the downloaded S2 folders (dates),
     # create NDVI and STR indices for each and crop to aoi
     safe_list <- list.dirs(safe_dir, full.names = TRUE, recursive = TRUE)
     safe_list <- safe_list[grepl(pattern = "SAFE$", x = safe_list)]
+    if (length(safe_list) == 0) {
+        warning("No SAFE formatted files in: ", safe_dir)
+        return(NULL)
+    }
+
     # The strings below are used to select the needed bands from Sentinel
     band_ids <- c(
         #"AOT_10m", #Coastal blue

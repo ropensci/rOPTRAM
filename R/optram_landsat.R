@@ -46,8 +46,7 @@
       warning("The directory of downloaded Landsat images is a required parameter.")
       return(NULL)
   } else {
-    if (is.null(aoi_file) || !file.exists(aoi_file)) {
-      warning("The area of interest spatial file is a required parameter.")
+    if (!check_aoi(aoi_file)) {
       return(NULL)
     }
   }

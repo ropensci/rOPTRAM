@@ -66,19 +66,8 @@ optram_acquire_s2 <- function(
   # Download Sentinel 2 images during the requested date range,
   # and clip to the area of interest
   # Pre flight checks...
-  if (is.null(aoi_file) || !file.exists(aoi_file)) {
-      message("An area_of_interest polygon shapefile is required",
-      "\n", "Please prepare the area_of_interest boundary file.")
-      return(NULL)
-  } else {
-    aoi_result <- try(suppressWarnings(sf::st_read(aoi_file)))
-    if (inherits(aoi_result, "try-error")) {
-        message("Cannot read: ", aoi_file)
-        return(NULL)
-    } else if (!inherits(aoi_result, "sf")) {
-        message(aoi_file, " is not a recognized spatial format")
-        return(NULL)
-    }
+  if (!check_aoi(aoi_file)) {
+    return(NULL)
   }
 
   # Scihub API credentials?

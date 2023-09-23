@@ -3,6 +3,7 @@
 export(aoi_to_name)
 export(calculate_str)
 export(calculate_vi)
+export(check_aoi)
 export(check_scihub_access)
 export(optram)
 export(optram_acquire_s2)

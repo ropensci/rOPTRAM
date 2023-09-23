@@ -68,6 +68,33 @@ check_scihub_access <- function(scihub_user = NULL,
     }
 }
 
+#' @title Check that aoi_file exists, and is a spatial file
+#'
+#' @description
+#' Check that oai file exists, and is a spatial file
+#'
+#' @param aoi_file, string
+#' @export
+#' @return boolean, TRUE when file exists, and is spatila
+check_aoi <- function(aoi_file) {
+  if (is.null(aoi_file) || !file.exists(aoi_file)) {
+      message("An area_of_interest polygon shapefile is required",
+      "\n", "Please prepare the area_of_interest boundary file.")
+      return(FALSE)
+  } else {
+    aoi_result <- try(suppressWarnings(sf::st_read(aoi_file)))
+    if (inherits(aoi_result, "try-error")) {
+        message("Cannot read: ", aoi_file)
+        return(FALSE)
+    } else if (!inherits(aoi_result, "sf")) {
+        message(aoi_file, " is not a recognized spatial format")
+        return(FALSE)
+    }
+  }
+    return(TRUE)
+}
+
+
 #' @title Calculate NDVI, SAVI or MSAVI from bottom of atmosphere images
 #'
 #' @description
