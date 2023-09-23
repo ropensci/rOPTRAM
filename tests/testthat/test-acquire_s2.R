@@ -1,4 +1,5 @@
 skip_if_not_installed("sen2r")
+skip_on_cran()
 
 test_that("Missing AOI file input", {
   from_date <- "2023-03-01"

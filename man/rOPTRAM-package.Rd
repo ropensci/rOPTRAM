@@ -19,5 +19,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Micha Silver \email{silverm@post.bgu.ac.il} (\href{https://orcid.org/0000-0002-1128-1325}{ORCID})
 
+Other contributors:
+\itemize{
+  \item Arnon Karnieli \email{karnieli@bgu.ac.il} (\href{https://orcid.org/0000-0001-8065-9793}{ORCID}) [contributor, funder]
+}
+
 }
 \keyword{internal}

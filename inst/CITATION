@@ -1,11 +1,8 @@
-citHeader("To cite rOPTRAM in publications use:")
-
-citEntry(
-  entry    = "Misc",
-  title    = "Derive soil moisture using the OPTRAM algorithm",
-  author   = "Micha Silver",
-  year     = 2023,
-  url      = "github.com/micha-silver/rOPTRAM",
-  textVersion = paste(
-    "Derive soil moisture using the OPTRAM algorithm")
+bibentry(
+  bibtype  = "misc",
+  title    = "rOPTRAM: an R package for preparing soil moisture grids based on the OPTRAM model",
+  author   = "Micha Silver, Arnon Karnieli",
+  year     = "2023",
+  doi      = "",
+  school   = "Ben Gurion University"
 )
