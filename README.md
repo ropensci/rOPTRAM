@@ -57,14 +57,17 @@ Google. For installation instructions see:
 #### optram()
 
 A main wrapper function to run the whole OPTRAM procedure. This function
-performs the following steps: - Acquire Sentinel 2 images covering the
-requested date range, and clipped to the input area of interest. This
-step relies on the sen2r package - Create the set of SWIR Tranformed
-Reflectance (STR) rasters; - Prepare a dataframe of NDVI and STR values
-for all pixels from all images; - Calculate the trapezoid wet and dry
-regression lines, and save coefficients to a CSV file. Returns: the set
-of four coefficients: wet slope, wet intercept, dry slope, and dry
-intercept.
+performs the following steps:
+
+-   Acquire Sentinel 2 images covering the requested date range, and
+    clipped to the input area of interest. This step relies on the sen2r
+    package
+-   Create the set of SWIR Tranformed Reflectance (STR) rasters;
+-   Prepare a dataframe of NDVI and STR values for all pixels from all
+    images;
+-   Calculate the trapezoid wet and dry regression lines, and save
+    coefficients to a CSV file. Returns: the set of four coefficients:
+    wet slope, wet intercept, dry slope, and dry intercept.
 
 #### optram_acquire_s2()
 
@@ -149,11 +152,13 @@ wrapper function.
 
 If, on the other hand, Sentinel 2 imagery has been downloaded in
 advance, then `sen2r` is not necessary. Instead, the following workflow
-can be used: - call `optram_safe()` to prepare NDVI and STR rasters -
-call `optram_calculate_str()` to calculate SWIR Transform - call
-`optram_ndvi_str()` to build a data.frame of pixel values - call
-`optram_wetdry_coefficients()` to derive slope and intercept of the
-trapezoid.
+can be used:
+
+-   call `optram_safe()` to prepare NDVI and STR rasters
+-   call `optram_calculate_str()` to calculate SWIR Transform
+-   call `optram_ndvi_str()` to build a data.frame of pixel values
+-   call `optram_wetdry_coefficients()` to derive slope and intercept of
+    the trapezoid.
 
 ## Meta
 
