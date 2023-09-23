@@ -72,8 +72,9 @@ performs the following steps:
 #### optram_acquire_s2()
 
 Acquire Sentinel 2 images covering the requested date range, and clipped
-to the input area of interest. Returns: a list of downloaded Sentinel 2
-images
+to the input area of interest.
+
+Returns: a list of downloaded Sentinel 2 images
 
 #### optram_calculate_str()
 
@@ -83,13 +84,15 @@ transformed relectance.
 #### optram_ndvi_str()
 
 Collects all pixel values from both the vegetation index and STR
-rasters, for all acquisition dates, and saves into a data.frame Returns:
-the full data.frame
+rasters, for all acquisition dates, and saves into a data.frame
+
+Returns: the full data.frame
 
 #### optram_wetdry_coefficients()
 
 Calculates the wet-dry trapezoid from the data.frame of NDVI and STR
 values, and obtains regression slope and intercept for both lines
+
 Returns: the set of four coefficients.
 
 #### optram_soil_moisture()
@@ -103,7 +106,9 @@ OPTRAM model coefficients from above procedure.
 
 Prepares the OPTRAM coefficients from a time series of Landsat images,
 (instead of Sentinel). This function requires that the images are
-downloaded in advance. Returns: the set of four coefficients.
+downloaded in advance.
+
+Returns: the set of four coefficients.
 
 #### optram_safe()
 
