@@ -41,9 +41,19 @@
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
     STR <- STR_df <- full_df <- NULL
 
+  # Check for inputs
+   if (is.null(landsat_dir) || !dir.exists(landsat_dir)) {
+      warning("The directory of downloaded Landsat images is a required parameter.")
+      return(NULL)
+  } else {
+    if (is.null(aoi_file) || !file.exists(aoi_file)) {
+      warning("The area of interest spatial file is a required parameter.")
+      return(NULL)
+    }
+  }
+
     # Loop over the downloaded LC folders (dates),
     # create NDVI and STR indices for each and crop to aoi
-
     landsat_list <- list.dirs(landsat_dir)[grepl("L*_02_*",list.dirs(landsat_dir))]
 
     # The strings below are used to select the needed bands from Landsat

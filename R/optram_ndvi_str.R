@@ -37,7 +37,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
   # to determine index for random sampling
   r <- terra::rast(STR_list[1])
   r_df <- as.data.frame(r, xy = TRUE)
-  if (nrow(r_df) > max_tbl-size) {
+  if (nrow(r_df) > max_tbl_size) {
     # Set sample size as:
     # maximum table / number of dates in date range
     samp_size <- max_tbl_size / length(STR_list)
