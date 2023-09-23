@@ -2,8 +2,8 @@
 #' @description
 #' Use this function to prepares vegetation index and
 #' SWIR Transformed Reflectance (STR) rasters
-#' when you have already downloaded landsat image files in advance
-#' THis function assumes that atmospheric correction has been applied.
+#' when you have already downloaded landsat image files in advance.
+#' This function assumes that atmospheric correction has been applied.
 #' @param landsat_dir, string, full path to containing folder of downloaded (unzipped)
 #' Sentinel 2 data in original landsat format, after atompheric correction (L2A)
 #' @param aoi_file, string, path to boundary polygon spatial file of area of interest
@@ -21,17 +21,19 @@
 #'  This directory should contain folders of Landsat images, where each folder 
 #'  consists of the individual Landsat bands as Geotif files, as well as the metadata files
 #'  as downloaded from, i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.  
-#' @examples  optram_landsat(landsat_dir,
+#' @examples 
+#' \dontrun{optram_landsat(landsat_dir,
 #'                           aoi_file,
 #'                           vi = 'NDVI',
 #'                           LC_output_dir = tempdir(),
 #'                           data_output_dir = tempdir())
+#' }
 
   optram_landsat <- function(landsat_dir,
                              aoi_file,
                              vi = 'NDVI',
-                             LC_output_dir,
-                             data_output_dir) {
+                             LC_output_dir = tempdir(),
+                             data_output_dir = tempdir()) {
 
     # Avoid "no visible binding for global variable" NOTE
     landsat_list <- band_ids <- aoi <- derived_rasters <- xml_file <- NULL

@@ -75,7 +75,7 @@ optram_acquire_s2 <- function(
     if (inherits(aoi_result, "try-error")) {
         message("Cannot read: ", aoi_file)
         return(NULL)
-    } else if (! inherits(aoi_result, "sf")) {
+    } else if (!inherits(aoi_result, "sf")) {
         message(aoi_file, " is not a recognized spatial format")
         return(NULL)
     }

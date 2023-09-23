@@ -14,7 +14,7 @@ check_scihub_access <- function(scihub_user = NULL,
     # Avoid "no visible binding for global variable" NOTE
     is_online <- site <- NULL
     # First check for internet connection
-    is_online <- function(site = "http://example.com/") {
+    is_online <- function(site = "https://scihub.copernicus.eu/") {
         tryCatch({
             readLines(site, n = 1)
             TRUE

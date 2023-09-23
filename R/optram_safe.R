@@ -44,7 +44,7 @@ optram_safe <- function(safe_dir,
     safe_list <- band_ids <- aoi <- derived_rasters <- xml_file <- NULL
     img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- epsg_code <- NULL
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
-    STR <- STR_df <- full_df <- NULL
+    vi <- STR <- STR_df <- full_df <- NULL
     
     # Loop over the downloaded S2 folders (dates),
     # create NDVI and STR indices for each and crop to aoi

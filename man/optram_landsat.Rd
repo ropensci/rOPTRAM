@@ -8,8 +8,8 @@ optram_landsat(
   landsat_dir,
   aoi_file,
   vi = "NDVI",
-  LC_output_dir,
-  data_output_dir
+  LC_output_dir = tempdir(),
+  data_output_dir = tempdir()
 )
 }
 \arguments{
@@ -32,8 +32,8 @@ coeffs, list, the derived trapezoid coefficients
 \description{
 Use this function to prepares vegetation index and
 SWIR Transformed Reflectance (STR) rasters
-when you have already downloaded landsat image files in advance
-THis function assumes that atmospheric correction has been applied.
+when you have already downloaded landsat image files in advance.
+This function assumes that atmospheric correction has been applied.
 }
 \note{
 Unlike the \code{optram_acquire_s2} function, there is no implementation
@@ -45,9 +45,10 @@ consists of the individual Landsat bands as Geotif files, as well as the metadat
 as downloaded from, i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 }
 \examples{
- optram_landsat(landsat_dir,
+\dontrun{optram_landsat(landsat_dir,
                           aoi_file,
                           vi = 'NDVI',
                           LC_output_dir = tempdir(),
                           data_output_dir = tempdir())
+}
 }
