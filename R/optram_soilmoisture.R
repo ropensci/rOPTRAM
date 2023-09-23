@@ -9,6 +9,11 @@
 #' @param output_dir, string, full path to output directory 
 #'  for saving soil moisture raster
 #' @return rast, soil moisture grid
+#' @note
+#' This function is used after preparing the OPTRAM model coefficients with:
+#'  `optram_wetdryt_coefficients()`. Typically a new image date,
+#'   that was not used for preparing the model, will be referenced in the `img_date` parameter.
+#'   The resulting soil moisture raster is saved to `output_dir`.
 #' @export
 #' @examples
 #' print("Running optram_calculate_soil_moisture.R")
@@ -33,31 +38,45 @@ optram_calculate_soil_moisture <- function(
   # Avoid "no visible binding for global variable" NOTE
   img_str <- VI_file <-  VI <- NULL
   STR_file <- STR <- coeffs <- NULL
-  
   i_dry <- i_wet <- s_dry <- s_wet <- W <- outfile <-  NULL
 
-  img_str <- gsub("-", "", img_date)
-  VI_file <- list.files(VI_dir,
-                        pattern = img_str, full.names = TRUE)
-  if (! file.exists(VI_file)) {
-    warning("No NDVI file:", VI_file, "Exiting...")
+  # Pre-flight checks...
+  if (is.na(as.Date(img_date, format = "%Y-%m-%d"))) {
+    warning("Image date:", img_date, " is not properly formatted",
+      "\nPlease format as YYYY-MM-DD")
     return(NULL)
   }
-  VI <- terra::rast(VI_file)
-  VI  <- VI / 10000
+  img_str <- gsub("-", "", img_date)
+
+  if (!dir.exists(VI_dir) || !dir.exists(STR_dir)) {
+    warning("Input directories missing, Exiting...")
+    return(NULL)
+  }
+
+  VI_file <- list.files(VI_dir,
+                        pattern = img_str, full.names = TRUE)
+  if (length(VI_file) == 0) {
+    warning("No NDVI file, Exiting...")
+    return(NULL)
+  }
+
   STR_file <- list.files(STR_dir,
                         pattern = paste0(img_str, ".*STR"),
                         full.names = TRUE)
-  if (! file.exists(STR_file)) {
-    warning("No NDVI file:", VI_file, "Exiting...")
+  if (length(STR_file) == 0) {
+    warning("No NDVI file:, Exiting...")
     return(NULL)
   }
-  STR <- terra::rast(STR_file)
 
   if (!file.exists(coeffs_file)) {
-    warning("No coefficients file:", coeffs_file, "Exiting...")
+    warning("No coefficients file, Exiting...")
     return(NULL)
   }
+
+  # All OK, continue...
+  VI <- terra::rast(VI_file[1])
+  VI  <- VI / 10000
+  STR <- terra::rast(STR_file[1])
   coeffs <- utils::read.csv(coeffs_file)
   i_dry <- coeffs$intercept_dry
   s_dry <- coeffs$slope_dry

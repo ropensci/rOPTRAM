@@ -32,6 +32,12 @@ rast, soil moisture grid
 Prepare soil moisture grid from STR and VI images for a single date
 using the derived slope and intercept coefficients
 }
+\note{
+This function is used after preparing the OPTRAM model coefficients with:
+\code{optram_wetdryt_coefficients()}. Typically a new image date,
+that was not used for preparing the model, will be referenced in the \code{img_date} parameter.
+The resulting soil moisture raster is saved to \code{output_dir}.
+}
 \examples{
 print("Running optram_calculate_soil_moisture.R")
 }

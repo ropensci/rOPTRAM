@@ -5,3 +5,4 @@
 ^bibliography\.bib$
 ^codemeta\.json$
 ^\.github$
+^\.covrignore`

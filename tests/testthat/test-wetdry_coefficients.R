@@ -14,5 +14,5 @@ test_that("Output coefficients is a data.frame of length 4", {
   aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
   coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
   expect_true(inherits(coeffs, "data.frame"))
-  expect_equal(length(coeffs, 4))
+  expect_equal(length(coeffs), 4)
 })

@@ -22,6 +22,7 @@ optram_prepare_other_vi_str(
 }
 \value{
 output_files, list, full paths to saved Geotif files
+(not exported yet)
 }
 \description{
 This function prepares vegetation index and STR rasters

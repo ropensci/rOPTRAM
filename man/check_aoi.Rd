@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities.R
 \name{check_aoi}
 \alias{check_aoi}
-\title{Check that aoi_file exists, and is a spatial file}
+\title{Check aoi_file}
 \usage{
 check_aoi(aoi_file)
 }
@@ -13,5 +13,5 @@ check_aoi(aoi_file)
 boolean, TRUE when file exists, and is spatila
 }
 \description{
-Check that oai file exists, and is a spatial file
+Check that aoi file exists, and is a spatial file
 }
