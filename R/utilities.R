@@ -113,7 +113,11 @@ calculate_vi <- function(img_stk, viname = "NDVI", redband = 3, nirband = 4) {
 #'
 #' @param img_stk, terra SpatRaster, multiband stack of images, already clipped to aoi
 #' @param swirband, integer, number of red band
-#' @export 
+#' @param scale_factor, integer, scaling factor for EO data source
+#'      default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)
+#' @export
+#' @note For Landsat images, scale_factor should be 1,
+#'      since Landsat metadata contains gain and offset for scaling image bands.
 #' @return STR, SpatRaster of STR band
 
 calculate_str <- function(img_stk, swirband = 12, scale_factor = 10000) {

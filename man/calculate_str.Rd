@@ -4,12 +4,15 @@
 \alias{calculate_str}
 \title{Calculate STR from SWIR band of bottom of atmosphere images}
 \usage{
-calculate_str(img_stk, swirband = 12)
+calculate_str(img_stk, swirband = 12, scale_factor = 10000)
 }
 \arguments{
 \item{img_stk, }{terra SpatRaster, multiband stack of images, already clipped to aoi}
 
 \item{swirband, }{integer, number of red band}
+
+\item{scale_factor, }{integer, scaling factor for EO data source
+default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)}
 }
 \value{
 STR, SpatRaster of STR band
@@ -18,4 +21,8 @@ STR, SpatRaster of STR band
 Use this function to prepare STR from SAFE imagery
 when you have already downloaded Sentinel 2 image files in advance
 (without using \code{sen2r}).
+}
+\note{
+For Landsat images, scale_factor should be 1,
+since Landsat metadata contains gain and offset for scaling image bands.
 }

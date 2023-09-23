@@ -183,8 +183,9 @@ optram_safe <- function(safe_dir,
         datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtd,
                             ".//SENSING_TIME")))
 
-        VI_idx <- rOPTRAM::calculate_vi(stk, viname,
-                                        redband = 3, nirband = 4)  
+        VI_idx <- rOPTRAM::calculate_vi(stk, vi,
+                                        redband = 3, nirband = 4,
+                                        overwrite = overwrite)  
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr
