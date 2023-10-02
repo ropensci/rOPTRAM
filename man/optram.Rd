@@ -13,6 +13,7 @@ optram(
   scihub_user = NULL,
   scihub_pass = NULL,
   remove_safe = "yes",
+  timeperiod = "full",
   S2_output_dir = tempdir(),
   data_output_dir = tempdir()
 )
@@ -34,6 +35,9 @@ optram(
 
 \item{remove_safe, }{string, "yes" or "no", whether to delete downloaded
 SAFE directories after processing. Default "yes"}
+
+\item{timeperiod, }{string, either "full" for the whole date range,
+or "seasonal" for only months specified, but over the full date range.}
 
 \item{S2_output_dir, }{string, directory to save downloaded S2
 and the derived products, defaults to tempdir()}
@@ -72,16 +76,26 @@ and they will be stored into the default location.
 Output can be separated:
 Sentinel downloads and products are saved to S2_output_dir.
 Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
+
+The \code{timeperiod} parameter allows to download either a "full" date range,
+i.e. all images between the \code{from_date} and \code{to_date}, or alternatively,
+"seasonal", where images are acquired for all years but only for the months
+specified. So, for example:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ if `from_date` = "2018-06-01` and `to_date` = '2020-09-20', then 
+ images for june through sept will be acquired for 2018, 2019, and 2020.
+}\if{html}{\out{</div>}}
 }
 \examples{
 \dontrun{
 from_date <- "2018-12-01"
-to_date <- "2019-04-30"
+to_date <- "2020-04-30"
 aoi <- "inst/extdata/migda_9.gpkg"
 coeffs <- optram(aoi,
                  from_date, to_date,
                  veg_index = c("SAVI"),
-                 scihub_user = "userxxx", scihub_pass = "secretxyz"
+                 scihub_user = "userxxx", scihub_pass = "secretxyz",
+                 timerperiod = "seasonal"
                  )
 }
 }

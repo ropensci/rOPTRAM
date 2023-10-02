@@ -22,13 +22,13 @@ p <- ggplot(iris, aes(Species, Sepal.Length)) +
 
 # SVG
 ggsave(
-  filename = "../man/figures/optram-hex-icon_72px.svg", p, 
+  filename = "./man/figures/optram-hex-icon_72px.svg", p, 
   dpi=72, width = 1, height = 1
   )
 
 # PNG
 ggsave(
-  filename = "figures/optram-hex-icon_72px.png", p, 
+  filename = "./man/figures/optram-hex-icon_72px.png", p, 
   dpi=72, width = 1, height = 1, bg = "transparent"
   )
 

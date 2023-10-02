@@ -23,7 +23,10 @@
 #'  and STR-VI data.frame, default is tempdir()
 #' @param remove_safe, string, "yes" or "no", whether to delete downloaded
 #'      SAFE directories after processing. Default "yes"
+#' @param timeperiod, string, either "full" for the whole date range,
+#' or "seasonal" for only months specified, but over the full date range.
 #' @return coeffs_file, string, full path to saved CSV of wet-dry coefficients
+#' the coefficients are also saved to a csv file in `data_output_dir`.
 #' @note
 #' Access to Copernicus Sentinel Hub requires registration.
 #' If you have already registered, and saved your credentials
@@ -38,16 +41,26 @@
 #' Output can be separated:
 #' Sentinel downloads and products are saved to S2_output_dir.
 #' Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
+#' 
+#' The `timeperiod` parameter allows to download either a "full" date range,
+#' i.e. all images between the `from_date` and `to_date`, or alternatively, 
+#' "seasonal", where images are acquired for all years but only for the months
+#' specified. So, for example:
+#' 
+#'      if `from_date` = "2018-06-01` and `to_date` = '2020-09-20', then 
+#'      images for june through sept will be acquired for 2018, 2019, and 2020.
+#' 
 #' @export
 #' @examples
 #' \dontrun{
 #' from_date <- "2018-12-01"
-#' to_date <- "2019-04-30"
+#' to_date <- "2020-04-30"
 #' aoi <- "inst/extdata/migda_9.gpkg"
 #' coeffs <- optram(aoi,
 #'                  from_date, to_date,
 #'                  veg_index = c("SAVI"),
-#'                  scihub_user = "userxxx", scihub_pass = "secretxyz"
+#'                  scihub_user = "userxxx", scihub_pass = "secretxyz",
+#'                  timeperiod = "seasonal"
 #'                  )
 #' }
 
@@ -61,6 +74,7 @@ optram <- function(aoi_file,
                    scihub_user = NULL,
                    scihub_pass = NULL,
                    remove_safe = "yes",
+                   timeperiod = "full",
                    S2_output_dir = tempdir(),
                    data_output_dir = tempdir()) {
 
@@ -85,6 +99,7 @@ optram <- function(aoi_file,
                     scihub_pass = scihub_pass,
                     veg_index = veg_index,
                     remove_safe = remove_safe,
+                    timeperiod = timeperiod,
                     output_dir = S2_output_dir)
 
     # Get full output directories for BOA, STR and NDVI
