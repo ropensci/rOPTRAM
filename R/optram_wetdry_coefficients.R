@@ -5,11 +5,16 @@
 #' @param full_df, data.frame of STR and NDVI values
 #' @param output_dir, string, directory to save coefficients CSV file
 #' @param step, float
-#' @param aoi_file, string, full path to AOI file (used to add title to plot)
+#' @param aoi_file, string, added to title of plot 
+#'  (Can be path to AOI file, then the file name is used in plot title)
 #' @param save_plot, boolean, If TRUE (default) save scatterplot to output_dir
 #' @return coeffs, list of float, coefficients of wet-dry trapezoid
 #' @export
-#' @examples print("Running optram_wetdry_coefficients.R")
+#' @examples 
+#' aoi_file <- "Test"
+#' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
+#' coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
+#' print(coeffs)
 
 optram_wetdry_coefficients <- function(full_df,
                                        aoi_file,
@@ -33,10 +38,12 @@ optram_wetdry_coefficients <- function(full_df,
   Qs <- str_max <- str_min <- interval_df <- VI_STR_df1 <- NULL
   
   #  Pre-flight Check
-  if (!check_aoi(aoi_file)) {
-      return(NULL)
-    }
-  
+  if (is.null(aoi_file)) {
+    aoi_name <- NULL
+    } else if (!file.exists(aoi_file)) {
+      aoi_name <- aoi_file
+      } else {aoi_name <- rOPTRAM::aoi_to_name(aoi_file)}
+
   # Make sure no Inf or NA in full_df
   full_df <- full_df[is.finite(full_df$NDVI), ]
   VI_min_max <- round(stats::quantile(full_df$NDVI, c(0.2, 0.98)), 2)
@@ -93,7 +100,7 @@ optram_wetdry_coefficients <- function(full_df,
   if (save_plot) {
     rOPTRAM::plot_ndvi_str_cloud(full_df,
                                 coeffs,
-                                aoi_file = aoi_file,
+                                aoi_name,
                                 output_dir = output_dir)
   }
   return(coeffs)
@@ -107,7 +114,7 @@ optram_wetdry_coefficients <- function(full_df,
 #' @param full_df, data.frame of NDVI and STR pixel values
 #' @param coeffs, list of floats, the slope and intercept
 #'   of wet and dry regression lines
-#' @param aoi_file, string, full path to AOI file
+#' @param aoi_name, string, used in plot title
 #' @param output_dir, string, directory to save plot png file.
 #' @return None
 #' @export
@@ -117,7 +124,7 @@ optram_wetdry_coefficients <- function(full_df,
 
 plot_ndvi_str_cloud <- function(full_df,
                                 coeffs,
-                                aoi_file,
+                                aoi_name,
                                 output_dir = tempdir()) {
   # Avoid "no visible binding for global variable" NOTE
   i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
@@ -151,7 +158,6 @@ plot_ndvi_str_cloud <- function(full_df,
   y_max <- 3.6
   #y_max <- max(plot_df$STR)*1.05
 
-  aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
   ggplot2::ggplot(plot_df) +
     geom_point(aes(x=NDVI, y=STR),
                color = "#0070000b", alpha = 0.1, size = 0.1) +

@@ -15,7 +15,8 @@ optram_wetdry_coefficients(
 \arguments{
 \item{full_df, }{data.frame of STR and NDVI values}
 
-\item{aoi_file, }{string, full path to AOI file (used to add title to plot)}
+\item{aoi_file, }{string, added to title of plot
+(Can be path to AOI file, then the file name is used in plot title)}
 
 \item{output_dir, }{string, directory to save coefficients CSV file}
 
@@ -32,5 +33,8 @@ for both wet and dry trapezoid lines.
 Write coefficients to a CSV file (as input to \code{optram_soilmoisture()} function)
 }
 \examples{
-print("Running optram_wetdry_coefficients.R")
+aoi_file <- "Test"
+full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
+coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
+print(coeffs)
 }

@@ -25,7 +25,7 @@ optram_calculate_soil_moisture <- function(
   output_dir = tempdir()) {
   # based on STR and two STR_dry and STR_wet bands
   # W = (STR - STR_dry) / (STR_wet - STR_dry)
-  # W = (i_dry + s_dry * VI - STR) / (i_dry − i_wet +  (s_dry−s_wet) * VI)
+  # W = (i_dry + s_dry * VI - STR) / (i_dry - i_wet +  (s_dry - s_wet) * VI)
   #
   # Parameters:
   #   coeffs: array of float, dry and wet coefficients
@@ -64,7 +64,7 @@ optram_calculate_soil_moisture <- function(
                         pattern = paste0(img_str, ".*STR"),
                         full.names = TRUE)
   if (length(STR_file) == 0) {
-    warning("No NDVI file:, Exiting...")
+    warning("No STR file, Exiting...")
     return(NULL)
   }
 

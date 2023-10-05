@@ -47,6 +47,7 @@ and STR-VI data.frame, default is tempdir()}
 }
 \value{
 coeffs_file, string, full path to saved CSV of wet-dry coefficients
+the coefficients are also saved to a csv file in \code{data_output_dir}.
 }
 \description{
 The main wrapper function to download, and preprocess Sentinel 2 imagery
@@ -95,7 +96,7 @@ coeffs <- optram(aoi,
                  from_date, to_date,
                  veg_index = c("SAVI"),
                  scihub_user = "userxxx", scihub_pass = "secretxyz",
-                 timerperiod = "seasonal"
+                 timeperiod = "seasonal"
                  )
 }
 }
