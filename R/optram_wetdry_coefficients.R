@@ -131,10 +131,10 @@ plot_ndvi_str_cloud <- function(full_df,
   x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- NULL
   NDVI <- STR <- NULL
 
-  i_dry <- coeffs$intercept_dry
-  s_dry <- coeffs$slope_dry
-  i_wet <- coeffs$intercept_wet
-  s_wet <- coeffs$slope_wet
+  i_dry <- round(coeffs$intercept_dry, 3)
+  s_dry <- round(coeffs$slope_dry, 3)
+  i_wet <- round(coeffs$intercept_wet, 3)
+  s_wet <- round(coeffs$slope_wet, 3)
 
   # We don't need Millions of points! get a subset
   num_rows <- nrow(full_df)
@@ -153,11 +153,13 @@ plot_ndvi_str_cloud <- function(full_df,
   # Set fixed plot limits
   x_min <- 0.0
   x_max <- 0.9
-  # STR (y) axis limits
+  # STR (y) axis limits     
   y_min <- 0.1
-  y_max <- 3.6
-  #y_max <- max(plot_df$STR)*1.05
-
+  #y_max <- 3.6
+  y_max <- max(plot_df$STR)*1.1
+  # Text to add to plot
+  coeffs_text <- paste("Dry intercept:", i_dry, "\n Dry slope:", s_dry,
+                       "\n Wet intercept:", i_wet, "\n Wet slope:", s_wet)
   ggplot2::ggplot(plot_df) +
     geom_point(aes(x=NDVI, y=STR),
                color = "#0070000b", alpha = 0.1, size = 0.1) +
@@ -173,6 +175,9 @@ plot_ndvi_str_cloud <- function(full_df,
     expand_limits(y=c(y_min, y_max), x=c(x_min, x_max)) +
     labs(x="Vegetation Index", y="SWIR Transformed") +
     ggtitle(paste("Trapezoid Plot - ", aoi_name)) +
+    # Add coeffs as text
+    annotate("text", x=0.1, y=max(plot_df$STR)*0.95,
+            label = coeffs_text, size = 5) +
     # Set theme
     theme_bw() +
     theme(axis.title = element_text(size = 14),
