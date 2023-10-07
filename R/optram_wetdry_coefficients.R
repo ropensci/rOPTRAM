@@ -120,7 +120,10 @@ optram_wetdry_coefficients <- function(full_df,
 #' @export
 #' @import ggplot2
 #' @examples
-#' print("Running plot_ndvi_str_cloud.R")
+#' aoi_name <- "Test"
+#' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
+#' coeffs <- read.csv(system.file("extdata", "coefficients.csv", package = "rOPTRAM"))
+#' plot_ndvi_str_cloud(full_df, coeffs, aoi_name)
 
 plot_ndvi_str_cloud <- function(full_df,
                                 coeffs,
@@ -131,6 +134,21 @@ plot_ndvi_str_cloud <- function(full_df,
   x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- NULL
   NDVI <- STR <- NULL
 
+  # Pre-flight test
+  if (!ncol(coeffs) == 4) {
+    warning("Coefficients not correctly formed. \n
+      Be sure the CSV file has 4 columns. Exiting...")
+    return(NULL)
+  }
+  if (! "STR" %in% names(full_df)) {
+    warning("STR column missing from data.frame. Exiting...")
+    return(NULL)
+  }
+  if (! "NDVI" %in% names(full_df)) {
+    warning("VI column missing from data.frame. Exiting...")
+    return(NULL)
+  }
+  
   i_dry <- round(coeffs$intercept_dry, 3)
   s_dry <- round(coeffs$slope_dry, 3)
   i_wet <- round(coeffs$intercept_wet, 3)
@@ -162,7 +180,7 @@ plot_ndvi_str_cloud <- function(full_df,
                        "\n Wet intercept:", i_wet, "\n Wet slope:", s_wet)
   ggplot2::ggplot(plot_df) +
     geom_point(aes(x=NDVI, y=STR),
-               color = "#0070000b", alpha = 0.1, size = 0.1) +
+               color = "#0070000b", alpha = 0.3, size = 0.2) +
     # Wet edge
     geom_abline(intercept = i_wet, slope = s_wet,
                 color = "#2E94B9", linewidth = 1.0) +

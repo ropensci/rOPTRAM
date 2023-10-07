@@ -8,6 +8,8 @@
 #' @param output_dir, string, path to save data.frames (in RDS format)
 #' @param max_tbl_size, numeric, maximum size of NDVI-STR data.frame
 #'      default set to 5e+6
+#' @param rm.low.vi, boolean, Should VI values <= 0 be removed
+#'      default FALSE. If set to TRUE then all VI <= 0 will be set to NA.
 #' @return full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
 #' @export
 #' @note
@@ -16,12 +18,18 @@
 #' the number of data points can overrun the computation resources.
 #' This parameter sets a total size of data.frame from the `max_tbl_size` 
 #' parameter, together with the number of image time slots in the time range.
+#' 
+#' In some cases (i.e. water surfaces within the study area) NDVI can have values
+#' below zero. These pixels can be removed from the trapezoid
+#' by setting `rm.low.vi` to TRUE.
+#' 
 #' @examples
 #' print("Running optram_ndvi_str.R")
 
 optram_ndvi_str <- function(STR_list, VI_list,
                             output_dir = tempdir(),
-                            max_tbl_size = 5e+6){
+                            max_tbl_size = 5e+6,
+                            rm.low.vi = FALSE){
 
   # Avoid "no visible binding for global variable" NOTE
   date_str <- STR <- STR_1_df <- STR_df <- STR_df_file <- NULL
@@ -64,8 +72,14 @@ optram_ndvi_str <- function(STR_list, VI_list,
     VI <- terra::rast(f)
     # Revert to original scale
     VI <- VI/10000.0
+    
     VI_1_df <- as.data.frame(VI, xy=TRUE, na.rm = FALSE)
     names(VI_1_df) <- c("x", "y", "NDVI")
+
+    # Apply rm.low.vi parameter
+    if (rm.low.vi) {
+      VI_1_df$NDVI[VI_1_df$NDVI <= 0.005]  <- NA
+    }
     VI_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
     # Keep only sampled rows
     VI_1_df <- VI_1_df[idx, ]

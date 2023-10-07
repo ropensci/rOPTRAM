@@ -8,7 +8,8 @@ optram_ndvi_str(
   STR_list,
   VI_list,
   output_dir = tempdir(),
-  max_tbl_size = 5e+06
+  max_tbl_size = 5e+06,
+  rm.low.vi = FALSE
 )
 }
 \arguments{
@@ -20,6 +21,9 @@ optram_ndvi_str(
 
 \item{max_tbl_size, }{numeric, maximum size of NDVI-STR data.frame
 default set to 5e+6}
+
+\item{rm.low.vi, }{boolean, Should VI values <= 0 be removed
+default FALSE. If set to TRUE then all VI <= 0 will be set to NA.}
 }
 \value{
 full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
@@ -36,6 +40,10 @@ With a large area of interest, and long time frame,
 the number of data points can overrun the computation resources.
 This parameter sets a total size of data.frame from the \code{max_tbl_size}
 parameter, together with the number of image time slots in the time range.
+
+In some cases (i.e. water surfaces within the study area) NDVI can have values
+below zero. These pixels can be removed from the trapezoid
+by setting \code{rm.low.vi} to TRUE.
 }
 \examples{
 print("Running optram_ndvi_str.R")

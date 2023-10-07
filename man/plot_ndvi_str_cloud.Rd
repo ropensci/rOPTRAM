@@ -24,5 +24,8 @@ Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
 over scatterplot of multi-temporal STR and NDVI pixel values
 }
 \examples{
-print("Running plot_ndvi_str_cloud.R")
+aoi_name <- "Test"
+full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
+coeffs <- read.csv(system.file("extdata", "coefficients.csv", package = "rOPTRAM"))
+plot_ndvi_str_cloud(full_df, coeffs, aoi_name)
 }
