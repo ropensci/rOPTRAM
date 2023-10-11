@@ -5,7 +5,6 @@
 #' and check credentials for access to Sentinel Hub
 #' @param scihub_user, string, scihub username
 #' @param scihub_pass, string, scihub password
-#'
 #' @export
 #' @return boolean, whether access to scihub using sen2r is possible
 
@@ -105,6 +104,12 @@ check_aoi <- function(aoi_file) {
 #' @param viname, string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'
 #' @export
 #' @return vi_rast, SpatRaster of vegetation index
+#' @examples
+#' img_stk <- terra::rast(system.file("extdata",
+#'          "BOA",
+#'          "S2A2A_20230301_121_migdaaoi_BOA_10.tif",
+#'          package = "rOPTRAM"))
+#' vi <- calculate_vi(img_stk)
 
 calculate_vi <- function(img_stk, viname = "NDVI", redband = 3, nirband = 4) {
     # Avoid "no visible binding for global variable" NOTE
@@ -121,6 +126,7 @@ calculate_vi <- function(img_stk, viname = "NDVI", redband = 3, nirband = 4) {
     } else {
         warning("Unrecognized index: ", viname)
         vi_rast <- NULL
+        return(NULL)
     }
     names(vi_rast) <- viname
     return(vi_rast)
@@ -142,8 +148,15 @@ calculate_vi <- function(img_stk, viname = "NDVI", redband = 3, nirband = 4) {
 #' @note For Landsat images, scale_factor should be 1,
 #'      since Landsat metadata contains gain and offset for scaling image bands.
 #' @return STR, SpatRaster of STR band
+#' @examples
+#' img_stk <- terra::rast(system.file("extdata",
+#'          "BOA",
+#'          "S2A2A_20230301_121_migdaaoi_BOA_10.tif",
+#'          package = "rOPTRAM"))
+#' str <- calculate_str(img_stk)
 
-calculate_str <- function(img_stk, swirband = 12, scale_factor = 10000) {
+
+calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
   # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
   # The optical trapezoid model:
   # A novel approach to remote sensing of soil moisture
@@ -166,10 +179,8 @@ calculate_str <- function(img_stk, swirband = 12, scale_factor = 10000) {
 
 
 #' @title Get name string for AIO from the full file name
-#'
 #' @description
 #' Extract a string from the full path to AIO file
-#'
 #' @param aoi_file, string, full path to AOI file
 #' @export 
 #' @return aoi_name, string
@@ -177,6 +188,9 @@ calculate_str <- function(img_stk, swirband = 12, scale_factor = 10000) {
 aoi_to_name <- function(aoi_file) {
 
     aoi_name <- NULL
+    if (is.null(aoi_file) || !file.exists(aoi_file)) {
+        return(NULL)
+    }
     aoi_name <- tools::file_path_sans_ext(basename(aoi_file))
     aoi_name <- gsub(x = aoi_name, pattern = " ", replacement = "")
     aoi_name <- gsub(x = aoi_name, pattern = "\\.", replacement = "")

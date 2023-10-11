@@ -4,7 +4,7 @@
 \alias{calculate_str}
 \title{Calculate STR from SWIR band of bottom of atmosphere images}
 \usage{
-calculate_str(img_stk, swirband = 12, scale_factor = 10000)
+calculate_str(img_stk, swirband = 11, scale_factor = 10000)
 }
 \arguments{
 \item{img_stk, }{terra SpatRaster, multiband stack of images, already clipped to aoi}
@@ -25,4 +25,11 @@ when you have already downloaded Sentinel 2 image files in advance
 \note{
 For Landsat images, scale_factor should be 1,
 since Landsat metadata contains gain and offset for scaling image bands.
+}
+\examples{
+img_stk <- terra::rast(system.file("extdata",
+         "BOA",
+         "S2A2A_20230301_121_migdaaoi_BOA_10.tif",
+         package = "rOPTRAM"))
+str <- calculate_str(img_stk)
 }

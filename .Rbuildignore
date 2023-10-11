@@ -5,6 +5,6 @@
 ^bibliography\.bib$
 ^codemeta\.json$
 ^\.github$
-^\.covrignore`
+^\.covrignore$
 R/create_icon.R
 
