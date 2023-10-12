@@ -46,6 +46,5 @@
   "thumbnails": [false],
   "log": [null],
   "parallel": [true],
-  "processing_order": ["by_groups"],
-  "pkg_version": ["1.5.4"]
+  "processing_order": ["by_groups"]
 }

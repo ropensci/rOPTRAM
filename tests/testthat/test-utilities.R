@@ -37,3 +37,12 @@ test_that("Check if aoi_file is spatial", {
 test_that("Check for aoi_name NULL", {
     expect_null(aoi_to_name(NULL))
 })
+
+if (package_version(utils::packageVersion("sen2r")) <= '1.5.0') {
+    test_that("Version of sen2r is recent", {
+        expect_false(check_scihub_access())
+    })
+}
+test_that("Scihub credentials correct", {
+      expect_false(check_scihub_access("XXX", "YYY"))
+})

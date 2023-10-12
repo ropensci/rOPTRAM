@@ -34,7 +34,7 @@ check_scihub_access <- function(scihub_user = NULL,
         return(FALSE)
     }
     # Check sen2r version
-    sen2r_version <- packageVersion("sen2r")
+    sen2r_version <- utils::packageVersion("sen2r")
     version_ok <- package_version(sen2r_version) > '1.5.0'
     if (!version_ok) {
         warning("Version of sen2r pacakge: ", sen2r_version, " is too old. \n",
