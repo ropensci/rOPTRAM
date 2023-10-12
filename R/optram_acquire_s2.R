@@ -63,6 +63,8 @@ optram_acquire_s2 <- function(
       output_dir = tempdir(),
       remove_safe = "yes",
       veg_index = "NDVI") {
+  # Avoid "no visible binding for global variable" NOTE
+    sen2r_version <- NULL 
   # Download Sentinel 2 images during the requested date range,
   # and clip to the area of interest
   # Pre flight checks...
@@ -101,6 +103,7 @@ optram_acquire_s2 <- function(
 
   # Get generic config json 
   config_file <- system.file("extdata", "s2_config.json", package = "rOPTRAM")
+
   result_list <- sen2r::sen2r(
       param_list = config_file,
       gui = FALSE,
@@ -121,7 +124,8 @@ optram_acquire_s2 <- function(
       path_l2a = output_dir,
       path_out = output_dir,
       path_indices = output_dir,
-      thumbnails = FALSE
+      thumbnails = FALSE,
+      pkg_version = sen2r_version
     )
   return(result_list)
 }

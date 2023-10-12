@@ -33,6 +33,15 @@ check_scihub_access <- function(scihub_user = NULL,
         "Please install that package first before running function")
         return(FALSE)
     }
+    # Check sen2r version
+    sen2r_version <- packageVersion("sen2r")
+    version_ok <- package_version(sen2r_version) > '1.5.0'
+    if (!version_ok) {
+        warning("Version of sen2r pacakge: ", sen2r_version, " is too old. \n",
+        "Please update to version > 1.5")
+        return(FALSE)
+    }
+
     # Check for stored credentials (by default in "~/.sen2r/apihub.txt")
     if (sen2r::is_scihub_configured()) {
         return(TRUE)

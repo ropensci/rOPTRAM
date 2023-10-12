@@ -30,7 +30,11 @@
 #' from each time slot. The sample size is determined based on `max_tbl_size` 
 #' and the total number of time slots in the full time range.
 #' @examples
-#' print("Running optram_prepare_safe_vi_str.R")
+#' \dontrun{
+#' aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+#' safe_dir  <- tempdir()
+#' optram_safe(safe_dir, aoi_file)
+#' }
 
 optram_safe <- function(safe_dir,
                         aoi_file,

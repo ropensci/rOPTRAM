@@ -28,3 +28,12 @@ test_that("API access to scihub not available", {
     expect_null(optram_acquire_s2(aoi_file, from_date, to_date))
   }
 })
+
+test_that("sen2r package is recent",{
+  if (!package_version(packageVersion("sen2r")) > '1.5.0') {
+    from_date <- "2023-03-01"
+    to_date <- "2023-04-30"
+    aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+    expect_false(optram_acquire_s2(aoi_file, from_date, to_date))
+  }
+})

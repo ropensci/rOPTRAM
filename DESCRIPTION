@@ -34,7 +34,7 @@ Suggests:
     geojsonio,
     geojsonlint,
     stats,
-    sen2r,
+    sen2r (> 1.5.0),
     testthat (>= 3.0.0),
     xml2
 Config/testthat/edition: 3
