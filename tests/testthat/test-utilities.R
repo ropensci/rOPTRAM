@@ -44,5 +44,8 @@ if (package_version(utils::packageVersion("sen2r")) <= '1.5.0') {
     })
 }
 test_that("Scihub credentials correct", {
+    if (!sen2r::is_scihub_configured()) {
       expect_false(check_scihub_access("XXX", "YYY"))
+      expect_false(check_scihub_access(NULL, NULL))
+    }
 })
