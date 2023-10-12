@@ -43,8 +43,3 @@ test:
    only:
    - master
 
-quality:
-   stage: quality
-   include:
-     - template: Jobs/Code-Quality.gitlab-ci.yml
-
