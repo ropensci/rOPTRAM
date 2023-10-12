@@ -26,25 +26,25 @@ default:
 test:
    stage: test
    script:
-    - echo "Testing"
-    - apt-get update
-    - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools
-    - R -e "devtools::install_deps(dependencies = TRUE)"
-    - R CMD build . --no-build-vignettes --no-manual
-    - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
-    - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
-    cache:
+   - echo "Testing"
+   - apt-get update
+   - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools
+   - R -e "devtools::install_deps(dependencies = TRUE)"
+   - R CMD build . --no-build-vignettes --no-manual
+   - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
+   - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
+   cache:
       key: "$CI_COMMIT_REF_SLUG"
       paths:
-       - installed_deps/
+      - installed_deps/
    artifacts:
     paths:
-     - '*.Rcheck/'
+    - '*.Rcheck/'
    only:
-    - master
+   - master
 
 quality:
    stage: quality
    include:
-    template: Jobs/Code-Quality.gitlab-ci.yml
+     - template: Jobs/Code-Quality.gitlab-ci.yml
 
