@@ -26,12 +26,15 @@ test:
    - apt-get update
    - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev
    # Minimal packages
-   - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools
+   - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools r-cran-dplyr
+   - R -e "'devtools' %in% installed.packages()"
    # with recommends and suggests...
    #- apt-get install --yes --install-suggests r-cran-testthat r-cran-devtools
+   - apt-get autoremove --yes --purge
+   - apt-get autoclean --yes
    #- R -e ".libPaths()"
    #- R -e "install.packages(c(‘usethis’, ‘pkgdown’, ‘rcmdcheck’, ‘roxygen2’, ‘rversions’, ‘urlchecker’), dependencies = TRUE)"
-   #- R -e "install.packages('devtools', dependencies = TRUE)"
+   - R -e "install.packages('devtools', dependencies = TRUE)"
    - R -e "devtools::install_deps(dependencies = TRUE)"
    - R CMD build . --no-build-vignettes --no-manual
    - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
