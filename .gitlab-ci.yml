@@ -24,8 +24,9 @@ test:
    script:
    - echo "Testing"
    - apt-get update
-   - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools
-   - R -e ".libPaths()"
+   - apt-get install --yes r-cran-testthat r-cran-devtools
+   #- R -e ".libPaths()"
+   #- R -e "install.packages(c(‘usethis’, ‘pkgdown’, ‘rcmdcheck’, ‘roxygen2’, ‘rversions’, ‘urlchecker’), dependencies = TRUE)"
    - R -e "install.packages('devtools', dependencies = TRUE)"
    - R -e "devtools::install_deps(dependencies = TRUE)"
    - R CMD build . --no-build-vignettes --no-manual
