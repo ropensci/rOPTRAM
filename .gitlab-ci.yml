@@ -10,6 +10,8 @@
 image: rocker/r-base
 # Ubuntu LTS
 #image: rocker/r-ver:4.1.0
+# Ubuntu r2u
+# image: rocker/r2u:22.04
 stages:
     - test
 
@@ -26,17 +28,22 @@ test:
    script:
    - echo "Installing system"
    - apt-get update
-   - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev libpng-dev libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev protobuf-compiler libprotobuf-lite32
+   - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev libpng-dev libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev protobuf-compiler libprotobuf-lite32 wget ca-certificates gnupg
+   # Setup r2u
+   #- wget -q -O- https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.asc | tee -a /etc/apt/trusted.gpg.d/cranapt_key.asc
+   #- echo "deb [arch=amd64] https://r2u.stat.illinois.edu/ubuntu jammy main" > /etc/apt/sources.list.d/cranapt.list
+   - apt update -qq
    # Minimal packages
-   - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools r-cran-dplyr
-   - R -e "'devtools' %in% installed.packages()"
+   - apt-get install --yes --no-install-recommends r-base r-base-core r-recommended r-cran-devtools r-cran-dplyr r-cran-sf r-cran-terra
+   # - R -e "'devtools' %in% installed.packages()"
    # with recommends and suggests...
    #- apt-get install --yes --install-suggests r-cran-testthat r-cran-devtools
    - apt-get autoremove --yes --purge
    - apt-get autoclean --yes
    #- R -e ".libPaths()"
-   #- R -e "install.packages(c(‘usethis’, ‘pkgdown’, ‘rcmdcheck’, ‘roxygen2’, ‘rversions’, ‘urlchecker’), dependencies = TRUE)"
-   - R -e "install.packages('devtools', dependencies = TRUE)"
+   #- R -e "install.packages(c(‘usethis’, ‘pkgdown’, ‘rcmdcheck’, ‘roxygen2’, ‘rversions’, ‘urlchecker’, 'geojsonlint'), dependencies = TRUE)"
+   - R -c "install.packages(c('urlchecker', 'geogjsonlint'), dependencied = TRUE)"
+   #- R -e "install.packages('devtools', dependencies = TRUE)"
    - R -e "devtools::install_deps(dependencies = TRUE)"
    - echo "Building package"
    - R CMD build . --no-build-vignettes --no-manual
