@@ -32,7 +32,7 @@ test:
    # Setup r2u
    #- wget -q -O- https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.asc | tee -a /etc/apt/trusted.gpg.d/cranapt_key.asc
    #- echo "deb [arch=amd64] https://r2u.stat.illinois.edu/ubuntu jammy main" > /etc/apt/sources.list.d/cranapt.list
-   - apt update -qq
+   - apt-get update -qq
    # Minimal packages
    - apt-get install --yes --no-install-recommends r-base r-base-core r-recommended r-cran-devtools r-cran-dplyr r-cran-sf r-cran-terra
    # - R -e "'devtools' %in% installed.packages()"
@@ -42,7 +42,7 @@ test:
    - apt-get autoclean --yes
    #- R -e ".libPaths()"
    #- R -e "install.packages(c(‘usethis’, ‘pkgdown’, ‘rcmdcheck’, ‘roxygen2’, ‘rversions’, ‘urlchecker’, 'geojsonlint'), dependencies = TRUE)"
-   - R -c "install.packages(c('urlchecker', 'geojsonlint'), dependencied = TRUE)"
+   - R -e "install.packages(c('urlchecker', 'geojsonlint'), dependencies = TRUE)"
    #- R -e "install.packages('devtools', dependencies = TRUE)"
    - R -e "devtools::install_deps(dependencies = TRUE)"
    - echo "Building package"
