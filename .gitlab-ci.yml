@@ -24,7 +24,7 @@ test:
    script:
    - echo "Testing"
    - apt-get update
-   - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev
+   - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libharfbuzz-dev
    # Minimal packages
    - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools r-cran-dplyr
    - R -e "'devtools' %in% installed.packages()"
