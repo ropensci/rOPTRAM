@@ -42,7 +42,7 @@ test:
    - apt-get autoclean --yes
    #- R -e ".libPaths()"
    #- R -e "install.packages(c(‘usethis’, ‘pkgdown’, ‘rcmdcheck’, ‘roxygen2’, ‘rversions’, ‘urlchecker’, 'geojsonlint'), dependencies = TRUE)"
-   - R -c "install.packages(c('urlchecker', 'geogjsonlint'), dependencied = TRUE)"
+   - R -c "install.packages(c('urlchecker', 'geojsonlint'), dependencied = TRUE)"
    #- R -e "install.packages('devtools', dependencies = TRUE)"
    - R -e "devtools::install_deps(dependencies = TRUE)"
    - echo "Building package"
