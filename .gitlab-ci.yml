@@ -25,7 +25,10 @@ test:
    - echo "Testing"
    - apt-get update
    - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev
-   - apt-get install --yes --install-suggests r-cran-testthat r-cran-devtools
+   # Minimal packages
+   - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools
+   # with recommends and suggests...
+   #- apt-get install --yes --install-suggests r-cran-testthat r-cran-devtools
    #- R -e ".libPaths()"
    #- R -e "install.packages(c(‘usethis’, ‘pkgdown’, ‘rcmdcheck’, ‘roxygen2’, ‘rversions’, ‘urlchecker’), dependencies = TRUE)"
    #- R -e "install.packages('devtools', dependencies = TRUE)"
