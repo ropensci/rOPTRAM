@@ -6,10 +6,12 @@
 # See https://docs.gitlab.com/ee/ci/yaml/index.html for all available options
 
 # you can delete this line if you're not using Docker
+# Debian testing
 image: rocker/r-base
+# Ubuntu LTS
+#image: rocker/r-ver:4.1.0
 stages:
     - test
-    - quality
 
 default:
    before_script:
@@ -24,7 +26,7 @@ test:
    script:
    - echo "Installing system"
    - apt-get update
-   - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev libpng-dev libtiff5-dev libjpeg-dev
+   - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev libpng-dev libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev
    # Minimal packages
    - apt-get install --yes --no-install-recommends r-cran-testthat r-cran-devtools r-cran-dplyr
    - R -e "'devtools' %in% installed.packages()"
