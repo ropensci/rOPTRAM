@@ -37,5 +37,5 @@ test:
     paths:
     - '*.Rcheck/'
    only:
-   - master
+   - main
 
