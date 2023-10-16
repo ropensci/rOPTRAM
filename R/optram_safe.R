@@ -174,7 +174,7 @@ optram_safe <- function(safe_dir,
     }
 
     # Get VI and STR from this list of raster stacks
-    VI_STR_list <- lapply(1:length(derived_rasters), function(x) {
+    VI_STR_list <- lapply(seq_along(derived_rasters), function(x) {
         # Each item in the derived_rasters list is a raster stack, with 6 bands
         # R-G-B-NIR, SWIR 1600, SWIR 2200
         stk <- derived_rasters[[x]]

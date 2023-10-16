@@ -18,10 +18,10 @@
 #'  for automatic download of Landsat images. This function requires a directory,
 #'  set in the `landsat_dir` parameter,  which contains the set of Landsat tiles,
 #'  downloaded manually by the user, in advance.
-#'  This directory should contain folders of Landsat images, where each folder 
+#'  This directory should contain folders of Landsat images, where each folder
 #'  consists of the individual Landsat bands as Geotif files, as well as the metadata files
-#'  as downloaded from, i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.  
-#' @examples 
+#'  as downloaded from, i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
+#' @examples
 #' \dontrun{optram_landsat(landsat_dir,
 #'                           aoi_file,
 #'                           vi = 'NDVI',
@@ -151,7 +151,7 @@
     }) # end-of-derived_rasters
 
     # Get VI and STR from this list of raster stacks
-    VI_STR_list <- lapply(1:length(derived_rasters), function(x) {
+    VI_STR_list <- lapply(seq_along(derived_rasters), function(x) {
       # LANDSAT: Each item in the derived_rasters list is a raster stack, with 3 bands:
       # Red, NIR, SWIR 2200nm
       stk <- derived_rasters[[x]]

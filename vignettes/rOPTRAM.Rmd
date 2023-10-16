@@ -47,7 +47,7 @@ Downloaded Sentinel-2 images are saved to `S2_output_dir`
 
 
 ```{r wrapper}
-from_date <- "2020-12-01"
+from_date <- "2021-12-01"
 to_date <- "2023-04-30"
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 output_dir = "/home/micha/EO_Data/Israel/Migda_season/"
@@ -116,7 +116,7 @@ coeffs <- optram_safe(safe_dir, aoi_file,
 ```{r soil-moisture}
 img_date <- "2023-03-11"
 VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
-STR_dir <- system_file("extdata", "STR", package = "rOPTRAM")
+STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 coeffs_file <- system_file("extdata", "coefficients.csv", package = "rOPTRAM")
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 ```

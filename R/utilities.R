@@ -1,5 +1,5 @@
 #' @title Check access to Sentinel Hub, using sen2r
-#' 
+#'
 #' @description
 #' Verify that sen2r is installed,
 #' and check credentials for access to Sentinel Hub
@@ -7,6 +7,8 @@
 #' @param scihub_pass, string, scihub password
 #' @export
 #' @return boolean, whether access to scihub using sen2r is possible
+#' @example check_scihub_access(scihub_user = "userxxx,
+#'                              scihub_pass = "secretyyy")
 
 check_scihub_access <- function(scihub_user = NULL,
                                 scihub_pass = NULL) {
@@ -81,7 +83,11 @@ check_scihub_access <- function(scihub_user = NULL,
 #' Check that aoi file exists, and is a spatial file
 #' @param aoi_file, string
 #' @export
-#' @return boolean, TRUE when file exists, and is spatila
+#' @return boolean, TRUE when file exists, and is spatial
+#' @example
+#' aoi_file <- system.file("extdata", "migda_aoi.gpkg")
+#' check_aoi(aoi_file)
+
 check_aoi <- function(aoi_file) {
   if (is.null(aoi_file) || !file.exists(aoi_file)) {
       message("An area_of_interest polygon shapefile is required",
@@ -191,8 +197,12 @@ calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
 #' @description
 #' Extract a string from the full path to AIO file
 #' @param aoi_file, string, full path to AOI file
-#' @export 
+#' @export
 #' @return aoi_name, string
+#' @example
+#' aoi_file <- system.file("extdata", "migda_aoi.gpkg")
+#' aoi_name <- aoi_to_name(aoi_file)
+#' aoi_name
 
 aoi_to_name <- function(aoi_file) {
 
@@ -204,6 +214,6 @@ aoi_to_name <- function(aoi_file) {
     aoi_name <- gsub(x = aoi_name, pattern = " ", replacement = "")
     aoi_name <- gsub(x = aoi_name, pattern = "\\.", replacement = "")
     aoi_name <- gsub(x = aoi_name, pattern = "_", replacement = "")
- 
+
     return(aoi_name)
 }
