@@ -10,9 +10,11 @@
 #'   applied to Sentinel-2 and Landsat-8 observations.
 #'   Remote Sensing of Environment 198, 52–68,
 #'   https://doi.org/10.1016/j.rse.2017.05.041 .
-#' @param aoi_file, string, full path to polygon spatial file of area of interest
+#' @param aoi_file, string, full path to polygon spatial file
+#'        of area of interest
 #' @param veg_index, string, which index to use. Default "NDVI"
-#' @param from_date, string, the start of the date range, Formatted as "YYYY-MM-DD"
+#' @param from_date, string, the start of the date range,
+#'        Formatted as "YYYY-MM-DD"
 #' @param to_date, the end of the date range.
 #' @param max_cloud, integer, maximum percent cloud cover, Default 15.
 #' @param scihub_user, string, username on Copernicus Sentinel Hub

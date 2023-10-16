@@ -87,7 +87,8 @@ s2_file_list <- optram_acquire_s2(aoi_file,
                             veg_index ="MSAVI2")
 BOA_dir <- system.file("extdata", "BOA", package = "rOPTRAM")
 STR_list <- optram_calculate_str(BOA_dir)
-VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"), pattern = ".tif$", full.names = TRUE)
+VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
+                      pattern = ".tif$", full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list)
 coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
 coeffs

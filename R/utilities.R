@@ -25,7 +25,8 @@ check_scihub_access <- function(scihub_user = NULL,
     }
 
     if (!is_online()) {
-        message("No internet connection. Downloading data is not currently possible")
+        message("No internet connection.
+                Downloading data is not currently possible")
         return(FALSE)
     }
 
@@ -58,7 +59,8 @@ check_scihub_access <- function(scihub_user = NULL,
                 }
                 # store valid credentials into "apihub.txt" for future
                 apihub_path <- file.path(sen2r_path, "apihub.txt")
-                sen2r::write_scihub_login(scihub_user, scihub_pass, apihub_path = apihub_path)
+                sen2r::write_scihub_login(scihub_user, scihub_pass,
+                                          apihub_path = apihub_path)
                 return(TRUE)
             } else {
                 message("Login credentials not accepted by ESA Sentinel Hub",
@@ -113,10 +115,12 @@ check_aoi <- function(aoi_file) {
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
 #'
-#' @param img_stk, terra SpatRaster, multiband stack of images, already clipped to aoi
+#' @param img_stk, terra SpatRaster, multiband stack of images,
+#'            already clipped to aoi
 #' @param redband, integer, number of red band
 #' @param nirband, integer, number of NIR band
-#' @param viname, string, which VI to prepare, either 'NDVI' (default) or 'SAVI' or 'MSAVI'
+#' @param viname, string, which VI to prepare,
+#'            either 'NDVI' (default) or 'SAVI' or 'MSAVI'
 #' @export
 #' @return vi_rast, SpatRaster of vegetation index
 #' @examples
@@ -155,7 +159,8 @@ calculate_vi <- function(img_stk, viname = "NDVI", redband = 3, nirband = 4) {
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
 #'
-#' @param img_stk, terra SpatRaster, multiband stack of images, already clipped to aoi
+#' @param img_stk, terra SpatRaster, multiband stack of images,
+#'          already clipped to aoi
 #' @param swirband, integer, number of red band
 #' @param scale_factor, integer, scaling factor for EO data source
 #'      default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)

@@ -4,10 +4,13 @@
 #' SWIR Transformed Reflectance (STR) rasters
 #' when you have already downloaded landsat image files in advance.
 #' This function assumes that atmospheric correction has been applied.
-#' @param landsat_dir, string, full path to containing folder of downloaded (unzipped)
-#' Sentinel 2 data in original landsat format, after atompheric correction (L2A)
-#' @param aoi_file, string, path to boundary polygon spatial file of area of interest
-#' @param vi, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
+#' @param landsat_dir, string, full path to containing folder of downloaded
+#'    (unzipped) Landsat data in original landsat format,
+#'    after atompheric correction (L2A)
+#' @param aoi_file, string, path to boundary polygon spatial file
+#'    of area of interest
+#' @param vi, string, which VI to prepare, either 'NVDI' (default)
+#'    or 'SAVI' or 'MSAVI'
 #' @param LC_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file
@@ -15,12 +18,14 @@
 #' @return coeffs, list, the derived trapezoid coefficients
 #' @export
 #' @note Unlike the `optram_acquire_s2` function, there is no implementation
-#'  for automatic download of Landsat images. This function requires a directory,
-#'  set in the `landsat_dir` parameter,  which contains the set of Landsat tiles,
-#'  downloaded manually by the user, in advance.
+#'  for automatic download of Landsat images.
+#'  This function requires a directory, set in the `landsat_dir` parameter,
+#'  which contains the set of Landsat tiles downloaded manually
+#'  by the user, in advance.
 #'  This directory should contain folders of Landsat images, where each folder
-#'  consists of the individual Landsat bands as Geotif files, as well as the metadata files
-#'  as downloaded from, i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
+#'  consists of the individual Landsat bands as Geotif files,
+#'  as well as the metadata files as downloaded from,
+#'  i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 #' @examples
 #' \dontrun{optram_landsat(landsat_dir,
 #'                           aoi_file,
@@ -43,7 +48,8 @@
 
   # Check for inputs
    if (is.null(landsat_dir) || !dir.exists(landsat_dir)) {
-      warning("The directory of downloaded Landsat images is a required parameter.")
+      warning("The directory of downloaded Landsat images
+              is a required parameter.")
       return(NULL)
   } else {
     if (!check_aoi(aoi_file)) {
@@ -53,7 +59,8 @@
 
     # Loop over the downloaded LC folders (dates),
     # create NDVI and STR indices for each and crop to aoi
-    landsat_list <- list.dirs(landsat_dir)[grepl("L*_02_*",list.dirs(landsat_dir))]
+    landsat_list <- list.dirs(landsat_dir)[
+      grepl("L*_02_*",list.dirs(landsat_dir))]
 
     # The strings below are used to select the needed bands from Landsat
     # L89 - bands for LANDSAT 8/9
@@ -76,10 +83,13 @@
     }
 
     # crs: from the first tile in the first landsat dir
-    rstt <- terra::rast(dir(landsat_list[1], full.names = TRUE)[grepl("*_SR_B1.TIF$", dir(landsat_list[1]))])
+    rstt <- terra::rast(dir(landsat_list[1],
+                            full.names = TRUE)[
+                              grepl("*_SR_B1.TIF$", dir(landsat_list[1]))])
     epsg_code <- paste("EPSG:",
                        (as.character(terra::crs(rstt, describe=T)[3])))
-    # Get Area of interest, make sure it is projected to the CRS of Landsat images
+    # Get Area of interest,
+    # make sure it is projected to the CRS of Landsat images
     aoi <- terra::vect(aoi_file)
     aoi <- terra::project(aoi, epsg_code)
     aoi_name <- aoi_to_name(aoi_file)
@@ -110,8 +120,10 @@
         mtl <- xml2::read_xml(mtl_file)
         # Values for gain and offset are read from the XML metadata
         # https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
-        gain <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
-        offset <- xml2::xml_text(xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
+        gain <- xml2::xml_text(
+          xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
+        offset <- xml2::xml_text(
+          xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
         gain <- as.numeric(gain)
         offset <- as.numeric(offset)
 
@@ -128,7 +140,7 @@
           img_path <- dir(s)[grepl(pattern = "*_SR_B[0-9]*.TIF$", x = dir(s))]
           img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
           img_path <- file.path(s, img_path)
-          # Use the `win` parameter of `terra::rast` to crop Landsat tile to aoi.
+          # Use the `win` parameter of `terra::rast` to crop Landsat tile to aoi
           rst <- terra::rast(img_path, win = terra::ext(aoi))
           return(rst)
         })
@@ -152,8 +164,8 @@
 
     # Get VI and STR from this list of raster stacks
     VI_STR_list <- lapply(seq_along(derived_rasters), function(x) {
-      # LANDSAT: Each item in the derived_rasters list is a raster stack, with 3 bands:
-      # Red, NIR, SWIR 2200nm
+      # LANDSAT: Each item in the derived_rasters list
+      # is a raster stack, with 3 bands: Red, NIR, SWIR 2200nm
       stk <- derived_rasters[[x]]
       if (is.null(stk)) {
         return(NULL)
@@ -168,7 +180,8 @@
       }
       #extract time, date and create datetime
       mtl <- xml2::read_xml(mtl_file)
-      datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtl, ".//DATE_ACQUIRED")))
+      datestr <- as.Date(xml2::xml_text(
+        xml2::xml_find_first(mtl, ".//DATE_ACQUIRED")))
       # Find VI values, and create data.frame
       VI_idx <- rOPTRAM::calculate_vi(stk, vi, redband = 1, nirband = 2)
       VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)

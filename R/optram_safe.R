@@ -8,13 +8,17 @@
 #' This function assumes that atmospheric correction has been applied.
 #' i.e. using the SNAP L2A_Process,
 #' or the  `sen2cor()` function from the {sen2r} R package.
-#' @param safe_dir, string, full path to containing folder of downloaded (unzipped)
-#' Sentinel 2 data in original SAFE format, after atompheric correction (L2A)
-#' @param aoi_file, string, path to boundary polygon spatial file of area of interest
-#' @param viname, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
+#' @param safe_dir, string, full path to containing folder of downloaded
+#'    (unzipped) Sentinel 2 data in original SAFE format,
+#'    after atompheric correction (L2A)
+#' @param aoi_file, string, path to boundary polygon spatial file
+#'    of area of interest
+#' @param viname, string, which VI to prepare, either 'NVDI' (default)
+#'    or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
-#' @param overwrite, boolean, overwrite derived products that already were created,
+#' @param overwrite, boolean, overwrite derived products
+#'      that already were created,
 #'      defaults to TRUE
 #' @param data_output_dir, string, path to save coeffs_file
 #'      and STR-VI data.frame, default is tempdir()
@@ -23,11 +27,14 @@
 #' @return coeffs, list, the derived trapezoid coefficients
 #' @export
 #' @note
-#' Use the `max_tbl_size` parameter to limit the total number of rows in the VI-STR data.frame.
+#' Use the `max_tbl_size` parameter to limit the total number of rows
+#' in the VI-STR data.frame.
 #' When the area of interest is large, or the time range of datasets is long,
-#' the total size of the data.frame can grow beyond the capacity of computation resources.
-#' This parameter limits the size of the table by sampling a number of data points
-#' from each time slot. The sample size is determined based on `max_tbl_size`
+#' the total size of the data.frame can grow
+#' beyond the capacity of computation resources.
+#' This parameter limits the size of the table
+#' by sampling a number of data points from each time slot.
+#' The sample size is determined based on `max_tbl_size`
 #' and the total number of time slots in the full time range.
 #' @examples
 #' \dontrun{
@@ -56,7 +63,8 @@ optram_safe <- function(safe_dir,
     }
 
     if (is.null(safe_dir) || !dir.exists(safe_dir)) {
-      warning("The directory of downloaded Landsat images is a required parameter.")
+      warning("The directory of downloaded Landsat images
+              is a required parameter.")
       return(NULL)
     }
 
@@ -119,7 +127,8 @@ optram_safe <- function(safe_dir,
             return(NULL)
         }
         mtd <- xml2::read_xml(mtd_file)
-        epsg_code <- xml2::xml_text(xml2::xml_find_first(mtd, ".//HORIZONTAL_CS_CODE"))
+        epsg_code <- xml2::xml_text(
+          xml2::xml_find_first(mtd, ".//HORIZONTAL_CS_CODE"))
         aoi <- terra::project(aoi, epsg_code)
         aoi_ext <- terra::ext(aoi)
 

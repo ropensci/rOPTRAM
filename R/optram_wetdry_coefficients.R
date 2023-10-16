@@ -1,18 +1,21 @@
 #' @title Derive coefficients of slope and intercept
 #' @description Derive slope and intercept coefficients
 #' for both wet and dry trapezoid lines.
-#' Write coefficients to a CSV file (as input to `optram_soilmoisture()` function)
+#' Write coefficients to a CSV file
+#' (as input to `optram_soilmoisture()` function)
 #' @param full_df, data.frame of STR and NDVI values
 #' @param output_dir, string, directory to save coefficients CSV file
 #' @param step, float
-#' @param aoi_file, string, added to title of plot 
+#' @param aoi_file, string, added to title of plot
 #'  (Can be path to AOI file, then the file name is used in plot title)
 #' @param save_plot, boolean, If TRUE (default) save scatterplot to output_dir
 #' @return coeffs, list of float, coefficients of wet-dry trapezoid
 #' @export
-#' @examples 
+#' @examples
 #' aoi_file <- "Test"
-#' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
+#' full_df <- readRDS(system.file("extdata",
+#'               "VI_STR_data.rds",
+#'               package = "rOPTRAM"))
 #' coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
 #' print(coeffs)
 
@@ -36,7 +39,7 @@ optram_wetdry_coefficients <- function(full_df,
   # Avoid "no visible binding for global variable" NOTE
   VI_min_max <- VI_series <- VI_STR_list <- VI_STR_df <- NULL
   Qs <- str_max <- str_min <- interval_df <- VI_STR_df1 <- NULL
-  
+
   #  Pre-flight Check
   if (is.null(aoi_file)) {
     aoi_name <- NULL
@@ -121,8 +124,10 @@ optram_wetdry_coefficients <- function(full_df,
 #' @import ggplot2
 #' @examples
 #' aoi_name <- "Test"
-#' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
-#' coeffs <- read.csv(system.file("extdata", "coefficients.csv", package = "rOPTRAM"))
+#' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
+#'         package = "rOPTRAM"))
+#' coeffs <- read.csv(system.file("extdata", "coefficients.csv",
+#'         package = "rOPTRAM"))
 #' plot_ndvi_str_cloud(full_df, coeffs, aoi_name)
 
 plot_ndvi_str_cloud <- function(full_df,
@@ -148,7 +153,7 @@ plot_ndvi_str_cloud <- function(full_df,
     warning("VI column missing from data.frame. Exiting...")
     return(NULL)
   }
-  
+
   i_dry <- round(coeffs$intercept_dry, 3)
   s_dry <- round(coeffs$slope_dry, 3)
   i_wet <- round(coeffs$intercept_wet, 3)
@@ -159,7 +164,7 @@ plot_ndvi_str_cloud <- function(full_df,
   if (num_rows < 400000) {
     plot_df <- full_df
   } else {
-    # This trick drops the num of plotted points 
+    # This trick drops the num of plotted points
     # by orders of magnitude
     divisor <-  log2(num_rows)
     samp_num <- num_rows  / divisor
@@ -171,7 +176,7 @@ plot_ndvi_str_cloud <- function(full_df,
   # Set fixed plot limits
   x_min <- 0.0
   x_max <- 0.9
-  # STR (y) axis limits     
+  # STR (y) axis limits
   y_min <- 0.1
   #y_max <- 3.6
   y_max <- max(plot_df$STR)*1.1
@@ -204,5 +209,6 @@ plot_ndvi_str_cloud <- function(full_df,
 
   plot_path <- file.path(output_dir, paste0("trapezoid_", aoi_name, ".png"))
   ggsave(plot_path, width = 10, height = 7)
-  message("Scatterplot of: ", num_rows_plotted, " pixels \n Saved to: ", plot_path)
+  message("Scatterplot of: ", num_rows_plotted,
+          " pixels \n Saved to: ", plot_path)
 }

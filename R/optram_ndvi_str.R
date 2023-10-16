@@ -14,18 +14,20 @@
 #' @export
 #' @note
 #' Use the `max_tbl_size` parameter to limit size of the NDVI-STR data.frame
-#' With a large area of interest, and long time frame, 
+#' With a large area of interest, and long time frame,
 #' the number of data points can overrun the computation resources.
-#' This parameter sets a total size of data.frame from the `max_tbl_size` 
+#' This parameter sets a total size of data.frame from the `max_tbl_size`
 #' parameter, together with the number of image time slots in the time range.
-#' 
-#' In some cases (i.e. water surfaces within the study area) NDVI can have values
+#'
+#' In some cases (i.e. water surfaces) NDVI can have values
 #' below zero. These pixels can be removed from the trapezoid
 #' by setting `rm.low.vi` to TRUE.
-#' 
+#'
 #' @examples
-#' VI_list <- list.files(system.file("extdata", "NDVI"), pattern = ".tif$"), full.names = TRUE)
-#' STR_list <- list.files(system.file("extdata", "STR"), pattern = ".tif$"), full.names = TRUE)
+#' VI_list <- list.files(system.file("extdata", "NDVI"),
+#'         pattern = ".tif$"), full.names = TRUE)
+#' STR_list <- list.files(system.file("extdata", "STR"),
+#'         pattern = ".tif$"), full.names = TRUE)
 #' full_df <- optram_ndvi_str(STR_list, VI_list)
 #' # Show structure of output data.frame
 #' str(full_df)
@@ -76,7 +78,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     VI <- terra::rast(f)
     # Revert to original scale
     VI <- VI/10000.0
-    
+
     VI_1_df <- as.data.frame(VI, xy=TRUE, na.rm = FALSE)
     names(VI_1_df) <- c("x", "y", "NDVI")
 
