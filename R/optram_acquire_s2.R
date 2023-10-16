@@ -30,7 +30,7 @@
 #' - https://scihub.copernicus.eu/userguide/SelfRegistration
 #' - enter your user and pass parameters in this function call,
 #'   and they will be stored into the default location.
-#' 
+#'
 #' This function calls `sen2r()` from the {sen2r} package. This function
 #' acquires Sentinel 2 imagery, clips to aoi,
 #' and prepares multiband output rasters, save to the `output_dir`.
@@ -39,8 +39,8 @@
 #'  - furthermore, the cirrus band B09 is not relevant for BOA level
 #'  - so band 10 is the SWIR refelctance at 1600 nm,
 #'    and band 11 is reflectance at 2200 nm.
-#' 
-#'  
+#'
+#'
 #' @examples
 #' \dontrun{
 #' from_date <- "2018-12-01"
@@ -51,7 +51,7 @@
 #'                                  scihub_user = "userxxx",
 #'                                  scihub_pass = "secretxyz"
 #'                                  timeperiod = "full",
-#'                                  list_indicies="MSAVI2")
+#'                                  veg_index = "MSAVI2")
 #' }
 
 optram_acquire_s2 <- function(
@@ -64,7 +64,7 @@ optram_acquire_s2 <- function(
       remove_safe = "yes",
       veg_index = "NDVI") {
   # Avoid "no visible binding for global variable" NOTE
-  sen2r_version <- NULL 
+  sen2r_version <- NULL
   # Download Sentinel 2 images during the requested date range,
   # and clip to the area of interest
   # Pre flight checks...
@@ -91,7 +91,7 @@ optram_acquire_s2 <- function(
             "\nExiting")
     return(NULL)
   }
- 
+
   # Avoid "no visible binding for global variable" NOTE
   aoi_name  <- result_list <- NULL
   # Checks OK, proceed to download
@@ -101,7 +101,7 @@ optram_acquire_s2 <- function(
     dir.create(output_dir, recursive = TRUE)
   }
 
-  # Get generic config json 
+  # Get generic config json
   config_file <- system.file("extdata", "s2_config.json", package = "rOPTRAM")
   sen2r_version <- utils::packageVersion("sen2r")
   result_list <- sen2r::sen2r(

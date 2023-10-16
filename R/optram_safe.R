@@ -14,9 +14,9 @@
 #' @param viname, string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
-#' @param overwrite, boolean, overwrite derived products that already were created, 
+#' @param overwrite, boolean, overwrite derived products that already were created,
 #'      defaults to TRUE
-#' @param data_output_dir, string, path to save coeffs_file 
+#' @param data_output_dir, string, path to save coeffs_file
 #'      and STR-VI data.frame, default is tempdir()
 #' @param max_tbl_size, numeric, maximum size of VI/STR dta.frame.
 #'      default is 5,000,000 rows
@@ -24,14 +24,14 @@
 #' @export
 #' @note
 #' Use the `max_tbl_size` parameter to limit the total number of rows in the VI-STR data.frame.
-#' When the area of interest is large, or the time range of datasets is long, 
+#' When the area of interest is large, or the time range of datasets is long,
 #' the total size of the data.frame can grow beyond the capacity of computation resources.
-#' This parameter limits the size of the table by sampling a number of data points 
-#' from each time slot. The sample size is determined based on `max_tbl_size` 
+#' This parameter limits the size of the table by sampling a number of data points
+#' from each time slot. The sample size is determined based on `max_tbl_size`
 #' and the total number of time slots in the full time range.
 #' @examples
 #' \dontrun{
-#' aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+#' aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 #' safe_dir  <- tempdir()
 #' coeffs <- optram_safe(safe_dir, aoi_file)
 #' }
@@ -87,13 +87,13 @@ optram_safe <- function(safe_dir,
     # Get Area of interest
     aoi <- terra::vect(aoi_file)
     aoi_name <- aoi_to_name(aoi_file)
-    
+
     # Prepare output directories
     BOA_dir <- file.path(S2_output_dir, "BOA")
     if (!dir.exists(BOA_dir)) {
          dir.create(BOA_dir, recursive = TRUE)
     }
-    
+
     NDVI_dir <- file.path(S2_output_dir, "NDVI")
     if (!dir.exists(NDVI_dir)) {
         dir.create(NDVI_dir)
@@ -111,7 +111,7 @@ optram_safe <- function(safe_dir,
         img_nodes <- img_nodes[!grepl(pattern = "R60m", img_nodes)]
         img_paths <- xml2::xml_contents(img_nodes)
 
-        # Get CRS for this SAFE dataset, and reproject AOI 
+        # Get CRS for this SAFE dataset, and reproject AOI
         mtd_file <- list.files(s, pattern = "MTD_TL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtd_file)) {

@@ -39,5 +39,9 @@ that was not used for preparing the model, will be referenced in the \code{img_d
 The resulting soil moisture raster is saved to \code{output_dir}.
 }
 \examples{
-print("Running optram_calculate_soil_moisture.R")
+img_date <- "2023-03-11"
+VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
+STR_dir <- system_file("extdata", "STR", package = "rOPTRAM")
+coeffs_file <- system_file("extdata", "coefficients.csv", package = "rOPTRAM")
+SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 }

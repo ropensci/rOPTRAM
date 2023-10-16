@@ -83,7 +83,7 @@ i.e. all images between the \code{from_date} and \code{to_date}, or alternativel
 "seasonal", where images are acquired for all years but only for the months
 specified. So, for example:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{ if `from_date` = "2018-06-01` and `to_date` = '2020-09-20', then 
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ if `from_date` = "2018-06-01` and `to_date` = '2020-09-20', then
  images for june through sept will be acquired for 2018, 2019, and 2020.
 }\if{html}{\out{</div>}}
 }
@@ -91,8 +91,8 @@ specified. So, for example:
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2020-04-30"
-aoi <- "inst/extdata/migda_9.gpkg"
-coeffs <- optram(aoi,
+aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = c("SAVI"),
                  scihub_user = "userxxx", scihub_pass = "secretxyz",

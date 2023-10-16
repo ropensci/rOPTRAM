@@ -80,12 +80,12 @@ and band 11 is reflectance at 2200 nm.
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-aoi <- "inst/extdata/migda_aoi.gpkg"
+aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
 s2_file_list <- optram_acquire_s2(aoi,
                                  from_date, to_date,
                                  scihub_user = "userxxx",
                                  scihub_pass = "secretxyz"
                                  timeperiod = "full",
-                                 list_indicies="MSAVI2")
+                                 veg_index = "MSAVI2")
 }
 }

@@ -46,5 +46,9 @@ below zero. These pixels can be removed from the trapezoid
 by setting \code{rm.low.vi} to TRUE.
 }
 \examples{
-print("Running optram_ndvi_str.R")
+VI_list <- list.files(system.file("extdata", "NDVI"), pattern = ".tif$"), full.names = TRUE)
+STR_list <- list.files(system.file("extdata", "STR"), pattern = ".tif$"), full.names = TRUE)
+full_df <- optram_ndvi_str(STR_list, VI_list)
+# Show structure of output data.frame
+str(full_df)
 }

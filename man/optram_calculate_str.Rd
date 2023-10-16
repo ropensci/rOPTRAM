@@ -30,5 +30,6 @@ STR = (1−SWIR)^2 / 2*SWIR
 SWIR is band 11 (2200 nm) from \code{sen2r()} since band B09 is not processed
 }
 \examples{
-print("Running optram_calculate_str.R")
+BOA_dir <- system.file("extdata", "BOA")
+STR <- optram_calculate_str(BOA_dir)
 }

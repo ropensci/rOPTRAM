@@ -122,7 +122,7 @@ This is a basic example which shows how to:
 ```{r example, eval=FALSE}
 library(rOPTRAM)
 # basic example
-geojson_file <- system.file("extdata", "migda_9.geojson", package="rOPTRAM")
+geojson_file <- system.file("extdata", "migda.geojson", package="rOPTRAM")
 coeffs <- rOPTRAM::optram(
     aoi = geojson_file,
     from_date = "2021-01-01", to_date = "2021-03-30",

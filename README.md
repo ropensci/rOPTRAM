@@ -43,8 +43,8 @@ This package works with the R package `sen2r`. To install that package
 you will need some system dependencies. On Debian and derivitives please
 install in advance:
 
--   jq libv8-dev libjq-dev
--   libprotobuf-dev protobuf-compiler
+- jq libv8-dev libjq-dev
+- libprotobuf-dev protobuf-compiler
 
 Install the google cloud CLI to allow acquiring images directly from
 Google. For installation instructions see:
@@ -59,15 +59,15 @@ Google. For installation instructions see:
 A main wrapper function to run the whole OPTRAM procedure. This function
 performs the following steps:
 
--   Acquire Sentinel 2 images covering the requested date range, and
-    clipped to the input area of interest. This step relies on the sen2r
-    package
--   Create the set of SWIR Tranformed Reflectance (STR) rasters;
--   Prepare a dataframe of NDVI and STR values for all pixels from all
-    images;
--   Calculate the trapezoid wet and dry regression lines, and save
-    coefficients to a CSV file. Returns: the set of four coefficients:
-    wet slope, wet intercept, dry slope, and dry intercept.
+- Acquire Sentinel 2 images covering the requested date range, and
+  clipped to the input area of interest. This step relies on the sen2r
+  package
+- Create the set of SWIR Tranformed Reflectance (STR) rasters;
+- Prepare a dataframe of NDVI and STR values for all pixels from all
+  images;
+- Calculate the trapezoid wet and dry regression lines, and save
+  coefficients to a CSV file. Returns: the set of four coefficients: wet
+  slope, wet intercept, dry slope, and dry intercept.
 
 #### optram_acquire_s2()
 
@@ -128,16 +128,16 @@ scatterplot is prepared.
 
 This is a basic example which shows how to:
 
--   retrieve Sentinel 2 imagery for a specific area of interest
--   covering a date range
--   preprocess the imagery to obtain a vegetation index and STR band
--   use these to derive coefficients of slope and intercept for the
-    OPTRAM trapezoid
+- retrieve Sentinel 2 imagery for a specific area of interest
+- covering a date range
+- preprocess the imagery to obtain a vegetation index and STR band
+- use these to derive coefficients of slope and intercept for the OPTRAM
+  trapezoid
 
 ``` r
 library(rOPTRAM)
 # basic example
-geojson_file <- system.file("extdata", "migda_9.geojson", package="rOPTRAM")
+geojson_file <- system.file("extdata", "migda.geojson", package="rOPTRAM")
 coeffs <- rOPTRAM::optram(
     aoi = geojson_file,
     from_date = "2021-01-01", to_date = "2021-03-30",
@@ -159,21 +159,21 @@ If, on the other hand, Sentinel 2 imagery has been downloaded in
 advance, then `sen2r` is not necessary. Instead, the following workflow
 can be used:
 
--   call `optram_safe()` to prepare NDVI and STR rasters
--   call `optram_calculate_str()` to calculate SWIR Transform
--   call `optram_ndvi_str()` to build a data.frame of pixel values
--   call `optram_wetdry_coefficients()` to derive slope and intercept of
-    the trapezoid.
+- call `optram_safe()` to prepare NDVI and STR rasters
+- call `optram_calculate_str()` to calculate SWIR Transform
+- call `optram_ndvi_str()` to build a data.frame of pixel values
+- call `optram_wetdry_coefficients()` to derive slope and intercept of
+  the trapezoid.
 
 ## Meta
 
--   Please report any issues on
-    [gitlab](https://gitlab.com/rsl-bidr/roptram/-/issues)
--   Anyone interested in collaborating is invited to “sign up” by
-    contacting the maintainers.
--   This package is released with a [Contributor Code of
-    Conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md).
-    By contributing to this project, you agree to abide by its terms.
+- Please report any issues on
+  [gitlab](https://gitlab.com/rsl-bidr/roptram/-/issues)
+- Anyone interested in collaborating is invited to “sign up” by
+  contacting the maintainers.
+- This package is released with a [Contributor Code of
+  Conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md).
+  By contributing to this project, you agree to abide by its terms.
 
 <div id="refs" class="references csl-bib-body hanging-indent">
 

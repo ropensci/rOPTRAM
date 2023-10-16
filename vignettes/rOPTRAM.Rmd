@@ -19,12 +19,9 @@ knitr::opts_chunk$set(
 ### Prepare soil moisture maps covering an area of interest (AOI), over a date range.
 
 
-`rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) to derive soil moisture based on the linear relation
-  between a vegetation index, i.e. NDVI, and Land Surface Temperature (LST).
+`rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) to derive soil moisture based on the linear relation between a vegetation index, i.e. NDVI, and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band is used as a proxy for LST. The SWIR band is transformed to Swir Transformed Reflectance (STR).
   
-  The Short Wave Infra-red (SWIR) band is used as a proxy for LST. The SWIR band is transformed to Swir Transformed Reflectance (STR).
-  
-  A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression lines, and the slope/intercept coefficents of these lines comprise the trapezoid. These coefficients are then used on a new satellite image to determine soil moisture.
+A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression lines, and the slope/intercept coefficents of these lines comprise the trapezoid. These coefficients are then used on a new satellite image to determine soil moisture.
 
   See:  @sadeghi_optical_2017, @burdun_satellite_2020, @ambrosone_retrieving_2020
 
@@ -34,7 +31,7 @@ remotes::install_gitlab("rsl-bidr/roptram")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
 # The `sen2r` package is required for downloading Sentinel imagery
-install.package("sen2r", dependencies = TRUE)
+if (!require("sen2r")) install.packages("sen2r", dependencies = TRUE)
 ```
 
 # Main wrapper function
@@ -43,13 +40,22 @@ install.package("sen2r", dependencies = TRUE)
 
 This example uses sets `timeperiod` to "seasonal", so only images between the month of from_date and the month of to_date will be used, but from all years in the date range.
 
+Required authentication for Copernicus Scihub was setup in advance.
+See: `r ?sen2r::is_scihub_configured()`
+
+Downloaded Sentinel-2 images are saved to `S2_output_dir`
+
+
 ```{r wrapper}
-from_date <- "2018-12-01"
-to_date <- "2020-04-30"
-aoi <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
-coeffs <- optram(aoi,
+from_date <- "2020-12-01"
+to_date <- "2023-04-30"
+aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+output_dir = "/home/micha/EO_Data/Israel/Migda_season/"
+coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = c("SAVI"),
+                 S2_output_dir = output_dir,
+                 remove_safe = "no",
                  timeperiod = "seasonal")
 coeffs
 ```
@@ -65,14 +71,20 @@ coeffs
 
 This example uses sets `timeperiod` to "full", so all images between from_date and to_date will be used.
 
+Required authentication for Copernicus Scihub was setup in advance.
+See: `r ?sen2r::is_scihub_configured()`
+
 ```{r stepbystep}
-from_date <- "2018-12-01"
-to_date <- "2019-04-30"
-aoi <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
-s2_file_list <- optram_acquire_s2(aoi,
-                                 from_date, to_date,
-                                 timeperiod = "full",
-                                 list_indicies="MSAVI2")
+from_date <- "2022-12-01"
+to_date <- "2023-04-30"
+aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+output_dir = "/home/micha/EO_Data/Israel/Migda_full/"
+s2_file_list <- optram_acquire_s2(aoi_file,
+                            from_date, to_date,
+                            output_dir = output_dir,
+                            remove_safe = "no",
+                            timeperiod = "full",
+                            veg_index ="MSAVI2")
 BOA_dir <- system.file("extdata", "BOA", package = "rOPTRAM")
 STR_list <- optram_calculate_str(BOA_dir)
 VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"), pattern = ".tif$", full.names = TRUE)
@@ -87,12 +99,14 @@ coeffs
 
   - manually download Copernicus Sentinel-2 imagery in advance
   - full control of image dates, cloud cover, etc
+  - covering multiple study areas
   - run the OPTRAM algorithm to prepare soil moisture using those images
 
 ```{r s2}
-aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
-safe_dir  <- "/home/micha/EO_Data/Israel/Migda_09/"
-coeffs <- optram_safe(safe_dir, aoi_file)
+aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+safe_dir  <- "/home/micha/EO_Data/Israel/Migda_season/"
+coeffs <- optram_safe(safe_dir, aoi_file,
+                      S2_output_dir = safe_dir)
 ```
 
 # Soil Moisture

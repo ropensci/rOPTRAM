@@ -17,9 +17,9 @@
 #' @param max_cloud, integer, maximum percent cloud cover, Default 15.
 #' @param scihub_user, string, username on Copernicus Sentinel Hub
 #' @param scihub_pass, string, password on Sentinel hub
-#' @param S2_output_dir, string, directory to save downloaded S2 
+#' @param S2_output_dir, string, directory to save downloaded S2
 #'  and the derived products, defaults to tempdir()
-#' @param data_output_dir, string, path to save coeffs_file 
+#' @param data_output_dir, string, path to save coeffs_file
 #'  and STR-VI data.frame, default is tempdir()
 #' @param remove_safe, string, "yes" or "no", whether to delete downloaded
 #'      SAFE directories after processing. Default "yes"
@@ -37,26 +37,26 @@
 #' - https://scihub.copernicus.eu/userguide/SelfRegistration
 #' - enter your user and pass parameters in this function call,
 #'   and they will be stored into the default location.
-#' 
+#'
 #' Output can be separated:
 #' Sentinel downloads and products are saved to S2_output_dir.
 #' Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
-#' 
+#'
 #' The `timeperiod` parameter allows to download either a "full" date range,
-#' i.e. all images between the `from_date` and `to_date`, or alternatively, 
+#' i.e. all images between the `from_date` and `to_date`, or alternatively,
 #' "seasonal", where images are acquired for all years but only for the months
 #' specified. So, for example:
-#' 
-#'      if `from_date` = "2018-06-01` and `to_date` = '2020-09-20', then 
+#'
+#'      if `from_date` = "2018-06-01` and `to_date` = '2020-09-20', then
 #'      images for june through sept will be acquired for 2018, 2019, and 2020.
-#' 
+#'
 #' @export
 #' @examples
 #' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2020-04-30"
-#' aoi <- "inst/extdata/migda_9.gpkg"
-#' coeffs <- optram(aoi,
+#' aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+#' coeffs <- optram(aoi_file,
 #'                  from_date, to_date,
 #'                  veg_index = c("SAVI"),
 #'                  scihub_user = "userxxx", scihub_pass = "secretxyz",
@@ -115,6 +115,6 @@ optram <- function(aoi_file,
     coeffs <- rOPTRAM::optram_wetdry_coefficients(VI_STR_df,
                                                   aoi_file = aoi_file,
                                                   output_dir = data_output_dir)
-                                                  
+
     return(coeffs)
 }
