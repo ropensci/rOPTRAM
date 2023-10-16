@@ -1,20 +1,22 @@
 ---
 title: "rOPTRAM"
-output: rmarkdown::html_vignette
+output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{rOPTRAM}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: "bibliography.bib"
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  message = FALSE,
   comment = "#>"
 )
 ```
 
-# Introduction
+## Introduction
 
 ### Prepare soil moisture maps covering an area of interest (AOI), over a date range.
 
@@ -34,7 +36,7 @@ ls(getNamespace('rOPTRAM'))
 if (!require("sen2r")) install.packages("sen2r", dependencies = TRUE)
 ```
 
-# Main wrapper function
+## Main wrapper function
 
 ### Run the full OPTRAM model procedure with a single function call
 
@@ -50,17 +52,18 @@ Downloaded Sentinel-2 images are saved to `S2_output_dir`
 from_date <- "2021-12-01"
 to_date <- "2023-04-30"
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
-output_dir = "/home/micha/EO_Data/Israel/Migda_season/"
+output_dir <- "/home/micha/EO_Data/Israel/Migda_season"
 coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = c("SAVI"),
                  S2_output_dir = output_dir,
                  remove_safe = "no",
                  timeperiod = "seasonal")
-coeffs
+knitr::kable(coeffs)
 ```
 
-# Step by step
+
+## Step by step
 
 ### The same procedure as the wrapper function, but in explicit steps
 
@@ -75,10 +78,10 @@ Required authentication for Copernicus Scihub was setup in advance.
 See: `r ?sen2r::is_scihub_configured()`
 
 ```{r stepbystep}
-from_date <- "2022-12-01"
+from_date <- "2022-10-01"
 to_date <- "2023-04-30"
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
-output_dir = "/home/micha/EO_Data/Israel/Migda_full/"
+output_dir = "/home/micha/EO_Data/Israel/Migda_full"
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
@@ -91,10 +94,17 @@ VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
                       pattern = ".tif$", full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list)
 coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
-coeffs
 ```
 
-# Manually downloaded Sentinel images
+### Show trapezoid plot
+
+```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%'}
+ttl <- "Migda"
+plot_ndvi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
+knitr::include_graphics(file.path(output_dir, paste0("trapezoid_", ttl, ".png")))
+```
+
+## Manually downloaded Sentinel images
 
 ### This function allows users to:
 
@@ -107,17 +117,29 @@ coeffs
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 safe_dir  <- "/home/micha/EO_Data/Israel/Migda_season/"
 coeffs <- optram_safe(safe_dir, aoi_file,
-                      S2_output_dir = safe_dir)
+                      S2_output_dir = tempdir())
 ```
 
-# Soil Moisture
+## Soil Moisture
 
-### Using the trapezoid coefficients and VI, STR rasters, prepare a soil moisture grid
+### Use the trapezoid coefficients and VI, STR rasters, prepare a soil moisture grid
 
 ```{r soil-moisture}
-img_date <- "2023-03-11"
-VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
-STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
-coeffs_file <- system_file("extdata", "coefficients.csv", package = "rOPTRAM")
+img_date <- "2023-01-25"
+VI_dir <- "/home/micha/EO_Data/Israel/Migda_season/SAVI"
+STR_dir <- "/home/micha/EO_Data/Israel/Migda_season/STR"
+coeffs_file <- system.file("extdata", "coefficients.csv", package = "rOPTRAM")
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 ```
+
+### Soil moisture plot
+```{r sm-plot}
+library(tmap)
+names(SM) <- "Migda soil moisture"
+tmap_mode("view")
+tm_basemap("OpenStreetMap") +
+  tm_shape(SM) + 
+  tm_raster(palette = "RdBu") +
+  tm_layout(legend.outside = TRUE, legend.outside.position = "right")
+```
+
