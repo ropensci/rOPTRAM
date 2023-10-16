@@ -33,7 +33,7 @@
 #' \dontrun{
 #' aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
 #' safe_dir  <- tempdir()
-#' optram_safe(safe_dir, aoi_file)
+#' coeffs <- optram_safe(safe_dir, aoi_file)
 #' }
 
 optram_safe <- function(safe_dir,

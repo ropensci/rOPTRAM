@@ -4,3 +4,4 @@
 .httr-oauth
 .DS_Store
 R/call_optram_landsat.R
+inst/doc
