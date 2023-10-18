@@ -25,7 +25,9 @@ over scatterplot of multi-temporal STR and NDVI pixel values
 }
 \examples{
 aoi_name <- "Test"
-full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
-coeffs <- read.csv(system.file("extdata", "coefficients.csv", package = "rOPTRAM"))
+full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
+        package = "rOPTRAM"))
+coeffs <- read.csv(system.file("extdata", "coefficients.csv",
+        package = "rOPTRAM"))
 plot_ndvi_str_cloud(full_df, coeffs, aoi_name)
 }

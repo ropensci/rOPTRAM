@@ -41,13 +41,15 @@ the number of data points can overrun the computation resources.
 This parameter sets a total size of data.frame from the \code{max_tbl_size}
 parameter, together with the number of image time slots in the time range.
 
-In some cases (i.e. water surfaces within the study area) NDVI can have values
+In some cases (i.e. water surfaces) NDVI can have values
 below zero. These pixels can be removed from the trapezoid
 by setting \code{rm.low.vi} to TRUE.
 }
 \examples{
-VI_list <- list.files(system.file("extdata", "NDVI"), pattern = ".tif$"), full.names = TRUE)
-STR_list <- list.files(system.file("extdata", "STR"), pattern = ".tif$"), full.names = TRUE)
+VI_list <- list.files(system.file("extdata", "NDVI"),
+        pattern = ".tif$"), full.names = TRUE)
+STR_list <- list.files(system.file("extdata", "STR"),
+        pattern = ".tif$"), full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list)
 # Show structure of output data.frame
 str(full_df)

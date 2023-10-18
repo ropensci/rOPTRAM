@@ -18,3 +18,6 @@ boolean, whether access to scihub using sen2r is possible
 Verify that sen2r is installed,
 and check credentials for access to Sentinel Hub
 }
+\examples{
+check_scihub_access(scihub_user = "userxxx", scihub_pass = "secretyyy")
+}

@@ -18,9 +18,11 @@ optram_acquire_s2(
 )
 }
 \arguments{
-\item{aoi_file, }{string, full path to polygon spatial file of boundary of area of interest}
+\item{aoi_file, }{string, full path to polygon spatial file of
+boundary of area of interest}
 
-\item{from_date, }{string, represents start of date range, formatted as "YYYY-MM-DD"}
+\item{from_date, }{string, represents start of date range,
+formatted as "YYYY-MM-DD"}
 
 \item{to_date, }{string, end of date range, formatted as "YYYY-MM-DD"}
 
@@ -35,7 +37,8 @@ or "seasonal" for only months specified, but over the full date range.}
 
 \item{output_dir, }{string, path to save downloaded, and processed imagery}
 
-\item{remove_safe, }{string, "yes" or "no": whether to delete downloaded SAFE directories
+\item{remove_safe, }{string, "yes" or "no":
+whether to delete downloaded SAFE directories
 after processing, default "yes"}
 
 \item{veg_index, }{string, which index to prepare. Default "NDVI".
@@ -45,9 +48,11 @@ Can be "NDVI", "SAVI", "MSAVI", etc}
 output_path, string, path to downloaded files
 }
 \description{
-Use the \code{sen2r} package to acquire, preprocess and crop, Sentinel 2 satellite imagery.
+Use the \code{sen2r} package to acquire, preprocess and crop
+Sentinel 2 satellite imagery.
 L. Ranghetti, M. Boschetti, F. Nutini, L. Busetto (2020)
-sen2r: An R toolbox for automatically downloading and preprocessing Sentinel-2 satellite data
+sen2r: An R toolbox for automatically downloading and preprocessing
+Sentinel-2 satellite data
 Computers & Geosciences, 139, 104473
 doi: 10.1016/j.cageo.2020.104473
 URL: https://sen2r.ranghetti.info/.
@@ -55,7 +60,8 @@ The package prepares vegetation indicies, cropped to an area of interest.
 }
 \note{
 Access to Copernicus Sentinel Hub requires registration. If you have already
-registered, and saved your credentials into the default "library(sen2r)" file,
+registered, and saved your credentials into the default file,
+(typically: ~/.sen2r/apihub.txt)
 then you can leave the scihub_user and scihub_pass empty.
 If your credentials are \strong{not} yet stored, then
 \itemize{

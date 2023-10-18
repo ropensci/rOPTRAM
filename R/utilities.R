@@ -7,8 +7,8 @@
 #' @param scihub_pass, string, scihub password
 #' @export
 #' @return boolean, whether access to scihub using sen2r is possible
-#' @example check_scihub_access(scihub_user = "userxxx,
-#'                              scihub_pass = "secretyyy")
+#' @examples 
+#' check_scihub_access(scihub_user = "userxxx", scihub_pass = "secretyyy")
 
 check_scihub_access <- function(scihub_user = NULL,
                                 scihub_pass = NULL) {
@@ -86,7 +86,7 @@ check_scihub_access <- function(scihub_user = NULL,
 #' @param aoi_file, string
 #' @export
 #' @return boolean, TRUE when file exists, and is spatial
-#' @example
+#' @examples
 #' aoi_file <- system.file("extdata", "migda_aoi.gpkg")
 #' check_aoi(aoi_file)
 
@@ -204,7 +204,7 @@ calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
 #' @param aoi_file, string, full path to AOI file
 #' @export
 #' @return aoi_name, string
-#' @example
+#' @examples
 #' aoi_file <- system.file("extdata", "migda_aoi.gpkg")
 #' aoi_name <- aoi_to_name(aoi_file)
 #' aoi_name

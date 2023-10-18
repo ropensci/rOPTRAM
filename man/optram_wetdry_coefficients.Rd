@@ -30,11 +30,14 @@ coeffs, list of float, coefficients of wet-dry trapezoid
 \description{
 Derive slope and intercept coefficients
 for both wet and dry trapezoid lines.
-Write coefficients to a CSV file (as input to \code{optram_soilmoisture()} function)
+Write coefficients to a CSV file
+(as input to \code{optram_soilmoisture()} function)
 }
 \examples{
 aoi_file <- "Test"
-full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
+full_df <- readRDS(system.file("extdata",
+              "VI_STR_data.rds",
+              package = "rOPTRAM"))
 coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
 print(coeffs)
 }

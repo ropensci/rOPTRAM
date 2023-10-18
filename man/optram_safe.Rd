@@ -15,17 +15,21 @@ optram_safe(
 )
 }
 \arguments{
-\item{safe_dir, }{string, full path to containing folder of downloaded (unzipped)
-Sentinel 2 data in original SAFE format, after atompheric correction (L2A)}
+\item{safe_dir, }{string, full path to containing folder of downloaded
+(unzipped) Sentinel 2 data in original SAFE format,
+after atompheric correction (L2A)}
 
-\item{aoi_file, }{string, path to boundary polygon spatial file of area of interest}
+\item{aoi_file, }{string, path to boundary polygon spatial file
+of area of interest}
 
-\item{viname, }{string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'}
+\item{viname, }{string, which VI to prepare, either 'NVDI' (default)
+or 'SAVI' or 'MSAVI'}
 
 \item{S2_output_dir, }{string, directory to save the derived products,
 defaults to tempdir()}
 
-\item{overwrite, }{boolean, overwrite derived products that already were created,
+\item{overwrite, }{boolean, overwrite derived products
+that already were created,
 defaults to TRUE}
 
 \item{data_output_dir, }{string, path to save coeffs_file
@@ -48,11 +52,14 @@ i.e. using the SNAP L2A_Process,
 or the  \code{sen2cor()} function from the {sen2r} R package.
 }
 \note{
-Use the \code{max_tbl_size} parameter to limit the total number of rows in the VI-STR data.frame.
+Use the \code{max_tbl_size} parameter to limit the total number of rows
+in the VI-STR data.frame.
 When the area of interest is large, or the time range of datasets is long,
-the total size of the data.frame can grow beyond the capacity of computation resources.
-This parameter limits the size of the table by sampling a number of data points
-from each time slot. The sample size is determined based on \code{max_tbl_size}
+the total size of the data.frame can grow
+beyond the capacity of computation resources.
+This parameter limits the size of the table
+by sampling a number of data points from each time slot.
+The sample size is determined based on \code{max_tbl_size}
 and the total number of time slots in the full time range.
 }
 \examples{

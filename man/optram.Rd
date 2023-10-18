@@ -19,11 +19,13 @@ optram(
 )
 }
 \arguments{
-\item{aoi_file, }{string, full path to polygon spatial file of area of interest}
+\item{aoi_file, }{string, full path to polygon spatial file
+of area of interest}
 
 \item{veg_index, }{string, which index to use. Default "NDVI"}
 
-\item{from_date, }{string, the start of the date range, Formatted as "YYYY-MM-DD"}
+\item{from_date, }{string, the start of the date range,
+Formatted as "YYYY-MM-DD"}
 
 \item{to_date, }{the end of the date range.}
 

@@ -10,8 +10,12 @@ check_aoi(aoi_file)
 \item{aoi_file, }{string}
 }
 \value{
-boolean, TRUE when file exists, and is spatila
+boolean, TRUE when file exists, and is spatial
 }
 \description{
 Check that aoi file exists, and is a spatial file
+}
+\examples{
+aoi_file <- system.file("extdata", "migda_aoi.gpkg")
+check_aoi(aoi_file)
 }

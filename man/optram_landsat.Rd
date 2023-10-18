@@ -13,12 +13,15 @@ optram_landsat(
 )
 }
 \arguments{
-\item{landsat_dir, }{string, full path to containing folder of downloaded (unzipped)
-Sentinel 2 data in original landsat format, after atompheric correction (L2A)}
+\item{landsat_dir, }{string, full path to containing folder of downloaded
+(unzipped) Landsat data in original landsat format,
+after atompheric correction (L2A)}
 
-\item{aoi_file, }{string, path to boundary polygon spatial file of area of interest}
+\item{aoi_file, }{string, path to boundary polygon spatial file
+of area of interest}
 
-\item{vi, }{string, which VI to prepare, either 'NVDI' (default) or 'SAVI' or 'MSAVI'}
+\item{vi, }{string, which VI to prepare, either 'NVDI' (default)
+or 'SAVI' or 'MSAVI'}
 
 \item{LC_output_dir, }{string, directory to save the derived products,
 defaults to tempdir()}
@@ -37,12 +40,14 @@ This function assumes that atmospheric correction has been applied.
 }
 \note{
 Unlike the \code{optram_acquire_s2} function, there is no implementation
-for automatic download of Landsat images. This function requires a directory,
-set in the \code{landsat_dir} parameter,  which contains the set of Landsat tiles,
-downloaded manually by the user, in advance.
+for automatic download of Landsat images.
+This function requires a directory, set in the \code{landsat_dir} parameter,
+which contains the set of Landsat tiles downloaded manually
+by the user, in advance.
 This directory should contain folders of Landsat images, where each folder
-consists of the individual Landsat bands as Geotif files, as well as the metadata files
-as downloaded from, i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
+consists of the individual Landsat bands as Geotif files,
+as well as the metadata files as downloaded from,
+i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 }
 \examples{
 \dontrun{optram_landsat(landsat_dir,

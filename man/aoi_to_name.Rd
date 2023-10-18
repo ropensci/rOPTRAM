@@ -15,3 +15,8 @@ aoi_name, string
 \description{
 Extract a string from the full path to AIO file
 }
+\examples{
+aoi_file <- system.file("extdata", "migda_aoi.gpkg")
+aoi_name <- aoi_to_name(aoi_file)
+aoi_name
+}

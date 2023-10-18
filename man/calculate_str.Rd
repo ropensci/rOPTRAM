@@ -7,7 +7,8 @@
 calculate_str(img_stk, swirband = 11, scale_factor = 10000)
 }
 \arguments{
-\item{img_stk, }{terra SpatRaster, multiband stack of images, already clipped to aoi}
+\item{img_stk, }{terra SpatRaster, multiband stack of images,
+already clipped to aoi}
 
 \item{swirband, }{integer, number of red band}
 
