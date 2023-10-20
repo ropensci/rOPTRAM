@@ -71,6 +71,7 @@ optram_acquire_s2 <- function(
       veg_index = "NDVI") {
   # Avoid "no visible binding for global variable" NOTE
   sen2r_version <- NULL
+  scihub_ok  <- gcloud_ok <- FALSE
   # Download Sentinel 2 images during the requested date range,
   # and clip to the area of interest
   # Pre flight checks...
