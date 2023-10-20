@@ -82,7 +82,7 @@ optram_acquire_s2 <- function(
   # Scihub API credentials?
   scihub_ok <- check_scihub_access(scihub_user, scihub_pass)
   # Where is 'gsutil' installed?
-  if (Sys.info()[]'sysname'] == 'Windows') {
+  if (Sys.info()['sysname'] == 'Windows') {
     # Assume that gcloud-sdk is installed in USER's home dir
     # Get the first instance of gsutil file
     homedir <- Sys.getenv("USERPROFILE")
