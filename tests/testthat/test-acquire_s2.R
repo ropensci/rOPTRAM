@@ -20,7 +20,16 @@ test_that("API access to scihub not available", {
   from_date <- "2023-03-01"
   to_date <- "2023-04-30"
   aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
-  gsutil_path <- Sys.which("gsutil")
+  if (Sys.info()['sysname'] == 'Windows') {
+    # Assume that gcloud-sdk is installed in USER's home dir
+    # Get the first instance of gsutil file
+    homedir <- Sys.getenv("USERPROFILE")
+    gsutil_path <- system2("WHERE",
+                           paste("/R", homedir, "gsutil"),
+                           stdout = TRUE)[1]
+  } else {
+    gsutil_path <- Sys.which("gsutil")
+  }
   gsutil_ok <- sen2r::check_gcloud(gsutil_path)
   scihub_user <- scihub_pass <- NULL
   scihub_ok <- check_scihub_access(scihub_user, scihub_pass)
