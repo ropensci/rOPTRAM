@@ -1,5 +1,5 @@
 test_that("Coefficients file exists", {
-  VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
+  VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
   STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
   coeffs_file <- system.file("extdata", "xxx.csv", package = "rOPTRAM")
   img_date <- "2023-03-16"
@@ -8,7 +8,7 @@ test_that("Coefficients file exists", {
 })
 
 test_that("Correct image date format", {
-  VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
+  VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
   STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
   coeffs_file <- system.file("extdata", "coefficients.csv", package = "rOPTRAM")
   img_date <- "2023-13-16"  # illegal date
@@ -28,7 +28,7 @@ test_that("Input NDVI directory exists", {
 
 
 test_that("Input STR directory exists", {
-  VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
+  VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
   STR_dir <- system.file("extdata", "XXX", package = "rOPTRAM")
   coeffs_file <- system.file("extdata", "coefficients.csv", package = "rOPTRAM")
   img_date <- "2023-03-16"
@@ -47,7 +47,7 @@ test_that("Length of lists of VI and STR", {
 })
 
 test_that("Output is a terra SpatRaster", {
-  VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
+  VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
   STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
   coeffs_file <- system.file("extdata", "coefficients.csv", package = "rOPTRAM")
   img_date <- "2023-03-16"

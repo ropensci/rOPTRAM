@@ -51,15 +51,17 @@ Downloaded Sentinel-2 images are saved to `S2_output_dir`
 
 ```{r wrapper}
 from_date <- "2021-11-01"
-to_date <- "2023-04-30"
-aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
-output_dir <- "/home/micha/EO_Data/Israel/Migda_season"
+to_date <- "2023-03-31"
+# Local directory for the vignette
+aoi_file <- "/home/micha/EO_Data/Israel/Migda_season/"
+output_dir <- system.file("extdata", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = c("SAVI"),
                  S2_output_dir = output_dir,
                  remove_safe = "no",
-                 timeperiod = "seasonal")
+                 timeperiod = "seasonal",
+                 data_output_dir = output_dir)
 knitr::kable(coeffs)
 ```
 
@@ -94,15 +96,20 @@ STR_list <- optram_calculate_str(BOA_dir)
 VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
                       pattern = ".tif$", full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list)
-coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
+coeffs <- optram_wetdry_coefficients(full_df,
+                                     aoi_file, output_dir = output_dir)
 ```
 
 ### Show trapezoid plot
 
 ```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%'}
 ttl <- "Migda"
+coeffs <- read.csv(file.path(output_dir, "coefficients.csv"))
+df_file <- file.path(output_dir, "VI_STR_data.rds")
+full_df <- readRDS(df_file)
 plot_ndvi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
-knitr::include_graphics(file.path(output_dir, paste0("trapezoid_", ttl, ".png")))
+knitr::include_graphics(file.path(output_dir,
+                                  paste0("trapezoid_", ttl, ".png")))
 ```
 
 ## Soil Moisture
@@ -111,9 +118,9 @@ knitr::include_graphics(file.path(output_dir, paste0("trapezoid_", ttl, ".png"))
 
 ```{r soil-moisture}
 img_date <- "2023-01-25"
-VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
-STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
-coeffs_file <- system.file("extdata", "coefficients.csv", package = "rOPTRAM")
+VI_dir <- 
+STR_dir <- 
+coeffs_file <- file.path(output_dir, "coefficients.csv")
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 ```
 
