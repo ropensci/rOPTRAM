@@ -19,8 +19,8 @@
 #' @examples
 #' img_date <- "2023-03-11"
 #' VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
-#' STR_dir <- system_file("extdata", "STR", package = "rOPTRAM")
-#' coeffs_file <- system_file("extdata", "coefficients.csv",
+#' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
+#' coeffs_file <- system.file("extdata", "coefficients.csv",
 #'         package = "rOPTRAM")
 #' SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 

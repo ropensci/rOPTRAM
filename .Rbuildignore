@@ -7,4 +7,4 @@
 ^\.github$
 ^\.covrignore$
 R/create_icon\.R$
-
+^paper\.md$

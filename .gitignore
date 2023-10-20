@@ -7,3 +7,4 @@ R/call_optram_landsat.R
 inst/doc
 R/create_icon.R
 SAFE$
+paper.md

@@ -50,9 +50,9 @@ other vegetgation indices, such as SAVI, or MSAVI.
 }
 \examples{
 VI_list <- list.files(system.file("extdata", "SAVI"),
-        pattern = ".tif$"), full.names = TRUE)
+        pattern = ".tif$", full.names = TRUE)
 STR_list <- list.files(system.file("extdata", "STR"),
-        pattern = ".tif$"), full.names = TRUE)
+        pattern = ".tif$", full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list)
 # Show structure of output data.frame
 str(full_df)
