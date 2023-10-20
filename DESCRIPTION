@@ -31,7 +31,6 @@ Imports:
     sf,
     terra,
     tools,
-    tmap,
     utils
 Suggests:
     geojsonio,
