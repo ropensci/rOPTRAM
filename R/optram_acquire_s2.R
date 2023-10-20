@@ -92,7 +92,7 @@ optram_acquire_s2 <- function(
   } else {
     gsutil_path <- Sys.which("gsutil")
   }
-  gcloud_ok <- sen2r::check_gcloud(gsutil_path)
+  gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE)
 
   if (scihub_ok && gcloud_ok) {
     servers <- c("scihub", "gcloud")
