@@ -44,9 +44,12 @@ parameter, together with the number of image time slots in the time range.
 In some cases (i.e. water surfaces) NDVI can have values
 below zero. These pixels can be removed from the trapezoid
 by setting \code{rm.low.vi} to TRUE.
+
+The vegetation index column is named "NDVI" even though it can represent
+other vegetgation indices, such as SAVI, or MSAVI.
 }
 \examples{
-VI_list <- list.files(system.file("extdata", "NDVI"),
+VI_list <- list.files(system.file("extdata", "SAVI"),
         pattern = ".tif$"), full.names = TRUE)
 STR_list <- list.files(system.file("extdata", "STR"),
         pattern = ".tif$"), full.names = TRUE)

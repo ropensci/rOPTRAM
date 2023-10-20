@@ -9,7 +9,7 @@
 #'    after atompheric correction (L2A)
 #' @param aoi_file, string, path to boundary polygon spatial file
 #'    of area of interest
-#' @param vi, string, which VI to prepare, either 'NVDI' (default)
+#' @param veg_index, string, which VI to prepare, either 'NVDI' (default)
 #'    or 'SAVI' or 'MSAVI'
 #' @param LC_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
@@ -29,14 +29,14 @@
 #' @examples
 #' \dontrun{optram_landsat(landsat_dir,
 #'                           aoi_file,
-#'                           vi = 'NDVI',
+#'                           veg_index = 'SAVI',
 #'                           LC_output_dir = tempdir(),
 #'                           data_output_dir = tempdir())
 #' }
 
   optram_landsat <- function(landsat_dir,
                              aoi_file,
-                             vi = 'NDVI',
+                             veg_index = 'NDVI',
                              LC_output_dir = tempdir(),
                              data_output_dir = tempdir()) {
 
@@ -183,7 +183,7 @@
       datestr <- as.Date(xml2::xml_text(
         xml2::xml_find_first(mtl, ".//DATE_ACQUIRED")))
       # Find VI values, and create data.frame
-      VI_idx <- rOPTRAM::calculate_vi(stk, vi, redband = 1, nirband = 2)
+      VI_idx <- rOPTRAM::calculate_vi(stk, veg_index, redband = 1, nirband = 2)
       VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
       # Add image date to data.frame
       VI_df['Date'] <- datestr

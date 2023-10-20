@@ -18,7 +18,7 @@
 #' @export
 #' @examples
 #' img_date <- "2023-03-11"
-#' VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
+#' VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
 #' STR_dir <- system_file("extdata", "STR", package = "rOPTRAM")
 #' coeffs_file <- system_file("extdata", "coefficients.csv",
 #'         package = "rOPTRAM")

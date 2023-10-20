@@ -7,7 +7,7 @@
 optram_landsat(
   landsat_dir,
   aoi_file,
-  vi = "NDVI",
+  veg_index = "NDVI",
   LC_output_dir = tempdir(),
   data_output_dir = tempdir()
 )
@@ -20,7 +20,7 @@ after atompheric correction (L2A)}
 \item{aoi_file, }{string, path to boundary polygon spatial file
 of area of interest}
 
-\item{vi, }{string, which VI to prepare, either 'NVDI' (default)
+\item{veg_index, }{string, which VI to prepare, either 'NVDI' (default)
 or 'SAVI' or 'MSAVI'}
 
 \item{LC_output_dir, }{string, directory to save the derived products,
@@ -52,7 +52,7 @@ i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 \examples{
 \dontrun{optram_landsat(landsat_dir,
                           aoi_file,
-                          vi = 'NDVI',
+                          veg_index = 'SAVI',
                           LC_output_dir = tempdir(),
                           data_output_dir = tempdir())
 }

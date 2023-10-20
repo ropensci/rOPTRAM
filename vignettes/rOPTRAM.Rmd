@@ -40,16 +40,17 @@ if (!require("sen2r")) install.packages("sen2r", dependencies = TRUE)
 
 ### Run the full OPTRAM model procedure with a single function call
 
-This example uses sets `timeperiod` to "seasonal", so only images between the month of from_date and the month of to_date will be used, but from all years in the date range.
+This example uses sets `timeperiod` to "seasonal", so only images between
+the month of from_date and the month of to_date will be used,
+but from all years in the date range.
 
 Required authentication for Copernicus Scihub was setup in advance.
 See: `r ?sen2r::is_scihub_configured()`
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`
 
-
 ```{r wrapper}
-from_date <- "2021-12-01"
+from_date <- "2021-11-01"
 to_date <- "2023-04-30"
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 output_dir <- "/home/micha/EO_Data/Israel/Migda_season"
@@ -104,30 +105,14 @@ plot_ndvi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
 knitr::include_graphics(file.path(output_dir, paste0("trapezoid_", ttl, ".png")))
 ```
 
-## Manually downloaded Sentinel images
-
-### This function allows users to:
-
-  - manually download Copernicus Sentinel-2 imagery in advance
-  - full control of image dates, cloud cover, etc
-  - covering multiple study areas
-  - run the OPTRAM algorithm to prepare soil moisture using those images
-
-```{r s2}
-aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
-safe_dir  <- "/home/micha/EO_Data/Israel/Migda_season/"
-coeffs <- optram_safe(safe_dir, aoi_file,
-                      S2_output_dir = tempdir())
-```
-
 ## Soil Moisture
 
 ### Use the trapezoid coefficients and VI, STR rasters, prepare a soil moisture grid
 
 ```{r soil-moisture}
 img_date <- "2023-01-25"
-VI_dir <- "/home/micha/EO_Data/Israel/Migda_season/SAVI"
-STR_dir <- "/home/micha/EO_Data/Israel/Migda_season/STR"
+VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
+STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 coeffs_file <- system.file("extdata", "coefficients.csv", package = "rOPTRAM")
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 ```

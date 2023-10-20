@@ -33,6 +33,10 @@ for both wet and dry trapezoid lines.
 Write coefficients to a CSV file
 (as input to \code{optram_soilmoisture()} function)
 }
+\note{
+The vegetation index column is named "NDVI" even though it can represent
+other vegetgation indices, such as SAVI, or MSAVI.
+}
 \examples{
 aoi_file <- "Test"
 full_df <- readRDS(system.file("extdata",

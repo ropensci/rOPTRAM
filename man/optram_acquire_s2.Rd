@@ -92,6 +92,6 @@ s2_file_list <- optram_acquire_s2(aoi,
                                  scihub_user = "userxxx",
                                  scihub_pass = "secretxyz"
                                  timeperiod = "full",
-                                 veg_index = "MSAVI2")
+                                 veg_index = "SAVI")
 }
 }

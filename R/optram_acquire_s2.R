@@ -57,7 +57,7 @@
 #'                                  scihub_user = "userxxx",
 #'                                  scihub_pass = "secretxyz"
 #'                                  timeperiod = "full",
-#'                                  veg_index = "MSAVI2")
+#'                                  veg_index = "SAVI")
 #' }
 
 optram_acquire_s2 <- function(

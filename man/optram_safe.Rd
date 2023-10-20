@@ -7,7 +7,7 @@
 optram_safe(
   safe_dir,
   aoi_file,
-  viname = "NDVI",
+  veg_index = "NDVI",
   S2_output_dir = tempdir(),
   overwrite = TRUE,
   data_output_dir = tempdir(),
@@ -22,7 +22,7 @@ after atompheric correction (L2A)}
 \item{aoi_file, }{string, path to boundary polygon spatial file
 of area of interest}
 
-\item{viname, }{string, which VI to prepare, either 'NVDI' (default)
+\item{veg_index, }{string, which VI to prepare, either 'NVDI' (default)
 or 'SAVI' or 'MSAVI'}
 
 \item{S2_output_dir, }{string, directory to save the derived products,
@@ -66,6 +66,6 @@ and the total number of time slots in the full time range.
 \dontrun{
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 safe_dir  <- tempdir()
-coeffs <- optram_safe(safe_dir, aoi_file)
+coeffs <- optram_safe(safe_dir, aoi_file, veg_index = "SAVI")
 }
 }

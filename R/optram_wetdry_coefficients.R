@@ -11,6 +11,9 @@
 #' @param save_plot, boolean, If TRUE (default) save scatterplot to output_dir
 #' @return coeffs, list of float, coefficients of wet-dry trapezoid
 #' @export
+#' @note
+#' The vegetation index column is named "NDVI" even though it can represent
+#' other vegetgation indices, such as SAVI, or MSAVI.
 #' @examples
 #' aoi_file <- "Test"
 #' full_df <- readRDS(system.file("extdata",

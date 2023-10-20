@@ -13,7 +13,7 @@
 #'    after atompheric correction (L2A)
 #' @param aoi_file, string, path to boundary polygon spatial file
 #'    of area of interest
-#' @param viname, string, which VI to prepare, either 'NVDI' (default)
+#' @param veg_index, string, which VI to prepare, either 'NVDI' (default)
 #'    or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
@@ -40,12 +40,12 @@
 #' \dontrun{
 #' aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 #' safe_dir  <- tempdir()
-#' coeffs <- optram_safe(safe_dir, aoi_file)
+#' coeffs <- optram_safe(safe_dir, aoi_file, veg_index = "SAVI")
 #' }
 
 optram_safe <- function(safe_dir,
                         aoi_file,
-                        viname = 'NDVI',
+                        veg_index = 'NDVI',
                         S2_output_dir = tempdir(),
                         overwrite = TRUE,
                         data_output_dir = tempdir(),
@@ -205,7 +205,7 @@ optram_safe <- function(safe_dir,
         datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtd,
                             ".//SENSING_TIME")))
 
-        VI_idx <- rOPTRAM::calculate_vi(stk, viname,
+        VI_idx <- rOPTRAM::calculate_vi(stk, veg_index,
                                         redband = 3, nirband = 4)
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
