@@ -30,7 +30,7 @@ test_that("API access to scihub not available", {
   } else {
     gsutil_path <- Sys.which("gsutil")
   }
-  gsutil_ok <- sen2r::check_gcloud(gsutil_path)
+  gsutil_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE)
   scihub_user <- scihub_pass <- NULL
   scihub_ok <- check_scihub_access(scihub_user, scihub_pass)
   if (!gsutil_ok && !scihub_ok) {
