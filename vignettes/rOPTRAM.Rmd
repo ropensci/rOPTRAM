@@ -8,13 +8,7 @@ vignette: >
 bibliography: "bibliography.bib"
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  message = FALSE,
-  comment = "#>"
-)
-```
+
 
 ## Introduction
 
@@ -22,16 +16,25 @@ knitr::opts_chunk$set(
 
 
 `rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) to derive soil moisture based on the linear relation between a vegetation index, i.e. NDVI, and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band is used as a proxy for LST. The SWIR band is transformed to Swir Transformed Reflectance (STR).
-  
+
 A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression lines, and the slope/intercept coefficents of these lines comprise the trapezoid. These coefficients are then used on a new satellite image to determine soil moisture.
 
   See:  @sadeghi_optical_2017, @burdun_satellite_2020, @ambrosone_retrieving_2020
 
 
-```{r setup}
+
+```r
 remotes::install_gitlab("rsl-bidr/roptram")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
+#>  [1] "aoi_to_name"                    "calculate_str"                 
+#>  [3] "calculate_vi"                   "check_aoi"                     
+#>  [5] "check_scihub_access"            "optram"                        
+#>  [7] "optram_acquire_s2"              "optram_calculate_soil_moisture"
+#>  [9] "optram_calculate_str"           "optram_landsat"                
+#> [11] "optram_ndvi_str"                "optram_prepare_other_vi_str"   
+#> [13] "optram_safe"                    "optram_wetdry_coefficients"    
+#> [15] "plot_ndvi_str_cloud"
 # The `sen2r` package is required for downloading Sentinel imagery
 if (!require("sen2r")) install.packages("sen2r", dependencies = TRUE)
 ```
@@ -45,11 +48,12 @@ the month of from_date and the month of to_date will be used,
 but from all years in the date range.
 
 Required authentication for Copernicus Scihub was setup in advance.
-See: `r ?sen2r::is_scihub_configured()`
+See: /home/micha/R/x86_64-pc-linux-gnu-library/4.2/sen2r/help/scihub_login
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`
 
-```{r wrapper}
+
+```r
 from_date <- "2021-11-01"
 to_date <- "2023-03-31"
 # Local directory for the vignette
@@ -62,8 +66,25 @@ coeffs <- optram(aoi_file,
                  remove_safe = "no",
                  timeperiod = "seasonal",
                  data_output_dir = output_dir)
+#> Reading layer `migda_aoi' from data source 
+#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/migda_aoi.gpkg' 
+#>   using driver `GPKG'
+#> Simple feature collection with 1 feature and 2 fields
+#> Geometry type: POLYGON
+#> Dimension:     XYZ
+#> Bounding box:  xmin: 34.58346 ymin: 31.35898 xmax: 34.58915 ymax: 31.36169
+#> z_range:       zmin: 0 zmax: 0
+#> Geodetic CRS:  WGS 84
 knitr::kable(coeffs)
 ```
+
+
+
+| intercept_dry| slope_dry| intercept_wet| slope_wet|
+|-------------:|---------:|-------------:|---------:|
+|     0.1253203|  2.615194|       1.14542|  3.725611|
+
+
 
 
 ## Step by step
@@ -75,12 +96,14 @@ knitr::kable(coeffs)
   - Prepare a data.frame of Vegetation Index and STR values;
   - Get trapezoid coefficients from the scatterplot of VI-STR pixels
 
-This example uses sets `timeperiod` to "full", so all images between from_date and to_date will be used.
+This example sets `timeperiod` to "full",
+so all images between from_date and to_date will be used.
 
 Required authentication for Copernicus Scihub was setup in advance.
-See: `r ?sen2r::is_scihub_configured()`
+See: /home/micha/R/x86_64-pc-linux-gnu-library/4.2/sen2r/help/scihub_login
 
-```{r stepbystep}
+
+```r
 from_date <- "2022-09-01"
 to_date <- "2023-04-30"
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
@@ -92,6 +115,15 @@ s2_file_list <- optram_acquire_s2(aoi_file,
                             remove_safe = "no",
                             timeperiod = "full",
                             veg_index ="SAVI")
+#> Reading layer `migda_aoi' from data source 
+#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/migda_aoi.gpkg' 
+#>   using driver `GPKG'
+#> Simple feature collection with 1 feature and 2 fields
+#> Geometry type: POLYGON
+#> Dimension:     XYZ
+#> Bounding box:  xmin: 34.58346 ymin: 31.35898 xmax: 34.58915 ymax: 31.36169
+#> z_range:       zmin: 0 zmax: 0
+#> Geodetic CRS:  WGS 84
 BOA_dir <- file.path(output_dir, "BOA")
 STR_list <- optram_calculate_str(BOA_dir)
 VI_list <- list.files(file.path(output_dir, "SAVI"),
@@ -105,7 +137,8 @@ coeffs <- optram_wetdry_coefficients(full_df,
 
 ### Show trapezoid plot
 
-```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%'}
+
+```r
 ttl <- "Migda"
 coeffs <- read.csv(file.path(output_dir, "coefficients.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
@@ -114,11 +147,17 @@ plot_ndvi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
 knitr::include_graphics("trapezoid_Migda.png")
 ```
 
+<div class="figure">
+<img src="trapezoid_Migda.png" alt="Trapezoid scatterplot" width="90%" />
+<p class="caption">Trapezoid scatterplot</p>
+</div>
+
 ## Soil Moisture
 
-### Use the trapezoid coefficients and VI, STR rasters, prepare a soil moisture grid
+### Use trapezoid coefficients, VI, snf STR rasters to prepare soil moisture grid
 
-```{r soil-moisture}
+
+```r
 img_date <- "2023-01-25"   # After a rain
 VI_dir <- file.path(output_dir, "SAVI")
 STR_dir <- file.path(output_dir, "STR")
@@ -127,13 +166,15 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 ```
 
 ### Soil moisture plot
-```{r sm-plot}
+
+
+```r
 library(tmap)
 names(SM) <- "Migda soil moisture"
 tmap_mode("view")
 tm_basemap("OpenStreetMap") +
-  tm_shape(SM) + 
-  tm_raster(palette = "RdBu", midpoint = 0.2) +
+  tm_shape(SM) +
+  tm_raster(palette = "RdBu", midpoint = NA) +
   tm_layout(legend.outside = TRUE, legend.outside.position = "right")
 ```
 

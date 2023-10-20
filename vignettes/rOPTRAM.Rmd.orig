@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 
 `rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) to derive soil moisture based on the linear relation between a vegetation index, i.e. NDVI, and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band is used as a proxy for LST. The SWIR band is transformed to Swir Transformed Reflectance (STR).
-  
+
 A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression lines, and the slope/intercept coefficents of these lines comprise the trapezoid. These coefficients are then used on a new satellite image to determine soil moisture.
 
   See:  @sadeghi_optical_2017, @burdun_satellite_2020, @ambrosone_retrieving_2020
@@ -75,7 +75,8 @@ knitr::kable(coeffs)
   - Prepare a data.frame of Vegetation Index and STR values;
   - Get trapezoid coefficients from the scatterplot of VI-STR pixels
 
-This example uses sets `timeperiod` to "full", so all images between from_date and to_date will be used.
+This example sets `timeperiod` to "full",
+so all images between from_date and to_date will be used.
 
 Required authentication for Copernicus Scihub was setup in advance.
 See: `r ?sen2r::is_scihub_configured()`
@@ -116,7 +117,7 @@ knitr::include_graphics("trapezoid_Migda.png")
 
 ## Soil Moisture
 
-### Use the trapezoid coefficients and VI, STR rasters, prepare a soil moisture grid
+### Use trapezoid coefficients, VI, snf STR rasters to prepare soil moisture grid
 
 ```{r soil-moisture}
 img_date <- "2023-01-25"   # After a rain
@@ -127,13 +128,14 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 ```
 
 ### Soil moisture plot
+
 ```{r sm-plot}
 library(tmap)
 names(SM) <- "Migda soil moisture"
 tmap_mode("view")
 tm_basemap("OpenStreetMap") +
-  tm_shape(SM) + 
-  tm_raster(palette = "RdBu", midpoint = 0.2) +
+  tm_shape(SM) +
+  tm_raster(palette = "RdBu", midpoint = NA) +
   tm_layout(legend.outside = TRUE, legend.outside.position = "right")
 ```
 
