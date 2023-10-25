@@ -177,7 +177,7 @@ optram_acquire_s2 <- function(
       path_merged = NULL,
       path_rgb = "",
       path_subdirs = TRUE,
-      log = c(NULL,NULL),
+      log = c(NA,NA),
       parallel = TRUE,
       processing_order = "by_groups",
     )
