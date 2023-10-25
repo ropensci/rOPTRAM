@@ -139,8 +139,7 @@ plot_ndvi_str_cloud <- function(full_df,
                                 output_dir = tempdir()) {
   # Avoid "no visible binding for global variable" NOTE
   i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
-  x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- NULL
-  NDVI <- STR <- NULL
+  x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- VI <- STR <- NULL
 
   # Pre-flight test
   if (!ncol(coeffs) == 4) {

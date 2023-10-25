@@ -157,7 +157,6 @@ optram_acquire_s2 <- function(
       rgb_ranges = NULL,
       index_source = "BOA",
       mask_type = "cloud_and_shadow",
-      max_mask = 10,
       mask_smooth = 0,
       mask_buffer = 0,
       clip_on_extent = TRUE,
