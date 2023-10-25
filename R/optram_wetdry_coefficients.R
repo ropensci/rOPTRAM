@@ -12,8 +12,8 @@
 #' @return coeffs, list of float, coefficients of wet-dry trapezoid
 #' @export
 #' @note
-#' The vegetation index column is named "NDVI" even though it can represent
-#' other vegetgation indices, such as SAVI, or MSAVI.
+#' The vegetation index column is named "VI" though it can represent
+#' several vegetation indices, such as SAVI, or MSAVI.
 #' @examples
 #' aoi_file <- "Test"
 #' full_df <- readRDS(system.file("extdata",
@@ -51,16 +51,16 @@ optram_wetdry_coefficients <- function(full_df,
       } else {aoi_name <- rOPTRAM::aoi_to_name(aoi_file)}
 
   # Make sure no Inf or NA in full_df
-  full_df <- full_df[is.finite(full_df$NDVI), ]
-  VI_min_max <- round(stats::quantile(full_df$NDVI, c(0.2, 0.98)), 2)
+  full_df <- full_df[is.finite(full_df$VI), ]
+  VI_min_max <- round(stats::quantile(full_df$VI, c(0.1, 0.98)), 2)
   VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], step)
-  message("NDVI series length:", length(VI_series))
+  message("VI series length:", length(VI_series))
   VI_STR_list <- lapply(VI_series, function(i){
     # Set NDVI value at midpoint of each interval
-    ndvi_val <- i + step/2.0
+    vi_val <- i + step/2.0
 
     # Subset the data.frame to include only NDVI values between i and i+step
-    interval_df <-  full_df[full_df$NDVI>=i & full_df$NDVI < (i+step),]
+    interval_df <-  full_df[full_df$VI>=i & full_df$VI < (i+step),]
     # if too few rows in this interval, skip it, just return NULL
     if (nrow(interval_df) < 4) {
       return(NA)
@@ -73,7 +73,7 @@ optram_wetdry_coefficients <- function(full_df,
     # Within each interval
     str_max <- max(interval_df$STR, na.rm = TRUE)
     str_min <- min(interval_df$STR, na.rm = TRUE)
-    VI_STR_df1 <- data.frame("NDVI" = ndvi_val,
+    VI_STR_df1 <- data.frame("VI" = vi_val,
                                "STR_wet" = str_max,
                                "STR_dry" = str_min)
     return(VI_STR_df1)
@@ -91,8 +91,8 @@ optram_wetdry_coefficients <- function(full_df,
             row.names = FALSE)
   # Run linear regression between STR and NDVI
   # to determine the intercept and slope for both wet and dry data
-  wet_fit <- stats::lm(STR_wet ~ NDVI, data=VI_STR_df)
-  dry_fit <- stats::lm(STR_dry ~ NDVI, data=VI_STR_df)
+  wet_fit <- stats::lm(STR_wet ~ VI, data=VI_STR_df)
+  dry_fit <- stats::lm(STR_dry ~ VI, data=VI_STR_df)
   i_wet <- wet_fit$coefficients[[1]]
   s_wet <- wet_fit$coefficients[[2]]
   i_dry <- dry_fit$coefficients[[1]]
@@ -145,14 +145,14 @@ plot_ndvi_str_cloud <- function(full_df,
   # Pre-flight test
   if (!ncol(coeffs) == 4) {
     warning("Coefficients not correctly formed. \n
-      Be sure the CSV file has 4 columns. Exiting...")
+    Be sure the CSV file has 4 columns. Exiting...")
     return(NULL)
   }
   if (! "STR" %in% names(full_df)) {
     warning("STR column missing from data.frame. Exiting...")
     return(NULL)
   }
-  if (! "NDVI" %in% names(full_df)) {
+  if (! "VI" %in% names(full_df)) {
     warning("VI column missing from data.frame. Exiting...")
     return(NULL)
   }
@@ -187,7 +187,7 @@ plot_ndvi_str_cloud <- function(full_df,
   coeffs_text <- paste("Dry intercept:", i_dry, "\n Dry slope:", s_dry,
                        "\n Wet intercept:", i_wet, "\n Wet slope:", s_wet)
   ggplot2::ggplot(plot_df) +
-    geom_point(aes(x=NDVI, y=STR),
+    geom_point(aes(x=VI, y=STR),
                color = "#0070000b", alpha = 0.3, size = 0.2) +
     # Wet edge
     geom_abline(intercept = i_wet, slope = s_wet,

@@ -102,9 +102,9 @@ optram_safe <- function(safe_dir,
          dir.create(BOA_dir, recursive = TRUE)
     }
 
-    NDVI_dir <- file.path(S2_output_dir, "NDVI")
-    if (!dir.exists(NDVI_dir)) {
-        dir.create(NDVI_dir)
+    VI_dir <- file.path(S2_output_dir, "VI")
+    if (!dir.exists(VI_dir)) {
+        dir.create(VI_dir)
     }
 
     STR_dir <- file.path(S2_output_dir, "STR")
@@ -206,7 +206,8 @@ optram_safe <- function(safe_dir,
                             ".//SENSING_TIME")))
 
         VI_idx <- rOPTRAM::calculate_vi(stk, veg_index,
-                                        redband = 3, nirband = 4)
+                                        redband = 3, nirband = 4,
+                                        blueband = 1, greenband = 2)
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr
@@ -225,8 +226,8 @@ optram_safe <- function(safe_dir,
         # Prepare file name parts for saving rasters
         s_parts <- unlist(strsplit(basename(safe_list[x]), "_"))
         VI_file <- paste(s_parts[1], s_parts[3], s_parts[5],
-                        aoi_name, "NDVI_10.tif", sep = "_")
-        VI_path <- file.path(NDVI_dir, VI_file)
+                        aoi_name, "VI_10.tif", sep = "_")
+        VI_path <- file.path(VI_dir, VI_file)
         if (!file.exists(VI_path) || overwrite == TRUE) {
             terra::writeRaster(VI_idx, VI_path, overwrite = TRUE)
         }

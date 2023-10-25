@@ -117,11 +117,13 @@ optram_acquire_s2 <- function(
     dir.create(output_dir, recursive = TRUE)
   }
 
-  # Get generic config json
-  config_file <- system.file("extdata", "s2_config.json", package = "rOPTRAM")
-  sen2r_version <- utils::packageVersion("sen2r")
+  # Get username and pass from Env variables (also on gitlab)
+  sen2r::write_scihub_login(username = Sys.getenv("SCIHUB_USER"),
+                            password = Sys.getenv("SCIHUB_PASS"))
+  #config_file <- system.file("extdata", "s2_config.json", package = "rOPTRAM")
+  #sen2r_version <- utils::packageVersion("sen2r")
   result_list <- sen2r::sen2r(
-      param_list = config_file,
+      #param_list = config_file,
       gui = FALSE,
       server = servers,
       rm_safe = remove_safe,
@@ -130,7 +132,6 @@ optram_acquire_s2 <- function(
       timewindow = c(from_date, to_date),
       timeperiod = timeperiod,
       list_prods = c("BOA"),
-      # param name in `sen2r` is "list_indices" (vector)
       # in rOPTRAM: "veg_index" (single character string)
       list_indices = c(veg_index),
       resampling = "bilinear",
@@ -140,8 +141,48 @@ optram_acquire_s2 <- function(
       path_l2a = output_dir,
       path_out = output_dir,
       path_indices = output_dir,
-      thumbnails = FALSE
-    #  pkg_version = sen2r_version
+      thumbnails = FALSE,
+      preprocess =  TRUE,
+      s2_levels = "l2a",
+      sel_sensor = c("s2a", "s2b"),
+      online = TRUE,
+      order_lta = TRUE,
+      downloader = "builtin",
+      overwrite_safe = FALSE,
+      step_atmcorr = "l2a",
+      sen2cor_use_dem = FALSE,
+      sen2cor_gipp = NULL,
+      s2orbits_selected = NULL,
+      list_rgb = NULL,
+      rgb_ranges = NULL,
+      index_source = "BOA",
+      mask_type = "cloud_and_shadow",
+      max_mask = 10,
+      mask_smooth = 0,
+      mask_buffer = 0,
+      clip_on_extent = TRUE,
+      extent_as_mask = TRUE,
+      reference_path = NULL,
+      res = NULL,
+      res_s2 = "10m",
+      unit = "Meter",
+      proj = NULL,
+      resampling_scl = "near",
+      outformat = "GTiff",
+      rgb_outformat = "GTiff",
+      index_datatype = "Int16",
+      compression = "DEFLATE",
+      rgb_compression = "DEFLATE",
+      overwrite = FALSE,
+      path_l1c = NULL,
+      path_tiles = NULL,
+      path_merged = NULL,
+      path_rgb = "",
+      path_subdirs = TRUE,
+      thumbnails = FALSE,
+      log = NULL,
+      parallel = TRUE,
+      processing_order = "by_groups",
     )
   return(result_list)
 }

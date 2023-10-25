@@ -62,7 +62,7 @@ optram_calculate_soil_moisture <- function(
   VI_file <- list.files(VI_dir,
                         pattern = img_str, full.names = TRUE)
   if (length(VI_file) == 0) {
-    warning("No NDVI file, Exiting...")
+    warning("No VI file, Exiting...")
     return(NULL)
   }
 

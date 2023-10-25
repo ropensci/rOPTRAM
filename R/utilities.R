@@ -130,24 +130,33 @@ check_aoi <- function(aoi_file) {
 #'          package = "rOPTRAM"))
 #' vi <- calculate_vi(img_stk)
 
-calculate_vi <- function(img_stk, viname = "NDVI", redband = 3, nirband = 4) {
+calculate_vi <- function(img_stk, viname = "NDVI",
+                         redband = 3, nirband = 4,
+                         blueband = 1, greenband = 2) {
     # Avoid "no visible binding for global variable" NOTE
     nir <- red <- vi_rast <- NULL
 
     nir <- img_stk[[nirband]]
     red <- img_stk[[redband]]
+    blue <- img_stk[[blueband]]
+    green <- img_stk[[greenband]]
+
     if (viname == "NDVI") {
         vi_rast <- ((nir - red) / (nir + red))
     } else if (viname == "SAVI") {
         vi_rast <- ((1.5 * (nir - red)) / (nir + red + 0.5) )
     } else if (viname == "MSAVI") {
         vi_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 8 * (nir - red))) / 2)
+    } else if (viname == "CI") {
+        vi_rast <- (1-((red - blue) / (red + blue)))
+    } else if (viname == "BSCI") {
+        vi_rast <- ((1-(2*(red - green))) / (mean(green, red, nir)))
     } else {
         warning("Unrecognized index: ", viname)
         vi_rast <- NULL
         return(NULL)
     }
-    names(vi_rast) <- viname
+    names(vi_rast) <- "VI"
     return(vi_rast)
 }
 
