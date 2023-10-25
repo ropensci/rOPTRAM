@@ -118,6 +118,8 @@ check_aoi <- function(aoi_file) {
 #' @param img_stk, terra SpatRaster, multiband stack of images,
 #'            already clipped to aoi
 #' @param redband, integer, number of red band
+#' @param greenband, integer, number of green band
+#' @param blueband, integer, number of blue band
 #' @param nirband, integer, number of NIR band
 #' @param viname, string, which VI to prepare,
 #'            either 'NDVI' (default) or 'SAVI' or 'MSAVI'
@@ -131,8 +133,8 @@ check_aoi <- function(aoi_file) {
 #' vi <- calculate_vi(img_stk)
 
 calculate_vi <- function(img_stk, viname = "NDVI",
-                         redband = 3, nirband = 4,
-                         blueband = 1, greenband = 2) {
+                         redband = 3, greenband = 2,
+                         blueband = 1, nirband = 4) {
     # Avoid "no visible binding for global variable" NOTE
     nir <- red <- vi_rast <- NULL
 

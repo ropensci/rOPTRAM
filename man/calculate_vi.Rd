@@ -4,7 +4,14 @@
 \alias{calculate_vi}
 \title{Calculate NDVI, SAVI or MSAVI from bottom of atmosphere images}
 \usage{
-calculate_vi(img_stk, viname = "NDVI", redband = 3, nirband = 4)
+calculate_vi(
+  img_stk,
+  viname = "NDVI",
+  redband = 3,
+  greenband = 2,
+  blueband = 1,
+  nirband = 4
+)
 }
 \arguments{
 \item{img_stk, }{terra SpatRaster, multiband stack of images,
@@ -14,6 +21,10 @@ already clipped to aoi}
 either 'NDVI' (default) or 'SAVI' or 'MSAVI'}
 
 \item{redband, }{integer, number of red band}
+
+\item{greenband, }{integer, number of green band}
+
+\item{blueband, }{integer, number of blue band}
 
 \item{nirband, }{integer, number of NIR band}
 }
