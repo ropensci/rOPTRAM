@@ -83,11 +83,11 @@ optram_ndvi_str <- function(STR_list, VI_list,
     VI <- VI/10000.0
 
     VI_1_df <- as.data.frame(VI, xy=TRUE, na.rm = FALSE)
-    names(VI_1_df) <- c("x", "y", "NDVI")
+    names(VI_1_df) <- c("x", "y", "VI")
 
     # Apply rm.low.vi parameter
     if (rm.low.vi) {
-      VI_1_df$NDVI[VI_1_df$NDVI <= 0.005]  <- NA
+      VI_1_df$VI[VI_1_df$VI <= 0.005]  <- NA
     }
     VI_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
     # Keep only sampled rows
