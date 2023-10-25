@@ -160,7 +160,6 @@ optram_acquire_s2 <- function(
       mask_smooth = 0,
       mask_buffer = 0,
       clip_on_extent = TRUE,
-      extent_as_mask = TRUE,
       reference_path = NULL,
       res = NULL,
       res_s2 = "10m",
