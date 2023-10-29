@@ -112,6 +112,7 @@ optram_safe <- function(safe_dir,
         dir.create(STR_dir)
     }
 
+    # Collect list of the BOA file paths created from cropped Sentinel-2 imagery 
     derived_rasters <- lapply(safe_list, function(s) {
         xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
         xml <- xml2::read_xml(xml_file)
@@ -164,7 +165,7 @@ optram_safe <- function(safe_dir,
         if (!file.exists(BOA_path) || overwrite == TRUE) {
             terra::writeRaster(img_stk, BOA_path, overwrite = TRUE)
         }
-        return(img_stk)
+        return(BOA_file)
     })
 
     # Get index of rows for sampling
