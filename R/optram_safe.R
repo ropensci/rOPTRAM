@@ -135,41 +135,42 @@ optram_safe <- function(safe_dir,
           xml2::xml_find_first(mtd, ".//HORIZONTAL_CS_CODE"))
         aoi <- terra::project(aoi, epsg_code)
         aoi_ext <- terra::ext(aoi)
-
-        # Read in jp2 files
-        img_list <- lapply(band_ids, function(b){
-            img_path <- img_paths[grepl(pattern = b, img_paths, fixed = TRUE)]
-            img_file <- paste0(img_path, ".jp2")
-            img_path <- file.path(s, img_file)
-            rst <- terra::rast(img_path)
-            rst <- terra::mask(terra::crop(rst, aoi), aoi)
-            return(rst)
-        })
-        # Make a rast obj to save the high resolution extent
-        # The first raster in the list is blue, 10m. Use for reampling
-        img_10m <- img_list[[1]]
-        img_10m_list <- lapply(img_list, function(i) {
-            if (all(terra::res(i) == c(10, 10))) {
-                return(i)
-            } else {
-                return(terra::resample(i, img_10m,
-                                      method = "bilinear",
-                                      threads = TRUE))
-            }
-        })
-        img_stk <- terra::rast(img_10m_list)
-        # Save to BOA dir
         # Create filename
         # Prepare file name parts for saving rasters
         s_parts <- unlist(strsplit(basename(s), "_"))
         BOA_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "BOA_10.tif", sep = "_")
         BOA_path <- file.path(BOA_dir, BOA_file)
+        # Read in the bands, prepare mask and save 
+        # Only if BOA file does not exist, or overwrite requested
         if (!file.exists(BOA_path) || overwrite == TRUE) {
+            # Read in jp2 files
+            img_list <- lapply(band_ids, function(b){
+                img_path <- img_paths[grepl(pattern = b, img_paths, fixed = TRUE)]
+                img_file <- paste0(img_path, ".jp2")
+                img_path <- file.path(s, img_file)
+                rst <- terra::rast(img_path)
+                rst <- terra::mask(terra::crop(rst, aoi), aoi)
+                return(rst)
+            })
+            # Make a rast obj to save the high resolution extent
+            # The first raster in the list is blue, 10m. Use for reampling
+            img_10m <- img_list[[1]]
+            img_10m_list <- lapply(img_list, function(i) {
+                if (all(terra::res(i) == c(10, 10))) {
+                    return(i)
+                } else {
+                    return(terra::resample(i, img_10m,
+                                           method = "bilinear",
+                                           threads = TRUE))
+                }
+            })
+            img_stk <- terra::rast(img_10m_list)
+            # Save to BOA dir
             terra::writeRaster(img_stk, BOA_path, overwrite = TRUE)
         }
         img_stk <- NULL
-        return(BOA_file)
+        return(BOA_path)
     })
 
     # Get index of rows for sampling
