@@ -114,6 +114,7 @@ optram_safe <- function(safe_dir,
 
     # Collect list of the BOA file paths created from cropped Sentinel-2 imagery 
     derived_rasters <- lapply(safe_list, function(s) {
+        # Get file paths to 10m and 20m jpeg images
         xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
         xml <- xml2::read_xml(xml_file)
         img_nodes <- xml2::xml_find_all(xml, ".//IMAGE_FILE")
@@ -127,6 +128,8 @@ optram_safe <- function(safe_dir,
             warning("No metadata file in SAFE dir: ", s, "Skipping...")
             return(NULL)
         }
+        # Get CRS for each S2 tile 
+        # (the list could have tiles in different UTM zones)
         mtd <- xml2::read_xml(mtd_file)
         epsg_code <- xml2::xml_text(
           xml2::xml_find_first(mtd, ".//HORIZONTAL_CS_CODE"))
@@ -139,7 +142,7 @@ optram_safe <- function(safe_dir,
             img_file <- paste0(img_path, ".jp2")
             img_path <- file.path(s, img_file)
             rst <- terra::rast(img_path)
-            rst <- terra::mask(terra::crop(rst, aoi_ext), aoi_ext)
+            rst <- terra::mask(terra::crop(rst, aoi), aoi)
             return(rst)
         })
         # Make a rast obj to save the high resolution extent
