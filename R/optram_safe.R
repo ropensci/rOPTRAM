@@ -165,6 +165,7 @@ optram_safe <- function(safe_dir,
         if (!file.exists(BOA_path) || overwrite == TRUE) {
             terra::writeRaster(img_stk, BOA_path, overwrite = TRUE)
         }
+        img_stk <- NULL
         return(BOA_file)
     })
 
@@ -172,7 +173,7 @@ optram_safe <- function(safe_dir,
     # Use the first raster (first date) in derived rasters
     # Get the red band (3) and
     # use that to determine index for random sampling
-    r <- derived_rasters[[1]][[3]]
+    r <- rast(derived_rasters[[1]])[[3]]
     r_df <- as.data.frame(r, xy = TRUE)
     if (nrow(r_df) > max_tbl_size) {
         # Set sample size as:
@@ -187,7 +188,7 @@ optram_safe <- function(safe_dir,
     VI_STR_list <- lapply(seq_along(derived_rasters), function(x) {
         # Each item in the derived_rasters list is a raster stack, with 6 bands
         # R-G-B-NIR, SWIR 1600, SWIR 2200
-        stk <- derived_rasters[[x]]
+        stk <- rast(derived_rasters[[x]])
         if (is.null(stk)) {
             return(NULL)
         }
