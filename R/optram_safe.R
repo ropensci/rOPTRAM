@@ -52,7 +52,7 @@ optram_safe <- function(safe_dir,
                         max_tbl_size = 5e+6) {
 
     # Avoid "no visible binding for global variable" NOTE
-    safe_list <- band_ids <- aoi <- derived_rasters <- xml_file <- NULL
+    safe_list <- band_ids <- aoi <- cropped_rast_list <- xml_file <- NULL
     img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- epsg_code <- NULL
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
     STR <- STR_df <- full_df <- NULL
@@ -113,7 +113,7 @@ optram_safe <- function(safe_dir,
     }
 
     # Collect list of the BOA file paths created from cropped Sentinel-2 imagery 
-    derived_rasters <- lapply(safe_list, function(s) {
+    cropped_rast_list <- lapply(safe_list, function(s) {
         # Get file paths to 10m and 20m jpeg images
         xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
         xml <- xml2::read_xml(xml_file)
@@ -166,6 +166,7 @@ optram_safe <- function(safe_dir,
                 }
             })
             img_stk <- terra::rast(img_10m_list)
+            names(img_stk) <- band_ids
             # Save to BOA dir
             terra::writeRaster(img_stk, BOA_path, overwrite = TRUE)
         }
@@ -177,22 +178,22 @@ optram_safe <- function(safe_dir,
     # Use the first raster (first date) in derived rasters
     # Get the red band (3) and
     # use that to determine index for random sampling
-    r <- rast(derived_rasters[[1]])[[3]]
+    r <- rast(cropped_rast_list[[1]])[[3]]
     r_df <- as.data.frame(r, xy = TRUE)
     if (nrow(r_df) > max_tbl_size) {
         # Set sample size as:
         # maximum table / number of dates in date range
-        samp_size <- max_tbl_size / length(derived_rasters)
+        samp_size <- max_tbl_size / length(cropped_rast_list)
         idx <- sample(nrow(r_df), samp_size)
     } else {
         idx <- seq(1, nrow(r_df))
     }
 
     # Get VI and STR from this list of raster stacks
-    VI_STR_list <- lapply(seq_along(derived_rasters), function(x) {
-        # Each item in the derived_rasters list is a raster stack, with 6 bands
+    VI_STR_list <- lapply(seq_along(cropped_rast_list), function(x) {
+        # Each item in the cropped_rast_list list is a raster stack, with 6 bands
         # R-G-B-NIR, SWIR 1600, SWIR 2200
-        stk <- rast(derived_rasters[[x]])
+        stk <- rast(cropped_rast_list[[x]])
         if (is.null(stk)) {
             return(NULL)
         }

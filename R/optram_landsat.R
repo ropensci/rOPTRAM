@@ -41,7 +41,7 @@
                              data_output_dir = tempdir()) {
 
     # Avoid "no visible binding for global variable" NOTE
-    landsat_list <- band_ids <- aoi <- derived_rasters <- xml_file <- NULL
+    landsat_list <- band_ids <- aoi <- cropped_rast_list <- xml_file <- NULL
     img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- epsg_code <- NULL
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
     STR <- STR_df <- full_df <- NULL
@@ -110,7 +110,7 @@
         dir.create(STR_dir)
     }
 
-    derived_rasters <- lapply(landsat_list, function(s) {
+    cropped_rast_list <- lapply(landsat_list, function(s) {
         mtl_file <- list.files(s, pattern = "MTL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtl_file)) {
@@ -160,13 +160,13 @@
         terra::writeRaster(img_stk,
                          file.path(BOA_dir, BOA_file), overwrite = TRUE)
         return(img_stk)
-    }) # end-of-derived_rasters
+    }) # end-of-cropped_rast_list
 
     # Get VI and STR from this list of raster stacks
-    VI_STR_list <- lapply(seq_along(derived_rasters), function(x) {
-      # LANDSAT: Each item in the derived_rasters list
+    VI_STR_list <- lapply(seq_along(cropped_rast_list), function(x) {
+      # LANDSAT: Each item in the cropped_rast_list list
       # is a raster stack, with 3 bands: Red, NIR, SWIR 2200nm
-      stk <- derived_rasters[[x]]
+      stk <- cropped_rast_list[[x]]
       if (is.null(stk)) {
         return(NULL)
       }
