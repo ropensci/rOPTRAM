@@ -139,7 +139,7 @@ optram_safe <- function(safe_dir,
             img_file <- paste0(img_path, ".jp2")
             img_path <- file.path(s, img_file)
             rst <- terra::rast(img_path)
-            rst <- terra::crop(rst, aoi_ext)
+            rst <- terra::mask(terra::crop(rst, aoi_ext), aoi_ext)
             return(rst)
         })
         # Make a rast obj to save the high resolution extent
