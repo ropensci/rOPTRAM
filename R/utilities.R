@@ -148,11 +148,13 @@ calculate_vi <- function(img_stk, viname = "NDVI",
     } else if (viname == "SAVI") {
         vi_rast <- ((1.5 * (nir - red)) / (nir + red + 0.5) )
     } else if (viname == "MSAVI") {
-        vi_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 8 * (nir - red))) / 2)
+        vi_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 
+            8 * (nir - red))) / 2)
     } else if (viname == "CI") {
         vi_rast <- (1-((red - blue) / (red + blue)))
     } else if (viname == "BSCI") {
-        vi_rast <- ((1-(2*(red - green))) / (mean(green, red, nir)))
+        vi_rast <- ((1-(2*(red - green))) / 
+            (terra::mean(green, red, nir, na.rm = TRUE)))
     } else {
         warning("Unrecognized index: ", viname)
         vi_rast <- NULL
