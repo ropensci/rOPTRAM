@@ -92,21 +92,31 @@ optram_acquire_s2 <- function(
   } else {
     gsutil_path <- Sys.which("gsutil")
   }
-  gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE)
 
-  if (scihub_ok && gcloud_ok) {
-    servers <- c("scihub", "gcloud")
-  } else if (scihub_ok) {
-    message("Using only Sentinel scihub")
-    servers <- c("scihub")
-  } else if (gcloud_ok) {
-    message("Using only gcloud")
-    servers <- c("gcloud")
+  gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE)
+  if (gcloud_id) {
+    message("Using gcloud")
+    servers <- ("gcloud")
   } else {
     warning("No access to Sentinel or Google cloud",
             "\nExiting")
     return(NULL)
   }
+
+  # Disable scihub altogether, since Copernicus DataSpace, 1/11/2023
+  # if (scihub_ok && gcloud_ok) {
+  #   servers <- c("scihub", "gcloud")
+  # } else if (scihub_ok) {
+  #   message("Using only Sentinel scihub")
+  #   servers <- c("scihub")
+  # } else if (gcloud_ok) {
+  #   message("Using only gcloud")
+  #   servers <- c("gcloud")
+  # } else {
+  #   warning("No access to Sentinel or Google cloud",
+  #           "\nExiting")
+  #   return(NULL)
+  # }
 
   # Avoid "no visible binding for global variable" NOTE
   aoi_name  <- result_list <- NULL
