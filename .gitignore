@@ -6,5 +6,6 @@
 R/call_optram_landsat.R
 inst/doc
 R/create_icon.R
+R/optram_acquire_cdse.R
 SAFE$
 paper.md
