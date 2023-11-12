@@ -3,7 +3,7 @@
   "s2_levels": ["l2a"],
   "sel_sensor": ["s2a", "s2b"],
   "online": [true],
-  "server": ["gcloud", "scihub"],
+  "server": ["gcloud"],
   "order_lta": [true],
   "downloader": ["builtin"],
   "overwrite_safe": [false],

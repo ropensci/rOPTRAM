@@ -96,7 +96,7 @@ optram_acquire_s2 <- function(
   gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE)
   if (gcloud_ok) {
     message("Using gcloud")
-    servers <- ("gcloud")
+    servers <- c("gcloud")
   } else {
     warning("No access to Sentinel or Google cloud",
             "\nExiting")
