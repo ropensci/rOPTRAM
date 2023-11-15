@@ -10,8 +10,6 @@ optram(
   from_date,
   to_date,
   max_cloud = 15,
-  scihub_user = NULL,
-  scihub_pass = NULL,
   remove_safe = "yes",
   timeperiod = "full",
   S2_output_dir = tempdir(),
@@ -30,10 +28,6 @@ Formatted as "YYYY-MM-DD"}
 \item{to_date, }{the end of the date range.}
 
 \item{max_cloud, }{integer, maximum percent cloud cover, Default 15.}
-
-\item{scihub_user, }{string, username on Copernicus Sentinel Hub}
-
-\item{scihub_pass, }{string, password on Sentinel hub}
 
 \item{remove_safe, }{string, "yes" or "no", whether to delete downloaded
 SAFE directories after processing. Default "yes"}
@@ -64,17 +58,10 @@ Remote Sensing of Environment 198, 52–68,
 https://doi.org/10.1016/j.rse.2017.05.041 .
 }
 \note{
-Access to Copernicus Sentinel Hub requires registration.
-If you have already registered, and saved your credentials
-in the default "~/.sen2r/apihub.txt" file,
-then you can leave the scihub_user and scihub_pass empty.
-If your credentials are \strong{not} yet stored, then
-\itemize{
-\item register on the Scihub website:
-\item https://scihub.copernicus.eu/userguide/SelfRegistration
-\item enter your user and pass parameters in this function call,
-and they will be stored into the default location.
-}
+to download imagery. Please first install \code{gcloud} folloowing instructions:
+https://cloud.google.com/sdk/docs/install
+for your operating system.
+And be sure to initialize with you google username and password.
 
 Output can be separated:
 Sentinel downloads and products are saved to S2_output_dir.
@@ -97,8 +84,6 @@ aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = c("SAVI"),
-                 scihub_user = "userxxx", scihub_pass = "secretxyz",
-                 timeperiod = "seasonal"
-                 )
+                 timeperiod = "seasonal")
 }
 }

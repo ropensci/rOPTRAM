@@ -178,7 +178,7 @@ optram_safe <- function(safe_dir,
     # Use the first raster (first date) in derived rasters
     # Get the red band (3) and
     # use that to determine index for random sampling
-    r <- rast(cropped_rast_list[[1]])[[3]]
+    r <- terra::rast(cropped_rast_list[[1]])[[3]]
     r_df <- as.data.frame(r, xy = TRUE)
     if (nrow(r_df) > max_tbl_size) {
         # Set sample size as:
@@ -193,7 +193,7 @@ optram_safe <- function(safe_dir,
     VI_STR_list <- lapply(seq_along(cropped_rast_list), function(x) {
         # Each item in the cropped_rast_list list is a raster stack, with 6 bands
         # R-G-B-NIR, SWIR 1600, SWIR 2200
-        stk <- rast(cropped_rast_list[[x]])
+        stk <- terra::rast(cropped_rast_list[[x]])
         if (is.null(stk)) {
             return(NULL)
         }

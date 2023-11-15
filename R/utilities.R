@@ -2,16 +2,12 @@
 #'
 #' @description
 #' Verify that sen2r is installed,
-#' and check credentials for access to Sentinel Hub
-#' @param scihub_user, string, scihub username
-#' @param scihub_pass, string, scihub password
 #' @export
 #' @return boolean, whether access to scihub using sen2r is possible
 #' @examples 
-#' check_scihub_access(scihub_user = "userxxx", scihub_pass = "secretyyy")
+#' check_scihub_access()
 
-check_scihub_access <- function(scihub_user = NULL,
-                                scihub_pass = NULL) {
+check_scihub_access <- function() {
     # Avoid "no visible binding for global variable" NOTE
     is_online <- site <- NULL
     # First check for internet connection
@@ -43,40 +39,6 @@ check_scihub_access <- function(scihub_user = NULL,
         warning("Version of sen2r pacakge: ", sen2r_version, " is too old. \n",
         "Please update to version > 1.5")
         return(FALSE)
-    }
-
-    # Check for stored credentials (by default in "~/.sen2r/apihub.txt")
-    if (sen2r::is_scihub_configured()) {
-        return(TRUE)
-    } else {
-        if (!is.null(scihub_user) && !is.null(scihub_pass)) {
-            # If credentials have never preciously been been stored,
-            # check the user supplied values, to be sure they are valid.
-            if(sen2r::check_scihub_login(scihub_user, scihub_pass)) {
-                sen2r_path <- file.path(path.expand("~"), ".sen2r")
-                if (!dir.exists(sen2r_path)) {
-                    dir.create(sen2r_path)
-                }
-                # store valid credentials into "apihub.txt" for future
-                apihub_path <- file.path(sen2r_path, "apihub.txt")
-                sen2r::write_scihub_login(scihub_user, scihub_pass,
-                                          apihub_path = apihub_path)
-                return(TRUE)
-            } else {
-                message("Login credentials not accepted by ESA Sentinel Hub",
-                "\n", "Please verify Sentinel Hub login credentials.")
-                return(FALSE)
-            }
-        } else {
-            # No stored credentials, and no values passed in by user.
-            # Print message and exit.
-            message("ESA Sentinel Hub requires authentication", "\n",
-                    "Please register at:", "\n",
-                    "https://scihub.copernicus.eu/userguide/SelfRegistration",
-                    "then rerun function specifying both:", "\n",
-                    "scihub_user, and scihub_pass")
-            return(FALSE)
-        }
     }
 }
 

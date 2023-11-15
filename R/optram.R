@@ -17,8 +17,6 @@
 #'        Formatted as "YYYY-MM-DD"
 #' @param to_date, the end of the date range.
 #' @param max_cloud, integer, maximum percent cloud cover, Default 15.
-#' @param scihub_user, string, username on Copernicus Sentinel Hub
-#' @param scihub_pass, string, password on Sentinel hub
 #' @param S2_output_dir, string, directory to save downloaded S2
 #'  and the derived products, defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file
@@ -30,15 +28,10 @@
 #' @return coeffs_file, string, full path to saved CSV of wet-dry coefficients
 #' the coefficients are also saved to a csv file in `data_output_dir`.
 #' @note
-#' Access to Copernicus Sentinel Hub requires registration.
-#' If you have already registered, and saved your credentials
-#' in the default "~/.sen2r/apihub.txt" file,
-#' then you can leave the scihub_user and scihub_pass empty.
-#' If your credentials are **not** yet stored, then
-#' - register on the Scihub website:
-#' - https://scihub.copernicus.eu/userguide/SelfRegistration
-#' - enter your user and pass parameters in this function call,
-#'   and they will be stored into the default location.
+#' to download imagery. Please first install `gcloud` folloowing instructions:
+#' https://cloud.google.com/sdk/docs/install
+#' for your operating system.
+#' And be sure to initialize with you google username and password.
 #'
 #' Output can be separated:
 #' Sentinel downloads and products are saved to S2_output_dir.
@@ -61,9 +54,7 @@
 #' coeffs <- optram(aoi_file,
 #'                  from_date, to_date,
 #'                  veg_index = c("SAVI"),
-#'                  scihub_user = "userxxx", scihub_pass = "secretxyz",
-#'                  timeperiod = "seasonal"
-#'                  )
+#'                  timeperiod = "seasonal")
 #' }
 
 
@@ -71,10 +62,6 @@ optram <- function(aoi_file,
                    veg_index = 'NDVI',
                    from_date, to_date,
                    max_cloud = 15,
-                   # NULL creds assumes that credentials are already
-                   # stored in "~/.sen2r/apihub.txt"
-                   scihub_user = NULL,
-                   scihub_pass = NULL,
                    remove_safe = "yes",
                    timeperiod = "full",
                    S2_output_dir = tempdir(),
@@ -84,21 +71,12 @@ optram <- function(aoi_file,
   access_ok <- s2_list <- s2_dirs <- BOA_dir <- NULL
   VI_dir <- VI_list <- VI_STR_df <- coeffs  <- NULL
 
-  # Make sure we have access to scihub
-  access_ok <- rOPTRAM::check_scihub_access(scihub_user,
-                                            scihub_pass)
-  if (! access_ok) {
-      return(NULL)
-  }
-
     # Loop over the downloaded S2 folders (dates),
     # create NDVI and STR indices for each and crop to aoi
     s2_list <- rOPTRAM::optram_acquire_s2(
                     aoi_file,
                     from_date, to_date,
                     max_cloud = max_cloud,
-                    scihub_user = scihub_user,
-                    scihub_pass = scihub_pass,
                     veg_index = veg_index,
                     remove_safe = remove_safe,
                     timeperiod = timeperiod,

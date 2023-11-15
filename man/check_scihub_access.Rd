@@ -4,20 +4,14 @@
 \alias{check_scihub_access}
 \title{Check access to Sentinel Hub, using sen2r}
 \usage{
-check_scihub_access(scihub_user = NULL, scihub_pass = NULL)
-}
-\arguments{
-\item{scihub_user, }{string, scihub username}
-
-\item{scihub_pass, }{string, scihub password}
+check_scihub_access()
 }
 \value{
 boolean, whether access to scihub using sen2r is possible
 }
 \description{
 Verify that sen2r is installed,
-and check credentials for access to Sentinel Hub
 }
 \examples{
-check_scihub_access(scihub_user = "userxxx", scihub_pass = "secretyyy")
+check_scihub_access()
 }

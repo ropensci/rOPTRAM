@@ -14,8 +14,6 @@
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
 #' @param max_cloud, integer, maximum percent of cloud cover. Default 15.
-#' @param scihub_user, string, username on Copernicus scihub
-#' @param scihub_pass, string, password for access to Copernicus scihub
 #' @param timeperiod, string, either "full" for the whole date range,
 #' or "seasonal" for only months specified, but over the full date range.
 #' @param output_dir, string, path to save downloaded, and processed imagery
@@ -27,15 +25,6 @@
 #' @return output_path, string, path to downloaded files
 #' @export
 #' @note
-#' Access to Copernicus Sentinel Hub requires registration. If you have already
-#' registered, and saved your credentials into the default file,
-#' (typically: ~/.sen2r/apihub.txt)
-#' then you can leave the scihub_user and scihub_pass empty.
-#' If your credentials are **not** yet stored, then
-#' - register on the Scihub website:
-#' - https://scihub.copernicus.eu/userguide/SelfRegistration
-#' - enter your user and pass parameters in this function call,
-#'   and they will be stored into the default location.
 #'
 #' This function calls `sen2r()` from the {sen2r} package. This function
 #' acquires Sentinel 2 imagery, clips to aoi,
@@ -45,7 +34,11 @@
 #'  - furthermore, the cirrus band B09 is not relevant for BOA level
 #'  - so band 10 is the SWIR refelctance at 1600 nm,
 #'    and band 11 is reflectance at 2200 nm.
-#'
+#' The `sen2r` package uses `gsutil`, a utility in the `gcloud` SDK 
+#' to download imagery. Please first install `gcloud` folloowing instructions:
+#' https://cloud.google.com/sdk/docs/install
+#' for your operating system.
+#' And be sure to initialize with you google username and password.
 #'
 #' @examples
 #' \dontrun{
@@ -54,8 +47,6 @@
 #' aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
 #' s2_file_list <- optram_acquire_s2(aoi,
 #'                                  from_date, to_date,
-#'                                  scihub_user = "userxxx",
-#'                                  scihub_pass = "secretxyz"
 #'                                  timeperiod = "full",
 #'                                  veg_index = "SAVI")
 #' }
@@ -63,15 +54,14 @@
 optram_acquire_s2 <- function(
       aoi_file,
       from_date, to_date,
-      scihub_user = NULL, scihub_pass = NULL,
       max_cloud = 10,
       timeperiod = "full",
       output_dir = tempdir(),
       remove_safe = "yes",
       veg_index = "NDVI") {
   # Avoid "no visible binding for global variable" NOTE
-  sen2r_version <- NULL
-  scihub_ok  <- gcloud_ok <- FALSE
+  sen2r_version <- gcloud_ok <- aoi_name  <- result_list <- NULL
+
   # Download Sentinel 2 images during the requested date range,
   # and clip to the area of interest
   # Pre flight checks...
@@ -79,8 +69,6 @@ optram_acquire_s2 <- function(
     return(NULL)
   }
 
-  # Scihub API credentials?
-  scihub_ok <- check_scihub_access(scihub_user, scihub_pass)
   # Where is 'gsutil' installed?
   if (Sys.info()['sysname'] == 'Windows') {
     # Assume that gcloud-sdk is installed in USER's home dir
@@ -96,30 +84,13 @@ optram_acquire_s2 <- function(
   gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE)
   if (gcloud_ok) {
     message("Using gcloud")
-    servers <- c("gcloud")
+    servers <- "gcloud"
   } else {
     warning("No access to Sentinel or Google cloud",
             "\nExiting")
     return(NULL)
   }
 
-  # Disable scihub altogether, since Copernicus DataSpace, 1/11/2023
-  # if (scihub_ok && gcloud_ok) {
-  #   servers <- c("scihub", "gcloud")
-  # } else if (scihub_ok) {
-  #   message("Using only Sentinel scihub")
-  #   servers <- c("scihub")
-  # } else if (gcloud_ok) {
-  #   message("Using only gcloud")
-  #   servers <- c("gcloud")
-  # } else {
-  #   warning("No access to Sentinel or Google cloud",
-  #           "\nExiting")
-  #   return(NULL)
-  # }
-
-  # Avoid "no visible binding for global variable" NOTE
-  aoi_name  <- result_list <- NULL
   # Checks OK, proceed to download
   aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
   # Make sure output_dir exists
@@ -127,13 +98,7 @@ optram_acquire_s2 <- function(
     dir.create(output_dir, recursive = TRUE)
   }
 
-  # Get username and pass from Env variables (also on gitlab)
-  sen2r::write_scihub_login(username = Sys.getenv("SCIHUB_USER"),
-                            password = Sys.getenv("SCIHUB_PASS"))
-  #config_file <- system.file("extdata", "s2_config.json", package = "rOPTRAM")
-  #sen2r_version <- utils::packageVersion("sen2r")
   result_list <- sen2r::sen2r(
-      #param_list = config_file,
       gui = FALSE,
       server = servers,
       rm_safe = remove_safe,

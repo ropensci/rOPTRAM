@@ -8,8 +8,6 @@ optram_acquire_s2(
   aoi_file,
   from_date,
   to_date,
-  scihub_user = NULL,
-  scihub_pass = NULL,
   max_cloud = 10,
   timeperiod = "full",
   output_dir = tempdir(),
@@ -25,10 +23,6 @@ boundary of area of interest}
 formatted as "YYYY-MM-DD"}
 
 \item{to_date, }{string, end of date range, formatted as "YYYY-MM-DD"}
-
-\item{scihub_user, }{string, username on Copernicus scihub}
-
-\item{scihub_pass, }{string, password for access to Copernicus scihub}
 
 \item{max_cloud, }{integer, maximum percent of cloud cover. Default 15.}
 
@@ -59,18 +53,6 @@ URL: https://sen2r.ranghetti.info/.
 The package prepares vegetation indicies, cropped to an area of interest.
 }
 \note{
-Access to Copernicus Sentinel Hub requires registration. If you have already
-registered, and saved your credentials into the default file,
-(typically: ~/.sen2r/apihub.txt)
-then you can leave the scihub_user and scihub_pass empty.
-If your credentials are \strong{not} yet stored, then
-\itemize{
-\item register on the Scihub website:
-\item https://scihub.copernicus.eu/userguide/SelfRegistration
-\item enter your user and pass parameters in this function call,
-and they will be stored into the default location.
-}
-
 This function calls \code{sen2r()} from the {sen2r} package. This function
 acquires Sentinel 2 imagery, clips to aoi,
 and prepares multiband output rasters, save to the \code{output_dir}.
@@ -80,6 +62,11 @@ Only L2A (atmospherically corrected) images are acquired, and therefore:
 \item furthermore, the cirrus band B09 is not relevant for BOA level
 \item so band 10 is the SWIR refelctance at 1600 nm,
 and band 11 is reflectance at 2200 nm.
+The \code{sen2r} package uses \code{gsutil}, a utility in the \code{gcloud} SDK
+to download imagery. Please first install \code{gcloud} folloowing instructions:
+https://cloud.google.com/sdk/docs/install
+for your operating system.
+And be sure to initialize with you google username and password.
 }
 }
 \examples{
@@ -89,8 +76,6 @@ to_date <- "2019-04-30"
 aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
 s2_file_list <- optram_acquire_s2(aoi,
                                  from_date, to_date,
-                                 scihub_user = "userxxx",
-                                 scihub_pass = "secretxyz"
                                  timeperiod = "full",
                                  veg_index = "SAVI")
 }
