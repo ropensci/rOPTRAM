@@ -7,56 +7,73 @@
 
 # you can delete this line if you're not using Docker
 # Debian testing
-image: rocker/r-base:4.1.0
+# image: rocker/r-base:4.1.0
 # Ubuntu LTS
 #image: rocker/r-ver:4.1.0
 # Ubuntu r2u
 # image: rocker/r2u:22.04
 stages:
-    - test
+  - checkrhub
 
+variables:
+  _R_CHECK_CRAN_INCOMING_: "false"
+  _R_CHECK_FORCE_SUGGESTS_: "true"
+#  CODECOV_TOKEN: $JHADDINS_TOKEN_CODECOV
+  RHUB_TOKEN: $RHUB_TOKEN
+  RHUB_EMAIL: $RHUB_EMAIL
+
+#
 default:
-   before_script:
-    - echo "Before script section"
-    - mkdir -p installed_deps
-    - echo 'R_LIBS="installed_deps"' > .Renviron
-    - echo 'R_LIBS_USER="installed_deps"' >> .Renviron
-    - echo 'R_LIBS_SITE="installed_deps"' >> .Renviron
+  before_script:
+   - echo "Before script section"
+   - R -e "install.packages(c('rhub'), dependencies = TRUE)"
+   - R -e "rhub::validate_email(email = RHUB_EMAIL, token = RHUB_TOKEN)"
+#     - mkdir -p installed_deps
+#     - echo 'R_LIBS="installed_deps"' > .Renviron
+#     - echo 'R_LIBS_USER="installed_deps"' >> .Renviron
+#     - echo 'R_LIBS_SITE="installed_deps"' >> .Renviron
+#
+# test:
+#    stage: test
+#    script:
+#    - echo "Installing system"
+#    - apt-get update
+#    - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev libpng-dev libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev protobuf-compiler libprotobuf-lite32 wget ca-certificates gnupg
+#    # Setup r2u
+#    #- wget -q -O- https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.asc | tee -a /etc/apt/trusted.gpg.d/cranapt_key.asc
+#    #- echo "deb [arch=amd64] https://r2u.stat.illinois.edu/ubuntu jammy main" > /etc/apt/sources.list.d/cranapt.list
+#    - apt-get update -qq
+#    # Minimal packages
+#    - apt-get install --yes --no-install-recommends r-base r-base-core r-recommended r-cran-devtools r-cran-dplyr r-cran-sf r-cran-terra
+#    # - R -e "'devtools' %in% installed.packages()"
+#    # with recommends and suggests...
+#    #- apt-get install --yes --install-suggests r-cran-testthat r-cran-devtools
+#    - apt-get autoremove --yes --purge
+#    - apt-get autoclean --yes
+#    #- R -e ".libPaths()"
+#    #- R -e "install.packages(c(‘usethis’, ‘pkgdown’, ‘rcmdcheck’, ‘roxygen2’, ‘rversions’, ‘urlchecker’, 'geojsonlint'), dependencies = TRUE)"
+#    - R -e "install.packages(c('devtools', 'pkgdown', 'rcmdcheck', 'roxygen2', 'rversions', 'urlchecker'), dependencies = TRUE)"
+#    #- R -e "install.packages('devtools', dependencies = TRUE)"
+#    - R -e "devtools::install_deps(dependencies = TRUE)"
+#    - echo "Building package"
+#    - R CMD build . --no-build-vignettes --no-manual
+#    - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
+#    - echo "Running check"
+#    - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
+#    cache:
+#       key: "$CI_COMMIT_REF_SLUG"
+#       paths:
+#       - installed_deps/
+#    artifacts:
+#     paths:
+#     - '*.Rcheck/'
+#    only:
+#    - main
 
-test:
-   stage: test
-   script:
-   - echo "Installing system"
-   - apt-get update
-   - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev libpng-dev libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev protobuf-compiler libprotobuf-lite32 wget ca-certificates gnupg
-   # Setup r2u
-   #- wget -q -O- https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.asc | tee -a /etc/apt/trusted.gpg.d/cranapt_key.asc
-   #- echo "deb [arch=amd64] https://r2u.stat.illinois.edu/ubuntu jammy main" > /etc/apt/sources.list.d/cranapt.list
-   - apt-get update -qq
-   # Minimal packages
-   - apt-get install --yes --no-install-recommends r-base r-base-core r-recommended r-cran-devtools r-cran-dplyr r-cran-sf r-cran-terra
-   # - R -e "'devtools' %in% installed.packages()"
-   # with recommends and suggests...
-   #- apt-get install --yes --install-suggests r-cran-testthat r-cran-devtools
-   - apt-get autoremove --yes --purge
-   - apt-get autoclean --yes
-   #- R -e ".libPaths()"
-   #- R -e "install.packages(c(‘usethis’, ‘pkgdown’, ‘rcmdcheck’, ‘roxygen2’, ‘rversions’, ‘urlchecker’, 'geojsonlint'), dependencies = TRUE)"
-   - R -e "install.packages(c('devtools', 'pkgdown', 'rcmdcheck', 'roxygen2', 'rversions', 'urlchecker'), dependencies = TRUE)"
-   #- R -e "install.packages('devtools', dependencies = TRUE)"
-   - R -e "devtools::install_deps(dependencies = TRUE)"
-   - echo "Building package"
-   - R CMD build . --no-build-vignettes --no-manual
-   - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
-   - echo "Running check"
-   - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
-   cache:
-      key: "$CI_COMMIT_REF_SLUG"
-      paths:
-      - installed_deps/
-   artifacts:
-    paths:
-    - '*.Rcheck/'
-   only:
-   - main
-
+check_platforms:
+  stage: checkrhub
+  script:
+    - Rscript inst/rhubcheck.R "ubuntu-gcc-release"
+    - Rscript inst/rhubcheck.R "ubuntu-gcc-devel"
+    - Rscript inst/rhubcheck.R "windows-x86_64-devel"
+    - Rscript inst/rhubcheck.R "macos-highsierra-release-cran"
