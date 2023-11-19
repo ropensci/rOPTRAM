@@ -9,7 +9,7 @@
 # Debian testing
 # image: rocker/r-base:4.1.0
 # Ubuntu LTS
-#image: rocker/r-ver:4.1.0
+image: rocker/r-ver:4.1.0
 # Ubuntu r2u
 # image: rocker/r2u:22.04
 stages:

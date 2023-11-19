@@ -159,7 +159,7 @@ calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
   # Remote Sensing of Environment 198, 52–68.
   # https://doi.org/10.1016/j.rse.2017.05.041
   #
-  # STR = (1−SWIR)^2 / 2*SWIR
+  # STR = (1-SWIR)^2 / 2*SWIR
   #
     SWIR_DN <-  img_stk[[swirband]]
     # back to native scale
