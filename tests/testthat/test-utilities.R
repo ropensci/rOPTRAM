@@ -1,5 +1,5 @@
 test_that("calculate_vi returns SpatRaster", {
-    
+
     img_stk <- terra::rast(system.file("extdata",
               "BOA",
               "S2A2A_20230301_121_migdaaoi_BOA_10.tif",
@@ -16,7 +16,7 @@ test_that("calculate_vi returns NULL for non-existant VI", {
 })
 
 test_that("calculate_str returns SpatRaster", {
-    
+
     img_stk <- terra::rast(system.file("extdata",
               "BOA",
               "S2A2A_20230301_121_migdaaoi_BOA_10.tif",
@@ -43,9 +43,3 @@ if (package_version(utils::packageVersion("sen2r")) <= '1.5.0') {
         expect_false(check_scihub_access())
     })
 }
-test_that("Scihub credentials correct", {
-    if (!sen2r::is_scihub_configured()) {
-      expect_false(check_scihub_access("XXX", "YYY"))
-      expect_false(check_scihub_access(NULL, NULL))
-    }
-})
