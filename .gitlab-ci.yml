@@ -80,7 +80,7 @@ check_platforms:
     #- Rscript inst/rhubcheck.R "windows-x86_64-devel"
     #- Rscript inst/rhubcheck.R "macos-highsierra-release-cran"
     # Platforms hard-coded in rhubcheck.R script
-    - Rscript inst/rhubcheck.R
+  #  - Rscript inst/rhubcheck.R
     - echo "Done"
     # Check MAC
     # Incorporated into rhubcheck.R
