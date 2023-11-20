@@ -11,7 +11,8 @@
 #     stop(paste(pf, "not in rhub::platforms()[[1L]]"))
 #   }
 # }
-
+t0 <- Sys.time()
+print(paste(t0, " - Starting Check"))
 # Check on Ubuntu and Win
 platforms <- c("ubuntu-gcc-devel",
                "ubuntu-gcc-release",
@@ -44,6 +45,11 @@ mac_df <- data.frame("platform" = "macos_release",
 
 res <- do.call(rbind, list(res, mac_df))
 print(res, row.names = FALSE)
+
+t1 <- Sys.time()
+print(paste(t1, " - Check completed"))
+interval <- as.numeric(difftime(t1, t0), units = "mins")
+print(paste("Running time:"), interval, "minutes")
 
 if (any(colSums(res[2L:3L]) > 0)) {
   stop("Some checks with ERROR, or WARNING.")

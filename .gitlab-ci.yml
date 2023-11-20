@@ -18,11 +18,7 @@ stages:
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
   _R_CHECK_FORCE_SUGGESTS_: "true"
-#  CODECOV_TOKEN: $JHADDINS_TOKEN_CODECOV
-#  RHUB_TOKEN: "$RHUB_TOKEN"
-#  RHUB_EMAIL: "$RHUB_EMAIL"
 
-#
 default:
   before_script:
    - echo "Before script section"
@@ -30,10 +26,6 @@ default:
    - echo "$RHUB_EMAIL"
    - echo "$RHUB_TOKEN"
    - R -e "rhub::validate_email(email = '$RHUB_EMAIL', token = '$RHUB_TOKEN')"
-#     - mkdir -p installed_deps
-#     - echo 'R_LIBS="installed_deps"' > .Renviron
-#     - echo 'R_LIBS_USER="installed_deps"' >> .Renviron
-#     - echo 'R_LIBS_SITE="installed_deps"' >> .Renviron
 #
 # test:
 #    stage: test
@@ -80,8 +72,7 @@ check_platforms:
     #- Rscript inst/rhubcheck.R "windows-x86_64-devel"
     #- Rscript inst/rhubcheck.R "macos-highsierra-release-cran"
     # Platforms hard-coded in rhubcheck.R script
-  #  - Rscript inst/rhubcheck.R
-    - echo "Done"
+    - Rscript inst/rhubcheck.R
     # Check MAC
     # Incorporated into rhubcheck.R
     # - mac_url = devtools::check_mac_release()
