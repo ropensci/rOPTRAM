@@ -9,9 +9,9 @@
 # Debian testing
 # image: rocker/r-base:4.1.0
 # Ubuntu LTS
-image: rocker/r-ver:4.1.0
+# image: rocker/r-ver:4.1.0
 # Ubuntu r2u
-#image: rocker/r2u:22.04
+image: rocker/r2u:22.04
 stages:
   - checkrhub
 
@@ -73,10 +73,10 @@ check_platforms:
     #- Rscript inst/rhubcheck.R "macos-highsierra-release-cran"
     # Platforms hard-coded in rhubcheck.R script
     - apt -y update && apt -y upgrade
-    - apt install -y libssl-dev libxml2-dev libcurl4-openssl-dev libpng-dev
-    - apt install -y libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev
-    - apt install -y libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev
-    - apt install -y protobuf-compiler libprotobuf-dev wget ca-certificates gnupg
+    #- apt install -y libssl-dev libxml2-dev libcurl4-openssl-dev libpng-dev
+    #- apt install -y libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev
+    #- apt install -y libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev
+    #- apt install -y protobuf-compiler libprotobuf-dev wget ca-certificates gnupg
     - R -e "install.packages(c('dplyr', 'ggplot2', 'sf', 'terra', 'markdown'), dependencies = TRUE)"
     - Rscript inst/rhubcheck.R
     # Check MAC
