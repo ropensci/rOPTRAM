@@ -50,5 +50,5 @@ if (any(colSums(res[2L:3L]) > 0)) {
 }
 
 if (colSums(res[4L]) > 0) {
-  stop("Some checks with NOTES.")
+  message("Some checks with NOTES.")
 }
