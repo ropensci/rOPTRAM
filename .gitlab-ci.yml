@@ -11,7 +11,7 @@
 # Ubuntu LTS
 image: rocker/r-ver:4.1.0
 # Ubuntu r2u
-# image: rocker/r2u:22.04
+image: rocker/r2u:22.04
 stages:
   - checkrhub
 
@@ -72,7 +72,8 @@ check_platforms:
     #- Rscript inst/rhubcheck.R "windows-x86_64-devel"
     #- Rscript inst/rhubcheck.R "macos-highsierra-release-cran"
     # Platforms hard-coded in rhubcheck.R script
-    - apt install -y libssl-dev libpq-dev libxml2-dev libcurl4-openssl-dev libpng-dev
+    - apt update && apt upgrade
+    - apt install -y libssl-dev libxml2-dev libcurl4-openssl-dev libpng-dev
     - apt install -y libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev
     - apt install -y libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev
     - apt install -y protobuf-compiler libprotobuf-lite32 wget ca-certificates gnupg
