@@ -43,7 +43,7 @@ mac_df <- data.frame("platform" = "macos_release",
                      "notes" = notes)
 
 res <- do.call(rbind, list(res, mac_df))
-print(res)
+print(res, row.names = FALSE)
 
 if (any(colSums(res[2L:3L]) > 0)) {
   stop("Some checks with ERROR, or WARNING.")
