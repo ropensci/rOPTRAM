@@ -45,6 +45,10 @@ mac_df <- data.frame("platform" = "macos_release",
 res <- do.call(rbind, list(res, mac_df))
 print(res)
 
-if (any(colSums(res[2L:4L]) > 0)) {
-  stop("Some checks with errors, warnings or notes.")
+if (any(colSums(res[2L:3L]) > 0)) {
+  stop("Some checks with ERROR, or WARNING.")
+}
+
+if (colSums(res[4L]) > 0) {
+  stop("Some checks with NOTES.")
 }
