@@ -27,8 +27,10 @@ default:
    - echo "$RHUB_TOKEN"
    - R -e "rhub::validate_email(email = '$RHUB_EMAIL', token = '$RHUB_TOKEN')"
    - apt update -y && apt upgrade -y
+   - apt install -y pandoc pandoc-citeproc
    - apt install -y r-cran-devtools r-cran-markdown r-cran-dplyr r-cran-ggplot2
-   - apt install -y pandoc pandoc-citeproc r-cran-sf r-cran-terra
+   - apt install -y r-cran-sf r-cran-terra r-cran-curl
+
 
 # test:
 #    stage: test
