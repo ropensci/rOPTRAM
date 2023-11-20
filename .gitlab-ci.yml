@@ -72,7 +72,7 @@ check_platforms:
     #- Rscript inst/rhubcheck.R "windows-x86_64-devel"
     #- Rscript inst/rhubcheck.R "macos-highsierra-release-cran"
     # Platforms hard-coded in rhubcheck.R script
-    - R -e "install.packages(c(‘dplyr’, ‘ggplot2’, ‘sf’, ‘terra’), dependencies = TRUE)"
+    - R -e "install.packages(c('dplyr', 'ggplot2', 'sf', 'terra'), dependencies = TRUE)"
     - Rscript inst/rhubcheck.R
     # Check MAC
     # Incorporated into rhubcheck.R
