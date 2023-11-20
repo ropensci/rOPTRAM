@@ -26,7 +26,7 @@ variables:
 default:
   before_script:
    - echo "Before script section"
-   - R -e "install.packages(c('rhub'), dependencies = TRUE)"
+   - R -e "install.packages(c('rhub', 'devtools'), dependencies = TRUE)"
    - R -e "rhub::validate_email(email = RHUB_EMAIL, token = RHUB_TOKEN)"
 #     - mkdir -p installed_deps
 #     - echo 'R_LIBS="installed_deps"' > .Renviron
@@ -73,7 +73,39 @@ default:
 check_platforms:
   stage: checkrhub
   script:
-    - Rscript inst/rhubcheck.R "ubuntu-gcc-release"
-    - Rscript inst/rhubcheck.R "ubuntu-gcc-devel"
-    - Rscript inst/rhubcheck.R "windows-x86_64-devel"
-    - Rscript inst/rhubcheck.R "macos-highsierra-release-cran"
+    #- Rscript inst/rhubcheck.R "ubuntu-gcc-release"
+    #- Rscript inst/rhubcheck.R "ubuntu-gcc-devel"
+    #- Rscript inst/rhubcheck.R "windows-x86_64-devel"
+    #- Rscript inst/rhubcheck.R "macos-highsierra-release-cran"
+    # Platforms hard-coded in rhubcheck.R script
+    - Rscript inst/rhubcheck.R
+
+    # Check MAC
+    # Incorporated into rhubcheck.R
+    # - mac_url = devtools::check_mac_release()
+    # - Sys.sleep(600)
+    # - mac_res <- curl::curl(mac_url)
+    # - mac_res <- readLines(mac_res)
+    # - errs <- length(grep(pattern = "ERROR", mac_res))
+    # - warns <- length(grep(pattern = "WARNING", mac_res))
+    # - notes <- length(grep(pattern = "NOTE", mac_res))
+    # - mac_df <- data.frame("platform" = "macos_release",
+    #               "errors" = errs, "warnings" = warns, "notes" = notes)
+
+    # - rhub_chk <- check(platforms =
+    #                 c("ubuntu-gcc-devel",
+    #                   "ubuntu-gcc-release",
+    #                   "windows-x86_64-release"))
+    # - statuses <- rhub_chk[[".__enclos_env__"]][["private"]][["status_"]]
+    # - status_list <- lapply(statuses, function(thisStatus) {
+    #       data.frame(
+    #         plaform  = thisStatus[["platform"]][["name"]],
+    #         errors   = length(thisStatus[["result"]][["errors"]]),
+    #         warnings = length(thisStatus[["result"]][["warnings"]]),
+    #         notes    = length(thisStatus[["result"]][["notes"]]),
+    #         stringsAsFactors = FALSE
+    #       )
+    #     })
+    # - res <- do.call(rbind, status_list)
+    # - print(res)
+

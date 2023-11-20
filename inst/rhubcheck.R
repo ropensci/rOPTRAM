@@ -1,25 +1,48 @@
-args <- commandArgs(trailingOnly = TRUE)
-if (length(args) != 1L) {
-  stop("Incorrect number of args, needs 1: platform (string)")
-}
+# args <- commandArgs(trailingOnly = TRUE)
+# # args should be string vector of platforms
+# # i.e. c("ubuntu-gcc-devel", "ubuntu-gcc-release", "windows-x86_64-release"))
+# if (length(args) < 1L) {
+#  stop("Incorrect number of args, required string vector of platforms")
+# }
+#
+# platforms <- args[[1L]]
+# for (pf in platforms) {
+#   if (!is.element(pf, rhub::platforms()[[1L]])) {
+#     stop(paste(pf, "not in rhub::platforms()[[1L]]"))
+#   }
+# }
 
-platform <- args[[1L]]
-if (!is.element(platform, rhub::platforms()[[1L]])) {
-  stop(paste(platform, "not in rhub::platforms()[[1L]]"))
-}
-
-cr <- rhub::check(platform = platform, show_status = TRUE)
-statuses <- cr[[".__enclos_env__"]][["private"]][["status_"]]
+# Check on Ubuntu and Win
+platforms <- c("ubuntu-gcc-devel",
+               "ubuntu-gcc-release",
+               "windows-x86_64-release")
+rhub_chk <- rhub::check(platform = platforms, show_status = TRUE)
+statuses <- rhub_chk[[".__enclos_env__"]][["private"]][["status_"]]
 
 res <- do.call(rbind, lapply(statuses, function(thisStatus) {
   data.frame(
-    plaform  = thisStatus[["platform"]][["name"]],
-    errors   = length(thisStatus[["result"]][["errors"]]),
+    platform = thisStatus[["platform"]][["name"]],
+    errors = length(thisStatus[["result"]][["errors"]]),
     warnings = length(thisStatus[["result"]][["warnings"]]),
-    notes    = length(thisStatus[["result"]][["notes"]]),
+    notes = length(thisStatus[["result"]][["notes"]]),
     stringsAsFactors = FALSE
   )
 }))
+
+# Check on MACOS
+mac_url = devtools::check_mac_release()
+Sys.sleep(600)
+mac_res <- curl::curl(mac_url)
+mac_res <- readLines(mac_res)
+errs <- length(grep(pattern = "ERROR", mac_res))
+warns <- length(grep(pattern = "WARNING", mac_res))
+notes <- length(grep(pattern = "NOTE", mac_res))
+mac_df <- data.frame("platform" = "macos_release",
+                     "errors" = errs,
+                     "warnings" = warns,
+                     "notes" = notes)
+
+res <- do.call(rbind, list(res, mac_df))
 print(res)
 
 if (any(colSums(res[2L:4L]) > 0)) {
