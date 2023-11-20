@@ -27,7 +27,7 @@ default:
    - echo "$RHUB_TOKEN"
    - R -e "rhub::validate_email(email = '$RHUB_EMAIL', token = '$RHUB_TOKEN')"
    - apt update -y && apt upgrade -y
-   - apt install -y devtools r-cran-markdown
+   - apt install -y r-cran-devtools r-cran-markdown
    - apt install -y pandoc r-cran-dplyr r-cran-ggplot2 r-cran-sf r-cran-terra
 
 # test:
@@ -79,7 +79,6 @@ check_platforms:
     #- apt install -y libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev
     #- apt install -y libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev
     #- apt install -y protobuf-compiler libprotobuf-dev wget ca-certificates gnupg
-
     - Rscript inst/rhubcheck.R
     # Check MAC
     # Incorporated into rhubcheck.R
