@@ -26,7 +26,7 @@ variables:
 default:
   before_script:
    - echo "Before script section"
-   - R -e "install.packages(c('rhub', 'devtools'), dependencies = TRUE)"
+#   - R -e "install.packages(c('rhub', 'devtools'), dependencies = TRUE)"
    - echo $RHUB_EMAIL
    - echo $RHUB_TOKEN
    - R -e "rhub::validate_email(email = $RHUB_EMAIL, token = $RHUB_TOKEN)"
@@ -81,7 +81,7 @@ check_platforms:
     #- Rscript inst/rhubcheck.R "macos-highsierra-release-cran"
     # Platforms hard-coded in rhubcheck.R script
     - Rscript inst/rhubcheck.R
-
+    - echo "Done"
     # Check MAC
     # Incorporated into rhubcheck.R
     # - mac_url = devtools::check_mac_release()
