@@ -27,7 +27,7 @@ default:
   before_script:
    - echo "Before script section"
    - R -e "install.packages(c('rhub', 'devtools'), dependencies = TRUE)"
-   - R -e "rhub::validate_email(email = RHUB_EMAIL, token = RHUB_TOKEN)"
+   - R -e "rhub::validate_email(email = '$RHUB_EMAIL', token = '$RHUB_TOKEN')"
 #     - mkdir -p installed_deps
 #     - echo 'R_LIBS="installed_deps"' > .Renviron
 #     - echo 'R_LIBS_USER="installed_deps"' >> .Renviron
