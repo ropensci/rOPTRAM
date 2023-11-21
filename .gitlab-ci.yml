@@ -18,8 +18,12 @@ stages:
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
   _R_CHECK_FORCE_SUGGESTS_: "true"
+  _RUN_CI_JOB: "false"
 
 default:
+rules:
+   - if: $_RUN_CI_JOB == "false"
+     when: manual
   before_script:
    - echo "Before script section"
    - R -e "install.packages(c('rhub'), dependencies = TRUE)"
@@ -110,4 +114,6 @@ check_platforms:
     #     })
     # - res <- do.call(rbind, status_list)
     # - print(res)
-
+ rules:
+   - if: $RUN_CI_JOB == "false"
+     when: manual
