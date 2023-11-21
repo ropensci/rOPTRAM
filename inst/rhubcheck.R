@@ -49,7 +49,7 @@ print(res, row.names = FALSE)
 t1 <- Sys.time()
 print(paste(t1, " - Check completed"))
 duration <- as.numeric(difftime(t1, t0), units = "mins")
-print(paste("Checking duration: ", 
+print(paste("Duration of checking: ", 
             sprintf("%.1f", duration),
             "minutes"))
 
