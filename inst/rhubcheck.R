@@ -48,10 +48,10 @@ print(res, row.names = FALSE)
 
 t1 <- Sys.time()
 print(paste(t1, " - Check completed"))
-interval <- as.numeric(difftime(t1, t0), units = "mins")
-print(paste("Checking duration: "), 
-            sprintf("%.1f", interval),
-            "minutes")
+duration <- as.numeric(difftime(t1, t0), units = "mins")
+print(paste("Checking duration: ", 
+            sprintf("%.1f", duration),
+            "minutes"))
 
 if (any(colSums(res[2L:3L]) > 0)) {
   stop("Some checks with ERROR, or WARNING.")
