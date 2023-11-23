@@ -1,9 +1,9 @@
-#' @title Check access to Sentinel Hub, using sen2r
+#' @title Check that sen2r is installed
 #'
 #' @description
 #' Verify that sen2r is installed,
 #' @export
-#' @return boolean, whether access to scihub using sen2r is possible
+#' @return boolean, whether online and using sen2r is possible
 #' @examples 
 #' check_scihub_access()
 
@@ -40,6 +40,7 @@ check_scihub_access <- function() {
         "Please update to version > 1.5")
         return(FALSE)
     }
+    return(TRUE)
 }
 
 #' @title Check aoi_file

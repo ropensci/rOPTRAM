@@ -42,4 +42,9 @@ if (package_version(utils::packageVersion("sen2r")) <= '1.5.0') {
     test_that("Version of sen2r is recent", {
         expect_false(check_scihub_access())
     })
+} else {
+    test_that("sen2r can access scihub", {
+        expect_true(check_scihub_access())
+})
 }
+
