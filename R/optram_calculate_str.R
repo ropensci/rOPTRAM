@@ -12,17 +12,14 @@
 #'
 #' SWIR Transformed Reflectance is calculated as
 #'  STR = (1-SWIR)^2 / 2*SWIR
-#'
 #'  SWIR is band 11 (2200 nm) from `sen2r()` since band B09 is not processed
-#'
 #' @export
-#' @examples 
+#' @examples
 #' BOA_dir <- system.file("extdata", "BOA")
 #' STR <- optram_calculate_str(BOA_dir)
 
 optram_calculate_str <- function(BOA_dir){
   # Returns: STR_list, list of paths to STR (SWIR Transformed) Raster files
-
   # Avoid "no visible binding for global variable" NOTE
   BOA_list <- STR_list <- SWIR_DN <- SWIR <- STR <- outfile <- outpath <- NULL
   

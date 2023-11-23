@@ -26,7 +26,6 @@ https://doi.org/10.1016/j.rse.2017.05.041
 
 SWIR Transformed Reflectance is calculated as
 STR = (1-SWIR)^2 / 2*SWIR
-
 SWIR is band 11 (2200 nm) from \code{sen2r()} since band B09 is not processed
 }
 \examples{

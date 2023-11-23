@@ -9,3 +9,5 @@
 R/create_icon\.R$
 ^paper\.md$
 ^\.gitlab-ci\.yml$
+^inst/extdata/S2A$
+

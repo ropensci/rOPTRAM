@@ -2,15 +2,16 @@
 % Please edit documentation in R/utilities.R
 \name{check_scihub_access}
 \alias{check_scihub_access}
-\title{Check access to Sentinel Hub, using sen2r}
+\title{Check that sen2r is installed}
 \usage{
 check_scihub_access()
 }
 \value{
-boolean, whether access to scihub using sen2r is possible
+boolean, whether online and using sen2r is possible
 }
 \description{
-Verify that sen2r is installed,
+Verify that sen2r is installed, and site is available.
+Default download site: "https://scihub.copernicus.eu/"
 }
 \examples{
 check_scihub_access()

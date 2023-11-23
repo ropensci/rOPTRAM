@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities.R
 \name{aoi_to_name}
 \alias{aoi_to_name}
-\title{Get name string for AIO from the full file name}
+\title{Get name string for Area of Interest from full file name}
 \usage{
 aoi_to_name(aoi_file)
 }

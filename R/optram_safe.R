@@ -63,7 +63,7 @@ optram_safe <- function(safe_dir,
     }
 
     if (is.null(safe_dir) || !dir.exists(safe_dir)) {
-      warning("The directory of downloaded Landsat images
+      message("The directory of downloaded Landsat images
               is a required parameter.")
       return(NULL)
     }
@@ -93,7 +93,7 @@ optram_safe <- function(safe_dir,
         "B12_20m"  #SWIR 2200
     )
     # Get Area of interest
-    aoi <- terra::vect(aoi_file)
+    aoi <- suppressWarnings(terra::vect(aoi_file))
     aoi_name <- aoi_to_name(aoi_file)
 
     # Prepare output directories
@@ -125,7 +125,7 @@ optram_safe <- function(safe_dir,
         mtd_file <- list.files(s, pattern = "MTD_TL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtd_file)) {
-            warning("No metadata file in SAFE dir: ", s, "Skipping...")
+            message("No metadata file in SAFE dir: ", s, "Skipping...")
             return(NULL)
         }
         # Get CRS for each S2 tile 
@@ -205,7 +205,7 @@ optram_safe <- function(safe_dir,
         mtd_file <- list.files(s, pattern = "MTD_TL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtd_file)) {
-            warning("No metadata file in SAFE dir: ", s, "Skipping...")
+            message("No metadata file in SAFE dir: ", s, "Skipping...")
             return(NULL)
         }
         mtd <- xml2::read_xml(mtd_file)

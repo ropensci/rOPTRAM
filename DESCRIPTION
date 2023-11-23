@@ -34,7 +34,6 @@ Imports:
     utils
 Suggests:
     geojsonio,
-    httptest,
     stats,
     sen2r (> 1.5.0),
     testthat (>= 3.0.0),

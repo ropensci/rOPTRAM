@@ -27,11 +27,11 @@
 #'  as well as the metadata files as downloaded from,
 #'  i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 #' @examples
-#' \dontrun{optram_landsat(landsat_dir,
-#'                           aoi_file,
-#'                           veg_index = 'SAVI',
-#'                           LC_output_dir = tempdir(),
-#'                           data_output_dir = tempdir())
+#' \dontrun{
+#' aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+#' optram_landsat(landsat_dir,  aoi_file,
+#'                veg_index = 'SAVI',
+#'                LC_output_dir = tempdir(), data_output_dir = tempdir())
 #' }
 
   optram_landsat <- function(landsat_dir,
@@ -90,7 +90,7 @@
                        (as.character(terra::crs(rstt, describe=T)[3])))
     # Get Area of interest,
     # make sure it is projected to the CRS of Landsat images
-    aoi <- terra::vect(aoi_file)
+    aoi <- suppressWarnings(terra::vect(aoi_file))
     aoi <- terra::project(aoi, epsg_code)
     aoi_name <- aoi_to_name(aoi_file)
 

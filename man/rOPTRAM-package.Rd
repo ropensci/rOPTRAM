@@ -4,9 +4,9 @@
 \name{rOPTRAM-package}
 \alias{rOPTRAM}
 \alias{rOPTRAM-package}
-\title{rOPTRAM: Derive soil moisture using the OPTRAM algorithm}
+\title{rOPTRAM: Derive Soil Moisture Using the OPTRAM Algorithm}
 \description{
-The OPtical TRapezoid Model (OPTRAM) derives soil moisture based on the linear relation between a vegetation index and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band is used as a proxy for LST. See: Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017. The optical trapezoid model: A novel approach to remote sensing of soil moisture applied to Sentinel-2 and Landsat-8 observations. Remote Sensing of Environment 198, 52–68, https://doi.org/10.1016/j.rse.2017.05.041 .
+The OPtical TRapezoid Model (OPTRAM) derives soil moisture based on the linear relation between a vegetation index and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band is used as a proxy for LST. See: Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017. The optical trapezoid model: A novel approach to remote sensing of soil moisture applied to Sentinel-2 and Landsat-8 observations. Remote Sensing of Environment 198, 52–68, \url{https://doi.org/10.1016/j.rse.2017.05.041} .
 }
 \seealso{
 Useful links:

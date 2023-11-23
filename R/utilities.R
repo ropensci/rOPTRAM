@@ -1,7 +1,8 @@
 #' @title Check that sen2r is installed
 #'
 #' @description
-#' Verify that sen2r is installed,
+#' Verify that sen2r is installed, and site is available.
+#' Default download site: "https://scihub.copernicus.eu/"
 #' @export
 #' @return boolean, whether online and using sen2r is possible
 #' @examples 
@@ -9,23 +10,23 @@
 
 check_scihub_access <- function() {
     # Avoid "no visible binding for global variable" NOTE
-    is_online <- site <- NULL
+    is_online <- NULL 
     # First check for internet connection
     is_online <- function(site = "https://scihub.copernicus.eu/") {
-        tryCatch({
-            readLines(site, n = 1)
-            TRUE
+      tryCatch({
+        readLines(site, n=1)
+        TRUE
         },
-        # warning = function(w) invokeRestart("muffleWarning"),
+        #warning = function(w) invokeRestart("muffleWarning"),
         error = function(e) FALSE)
     }
-
+    
     if (!is_online()) {
-        message("No internet connection.
-                Downloading data is not currently possible")
+        message("No internet connection to SCIHUB.", "\n",
+        "Downloading data is not currently possible")
         return(FALSE)
     }
-
+    
     # Is sen2r installed?
     if (system.file(package='sen2r') == "") {
         message("This function requires the `sen2r` package.", "\n",
@@ -36,7 +37,7 @@ check_scihub_access <- function() {
     sen2r_version <- utils::packageVersion("sen2r")
     version_ok <- package_version(sen2r_version) > '1.5.0'
     if (!version_ok) {
-        warning("Version of sen2r pacakge: ", sen2r_version, " is too old. \n",
+        message("Version of sen2r pacakge: ", sen2r_version, " is too old. \n",
         "Please update to version > 1.5")
         return(FALSE)
     }
@@ -119,7 +120,7 @@ calculate_vi <- function(img_stk, viname = "NDVI",
         vi_rast <- ((1-(2*(red - green))) / 
             (terra::mean(green, red, nir, na.rm = TRUE)))
     } else {
-        warning("Unrecognized index: ", viname)
+        message("Unrecognized index: ", viname)
         vi_rast <- NULL
         return(NULL)
     }
@@ -174,7 +175,7 @@ calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
 }
 
 
-#' @title Get name string for AIO from the full file name
+#' @title Get name string for Area of Interest from full file name
 #' @description
 #' Extract a string from the full path to AIO file
 #' @param aoi_file, string, full path to AOI file
