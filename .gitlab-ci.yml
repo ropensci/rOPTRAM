@@ -14,6 +14,7 @@
 image: rocker/r2u:22.04
 stages:
   - checkrhub
+  - coverage
 
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
@@ -22,7 +23,7 @@ variables:
 
 default:
 rules:
-   - if: $_RUN_CI_JOB == "false"
+   - if: "$_RUN_CI_JOB" == "false"
      when: manual
   before_script:
    - echo "Before script section"
@@ -114,6 +115,9 @@ check_platforms:
     #     })
     # - res <- do.call(rbind, status_list)
     # - print(res)
- rules:
-   - if: $RUN_CI_JOB == "false"
+  stage: checkrhub
+  script:
+    - covr::package_coverage()
+  rules:
+   - if: "$_RUN_CI_JOB" == "false"
      when: manual
