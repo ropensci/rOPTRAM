@@ -43,8 +43,14 @@ if (package_version(utils::packageVersion("sen2r")) <= '1.5.0') {
         expect_false(check_scihub_access())
     })
 } else {
+    skip_if_offline(host = "r-project.org")
     test_that("sen2r can access scihub", {
         expect_true(check_scihub_access())
 })
 }
 
+httptest::without_internet(
+    test_that("Offline fails", {
+        expect_false(check_scihub_access())
+    }    
+)
