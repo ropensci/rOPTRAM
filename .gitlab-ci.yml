@@ -23,7 +23,7 @@ variables:
 
 default:
 rules:
-   - if: "$_RUN_CI_JOB" == "false"
+   - if: $_RUN_CI_JOB == "false"
      when: manual
   before_script:
    - echo "Before script section"
@@ -119,5 +119,5 @@ check_platforms:
   script:
     - covr::package_coverage()
   rules:
-   - if: "$_RUN_CI_JOB" == "false"
+   - if: $_RUN_CI_JOB == "false"
      when: manual
