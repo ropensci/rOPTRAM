@@ -121,5 +121,5 @@ check_platforms:
     # - print(res)
 
   rules:
-    - if: $RUN_CI_JOB_AUTO' == "false"
+    - if: $RUN_CI_JOB_AUTO == "false"
       when: manual
