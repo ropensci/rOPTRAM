@@ -22,7 +22,6 @@ variables:
   RUN_CI_JOB_AUTO: "false"
 
 default:
-
   before_script:
    - echo "Before script section"
    - R -e "install.packages(c('rhub'), dependencies = TRUE)"
@@ -33,7 +32,12 @@ default:
    - apt install -y pandoc pandoc-citeproc apt-utils
    - apt install -y r-cran-devtools r-cran-markdown r-cran-dplyr r-cran-ggplot2
    - apt install -y r-cran-sf r-cran-terra r-cran-curl r-cran-covr r-cran-sen2r
-
+   # Install Google cloud
+   - curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-455.0.0-linux-x86_64.tar.gz
+   - tar xvzf google-cloud-cli-455.0.0-linux-x86_64.tar.gz
+   - ./google-cloud-sdk/install.sh -q
+   #- ./google-cloud-sdk/bin/gcloud init
+   - PATH=$PATH:`pwd`/google-cloud-sdk/bin/
 
 # test:
 #    stage: test
