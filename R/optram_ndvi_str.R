@@ -45,7 +45,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
   VI_df_list <- VI_df <- VI_df_1 <- size <- max_tbl <- NULL
 
   if (length(STR_list) == 0 || length(VI_list) == 0) {
-    warning("No raster files in directories")
+    message("No raster files in directories")
     return(NULL)
   }
 

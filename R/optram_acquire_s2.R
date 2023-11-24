@@ -86,7 +86,7 @@ optram_acquire_s2 <- function(
     message("Using gcloud")
     servers <- "gcloud"
   } else {
-    warning("No access to Sentinel or Google cloud",
+    message("No access to Sentinel or Google cloud",
             "\nExiting")
     return(NULL)
   }

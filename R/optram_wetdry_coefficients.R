@@ -143,16 +143,16 @@ plot_ndvi_str_cloud <- function(full_df,
 
   # Pre-flight test
   if (!ncol(coeffs) == 4) {
-    warning("Coefficients not correctly formed. \n
+    message("Coefficients not correctly formed. \n
     Be sure the CSV file has 4 columns. Exiting...")
     return(NULL)
   }
   if (! "STR" %in% names(full_df)) {
-    warning("STR column missing from data.frame. Exiting...")
+    message("STR column missing from data.frame. Exiting...")
     return(NULL)
   }
   if (! "VI" %in% names(full_df)) {
-    warning("VI column missing from data.frame. Exiting...")
+    message("VI column missing from data.frame. Exiting...")
     return(NULL)
   }
 

@@ -48,21 +48,21 @@ optram_calculate_soil_moisture <- function(
 
   # Pre-flight checks...
   if (is.na(as.Date(img_date, format = "%Y-%m-%d"))) {
-    warning("Image date:", img_date, " is not properly formatted",
+    message("Image date:", img_date, " is not properly formatted",
       "\nPlease format as YYYY-MM-DD")
     return(NULL)
   }
   img_str <- gsub("-", "", img_date)
 
   if (!dir.exists(VI_dir) || !dir.exists(STR_dir)) {
-    warning("Input directories missing, Exiting...")
+    message("Input directories missing, Exiting...")
     return(NULL)
   }
 
   VI_file <- list.files(VI_dir,
                         pattern = img_str, full.names = TRUE)
   if (length(VI_file) == 0) {
-    warning("No VI file, Exiting...")
+    message("No VI file, Exiting...")
     return(NULL)
   }
 
@@ -70,12 +70,12 @@ optram_calculate_soil_moisture <- function(
                         pattern = paste0(img_str, ".*STR"),
                         full.names = TRUE)
   if (length(STR_file) == 0) {
-    warning("No STR file, Exiting...")
+    message("No STR file, Exiting...")
     return(NULL)
   }
 
   if (!file.exists(coeffs_file)) {
-    warning("No coefficients file, Exiting...")
+    message("No coefficients file, Exiting...")
     return(NULL)
   }
 

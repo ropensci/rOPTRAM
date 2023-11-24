@@ -48,7 +48,7 @@
 
   # Check for inputs
    if (is.null(landsat_dir) || !dir.exists(landsat_dir)) {
-      warning("The directory of downloaded Landsat images
+      message("The directory of downloaded Landsat images
               is a required parameter.")
       return(NULL)
   } else {
@@ -115,7 +115,7 @@
         mtl_file <- list.files(s, pattern = "MTL.*xml$",
                                 recursive = TRUE, full.names = TRUE, )[1]
         if (! file.exists(mtl_file)) {
-            warning("No metadata file in landsat dir: ", s, "Skipping...")
+            message("No metadata file in landsat dir: ", s, "Skipping...")
             return(NULL)
         }
         mtl <- xml2::read_xml(mtl_file)
@@ -176,7 +176,7 @@
       mtl_file <- list.files(s, pattern = "MTL.*xml$",
                              recursive = TRUE, full.names = TRUE, )[1]
       if (! file.exists(mtl_file)) {
-        warning("No metadata file in landsat dir: ", s, "Skipping...")
+        message("No metadata file in landsat dir: ", s, "Skipping...")
         return(NULL)
       }
       #extract time, date and create datetime

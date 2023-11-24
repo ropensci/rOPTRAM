@@ -19,11 +19,11 @@ stages:
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
   _R_CHECK_FORCE_SUGGESTS_: "true"
-  RUN_CI_JOB_MANUAL: "false"
+  RUN_CI_JOB_AUTO: "false"
 
 default:
   rules:
-    - if: '$RUN_CI_JOB_MANUAL' == "false"
+    - if: $RUN_CI_JOB_AUTO' == "false"
       when: manual
   before_script:
    - echo "Before script section"
@@ -119,5 +119,5 @@ check_platforms:
   script:
     - covr::package_coverage()
   rules:
-    - if: '$RUN_CI_JOB_MANUAL' == "false"
+    - if: $RUN_CI_JOB_AUTO == "false"
       when: manual
