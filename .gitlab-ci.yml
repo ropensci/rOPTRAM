@@ -14,6 +14,7 @@
 image: rocker/r2u:22.04
 stages:
   - checkrhub
+  - coverage
 
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
@@ -78,48 +79,15 @@ default:
 check_platforms:
   stage: checkrhub
   script:
-    #- Rscript inst/rhubcheck.R "ubuntu-gcc-release"
-    #- Rscript inst/rhubcheck.R "ubuntu-gcc-devel"
-    #- Rscript inst/rhubcheck.R "windows-x86_64-devel"
-    #- Rscript inst/rhubcheck.R "macos-highsierra-release-cran"
-    # Platforms hard-coded in rhubcheck.R script
-    #- apt install -y libssl-dev libxml2-dev libcurl4-openssl-dev libpng-dev
-    #- apt install -y libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev
-    #- apt install -y libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev
-    #- apt install -y protobuf-compiler libprotobuf-dev wget ca-certificates gnupg
-    
     - Rscript inst/rhubcheck.R
-    - R -e "covr::package_coverage()"
-    
-    # Check MAC
-    # Incorporated into rhubcheck.R
-    # - mac_url = devtools::check_mac_release()
-    # - Sys.sleep(600)
-    # - mac_res <- curl::curl(mac_url)
-    # - mac_res <- readLines(mac_res)
-    # - errs <- length(grep(pattern = "ERROR", mac_res))
-    # - warns <- length(grep(pattern = "WARNING", mac_res))
-    # - notes <- length(grep(pattern = "NOTE", mac_res))
-    # - mac_df <- data.frame("platform" = "macos_release",
-    #               "errors" = errs, "warnings" = warns, "notes" = notes)
+  rules:
+    - if: $RUN_CI_JOB_AUTO' == "false"
+      when: manual
 
-    # - rhub_chk <- check(platforms =
-    #                 c("ubuntu-gcc-devel",
-    #                   "ubuntu-gcc-release",
-    #                   "windows-x86_64-release"))
-    # - statuses <- rhub_chk[[".__enclos_env__"]][["private"]][["status_"]]
-    # - status_list <- lapply(statuses, function(thisStatus) {
-    #       data.frame(
-    #         plaform  = thisStatus[["platform"]][["name"]],
-    #         errors   = length(thisStatus[["result"]][["errors"]]),
-    #         warnings = length(thisStatus[["result"]][["warnings"]]),
-    #         notes    = length(thisStatus[["result"]][["notes"]]),
-    #         stringsAsFactors = FALSE
-    #       )
-    #     })
-    # - res <- do.call(rbind, status_list)
-    # - print(res)
+  stage: coverage
+  script:
+    - R -e "covr::package_coverage()"
 
   rules:
-    - if: $RUN_CI_JOB_AUTO == "false"
+    - if: $RUN_CI_JOB_AUTO' == "false"
       when: manual
