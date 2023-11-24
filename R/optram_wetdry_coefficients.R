@@ -166,10 +166,8 @@ plot_ndvi_str_cloud <- function(full_df,
   if (num_rows < 400000) {
     plot_df <- full_df
   } else {
-    # This trick drops the num of plotted points
-    # by orders of magnitude
-    divisor <-  log2(num_rows)
-    samp_num <- num_rows  / divisor
+    # This trick drops the num of plotted points by orders of magnitude
+    samp_num <- num_rows  / log2(num_rows)
     sample_idx <- sample(num_rows, samp_num)
     plot_df <- full_df[sample_idx, ]
   }

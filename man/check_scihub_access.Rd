@@ -4,7 +4,10 @@
 \alias{check_scihub_access}
 \title{Check that sen2r is installed}
 \usage{
-check_scihub_access()
+check_scihub_access(site = "http://scihub.copernicus.eu")
+}
+\arguments{
+\item{site, }{string, Default is copernicus download site}
 }
 \value{
 boolean, whether online and using sen2r is possible
@@ -14,5 +17,6 @@ Verify that sen2r is installed, and site is available.
 Default download site: "https://scihub.copernicus.eu/"
 }
 \examples{
-check_scihub_access()
+site <-  "http://scihub.copernicus.eu"
+check_scihub_access(site)
 }

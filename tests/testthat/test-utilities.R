@@ -1,3 +1,14 @@
+site <- "http://scihub.copernicus.eu"
+if (package_version(utils::packageVersion("sen2r")) <= '1.5.0') {
+    test_that("Version of sen2r is recent", {
+        expect_false(check_scihub_access(site))
+    })
+} else {
+    test_that("sen2r can access scihub", {
+        expect_true(check_scihub_access(site))
+    })
+}
+
 test_that("calculate_vi returns SpatRaster", {
     img_stk <- terra::rast(system.file("extdata",
               "BOA", "S2A2A_20230301_121_migdaaoi_BOA_10.tif",
@@ -47,18 +58,7 @@ test_that("Check aoi_to_name return value",{
     expect_equal(aoi_to_name(aoi_file), "somearea")
 })
 
-if (package_version(utils::packageVersion("sen2r")) <= '1.5.0') {
-    test_that("Version of sen2r is recent", {
-        expect_false(check_scihub_access())
-    })
-} else {
-    skip_if_offline(host = "r-project.org")
-    test_that("sen2r can access scihub", {
-        expect_true(check_scihub_access())
-})
-}
-
 test_that("SCIHUB available", {
-    expect_true(check_scihub_access())
+    expect_true(check_scihub_access(site))
      }
 )

@@ -3,27 +3,26 @@
 #' @description
 #' Verify that sen2r is installed, and site is available.
 #' Default download site: "https://scihub.copernicus.eu/"
+#' @param site, string, Default is copernicus download site
 #' @export
 #' @return boolean, whether online and using sen2r is possible
-#' @examples 
-#' check_scihub_access()
+#' @examples
+#' site <-  "http://scihub.copernicus.eu"
+#' check_scihub_access(site)
 
-check_scihub_access <- function() {
-    # Avoid "no visible binding for global variable" NOTE
-    is_online <- site <- NULL 
+check_scihub_access <- function(site = "http://scihub.copernicus.eu") {
+    #message("In check_scihub_access:", covr::in_covr())
     # First check for internet connection
-    site <- "http://scihub.copernicus.eu"
-    #message("In covr 1:", covr::in_covr())
-    is_online <- tryCatch({
-        readLines(site, n=1)
-        TRUE},
+    internet_online <- tryCatch({
+            readLines(site, n=1)
+            TRUE},
         error = {function(e) {
             message("No internet connection to SCIHUB.", "\n",
         "Downloading data is not currently possible")
             FALSE}
     })
     
-    if (is_online) {
+    if (internet_online) {
         #message("In covr 2:", covr::in_covr())
         # Is sen2r installed?
         if (system.file(package='sen2r') == "") {
@@ -39,7 +38,7 @@ check_scihub_access <- function() {
             "Please update to version > 1.5")
             return(FALSE)
         }
-    return(TRUE)
+        return(TRUE)
     } else {
         return(FALSE)
     }
@@ -188,7 +187,6 @@ calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
 #' aoi_name
 
 aoi_to_name <- function(aoi_file) {
-
     aoi_name <- NULL
     if (is.null(aoi_file) || !file.exists(aoi_file)) {
         return(NULL)

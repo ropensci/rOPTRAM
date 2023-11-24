@@ -38,10 +38,17 @@ test_that("Input STR directory exists", {
 
 test_that("Length of lists of VI and STR", {
   img_date <- "2023-03-16"
-  # Empty directories, just for testing
-  VI_dir <- system.file("extdata", "NDVI2", package = "rOPTRAM")
-  STR_dir <- system.file("extdata", "STR2", package = "rOPTRAM")
+  VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
   coeffs_file <- system.file("extdata", "coefficients.csv", package = "rOPTRAM")
+  # Empty directory, just for testing
+  STR_dir <- system.file("extdata", "STR2", package = "rOPTRAM")
+  
+  expect_null(optram_calculate_soil_moisture(img_date = img_date,
+        VI_dir = VI_dir, STR_dir = STR_dir, coeffs_file = coeffs_file))
+
+  VI_dir <- system.file("extdata", "SAVI2", package = "rOPTRAM")
+  STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
+  
   expect_null(optram_calculate_soil_moisture(img_date = img_date,
         VI_dir = VI_dir, STR_dir = STR_dir, coeffs_file = coeffs_file))
 })
