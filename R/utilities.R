@@ -10,38 +10,39 @@
 
 check_scihub_access <- function() {
     # Avoid "no visible binding for global variable" NOTE
-    is_online <- NULL 
+    is_online <- site <- NULL 
     # First check for internet connection
-    is_online <- function(site = "https://scihub.copernicus.eu/") {
-      tryCatch({
+    site <- "http://scihub.copernicus.eu"
+    #message("In covr 1:", covr::in_covr())
+    is_online <- tryCatch({
         readLines(site, n=1)
-        TRUE
-        },
-        #warning = function(w) invokeRestart("muffleWarning"),
-        error = function(e) FALSE)
-    }
-    
-    if (!is_online()) {
-        message("No internet connection to SCIHUB.", "\n",
+        TRUE},
+        error = {function(e) {
+            message("No internet connection to SCIHUB.", "\n",
         "Downloading data is not currently possible")
-        return(FALSE)
-    }
+            FALSE}
+    })
     
-    # Is sen2r installed?
-    if (system.file(package='sen2r') == "") {
-        message("This function requires the `sen2r` package.", "\n",
-        "Please install that package first before running function")
-        return(FALSE)
-    }
-    # Check sen2r version
-    sen2r_version <- utils::packageVersion("sen2r")
-    version_ok <- package_version(sen2r_version) > '1.5.0'
-    if (!version_ok) {
-        message("Version of sen2r pacakge: ", sen2r_version, " is too old. \n",
-        "Please update to version > 1.5")
-        return(FALSE)
-    }
+    if (is_online) {
+        #message("In covr 2:", covr::in_covr())
+        # Is sen2r installed?
+        if (system.file(package='sen2r') == "") {
+            message("This function requires the `sen2r` package.", "\n",
+            "Please install that package first before running function")
+            return(FALSE)
+        }
+        # Check sen2r version
+        sen2r_version <- utils::packageVersion("sen2r")
+        version_ok <- package_version(sen2r_version) > '1.5.0'
+        if (!version_ok) {
+            message("Version of sen2r pacakge: ", sen2r_version, " is too old. \n",
+            "Please update to version > 1.5")
+            return(FALSE)
+        }
     return(TRUE)
+    } else {
+        return(FALSE)
+    }
 }
 
 #' @title Check aoi_file

@@ -58,8 +58,7 @@ if (package_version(utils::packageVersion("sen2r")) <= '1.5.0') {
 })
 }
 
-# httptest::without_internet(
-#     test_that("Offline fails", {
-#         expect_false(check_scihub_access())
-#     })
-# )
+test_that("SCIHUB available", {
+    expect_true(check_scihub_access())
+     }
+)

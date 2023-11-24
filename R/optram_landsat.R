@@ -90,7 +90,8 @@
                        (as.character(terra::crs(rstt, describe=T)[3])))
     # Get Area of interest,
     # make sure it is projected to the CRS of Landsat images
-    aoi <- suppressWarnings(terra::vect(aoi_file))
+    aoi <- sf::st_zm(sf::st_read(aoi_file), drop = TRUE, what = "zm")
+    aoi <- terra::vect(aoi)
     aoi <- terra::project(aoi, epsg_code)
     aoi_name <- aoi_to_name(aoi_file)
 
