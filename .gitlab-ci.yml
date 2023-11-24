@@ -81,7 +81,7 @@ check_platforms:
   script:
     - Rscript inst/rhubcheck.R
   rules:
-    - if: $RUN_CI_JOB_AUTO' == "false"
+    - if: $RUN_CI_JOB_AUTO == "false"
       when: manual
 
   stage: coverage
@@ -89,5 +89,5 @@ check_platforms:
     - R -e "covr::package_coverage()"
 
   rules:
-    - if: $RUN_CI_JOB_AUTO' == "false"
+    - if: $RUN_CI_JOB_AUTO == "false"
       when: manual
