@@ -22,9 +22,7 @@ variables:
   RUN_CI_JOB_AUTO: "false"
 
 default:
-  rules:
-    - if: $RUN_CI_JOB_AUTO' == "false"
-      when: manual
+
   before_script:
    - echo "Before script section"
    - R -e "install.packages(c('rhub'), dependencies = TRUE)"
@@ -115,7 +113,11 @@ check_platforms:
     #     })
     # - res <- do.call(rbind, status_list)
     # - print(res)
-  stage: checkrhub
+  rules:
+    - if: $RUN_CI_JOB_AUTO' == "false"
+      when: manual
+  
+  stage: coverage
   script:
     - covr::package_coverage()
   rules:
