@@ -119,7 +119,7 @@ check_platforms:
   
   stage: coverage
   script:
-    - covr::package_coverage()
+    - R -e "covr::package_coverage()"
   rules:
     - if: $RUN_CI_JOB_AUTO == "false"
       when: manual
