@@ -32,7 +32,7 @@ default:
    - apt update -y && apt upgrade -y
    - apt install -y pandoc pandoc-citeproc apt-utils
    - apt install -y r-cran-devtools r-cran-markdown r-cran-dplyr r-cran-ggplot2
-   - apt install -y r-cran-sf r-cran-terra r-cran-curl
+   - apt install -y r-cran-sf r-cran-terra r-cran-curl r-cran-covr
 
 
 # test:
