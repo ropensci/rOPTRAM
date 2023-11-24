@@ -14,7 +14,7 @@
 image: rocker/r2u:22.04
 stages:
   - checkrhub
-  - coverage
+#  - coverage
 
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
@@ -80,14 +80,7 @@ check_platforms:
   stage: checkrhub
   script:
     - Rscript inst/rhubcheck.R
-  rules:
-    - if: $RUN_CI_JOB_AUTO == "false"
-      when: manual
-
-  stage: coverage
-  script:
     - R -e "covr::package_coverage()"
-
   rules:
     - if: $RUN_CI_JOB_AUTO == "false"
       when: manual
