@@ -14,7 +14,6 @@
 image: rocker/r2u:22.04
 stages:
   - checkrhub
-  - coverage
 
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
@@ -88,7 +87,10 @@ check_platforms:
     #- apt install -y libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev
     #- apt install -y libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev
     #- apt install -y protobuf-compiler libprotobuf-dev wget ca-certificates gnupg
+    
     - Rscript inst/rhubcheck.R
+    - R -e "covr::package_coverage()"
+    
     # Check MAC
     # Incorporated into rhubcheck.R
     # - mac_url = devtools::check_mac_release()
@@ -117,13 +119,7 @@ check_platforms:
     #     })
     # - res <- do.call(rbind, status_list)
     # - print(res)
+
   rules:
     - if: $RUN_CI_JOB_AUTO' == "false"
-      when: manual
-  
-  stage: coverage
-  script:
-    - R -e "covr::package_coverage()"
-  rules:
-    - if: $RUN_CI_JOB_AUTO == "false"
       when: manual
