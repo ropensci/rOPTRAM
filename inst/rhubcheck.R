@@ -2,7 +2,7 @@
 # and macos check on macbuilds.org
 t0 <- Sys.time()
 print(paste(t0, " - Starting Check"))
-setwd("/home/docker/rhub")
+setwd("/home/docker")
 
 # Prepare for rhub to check on Ubuntu and Win
 tarball <- list.files(".", pattern="rOPTRAM.*tar.gz")

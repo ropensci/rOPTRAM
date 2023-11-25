@@ -5,7 +5,7 @@ apt install -y r-cran-devtools r-cran-markdown r-cran-dplyr r-cran-ggplot2
 apt install -y r-cran-sf r-cran-terra r-cran-curl r-cran-covr r-cran-sen2r
 
 # Install rOPTRAM (prepare tarball for rhub)
-cd /home/docker/rhub
+cd /home/docker/
 git clone https://gitlab.com/rsl-bidr/roptram.git
 R CMD build ./roptram
 tarball=`ls rOPTRAM*.tar.gz`
