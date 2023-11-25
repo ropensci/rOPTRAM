@@ -60,7 +60,8 @@ optram_acquire_s2 <- function(
       remove_safe = "yes",
       veg_index = "NDVI") {
   # Avoid "no visible binding for global variable" NOTE
-  sen2r_version <- sen2r_ok <- gcloud_ok <- aoi_name <- result_list <- NULL
+  sen2r_version <- sen2r_ok <- gcloud_ok <- gsutil_path <- NULL
+  aoi_name <- result_list <- NULL
 
   # Download Sentinel 2 images during the requested date range,
   # and clip to the area of interest
@@ -87,10 +88,12 @@ optram_acquire_s2 <- function(
   } else {
     gsutil_path <- Sys.which("gsutil")
   }
-
-  gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE)
+  ifelse(is.null(gsutil_path) | gsutil_path == "" | is.na(gsutil_path),
+    gcloud_ok <- FALSE,
+    gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
+  }
   if (gcloud_ok) {
-    message("Using gcloud")
+    message("Using gcloud CLI")
     servers <- "gcloud"
   } else {
     message("No access to Sentinel or Google cloud",
