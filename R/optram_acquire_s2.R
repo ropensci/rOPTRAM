@@ -91,7 +91,7 @@ optram_acquire_s2 <- function(
   ifelse(is.null(gsutil_path) | gsutil_path == "" | is.na(gsutil_path),
     gcloud_ok <- FALSE,
     gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
-  }
+  
   if (gcloud_ok) {
     message("Using gcloud CLI")
     servers <- "gcloud"
