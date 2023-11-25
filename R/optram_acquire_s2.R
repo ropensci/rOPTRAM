@@ -60,12 +60,19 @@ optram_acquire_s2 <- function(
       remove_safe = "yes",
       veg_index = "NDVI") {
   # Avoid "no visible binding for global variable" NOTE
-  sen2r_version <- gcloud_ok <- aoi_name  <- result_list <- NULL
+  sen2r_version <- sen2r_ok <- gcloud_ok <- aoi_name <- result_list <- NULL
 
   # Download Sentinel 2 images during the requested date range,
   # and clip to the area of interest
+
   # Pre flight checks...
   if (!check_aoi(aoi_file)) {
+    return(NULL)
+  }
+
+  sen2r_ok <- "sen2r" %in% utils::installed.packages()
+  if (!sen2r_ok) {
+    message("sen2r package is missing. Download is not possible")
     return(NULL)
   }
 

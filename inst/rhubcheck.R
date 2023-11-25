@@ -17,7 +17,10 @@ print(paste(t0, " - Starting Check"))
 platforms <- c("ubuntu-gcc-devel",
                "ubuntu-gcc-release",
                "windows-x86_64-release")
-rhub_chk <- rhub::check(platform = platforms, show_status = TRUE)
+email <- Sys.getenv("RHUB_EMAIL")
+print(email)
+rhub_chk <- rhub::check(platform = platforms,
+                        show_status = TRUE, email = email)
 statuses <- rhub_chk[[".__enclos_env__"]][["private"]][["status_"]]
 
 res <- do.call(rbind, lapply(statuses, function(thisStatus) {
