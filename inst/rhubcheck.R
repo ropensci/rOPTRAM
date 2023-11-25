@@ -6,9 +6,10 @@ setwd("/home/docker")
 
 # Prepare for rhub to check on Ubuntu and Win
 tarball <- list.files(".", pattern="rOPTRAM.*tar.gz")
-platforms <- c("ubuntu-gcc-devel",
-               "ubuntu-gcc-release",
-               "windows-x86_64-release")
+platforms <- c("ubuntu-gcc-release",
+               "windows-x86_64-release",
+               "windows-x86_64-oldrel",
+               "windows-x86_64-devel")
 
 rhub_chk <- rhub::check(path = tarball, platform = platforms,
                         show_status = TRUE)
@@ -25,8 +26,8 @@ res <- do.call(rbind, lapply(statuses, function(thisStatus) {
 }))
 
 # Check on MACOS
-pkgs <- c("dplyr", "ggplot2", "sf", "terra", "tools", "utils")
-mac_url = devtools::check_mac_release("./roptram", dep_pkgs = pkgs)
+#pkgs <- c("dplyr", "ggplot2", "sf", "terra", "tools", "utils")
+mac_url = devtools::check_mac_release("./roptram")
 Sys.sleep(600)
 mac_res <- curl::curl(mac_url)
 mac_res <- readLines(mac_res)
