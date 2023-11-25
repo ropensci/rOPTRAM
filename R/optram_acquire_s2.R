@@ -34,11 +34,12 @@
 #'  - furthermore, the cirrus band B09 is not relevant for BOA level
 #'  - so band 10 is the SWIR refelctance at 1600 nm,
 #'    and band 11 is reflectance at 2200 nm.
-#' The `sen2r` package uses `gsutil`, a utility in the `gcloud` SDK 
+#' The `sen2r` package uses `gsutil`, a utility in the Google Cloud SDK 
 #' to download imagery. Please first install `gcloud` folloowing instructions:
 #' https://cloud.google.com/sdk/docs/install
 #' for your operating system.
 #' And be sure to initialize with you google username and password.
+#' If the Google Cloud CLI is not installed, this function fails
 #'
 #' @examples
 #' \dontrun{

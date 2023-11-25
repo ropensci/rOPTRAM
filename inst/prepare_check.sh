@@ -2,7 +2,8 @@
 apt-get update -y && apt-get upgrade -y
 apt-get install -y pandoc pandoc-citeproc apt-utils curl git gpg gnupg
 apt-get install -y r-cran-devtools r-cran-markdown r-cran-dplyr r-cran-ggplot2
-apt-get install -y r-cran-sf r-cran-terra r-cran-curl r-cran-covr r-cran-sen2r
+apt-get install -y r-cran-sf r-cran-terra r-cran-lwgeom
+apt-get install -y r-cran-curl r-cran-covr r-cran-sen2r
 
 # Install rOPTRAM (prepare tarball for rhub)
 cd /home/docker/

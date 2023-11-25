@@ -62,11 +62,12 @@ Only L2A (atmospherically corrected) images are acquired, and therefore:
 \item furthermore, the cirrus band B09 is not relevant for BOA level
 \item so band 10 is the SWIR refelctance at 1600 nm,
 and band 11 is reflectance at 2200 nm.
-The \code{sen2r} package uses \code{gsutil}, a utility in the \code{gcloud} SDK
+The \code{sen2r} package uses \code{gsutil}, a utility in the Google Cloud SDK
 to download imagery. Please first install \code{gcloud} folloowing instructions:
 https://cloud.google.com/sdk/docs/install
 for your operating system.
 And be sure to initialize with you google username and password.
+If the Google Cloud CLI is not installed, this function fails
 }
 }
 \examples{

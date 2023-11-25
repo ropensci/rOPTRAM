@@ -15,9 +15,10 @@ test_that("AOI file is not spatial", {
 })
 
 
-test_that("API access to scihub not available", {
-  from_date <- "2023-03-01"
-  to_date <- "2023-04-30"
+test_that("API access to scihub ", {
+  # Short time interval to get only one downloaded file
+  from_date <- "2019-04-24"
+  to_date <- "2019-04-30"
   aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
   gsutil_path <- NULL
   if (Sys.info()['sysname'] == 'Windows') {
@@ -30,20 +31,15 @@ test_that("API access to scihub not available", {
   } else {
     gsutil_path <- Sys.which("gsutil")
   }
+  ifelse(is.null(gsutil_path) | gsutil_path == "" | is.na(gsutil_path),
+    gcloud_ok <- FALSE,
+    gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
   
-  gsutil_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE)
-  if (!gsutil_ok) {
+  if (!gcloud_ok) {
     expect_null(optram_acquire_s2(aoi_file, from_date, to_date))
+  } else {
+    result_list <- optram_acquire_s2(aoi_file, from_date, to_date)
+    expect_type(result_list, "character")
+    expect_length(result_list, 2)
   }
 })
-
-# test_that("sen2r package is recent",{
-#   if (!package_version(utils::packageVersion("sen2r")) > '1.5.0') {
-#     from_date <- "2023-03-01"
-#     to_date <- "2023-04-30"
-#     aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
-#     expect_false(optram_acquire_s2(aoi_file, from_date, to_date))
-#   } else {
-#     TRUE
-#   }
-# })

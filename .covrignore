@@ -1,7 +1,6 @@
 R/optram.R
 R/optram_other.R
 R/create_icon.R
-R/optram_acquire_s2.R
 R/optram_safe.R
 R/optram_landsat.R
 

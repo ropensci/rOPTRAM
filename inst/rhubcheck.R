@@ -6,7 +6,7 @@ setwd("/home/docker")
 
 # Prepare for rhub to check on Ubuntu and Win
 tarball <- list.files(".", pattern="rOPTRAM.*tar.gz")
-platforms <- c("ubuntu-gcc-release",
+platforms <- c("ubuntu-gcc-devel",
                "windows-x86_64-release",
                "windows-x86_64-oldrel",
                "windows-x86_64-devel")
