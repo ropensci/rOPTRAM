@@ -24,6 +24,8 @@ tar xvzf google-cloud-cli-455.0.0-linux-x86_64.tar.gz
 #- ./google-cloud-sdk/bin/gcloud init
 export PATH=$PATH:`pwd`/google-cloud-sdk/bin
 
+# Change to package directory
+cd /home/docker/roptram
 # Now run pipeline:
 # Rscript rhubcheck.R
 # R -e "covr::package_coverage()"

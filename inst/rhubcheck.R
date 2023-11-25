@@ -25,7 +25,8 @@ res <- do.call(rbind, lapply(statuses, function(thisStatus) {
 }))
 
 # Check on MACOS
-mac_url = devtools::check_mac_release()
+pkgs <- c("dplyr", "ggplot2", "sf", "terra", "tools", "utils")
+mac_url = devtools::check_mac_release("./roptram", dep_pkgs = pkgs)
 Sys.sleep(600)
 mac_res <- curl::curl(mac_url)
 mac_res <- readLines(mac_res)
