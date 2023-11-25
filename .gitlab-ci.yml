@@ -1,11 +1,3 @@
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Bash.gitlab-ci.yml
-
-# See https://docs.gitlab.com/ee/ci/yaml/index.html for all available options
-
-# you can delete this line if you're not using Docker
 # Debian testing
 # image: rocker/r-base:4.1.0
 # Ubuntu LTS
@@ -23,58 +15,7 @@ variables:
 
 default:
   before_script:
-   - echo "Before script section"
-   - R -e "install.packages(c('rhub'), dependencies = TRUE)"
-   - echo "$RHUB_EMAIL"
-   - echo "$RHUB_TOKEN"
-   - R -e "rhub::validate_email(email = '$RHUB_EMAIL', token = '$RHUB_TOKEN')"
-   - apt update -y && apt upgrade -y
-   - apt install -y pandoc pandoc-citeproc apt-utils curl
-   - apt install -y r-cran-devtools r-cran-markdown r-cran-dplyr r-cran-ggplot2
-   - apt install -y r-cran-sf r-cran-terra r-cran-curl r-cran-covr r-cran-sen2r
-   # Install Google cloud
-   - curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-455.0.0-linux-x86_64.tar.gz
-   - tar xvzf google-cloud-cli-455.0.0-linux-x86_64.tar.gz
-   - ./google-cloud-sdk/install.sh -q
-   #- ./google-cloud-sdk/bin/gcloud init
-   - PATH=$PATH:`pwd`/google-cloud-sdk/bin/
-
-# test:
-#    stage: test
-#    script:
-#    - echo "Installing system"
-#    - apt-get update
-#    - apt-get install --yes libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libfribidi-dev libharfbuzz-dev libfreetype-dev libpng-dev libtiff5-dev libjpeg-dev libprotobuf-dev libjq-dev libgdal-dev libudunits2-dev protobuf-compiler libprotobuf-lite32 wget ca-certificates gnupg
-#    # Setup r2u
-#    #- wget -q -O- https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.asc | tee -a /etc/apt/trusted.gpg.d/cranapt_key.asc
-#    #- echo "deb [arch=amd64] https://r2u.stat.illinois.edu/ubuntu jammy main" > /etc/apt/sources.list.d/cranapt.list
-#    - apt-get update -qq
-#    # Minimal packages
-#    - apt-get install --yes --no-install-recommends r-base r-base-core r-recommended r-cran-devtools r-cran-dplyr r-cran-sf r-cran-terra
-#    # - R -e "'devtools' %in% installed.packages()"
-#    # with recommends and suggests...
-#    #- apt-get install --yes --install-suggests r-cran-testthat r-cran-devtools
-#    - apt-get autoremove --yes --purge
-#    - apt-get autoclean --yes
-#    #- R -e ".libPaths()"
-#    #- R -e "install.packages(c(‘usethis’, ‘pkgdown’, ‘rcmdcheck’, ‘roxygen2’, ‘rversions’, ‘urlchecker’, 'geojsonlint'), dependencies = TRUE)"
-#    - R -e "install.packages(c('devtools', 'pkgdown', 'rcmdcheck', 'roxygen2', 'rversions', 'urlchecker'), dependencies = TRUE)"
-#    #- R -e "install.packages('devtools', dependencies = TRUE)"
-#    - R -e "devtools::install_deps(dependencies = TRUE)"
-#    - echo "Building package"
-#    - R CMD build . --no-build-vignettes --no-manual
-#    - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
-#    - echo "Running check"
-#    - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
-#    cache:
-#       key: "$CI_COMMIT_REF_SLUG"
-#       paths:
-#       - installed_deps/
-#    artifacts:
-#     paths:
-#     - '*.Rcheck/'
-#    only:
-#    - main
+    - source inst/prepare_check.sh
 
 check_platforms:
   stage: checkrhub

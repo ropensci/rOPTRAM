@@ -1,26 +1,17 @@
-# args <- commandArgs(trailingOnly = TRUE)
-# # args should be string vector of platforms
-# # i.e. c("ubuntu-gcc-devel", "ubuntu-gcc-release", "windows-x86_64-release"))
-# if (length(args) < 1L) {
-#  stop("Incorrect number of args, required string vector of platforms")
-# }
-#
-# platforms <- args[[1L]]
-# for (pf in platforms) {
-#   if (!is.element(pf, rhub::platforms()[[1L]])) {
-#     stop(paste(pf, "not in rhub::platforms()[[1L]]"))
-#   }
-# }
+# R script to run checks on rhub (linux and windows)
+# and macos check on macbuilds.org
 t0 <- Sys.time()
 print(paste(t0, " - Starting Check"))
-# Check on Ubuntu and Win
+setwd("/home/docker/rhub")
+
+# Prepare for rhub to check on Ubuntu and Win
+tarball <- list.files(".", pattern="rOPTRAM.*tar.gz")
 platforms <- c("ubuntu-gcc-devel",
                "ubuntu-gcc-release",
                "windows-x86_64-release")
-email <- Sys.getenv("RHUB_EMAIL")
-print(email)
-rhub_chk <- rhub::check(platform = platforms,
-                        show_status = TRUE, email = email)
+
+rhub_chk <- rhub::check(path = tarball, platform = platforms,
+                        show_status = TRUE)
 statuses <- rhub_chk[[".__enclos_env__"]][["private"]][["status_"]]
 
 res <- do.call(rbind, lapply(statuses, function(thisStatus) {
@@ -29,7 +20,7 @@ res <- do.call(rbind, lapply(statuses, function(thisStatus) {
     errors = length(thisStatus[["result"]][["errors"]]),
     warnings = length(thisStatus[["result"]][["warnings"]]),
     notes = length(thisStatus[["result"]][["notes"]]),
-    stringsAsFactors = FALSE
+   stringsAsFactors = FALSE
   )
 }))
 
@@ -52,7 +43,7 @@ print(res, row.names = FALSE)
 t1 <- Sys.time()
 print(paste(t1, " - Check completed"))
 duration <- as.numeric(difftime(t1, t0), units = "mins")
-print(paste("Duration of checking: ", 
+print(paste("Elapsed time for checking: ", 
             sprintf("%.1f", duration),
             "minutes"))
 
