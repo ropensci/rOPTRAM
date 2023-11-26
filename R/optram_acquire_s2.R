@@ -84,12 +84,15 @@ optram_acquire_s2 <- function(
     # Get the first instance of gsutil file
     homedir <- Sys.getenv("USERPROFILE")
     gsutil_path <- system2("WHERE",
-                      paste("/R", homedir, "gsutil"),
-                      stdout = TRUE)[1]
+                          paste("/R", homedir, "gsutil"), stdout = TRUE)[1]
   } else {
     gsutil_path <- Sys.which("gsutil")
   }
-  ifelse(is.null(gsutil_path) | gsutil_path == "" | is.na(gsutil_path),
+
+  ifelse( is.null(gsutil_path) | 
+          gsutil_path == "" | 
+          is.na(gsutil_path) | 
+          !sen2r::is_gcloud_configured(),
     gcloud_ok <- FALSE,
     gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
   
@@ -97,8 +100,7 @@ optram_acquire_s2 <- function(
     message("Using gcloud CLI")
     servers <- "gcloud"
   } else {
-    message("No access to Sentinel or Google cloud",
-            "\nExiting")
+    message("No access to Google cloud", "\n", "Exiting")
     return(NULL)
   }
 

@@ -31,13 +31,16 @@ test_that("API access to scihub ", {
   } else {
     gsutil_path <- Sys.which("gsutil")
   }
-  ifelse(is.null(gsutil_path) | gsutil_path == "" | is.na(gsutil_path),
+  ifelse(is.null(gsutil_path) |
+          gsutil_path == "" |
+          is.na(gsutil_path) |
+          !sen2r::is_gcloud_configured(),
     gcloud_ok <- FALSE,
     gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
   
   if (!gcloud_ok) {
     expect_null(optram_acquire_s2(aoi_file, from_date, to_date))
-  } else {
+  } else if (sen2r::is_gcloud_configured()) {
     result_list <- optram_acquire_s2(aoi_file, from_date, to_date)
     expect_type(result_list, "character")
     expect_length(result_list, 2)
