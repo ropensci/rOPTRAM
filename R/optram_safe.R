@@ -179,7 +179,7 @@ optram_safe <- function(safe_dir,
     # Get the red band (3) and
     # use that to determine index for random sampling
     r <- terra::rast(cropped_rast_list[[1]])[[3]]
-    r_df <- as.data.frame(r, xy = TRUE)
+    r_df <- terra::as.data.frame(r, xy = TRUE)
     if (nrow(r_df) > max_tbl_size) {
         # Set sample size as:
         # maximum table / number of dates in date range
