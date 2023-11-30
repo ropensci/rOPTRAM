@@ -46,7 +46,8 @@ Use this function to prepares vegetation index and
 SWIR Transformed Reflectance (STR) rasters
 when you have already downloaded Sentinel 2 image files in advance
 (without using \code{sen2r}).
-Unzip the downloaded Sentinel 2 files and do not change the folder structure.
+Unzip the downloaded Sentinel 2 files
+and do not change the folder structure.
 This function assumes that atmospheric correction has been applied.
 i.e. using the SNAP L2A_Process,
 or the  \code{sen2cor()} function from the {sen2r} R package.

@@ -29,7 +29,8 @@ for saving soil moisture raster}
 rast, soil moisture grid
 }
 \description{
-Prepare soil moisture grid from STR and VI images for a single date
+Prepare soil moisture grid from STR and VI images
+for a single date
 using the derived slope and intercept coefficients
 }
 \note{

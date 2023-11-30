@@ -16,10 +16,8 @@ check_scihub_access <- function(site = "http://scihub.copernicus.eu") {
     internet_online <- tryCatch({
             readLines(site, n=1)
             TRUE},
-        error = {function(e) {
-            message("No internet connection to SCIHUB.", "\n",
-        "Downloading data is not currently possible")
-            FALSE}
+        error = {function(e) {message("No internet connection to SCIHUB.",
+             "\n", "Downloading data is not currently possible"); FALSE}
     })
     
     if (internet_online) {
@@ -28,15 +26,13 @@ check_scihub_access <- function(site = "http://scihub.copernicus.eu") {
         if (system.file(package='sen2r') == "") {
             message("This function requires the `sen2r` package.", "\n",
             "Please install that package first before running function")
-            return(FALSE)
-        }
+            return(FALSE)}
         # Check sen2r version
         sen2r_version <- utils::packageVersion("sen2r")
         version_ok <- package_version(sen2r_version) > '1.5.0'
         if (!version_ok) {
-            message("Version of sen2r package: ",
-                     sen2r_version, " is too old. \n",
-            "Please update to version > 1.5")
+            message("Version of sen2r package: ", sen2r_version,
+        " is too old. \n", "Please update to version > 1.5")
             return(FALSE)
         }
         return(TRUE)

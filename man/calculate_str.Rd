@@ -25,7 +25,8 @@ when you have already downloaded Sentinel 2 image files in advance
 }
 \note{
 For Landsat images, scale_factor should be 1,
-since Landsat metadata contains gain and offset for scaling image bands.
+since Landsat metadata contains gain and offset
+for scaling image bands.
 }
 \examples{
 img_stk <- terra::rast(system.file("extdata",

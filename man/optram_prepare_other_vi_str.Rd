@@ -12,7 +12,8 @@ optram_prepare_other_vi_str(
 )
 }
 \arguments{
-\item{img_dir, }{string, full path directory of downloaded images (assumes Geotif)}
+\item{img_dir, }{string, full path directory of downloaded images
+(assumes Geotif)}
 
 \item{aoi, }{string, full path to polygon spatial file of area of interest}
 
