@@ -2,7 +2,8 @@
 #' @description
 #' This function prepares vegetation index and STR rasters
 #' from other (non-Sentinel) image files downloaded in advance.
-#' @param img_dir, string, full path directory of downloaded images (assumes Geotif)
+#' @param img_dir, string, full path directory of downloaded images
+#'                 (assumes Geotif)
 #' @param aoi, string, full path to polygon spatial file of area of interest
 #' @param viname, string, which VI to prepare, 'NVDI', 'SAVI', etc.
 #' @param output_dir, string, where to save Geotiff, default is tempdir()

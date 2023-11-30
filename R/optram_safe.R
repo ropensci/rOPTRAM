@@ -4,7 +4,8 @@
 #' SWIR Transformed Reflectance (STR) rasters
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
-#' Unzip the downloaded Sentinel 2 files and do not change the folder structure.
+#' Unzip the downloaded Sentinel 2 files 
+#'      and do not change the folder structure.
 #' This function assumes that atmospheric correction has been applied.
 #' i.e. using the SNAP L2A_Process,
 #' or the  `sen2cor()` function from the {sen2r} R package.
@@ -73,8 +74,9 @@ optram_safe <- function(safe_dir,
     safe_list <- list.dirs(safe_dir, full.names = TRUE, recursive = TRUE)
     safe_list <- safe_list[grepl(pattern = "SAFE$", x = safe_list)]
     if (length(safe_list) == 0) {
-        message("No Sentinel 2 SAFE folders in: ", safe_dir, " directory", "\n",
-        "Please check download folder.", "\n", "Exiting...")
+        message("No Sentinel 2 SAFE folders in: "
+                , safe_dir, " directory", "\n",
+                "Please check download folder.", "\n", "Exiting...")
         return(NULL)
     }
 
@@ -112,7 +114,8 @@ optram_safe <- function(safe_dir,
         dir.create(STR_dir)
     }
 
-    # Collect list of the BOA file paths created from cropped Sentinel-2 imagery 
+    # Collect list of the BOA file paths 
+    # created from cropped Sentinel-2 imagery 
     cropped_rast_list <- lapply(safe_list, function(s) {
         # Get file paths to 10m and 20m jpeg images
         xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
@@ -146,7 +149,8 @@ optram_safe <- function(safe_dir,
         if (!file.exists(BOA_path) || overwrite == TRUE) {
             # Read in jp2 files
             img_list <- lapply(band_ids, function(b){
-                img_path <- img_paths[grepl(pattern = b, img_paths, fixed = TRUE)]
+                img_path <- img_paths[grepl(pattern = b,
+                                            img_paths, fixed = TRUE)]
                 img_file <- paste0(img_path, ".jp2")
                 img_path <- file.path(s, img_file)
                 rst <- terra::rast(img_path)
@@ -191,8 +195,8 @@ optram_safe <- function(safe_dir,
 
     # Get VI and STR from this list of raster stacks
     VI_STR_list <- lapply(seq_along(cropped_rast_list), function(x) {
-        # Each item in the cropped_rast_list list is a raster stack, with 6 bands
-        # R-G-B-NIR, SWIR 1600, SWIR 2200
+        # Each item in the cropped_rast_list list is a raster stack,
+        # with 6 bands: R-G-B-NIR, SWIR 1600, SWIR 2200
         stk <- terra::rast(cropped_rast_list[[x]])
         if (is.null(stk)) {
             return(NULL)

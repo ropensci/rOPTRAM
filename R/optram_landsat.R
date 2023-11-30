@@ -119,8 +119,8 @@
             return(NULL)
         }
         mtl <- xml2::read_xml(mtl_file)
-        # Values for gain and offset are read from the XML metadata
-        # https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
+# Values for gain and offset are read from the XML metadata
+# https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
         gain <- xml2::xml_text(
           xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
         offset <- xml2::xml_text(
@@ -141,7 +141,7 @@
           img_path <- dir(s)[grepl(pattern = "*_SR_B[0-9]*.TIF$", x = dir(s))]
           img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
           img_path <- file.path(s, img_path)
-          # Use the `win` parameter of `terra::rast` to crop Landsat tile to aoi
+# Use the `win` parameter of `terra::rast` to crop Landsat tile to aoi
           rst <- terra::rast(img_path, win = terra::ext(aoi))
           return(rst)
         })
@@ -202,7 +202,8 @@
       terra::writeRaster(VI_idx,
                          file.path(NDVI_dir, VI_file), overwrite = TRUE)
       # Save STR to BOA_dir
-      STR_file <- paste(s_parts[1], s_parts[2],s_parts[3],s_parts[4],s_parts[6],
+      STR_file <- paste(s_parts[1], s_parts[2],
+                        s_parts[3],s_parts[4],s_parts[6],
                         aoi_name, "STR.tif", sep = "_")
       terra::writeRaster(STR,
                          file.path(STR_dir, STR_file), overwrite = TRUE)

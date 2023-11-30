@@ -1,5 +1,6 @@
 #' @title Calculate soil moisture grid
-#' @description Prepare soil moisture grid from STR and VI images for a single date
+#' @description Prepare soil moisture grid from STR and VI images 
+#'              for a single date
 #' using the derived slope and intercept coefficients
 #' @param VI_dir, string, full path to directory holding the VI rasters
 #' @param STR_dir, string, full path to directory holding the STR rasters

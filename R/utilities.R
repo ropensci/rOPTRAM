@@ -34,7 +34,8 @@ check_scihub_access <- function(site = "http://scihub.copernicus.eu") {
         sen2r_version <- utils::packageVersion("sen2r")
         version_ok <- package_version(sen2r_version) > '1.5.0'
         if (!version_ok) {
-            message("Version of sen2r pacakge: ", sen2r_version, " is too old. \n",
+            message("Version of sen2r package: ",
+                     sen2r_version, " is too old. \n",
             "Please update to version > 1.5")
             return(FALSE)
         }
@@ -143,7 +144,8 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 #'      default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)
 #' @export
 #' @note For Landsat images, scale_factor should be 1,
-#'      since Landsat metadata contains gain and offset for scaling image bands.
+#'      since Landsat metadata contains gain and offset
+#'      for scaling image bands.
 #' @return STR, SpatRaster of STR band
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata",

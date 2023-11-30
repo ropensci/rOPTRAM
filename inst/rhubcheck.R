@@ -2,6 +2,8 @@
 # and macos check on macbuilds.org
 t0 <- Sys.time()
 print(paste(t0, " - Starting Check"))
+cur_dir <- getwd()
+on.exit(setwd(cur_dir))
 setwd("/home/docker")
 
 # Prepare for rhub to check on Ubuntu and Win
@@ -27,7 +29,7 @@ res <- do.call(rbind, lapply(statuses, function(thisStatus) {
 
 # Check on MACOS
 #pkgs <- c("dplyr", "ggplot2", "sf", "terra", "tools", "utils")
-mac_url = devtools::check_mac_release("./roptram")
+mac_url <- devtools::check_mac_release("./roptram")
 Sys.sleep(600)
 mac_res <- curl::curl(mac_url)
 mac_res <- readLines(mac_res)
