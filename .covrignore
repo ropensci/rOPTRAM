@@ -3,4 +3,5 @@ R/optram_other.R
 R/create_icon.R
 R/optram_safe.R
 R/optram_landsat.R
+R/acquire_utilities.R
 

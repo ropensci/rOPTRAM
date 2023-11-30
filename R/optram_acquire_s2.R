@@ -22,12 +22,17 @@
 #' @param remove_safe, string, "yes" or "no":
 #'      whether to delete downloaded SAFE directories
 #'      after processing, default "yes"
+#' @param remote, string, from which archive to download imagery
 #' @return output_path, string, path to downloaded files
 #' @export
 #' @note
-#'
-#' This function calls `sen2r()` from the {sen2r} package. This function
-#' acquires Sentinel 2 imagery, clips to aoi,
+#' This wrapper function calls one of multiple download functions, 
+#' each accessing a different cloud-based resource.
+#' The cloud based resource can be one of:
+#' "gcloud",...
+#' If "gcloud" then:
+#' The  `sen2r()` function from the {sen2r} package is used.
+#' This function acquires Sentinel 2 imagery, clips to aoi,
 #' and prepares multiband output rasters, save to the `output_dir`.
 #' Only L2A (atmospherically corrected) images are acquired, and therefore:
 #'  - only one NIR band, B08 is used. The lower res B8A is not used
@@ -59,115 +64,53 @@ optram_acquire_s2 <- function(
       timeperiod = "full",
       output_dir = tempdir(),
       remove_safe = "yes",
-      veg_index = "NDVI") {
+      veg_index = "NDVI",
+      remote = "gcloud") {
   # Avoid "no visible binding for global variable" NOTE
   sen2r_version <- sen2r_ok <- gcloud_ok <- gsutil_path <- NULL
   aoi_name <- result_list <- NULL
 
-  # Download Sentinel 2 images during the requested date range,
-  # and clip to the area of interest
-
   # Pre flight checks...
-  if (!check_aoi(aoi_file)) {
-    return(NULL)
-  }
+  if (!check_aoi(aoi_file)) return(NULL)
 
-  sen2r_ok <- "sen2r" %in% utils::installed.packages()
-  if (!sen2r_ok) {
-    message("sen2r package is missing. Download is not possible")
-    return(NULL)
-  }
+  # One option, Google Cloud CLI
+  if (remote == "gcloud") {
+    # Pre flight tests, check for `sen2r` and gsutil 
+    sen2r_ok <- "sen2r" %in% utils::installed.packages()
+    if (!sen2r_ok) {
+      message("sen2r package is missing. Download is not possible")
+      return(NULL)
+    }
 
-  # Where is 'gsutil' installed?
-  if (Sys.info()['sysname'] == 'Windows') {
-    # Assume that gcloud-sdk is installed in USER's home dir
-    # Get the first instance of gsutil file
-    homedir <- Sys.getenv("USERPROFILE")
-    gsutil_path <- system2("WHERE",
-                          paste("/R", homedir, "gsutil"), stdout = TRUE)[1]
-  } else {
-    gsutil_path <- Sys.which("gsutil")
-  }
+    # Where is 'gsutil' installed?
+    if (Sys.info()['sysname'] == 'Windows') {
+      # Assume that gcloud-sdk is installed in USER's home dir
+      # Get the first instance of gsutil file
+      homedir <- Sys.getenv("USERPROFILE")
+      gsutil_path <- system2("WHERE",
+                            paste("/R", homedir, "gsutil"), stdout = TRUE)[1]
+    } else {
+      gsutil_path <- Sys.which("gsutil")
+    }
+    gcloud_ok <- ifelse(is.null(gsutil_path) | gsutil_path == "" | 
+                        is.na(gsutil_path) | !sen2r::is_gcloud_configured(),
+                        FALSE, sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
+    
+    if (gcloud_ok) {message("Using gcloud CLI")} else {
+          message("No access to Google cloud", "\n", "Exiting")
+          return(NULL)}
 
-  ifelse( is.null(gsutil_path) | 
-          gsutil_path == "" | 
-          is.na(gsutil_path) | 
-          !sen2r::is_gcloud_configured(),
-    gcloud_ok <- FALSE,
-    gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
-  
-  if (gcloud_ok) {
-    message("Using gcloud CLI")
-    servers <- "gcloud"
-  } else {
-    message("No access to Google cloud", "\n", "Exiting")
-    return(NULL)
-  }
-
-  # Checks OK, proceed to download
-  aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
-  # Make sure output_dir exists
-  if (!dir.exists(output_dir)) {
-    dir.create(output_dir, recursive = TRUE)
-  }
-
-  result_list <- sen2r::sen2r(
-      gui = FALSE,
-      server = servers,
-      rm_safe = remove_safe,
-      max_cloud_safe = max_cloud * 1.5,
-      max_mask = max_cloud,
-      timewindow = c(from_date, to_date),
-      timeperiod = timeperiod,
-      list_prods = c("BOA"),
-      # in rOPTRAM: "veg_index" (single character string)
-      list_indices = c(veg_index),
-      resampling = "bilinear",
-      extent = aoi_file,
-      extent_name = aoi_name,
-      extent_as_mask = TRUE,
-      path_l2a = output_dir,
-      path_out = output_dir,
-      path_indices = output_dir,
-      thumbnails = FALSE,
-      preprocess =  TRUE,
-      s2_levels = "l2a",
-      sel_sensor = c("s2a", "s2b"),
-      online = TRUE,
-      order_lta = TRUE,
-      downloader = "builtin",
-      overwrite_safe = FALSE,
-      step_atmcorr = "l2a",
-      sen2cor_use_dem = FALSE,
-      sen2cor_gipp = NULL,
-      s2orbits_selected = NULL,
-      list_rgb = NULL,
-      rgb_ranges = NULL,
-      index_source = "BOA",
-      mask_type = "cloud_and_shadow",
-      mask_smooth = 0,
-      mask_buffer = 0,
-      clip_on_extent = TRUE,
-      reference_path = NULL,
-      res = NULL,
-      res_s2 = "10m",
-      unit = "Meter",
-      proj = NULL,
-      resampling_scl = "near",
-      outformat = "GTiff",
-      rgb_outformat = "GTiff",
-      index_datatype = "Int16",
-      compression = "DEFLATE",
-      rgb_compression = "DEFLATE",
-      overwrite = FALSE,
-      path_l1c = NULL,
-      path_tiles = NULL,
-      path_merged = NULL,
-      path_rgb = "",
-      path_subdirs = TRUE,
-      log = c(NA,NA),
-      parallel = TRUE,
-      processing_order = "by_groups",
-    )
-  return(result_list)
+    # Checks OK, proceed to download
+    # Make sure output_dir exists
+    if (!dir.exists(output_dir)) {
+      dir.create(output_dir, recursive = TRUE)
+    }
+    result_list <- acquire_gcloud(aoi_file = aoi_file,
+                                  from_date = from_date, to_date = to_date,
+                                  max_cloud = max_cloud, timeperiod = timeperiod,
+                                  output_dir = output_dir, remove_safe = remove_safe,
+                                  veg_index = veg_index)
+    return(result_list)
+    # else { Additional download option }
+    }
 }
