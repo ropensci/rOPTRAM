@@ -87,7 +87,7 @@
                             full.names = TRUE)[
                               grepl("*_SR_B1.TIF$", dir(landsat_list[1]))])
     epsg_code <- paste("EPSG:",
-                       (as.character(terra::crs(rstt, describe=T)[3])))
+                       (as.character(terra::crs(rstt, describe = TRUE)[3])))
     # Get Area of interest,
     # make sure it is projected to the CRS of Landsat images
     aoi <- sf::st_zm(sf::st_read(aoi_file), drop = TRUE, what = "zm")
