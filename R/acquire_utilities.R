@@ -54,7 +54,7 @@ acquire_gcloud <- function(aoi_file,
     # Avoid "no visible binding for global variable" NOTE
     result_list <- aoi_name <- NULL
     # Pre flight checks done in advance by optram_acquire_s2()
-    aoi_name <- rOPTRAM::aoi_to_name(aoi_file)
+    aoi_name <- rOPTRAM:::aoi_to_name(aoi_file)
     result_list <- sen2r::sen2r(
         gui = FALSE,
         server = "gcloud",
