@@ -2,18 +2,18 @@
 % Please edit documentation in R/optram_calculate_str.R
 \name{optram_calculate_str}
 \alias{optram_calculate_str}
-\title{Create SWIR transformed reflectance}
+\title{Create SWIR Transformed Reflectance}
 \usage{
 optram_calculate_str(BOA_dir)
 }
 \arguments{
-\item{BOA_dir, }{string, the path to the \code{sen2r} Bottom of Atmosphere bands}
+\item{BOA_dir, }{string, the path to the \CRANpkg{sen2r} Bottom of Atmosphere bands}
 }
 \value{
 list of string, the path to transformed raster
 }
 \description{
-Create SWIR transformed reflectance
+Create SWIR Transformed Reflectance
 }
 \note{
 This function follows:

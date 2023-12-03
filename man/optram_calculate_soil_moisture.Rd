@@ -2,7 +2,7 @@
 % Please edit documentation in R/optram_soilmoisture.R
 \name{optram_calculate_soil_moisture}
 \alias{optram_calculate_soil_moisture}
-\title{Calculate soil moisture grid}
+\title{Calculate Soil Moisture Grid}
 \usage{
 optram_calculate_soil_moisture(
   img_date,

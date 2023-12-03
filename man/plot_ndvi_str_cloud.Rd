@@ -2,7 +2,7 @@
 % Please edit documentation in R/optram_wetdry_coefficients.R
 \name{plot_ndvi_str_cloud}
 \alias{plot_ndvi_str_cloud}
-\title{Create scatter plot of STR-NDVI point cloud,}
+\title{Create Scatter Plot of STR-NDVI Data Points,}
 \usage{
 plot_ndvi_str_cloud(full_df, coeffs, aoi_name, output_dir = tempdir())
 }

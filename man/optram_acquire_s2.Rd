@@ -2,7 +2,7 @@
 % Please edit documentation in R/optram_acquire_s2.R
 \name{optram_acquire_s2}
 \alias{optram_acquire_s2}
-\title{Acquire Sentinel 2 images at a given location and date range}
+\title{Acquire Sentinel 2 Images at a Given Location and Date Range}
 \usage{
 optram_acquire_s2(
   aoi_file,
@@ -53,7 +53,7 @@ Sentinel-2 satellite data
 Computers & Geosciences, 139, 104473
 doi: 10.1016/j.cageo.2020.104473
 URL: https://sen2r.ranghetti.info/.
-The package prepares vegetation indicies, cropped to an area of interest.
+The package prepares vegetation indices, cropped to an area of interest.
 }
 \note{
 This wrapper function calls one of multiple download functions,
@@ -61,17 +61,17 @@ each accessing a different cloud-based resource.
 The cloud based resource can be one of:
 "gcloud",...
 If "gcloud" then:
-The  \code{sen2r()} function from the {sen2r} package is used.
+The  \CRANpkg{sen2r} function from the {sen2r} package is used.
 This function acquires Sentinel 2 imagery, clips to aoi,
 and prepares multiband output rasters, save to the \code{output_dir}.
 Only L2A (atmospherically corrected) images are acquired, and therefore:
 \itemize{
 \item only one NIR band, B08 is used. The lower res B8A is not used
 \item furthermore, the cirrus band B09 is not relevant for BOA level
-\item so band 10 is the SWIR refelctance at 1600 nm,
+\item so band 10 is the SWIR reflectance at 1600 nm,
 and band 11 is reflectance at 2200 nm.
-The \code{sen2r} package uses \code{gsutil}, a utility in the Google Cloud SDK
-to download imagery. Please first install \code{gcloud} folloowing instructions:
+The \CRANpkg{sen2r} package uses \code{gsutil}, a utility in the Google Cloud SDK
+to download imagery. Please first install \code{gcloud} following instructions:
 https://cloud.google.com/sdk/docs/install
 for your operating system.
 And be sure to initialize with you google username and password.

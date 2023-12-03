@@ -2,7 +2,7 @@
 % Please edit documentation in R/optram.R
 \name{optram}
 \alias{optram}
-\title{Prepare Sentinel imagery for soil moisture prediction using OPTRAM.}
+\title{Prepare Sentinel Imagery for Soil Moisture Prediction Using OPTRAM.}
 \usage{
 optram(
   aoi_file,
@@ -58,7 +58,7 @@ Remote Sensing of Environment 198, 52–68,
 https://doi.org/10.1016/j.rse.2017.05.041 .
 }
 \note{
-to download imagery. Please first install \code{gcloud} folloowing instructions:
+to download imagery. Please first install \code{gcloud} following instructions:
 https://cloud.google.com/sdk/docs/install
 for your operating system.
 And be sure to initialize with you google username and password.

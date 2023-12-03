@@ -1,4 +1,4 @@
-#' @title Derive coefficients of slope and intercept
+#' @title Derive Coefficients of Slope and Intercept
 #' @description Derive slope and intercept coefficients
 #' for both wet and dry trapezoid lines.
 #' Write coefficients to a CSV file
@@ -48,7 +48,7 @@ optram_wetdry_coefficients <- function(full_df,
     aoi_name <- NULL
     } else if (!file.exists(aoi_file)) {
       aoi_name <- aoi_file
-      } else {aoi_name <- rOPTRAM::aoi_to_name(aoi_file)}
+      } else {aoi_name <- rOPTRAM:::aoi_to_name(aoi_file)}
 
   # Make sure no Inf or NA in full_df
   full_df <- full_df[is.finite(full_df$VI), ]
@@ -113,7 +113,7 @@ optram_wetdry_coefficients <- function(full_df,
 }
 
 
-#' @title Create scatter plot of STR-NDVI point cloud,
+#' @title Create Scatter Plot of STR-NDVI Data Points,
 #' @description
 #' Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
 #' over scatterplot of multi-temporal STR and NDVI pixel values

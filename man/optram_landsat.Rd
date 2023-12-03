@@ -2,7 +2,7 @@
 % Please edit documentation in R/optram_landsat.R
 \name{optram_landsat}
 \alias{optram_landsat}
-\title{Handle Satellite imagery in original landsat format}
+\title{Handle Satellite Imagery in Original Landsat Format}
 \usage{
 optram_landsat(
   landsat_dir,
@@ -15,12 +15,12 @@ optram_landsat(
 \arguments{
 \item{landsat_dir, }{string, full path to containing folder of downloaded
 (unzipped) Landsat data in original landsat format,
-after atompheric correction (L2A)}
+after atmospheric correction (L2A)}
 
 \item{aoi_file, }{string, path to boundary polygon spatial file
 of area of interest}
 
-\item{veg_index, }{string, which VI to prepare, either 'NVDI' (default)
+\item{veg_index, }{string, which VI to prepare, either 'NDVI' (default)
 or 'SAVI' or 'MSAVI'}
 
 \item{LC_output_dir, }{string, directory to save the derived products,
@@ -45,7 +45,7 @@ This function requires a directory, set in the \code{landsat_dir} parameter,
 which contains the set of Landsat tiles downloaded manually
 by the user, in advance.
 This directory should contain folders of Landsat images, where each folder
-consists of the individual Landsat bands as Geotif files,
+consists of the individual Landsat bands as Geotiff files,
 as well as the metadata files as downloaded from,
 i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 }

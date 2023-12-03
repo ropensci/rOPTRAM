@@ -1,4 +1,4 @@
-#' @title Calculate soil moisture grid
+#' @title Calculate Soil Moisture Grid
 #' @description Prepare soil moisture grid from STR and VI images 
 #'              for a single date
 #' using the derived slope and intercept coefficients

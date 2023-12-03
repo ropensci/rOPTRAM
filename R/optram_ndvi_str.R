@@ -1,4 +1,4 @@
-#' @title Prepare dataframe of pairs NDVI and STR values
+#' @title Prepare Dataframe with Pairs of NDVI and STR Values
 #' @description Collect all pixel values of both vegetation index,
 #' and Swir Transformed Reflectance, for a time series of images.
 #' Prepare data.frame of all pairs of values
@@ -24,7 +24,7 @@
 #' by setting `rm.low.vi` to TRUE.
 #'
 #' The vegetation index column is named "NDVI" even though it can represent
-#' other vegetgation indices, such as SAVI, or MSAVI.
+#' other vegetation indices, such as SAVI, or MSAVI.
 #'
 #' @examples
 #' VI_list <- list.files(system.file("extdata", "SAVI"),

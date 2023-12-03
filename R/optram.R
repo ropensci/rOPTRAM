@@ -1,4 +1,4 @@
-#' @title Prepare Sentinel imagery for soil moisture prediction using OPTRAM.
+#' @title Prepare Sentinel Imagery for Soil Moisture Prediction Using OPTRAM.
 #' @description
 #' The main wrapper function to download, and preprocess Sentinel 2 imagery
 #' then prepare the OPTRAM trapezoid to derive slope and intercept
@@ -28,7 +28,7 @@
 #' @return coeffs_file, string, full path to saved CSV of wet-dry coefficients
 #' the coefficients are also saved to a csv file in `data_output_dir`.
 #' @note
-#' to download imagery. Please first install `gcloud` folloowing instructions:
+#' to download imagery. Please first install `gcloud` following instructions:
 #' https://cloud.google.com/sdk/docs/install
 #' for your operating system.
 #' And be sure to initialize with you google username and password.
@@ -88,7 +88,7 @@ optram <- function(aoi_file,
     STR_dir <- s2_dirs[basename(s2_dirs) == "STR"]
     VI_dir <- s2_dirs[basename(s2_dirs) == veg_index]
 
-    # Calculate SWIR Tranformed Reflectance
+    # Calculate SWIR Transformed Reflectance
     STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
     VI_list <- list.files(path = VI_dir, full.names = TRUE)
     VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)

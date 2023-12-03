@@ -1,20 +1,20 @@
-#' @title Handle Sentinel imagery in original Copernicus SAFE format
+#' @title Handle Sentinel Imagery in Original Copernicus SAFE Format
 #' @description
 #' Use this function to prepares vegetation index and
 #' SWIR Transformed Reflectance (STR) rasters
 #' when you have already downloaded Sentinel 2 image files in advance
-#' (without using `sen2r`).
+#' (without using \CRANpkg{sen2r}).
 #' Unzip the downloaded Sentinel 2 files 
 #'      and do not change the folder structure.
 #' This function assumes that atmospheric correction has been applied.
 #' i.e. using the SNAP L2A_Process,
-#' or the  `sen2cor()` function from the {sen2r} R package.
+#' or the  `sen2cor` function from the \CRANpkg{sen2r} R package.
 #' @param safe_dir, string, full path to containing folder of downloaded
 #'    (unzipped) Sentinel 2 data in original SAFE format,
-#'    after atompheric correction (L2A)
+#'    after atmospheric correction (L2A)
 #' @param aoi_file, string, path to boundary polygon spatial file
 #'    of area of interest
-#' @param veg_index, string, which VI to prepare, either 'NVDI' (default)
+#' @param veg_index, string, which VI to prepare, either 'NDVI' (default)
 #'    or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()

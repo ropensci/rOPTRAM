@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities.R
 \name{calculate_vi}
 \alias{calculate_vi}
-\title{Calculate NDVI, SAVI or MSAVI from bottom of atmosphere images}
+\title{Calculate Vegetation Index from Bottom of Atmosphere Image Bands}
 \usage{
 calculate_vi(
   img_stk,

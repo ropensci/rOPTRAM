@@ -1,11 +1,11 @@
-#' @title Check that sen2r is installed
+#' @title Check That sen2r Package is Installed
 #'
 #' @description
-#' Verify that sen2r is installed, and site is available.
+#' Verify that \CRANpkg{sen2r} is installed, and site is available.
 #' Default download site: "https://scihub.copernicus.eu/"
 #' @param site, string, Default is copernicus download site
-#' @export
 #' @return boolean, whether online and using sen2r is possible
+#' @noRd
 #' @examples
 #' site <-  "http://scihub.copernicus.eu"
 #' check_scihub_access(site)
@@ -41,12 +41,12 @@ check_scihub_access <- function(site = "http://scihub.copernicus.eu") {
     }
 }
 
-#' @title Check aoi_file
+#' @title Check Area of Interest File
 #' @description
 #' Check that aoi file exists, and is a spatial file
 #' @param aoi_file, string
-#' @export
 #' @return boolean, TRUE when file exists, and is spatial
+#' @noRd
 #' @examples
 #' aoi_file <- system.file("extdata", "migda_aoi.gpkg")
 #' check_aoi(aoi_file)
@@ -70,12 +70,11 @@ check_aoi <- function(aoi_file) {
 }
 
 
-#' @title Calculate NDVI, SAVI or MSAVI from bottom of atmosphere images
+#' @title Calculate Vegetation Index from Bottom of Atmosphere Image Bands
 #' @description
 #' Use this function to prepare vegetation index from SAFE imagery
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using `sen2r`).
-#'
 #' @param img_stk, terra SpatRaster, multiband stack of images,
 #'            already clipped to aoi
 #' @param redband, integer, number of red band
@@ -126,12 +125,11 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 }
 
 
-#' @title Calculate STR from SWIR band of bottom of atmosphere images
-#'
+#' @title Calculate STR from SWIR Bottom of Atmosphere Band
 #' @description
 #' Use this function to prepare STR from SAFE imagery
 #' when you have already downloaded Sentinel 2 image files in advance
-#' (without using `sen2r`).
+#' (without using \CRANpkg{sen2r}).
 #'
 #' @param img_stk, terra SpatRaster, multiband stack of images,
 #'          already clipped to aoi
@@ -173,11 +171,12 @@ calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
 }
 
 
-#' @title Get name string for Area of Interest from full file name
+#' @title Get Name String for Area of Interest from Full File Name
 #' @description
-#' Extract a string from the full path to AIO file
+#' Extract a string from the full path to area of interest (AOI) file
 #' @param aoi_file, string, full path to AOI file
-#' @export
+#' @noRd 
+#' @keywords Internal
 #' @return aoi_name, string
 #' @examples
 #' aoi_file <- system.file("extdata", "migda_aoi.gpkg")

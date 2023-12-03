@@ -17,7 +17,7 @@ bibliography: "bibliography.bib"
 
 `rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) to derive soil moisture based on the linear relation between a vegetation index, i.e. NDVI, and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band is used as a proxy for LST. The SWIR band is transformed to Swir Transformed Reflectance (STR).
 
-A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression lines, and the slope/intercept coefficents of these lines comprise the trapezoid. These coefficients are then used on a new satellite image to determine soil moisture.
+A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression lines, and the slope/intercept coefficients of these lines comprise the trapezoid. These coefficients are then used on a new satellite image to determine soil moisture.
 
   See:  @sadeghi_optical_2017, @burdun_satellite_2020, @ambrosone_retrieving_2020
 
@@ -154,7 +154,7 @@ knitr::include_graphics("trapezoid_Migda.png")
 
 ## Soil Moisture
 
-### Use trapezoid coefficients, VI, snf STR rasters to prepare soil moisture grid
+### Use trapezoid coefficients, VI, and STR rasters to prepare soil moisture grid
 
 
 ```r

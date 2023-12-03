@@ -1,4 +1,4 @@
-#' @title Utility function to acquire Sentinel-2 imagery using Google Cloud CLI
+#' @title Utility Function to Acquire Sentinel-2 Imagery using Google Cloud CLI
 #' @description This non-exported function uses the `sen2r` package 
 #' to send a request to Google Cloud, and prepare the products.
 #' Called by optram_acquire_s2
@@ -18,16 +18,16 @@
 #'      after processing, default "yes"
 #' @return output_path, string, path to downloaded files
 #' @note
-#' This function calls `sen2r()` from the {sen2r} package. This function
-#' acquires Sentinel 2 imagery, clips to aoi,
+#' This function calls the `sen2r` function from the \CRANpkg{sen2r} package.
+#' This function acquires Sentinel 2 imagery, clips to aoi,
 #' and prepares multiband output rasters, save to the `output_dir`.
 #' Only L2A (atmospherically corrected) images are acquired, and therefore:
 #'  - only one NIR band, B08 is used. The lower res B8A is not used
 #'  - furthermore, the cirrus band B09 is not relevant for BOA level
-#'  - so band 10 is the SWIR refelctance at 1600 nm,
+#'  - so band 10 is the SWIR reflectance at 1600 nm,
 #'    and band 11 is reflectance at 2200 nm.
-#' The `sen2r` package uses `gsutil`, a utility in the Google Cloud SDK 
-#' to download imagery. Please first install `gcloud` folloowing instructions:
+#' The \CRANpkg{sen2r} package uses `gsutil`, a utility in the Google Cloud SDK 
+#' to download imagery. Please first install `gcloud` following instructions:
 #' https://cloud.google.com/sdk/docs/install
 #' for your operating system.
 #' And be sure to initialize with you google username and password.

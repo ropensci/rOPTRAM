@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities.R
 \name{calculate_str}
 \alias{calculate_str}
-\title{Calculate STR from SWIR band of bottom of atmosphere images}
+\title{Calculate STR from SWIR Bottom of Atmosphere Band}
 \usage{
 calculate_str(img_stk, swirband = 11, scale_factor = 10000)
 }
@@ -21,7 +21,7 @@ STR, SpatRaster of STR band
 \description{
 Use this function to prepare STR from SAFE imagery
 when you have already downloaded Sentinel 2 image files in advance
-(without using \code{sen2r}).
+(without using \CRANpkg{sen2r}).
 }
 \note{
 For Landsat images, scale_factor should be 1,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/optram_ndvi_str.R
 \name{optram_ndvi_str}
 \alias{optram_ndvi_str}
-\title{Prepare dataframe of pairs NDVI and STR values}
+\title{Prepare Dataframe with Pairs of NDVI and STR Values}
 \usage{
 optram_ndvi_str(
   STR_list,
@@ -46,7 +46,7 @@ below zero. These pixels can be removed from the trapezoid
 by setting \code{rm.low.vi} to TRUE.
 
 The vegetation index column is named "NDVI" even though it can represent
-other vegetgation indices, such as SAVI, or MSAVI.
+other vegetation indices, such as SAVI, or MSAVI.
 }
 \examples{
 VI_list <- list.files(system.file("extdata", "SAVI"),

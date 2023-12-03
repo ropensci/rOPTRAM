@@ -2,7 +2,7 @@
 % Please edit documentation in R/optram_wetdry_coefficients.R
 \name{optram_wetdry_coefficients}
 \alias{optram_wetdry_coefficients}
-\title{Derive coefficients of slope and intercept}
+\title{Derive Coefficients of Slope and Intercept}
 \usage{
 optram_wetdry_coefficients(
   full_df,
