@@ -48,7 +48,7 @@ optram_wetdry_coefficients <- function(full_df,
     aoi_name <- NULL
     } else if (!file.exists(aoi_file)) {
       aoi_name <- aoi_file
-      } else {aoi_name <- rOPTRAM:::aoi_to_name(aoi_file)}
+      } else {aoi_name <- aoi_to_name(aoi_file)}
 
   # Make sure no Inf or NA in full_df
   full_df <- full_df[is.finite(full_df$VI), ]
