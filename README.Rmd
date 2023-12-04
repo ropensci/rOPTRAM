@@ -1,6 +1,110 @@
 ---
 output: github_document
-bibliography: bibliography.bib  
+references:
+- type: article-journal
+  id: sadeghi_optical_2017
+  author:
+  - family: Sadeghi
+    given:  Morteza
+  - family: Babaeian
+    given: Ebrahim
+  - family: Tuller
+    given: Markus
+  - family: Jones
+    given: Scott B.
+  issued:
+    date-parts:
+    - 2017
+  title: 'The optical trapezoid model: A novel approach to remote sensing of soil moisture applied to Sentinel-2 and Landsat-8 observations'
+  title-short: The optical trapezoid model
+  container-title: Remote Sensing of Environment
+  volume: 198
+  pages: 52-58
+  DOI: 10.1016/j.rse.2017.05.041
+  language: en-GB
+  
+- type: article-journal
+  id: burdun_satellite_2020
+  author:
+    - family: Burdun
+      given: Iuliia
+    - family: Bechtold
+      given: Michel
+    - family: Sagris
+      given: Valentina
+    - family: Lohila
+      given: Annalea
+    - family: Humphreys
+      given: Elyn
+    - family: Desai
+      given: Ankur R.
+    - family: Nilsson
+      given: Mats B.
+    - family: De Lannoy
+      given: Gabrielle
+    - family: Mander
+      given: Ülo
+  issued:
+    date-parts:
+      - 2020
+  title: 'Satellite Determination of Peatland Water Table Temporal Dynamics by Localizing Representative Pixels of A SWIR Based Moisture Index'
+  container-title: Remote Sensing
+  volume: 12
+  DOI: 10.3390/rs12182936
+  language: en
+
+- type: article-journal
+  id: ambrosone_retrieving_2020
+  author: 
+    - family: Ambrosone
+      given: Mariapaola
+    - family: Matese
+      given: Alessandro
+    - family: Di Gennaro
+      given: Salvatore Filippo
+    - family: Gioli
+      given: Beniamino
+    - family: Tudoroiu
+      given: Marin
+    - family: Genesio
+      given: Lorenzo
+    - family: Miglietta
+      given: Franco
+    - family: Baronti
+      given: Silvia
+    - family: Maienza
+      given: Anita
+    - family: Ungaro
+      given: Fabrizio
+    - family: Toscano
+      given: Piero  
+  issued:
+    date-parts:
+      - 2020
+  title: 'Retrieving soil moisture in rainfed and irrigated fields using Sentinel-2 observations and a modified OPTRAM approach'
+  container-title: International Journal of Applied Earth Observation and Geoinformation
+  volume: 89
+  DOI: 10.1016/j.jag.2020.102113
+  language: en
+  
+- type: article-journal
+  id: ranghetti_sen2r_2020
+  author: 
+    - family: Ranghetti
+      given: Luigi
+    - family: Boschetti
+      given: Mirco
+    - family: Nutini
+      given: Francesco
+    - family: Busetto
+      given: Lorenzo
+  issued:
+    date-parts:
+      - 2020
+  title: 'Satellite Determination of Peatland Water Table Temporal Dynamics by Localizing Representative Pixels of A SWIR Based Moisture Index'
+  container-title: Computers & Geosciences
+  volume: 139
+  DOI: 10.1016/j.cageo.2020.104473
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->

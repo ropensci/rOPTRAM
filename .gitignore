@@ -9,3 +9,5 @@ R/create_icon.R
 R/optram_acquire_cdse.R
 SAFE$
 paper.md
+/doc/
+/Meta/

@@ -11,3 +11,5 @@ R/create_icon\.R$
 ^\.gitlab-ci\.yml$
 ^inst/extdata/S2A$
 
+^doc$
+^Meta$

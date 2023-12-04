@@ -21,8 +21,8 @@ regression lines, and the slope/intercept coefficients of these lines
 comprise the trapezoid. These coefficients are then used on a new
 satellite image to determine soil moisture.
 
-See: Sadeghi et al. (2017), Burdun et al. (2020), Ambrosone et al.
-(2020)
+See: Sadeghi et al. (n.d.), Burdun et al. (n.d.), Ambrosone et al.
+(n.d.)
 
 ## Installation
 
@@ -43,8 +43,8 @@ This package uses the R package for acquiring Sentinel-2 imagery. To
 install that package you will need some system dependencies. On Debian
 and derivatives please install in advance:
 
--   jq libv8-dev libjq-dev
--   libprotobuf-dev protobuf-compiler
+- jq libv8-dev libjq-dev
+- libprotobuf-dev protobuf-compiler
 
 Install the google cloud CLI to allow acquiring images directly from
 Google. For installation instructions see:
@@ -59,15 +59,15 @@ Google. For installation instructions see:
 A main wrapper function to run the whole OPTRAM procedure. This function
 performs the following steps:
 
--   Acquire Sentinel 2 images covering the requested date range, and
-    clipped to the input area of interest. This step relies on the sen2r
-    package
--   Create the set of SWIR Transformed Reflectance (STR) rasters;
--   Prepare a dataframe of NDVI and STR values for all pixels from all
-    images;
--   Calculate the trapezoid wet and dry regression lines, and save
-    coefficients to a CSV file. Returns: the set of four coefficients:
-    wet slope, wet intercept, dry slope, and dry intercept.
+- Acquire Sentinel 2 images covering the requested date range, and
+  clipped to the input area of interest. This step relies on the sen2r
+  package
+- Create the set of SWIR Transformed Reflectance (STR) rasters;
+- Prepare a dataframe of NDVI and STR values for all pixels from all
+  images;
+- Calculate the trapezoid wet and dry regression lines, and save
+  coefficients to a CSV file. Returns: the set of four coefficients: wet
+  slope, wet intercept, dry slope, and dry intercept.
 
 #### optram_acquire_s2()
 
@@ -128,11 +128,11 @@ scatterplot is prepared.
 
 This is a basic example which shows how to:
 
--   retrieve Sentinel 2 imagery for a specific area of interest
--   covering a date range
--   preprocess the imagery to obtain a vegetation index and STR band
--   use these to derive coefficients of slope and intercept for the
-    OPTRAM trapezoid
+- retrieve Sentinel 2 imagery for a specific area of interest
+- covering a date range
+- preprocess the imagery to obtain a vegetation index and STR band
+- use these to derive coefficients of slope and intercept for the OPTRAM
+  trapezoid
 
 ``` r
 library(rOPTRAM)
@@ -150,7 +150,7 @@ coeffs
 
 In order to download Sentinel 2 images, the `sen2r` package is used:
 
-Ranghetti et al. (2020)
+Ranghetti et al. (n.d.)
 
 That package must be installed in advance in order to run the `optram()`
 wrapper function.
@@ -159,21 +159,21 @@ If, on the other hand, Sentinel 2 imagery has been downloaded in
 advance, then `sen2r` is not necessary. Instead, the following workflow
 can be used:
 
--   call `optram_safe()` to prepare NDVI and STR rasters
--   call `optram_calculate_str()` to calculate SWIR Transform
--   call `optram_ndvi_str()` to build a data.frame of pixel values
--   call `optram_wetdry_coefficients()` to derive slope and intercept of
-    the trapezoid.
+- call `optram_safe()` to prepare NDVI and STR rasters
+- call `optram_calculate_str()` to calculate SWIR Transform
+- call `optram_ndvi_str()` to build a data.frame of pixel values
+- call `optram_wetdry_coefficients()` to derive slope and intercept of
+  the trapezoid.
 
 ## Meta
 
--   Please report any issues on
-    [gitlab](https://gitlab.com/rsl-bidr/roptram/-/issues)
--   Anyone interested in collaborating is invited to “sign up” by
-    contacting the maintainers.
--   This package is released with a [Contributor Code of
-    Conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md).
-    By contributing to this project, you agree to abide by its terms.
+- Please report any issues on
+  [gitlab](https://gitlab.com/rsl-bidr/roptram/-/issues)
+- Anyone interested in collaborating is invited to “sign up” by
+  contacting the maintainers.
+- This package is released with a [Contributor Code of
+  Conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md).
+  By contributing to this project, you agree to abide by its terms.
 
 <div id="refs" class="references csl-bib-body hanging-indent">
 
@@ -181,10 +181,10 @@ can be used:
 
 Ambrosone, Mariapaola, Alessandro Matese, Salvatore Filippo Di Gennaro,
 Beniamino Gioli, Marin Tudoroiu, Lorenzo Genesio, Franco Miglietta, et
-al. 2020. “Retrieving Soil Moisture in Rainfed and Irrigated Fields
-Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
-*International Journal of Applied Earth Observation and Geoinformation*
-89 (July): 102113. <https://doi.org/10.1016/j.jag.2020.102113>.
+al. n.d. “Retrieving Soil Moisture in Rainfed and Irrigated Fields Using
+Sentinel-2 Observations and a Modified OPTRAM Approach.” *International
+Journal of Applied Earth Observation and Geoinformation* 89.
+<https://doi.org/10.1016/j.jag.2020.102113>.
 
 </div>
 
@@ -192,28 +192,28 @@ Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 
 Burdun, Iuliia, Michel Bechtold, Valentina Sagris, Annalea Lohila, Elyn
 Humphreys, Ankur R. Desai, Mats B. Nilsson, Gabrielle De Lannoy, and Ülo
-Mander. 2020. “Satellite Determination of Peatland Water Table Temporal
-Dynamics by Localizing Representative Pixels of A SWIR-Based Moisture
-Index.” *Remote Sensing* 12 (18): 2936.
-<https://doi.org/10.3390/rs12182936>.
+Mander. n.d. “Satellite Determination of Peatland Water Table Temporal
+Dynamics by Localizing Representative Pixels of A SWIR Based Moisture
+Index.” *Remote Sensing* 12. <https://doi.org/10.3390/rs12182936>.
 
 </div>
 
 <div id="ref-ranghetti_sen2r_2020" class="csl-entry">
 
 Ranghetti, Luigi, Mirco Boschetti, Francesco Nutini, and Lorenzo
-Busetto. 2020. “Sen2r: An r Toolbox for Automatically Downloading and
-Preprocessing Sentinel-2 Satellite Data.” *Computers & Geosciences* 139:
-104473. <https://doi.org/10.1016/j.cageo.2020.104473>.
+Busetto. n.d. “Satellite Determination of Peatland Water Table Temporal
+Dynamics by Localizing Representative Pixels of A SWIR Based Moisture
+Index.” *Computers & Geosciences* 139.
+<https://doi.org/10.1016/j.cageo.2020.104473>.
 
 </div>
 
 <div id="ref-sadeghi_optical_2017" class="csl-entry">
 
 Sadeghi, Morteza, Ebrahim Babaeian, Markus Tuller, and Scott B. Jones.
-2017. “The Optical Trapezoid Model: A Novel Approach to Remote Sensing
-of Soil Moisture Applied to Sentinel-2 and Landsat-8 Observations.”
-*Remote Sensing of Environment* 198 (September): 52–68.
+n.d. “The Optical Trapezoid Model: A Novel Approach to Remote Sensing of
+Soil Moisture Applied to Sentinel-2 and Landsat-8 Observations.” *Remote
+Sensing of Environment* 198.
 <https://doi.org/10.1016/j.rse.2017.05.041>.
 
 </div>
