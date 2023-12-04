@@ -1,5 +1,5 @@
 ---
-title: "rOPTRAM"
+title: "rOPTRAM: Deriving Soil Moisture from Sentinel-2 Imagery"
 output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{rOPTRAM}
@@ -18,15 +18,13 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-### Prepare soil moisture maps covering an area of interest (AOI), over a date range.
-
-
 `rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) to derive soil moisture based on the linear relation between a vegetation index, i.e. NDVI, and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band is used as a proxy for LST. The SWIR band is transformed to Swir Transformed Reflectance (STR).
 
 A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression lines, and the slope/intercept coefficents of these lines comprise the trapezoid. These coefficients are then used on a new satellite image to determine soil moisture.
 
   See:  @sadeghi_optical_2017, @burdun_satellite_2020, @ambrosone_retrieving_2020
 
+#### Prepare soil moisture maps covering an area of interest (AOI), over a date range.
 
 ```{r setup}
 remotes::install_gitlab("rsl-bidr/roptram")
@@ -38,21 +36,20 @@ if (!require("sen2r")) install.packages("sen2r", dependencies = TRUE)
 
 ## Main wrapper function
 
-### Run the full OPTRAM model procedure with a single function call
+#### Run the full OPTRAM model procedure with a single function call
 
 This example uses sets `timeperiod` to "seasonal", so only images between
 the month of from_date and the month of to_date will be used,
 but from all years in the date range.
 
-Required authentication for Copernicus Scihub was setup in advance.
-See: `r ?sen2r::is_scihub_configured()`
+The prerequisite Google Cloud CLI utility `gsutil` was installed in advance.
+See: [Google Cloud Documention](https://cloud.google.com/sdk/docs/install) for detailed instructions.
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`
 
 ```{r wrapper}
 from_date <- "2021-11-01"
 to_date <- "2023-03-31"
-# Local directory for the vignette
 output_dir <- "/home/micha/EO_Data/Israel/Migda_season/"
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
@@ -65,10 +62,9 @@ coeffs <- optram(aoi_file,
 knitr::kable(coeffs)
 ```
 
-
 ## Step by step
 
-### The same procedure as the wrapper function, but in explicit steps
+#### The same procedure as the wrapper function, but in explicit steps
 
   - Acquire Sentinel 2 images within a date range, and crop to AOI;
   - Prepare the SWIR Transformed Reflectance;
@@ -77,9 +73,6 @@ knitr::kable(coeffs)
 
 This example sets `timeperiod` to "full",
 so all images between from_date and to_date will be used.
-
-Required authentication for Copernicus Scihub was setup in advance.
-See: `r ?sen2r::is_scihub_configured()`
 
 ```{r stepbystep}
 from_date <- "2022-09-01"
@@ -104,7 +97,7 @@ coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir)
 ```
 
-### Show trapezoid plot
+#### Show trapezoid plot
 
 ```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%'}
 ttl <- "Migda"
@@ -117,7 +110,7 @@ knitr::include_graphics("trapezoid_Migda.png")
 
 ## Soil Moisture
 
-### Use trapezoid coefficients, VI, snf STR rasters to prepare soil moisture grid
+#### Use trapezoid coefficients, VI, and STR rasters to prepare soil moisture grid
 
 ```{r soil-moisture}
 img_date <- "2023-01-25"   # After a rain
@@ -127,15 +120,15 @@ coeffs_file <- file.path(output_dir, "coefficients.csv")
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 ```
 
-### Soil moisture plot
+#### Soil moisture plot
 
 ```{r sm-plot}
 library(tmap)
 names(SM) <- "Migda soil moisture"
+SM[terra::values(SM) < 0] <- 0
 tmap_mode("view")
 tm_basemap("OpenStreetMap") +
   tm_shape(SM) +
-  tm_raster(palette = "RdBu", midpoint = NA) +
+  tm_raster(palette = "RdYlGn", midpoint = NA) +
   tm_layout(legend.outside = TRUE, legend.outside.position = "right")
 ```
-

@@ -2,12 +2,11 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
-^bibliography\.bib$
 ^codemeta\.json$
 ^\.github$
 ^\.covrignore$
 R/create_icon\.R$
-^paper\.md$
+^inst/paper$
 ^\.gitlab-ci\.yml$
 ^inst/extdata/S2A$
 
