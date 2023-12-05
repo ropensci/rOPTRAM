@@ -3,8 +3,10 @@ title: "rOPTRAM: Deriving Soil Moisture from Sentinel-2 Imagery"
 output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{rOPTRAM}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{tmap}
+  %\VignetteDepends{here}
 bibliography: "bibliography.bib"
 ---
 
@@ -20,7 +22,7 @@ knitr::opts_chunk$set(
 
 `rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) to derive soil moisture based on the linear relation between a vegetation index, i.e. NDVI, and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band is used as a proxy for LST. The SWIR band is transformed to Swir Transformed Reflectance (STR).
 
-A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression lines, and the slope/intercept coefficents of these lines comprise the trapezoid. These coefficients are then used on a new satellite image to determine soil moisture.
+A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression lines, and the slope/intercept coefficients of these lines comprise the trapezoid. These coefficients are then used on a new satellite image to determine soil moisture.
 
   See:  @sadeghi_optical_2017, @burdun_satellite_2020, @ambrosone_retrieving_2020
 
@@ -64,7 +66,7 @@ Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, out
 ```{r wrapper}
 from_date <- "2021-11-01"
 to_date <- "2023-03-31"
-output_dir <- file.path(tempdir(), "seasonal")
+output_dir <- here::here("inst", "extdata", "S2A", "seasonal")
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
@@ -89,10 +91,10 @@ This example sets `timeperiod` to "full",
 so all images between from_date and to_date will be used.
 
 ```{r stepbystep}
-from_date <- "2022-09-01"
+from_date <- "2022-10-01"
 to_date <- "2023-04-30"
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
-output_dir = file.path(tempdir(), "full")
+output_dir <- here::here("inst", "extdata", "S2A", "full")
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
