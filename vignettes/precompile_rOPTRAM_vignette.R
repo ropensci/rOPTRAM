@@ -1,15 +1,15 @@
-setwd("./vignettes")
-knitr::knit(input = file.path("rOPTRAM.Rmd.orig"),
-            output = file.path("rOPTRAM.Rmd"))
+knitr::knit(input = "vignettes/rOPTRAM.Rmd.orig",
+            output = "vignettes/rOPTRAM.Rmd")
 
-output_dir <- "/home/micha/EO_Data/Israel/Migda_full"
+# Output directory and plot file name as defined in the vignette:
+output_dir <- file.path(tempdir(), "full")
 figures <- c("trapezoid_Migda.png")
 invisible(lapply(figures, function(f) {
   fig_path <- file.path(output_dir, f)
   file.copy(from = fig_path,
               to = f)
-  file.remove(fig_path)
   }))
 
 devtools::build_vignettes()
-setwd("../")
+
+

@@ -18,6 +18,20 @@ A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression l
 
   See:  @sadeghi_optical_2017, @burdun_satellite_2020, @ambrosone_retrieving_2020
 
+
+#### Prerequisites
+
+This package uses the R package \CRANpkg{sen2r} for acquiring Sentinel-2 imagery.
+To install that package you will need some system dependencies.
+On Debian and derivatives please install in advance:
+
+  - jq libv8-dev libjq-dev
+  - libprotobuf-dev protobuf-compiler
+
+That R package uses the Google Cloud infrastructure to download Sentinel-2 images. To install the Google Cloud CLI for acquiring images follow installation instructions here:
+https://cloud.google.com/sdk/docs/install
+
+
 #### Prepare soil moisture maps covering an area of interest (AOI), over a date range.
 
 
@@ -48,13 +62,13 @@ but from all years in the date range.
 The prerequisite Google Cloud CLI utility `gsutil` was installed in advance.
 See: [Google Cloud Documention](https://cloud.google.com/sdk/docs/install) for detailed instructions.
 
-Downloaded Sentinel-2 images are saved to `S2_output_dir`
+Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 
 
 ```r
 from_date <- "2021-11-01"
 to_date <- "2023-03-31"
-output_dir <- "/home/micha/EO_Data/Israel/Migda_season/"
+output_dir <- file.path(tempdir(), "seasonal")
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
@@ -100,8 +114,7 @@ so all images between from_date and to_date will be used.
 from_date <- "2022-09-01"
 to_date <- "2023-04-30"
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
-# Local directory for the vignette
-output_dir = "/home/micha/EO_Data/Israel/Migda_full"
+output_dir = file.path(tempdir(), "full")
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
@@ -166,9 +179,8 @@ library(tmap)
 names(SM) <- "Migda soil moisture"
 SM[terra::values(SM) < 0] <- 0
 tmap_mode("view")
-tm_basemap("OpenStreetMap") +
+map <- tm_basemap("OpenStreetMap") +
   tm_shape(SM) +
   tm_raster(palette = "RdYlGn", midpoint = NA) +
   tm_layout(legend.outside = TRUE, legend.outside.position = "right")
-#> Error in path.expand(path): invalid 'path' argument
 ```

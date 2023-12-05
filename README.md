@@ -37,7 +37,7 @@ if (! require("remotes")) {
 remotes::install_gitlab("rsl-bidr/roptram")
 ```
 
-#### Suggested prerequisites
+#### Prerequisites
 
 This package uses the R package for acquiring Sentinel-2 imagery. To
 install that package you will need some system dependencies. On Debian
@@ -46,8 +46,9 @@ and derivatives please install in advance:
 - jq libv8-dev libjq-dev
 - libprotobuf-dev protobuf-compiler
 
-Install the google cloud CLI to allow acquiring images directly from
-Google. For installation instructions see:
+That R package uses the Google Cloud infrastructure to download
+Sentinel-2 images. Install the Google Cloud CLI to allow acquiring
+images directly from Google. For installation instructions see:
 <https://cloud.google.com/sdk/docs/install>
 
 ## Available functions
