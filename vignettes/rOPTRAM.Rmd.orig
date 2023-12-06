@@ -6,7 +6,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{tmap}
-  %\VignetteDepends{here}
 bibliography: "bibliography.bib"
 ---
 
