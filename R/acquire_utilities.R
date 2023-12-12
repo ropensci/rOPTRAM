@@ -1,5 +1,5 @@
 #' @title Utility Function to Acquire Sentinel-2 Imagery using Google Cloud CLI
-#' @description This non-exported function uses the `sen2r` package 
+#' @description This non-exported function uses the `sen2r` package
 #' to send a request to Google Cloud, and prepare the products.
 #' Called by optram_acquire_s2
 #' @param aoi_file, string, full path to polygon spatial file of
@@ -26,7 +26,7 @@
 #'  - furthermore, the cirrus band B09 is not relevant for BOA level
 #'  - so band 10 is the SWIR reflectance at 1600 nm,
 #'    and band 11 is reflectance at 2200 nm.
-#' The \CRANpkg{sen2r} package uses `gsutil`, a utility in the Google Cloud SDK 
+#' The \CRANpkg{sen2r} package uses `gsutil`, a utility in the Google Cloud SDK
 #' to download imagery. Please first install `gcloud` following instructions:
 #' https://cloud.google.com/sdk/docs/install
 #' for your operating system.
@@ -53,7 +53,14 @@ acquire_gcloud <- function(aoi_file,
                         veg_index = "NDVI") {
     # Avoid "no visible binding for global variable" NOTE
     result_list <- aoi_name <- NULL
-    # Pre flight checks done in advance by optram_acquire_s2()
+
+    stopifnot(check_gcloud())
+    # Make sure output_dir exists
+    if (!dir.exists(output_dir)) {
+      dir.create(output_dir, recursive = TRUE)
+    }
+    # Checks OK, proceed to download
+
     aoi_name <- aoi_to_name(aoi_file)
     result_list <- sen2r::sen2r(
         gui = FALSE,
@@ -114,4 +121,65 @@ acquire_gcloud <- function(aoi_file,
         processing_order = "by_groups",
         )
     return(result_list)
+}
+
+
+#' @title: Check if gcloud is installed
+#' @description:  Check for sen2r dependency, and gcloud utility
+#' @return: boolean
+#' @examples
+#' gcloud_ok <- check_gcloud()
+#'
+check_gcloud <- function() {
+  # Pre flight checks
+  sen2r_ok <- "sen2r" %in% utils::installed.packages()
+  if (!sen2r_ok) {
+    message("sen2r package is missing. Download is not possible",
+            "\n", "Exiting...")
+    return(FALSE)
+  }
+  if (Sys.info()['sysname'] == 'Windows') {
+    # Assume that gcloud-sdk is installed in USER's home dir
+    # Get the first instance of gsutil file
+    homedir <- Sys.getenv("USERPROFILE")
+    gsutil_path <- system2("WHERE",
+                           paste("/R", homedir, "gsutil"), stdout = TRUE)[1]
+  } else {
+    gsutil_path <- Sys.which("gsutil")
+  }
+  gcloud_ok <- ifelse(is.null(gsutil_path) | gsutil_path == "" |
+                        is.na(gsutil_path) | !sen2r::is_gcloud_configured(),
+                      FALSE, sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
+
+  if (gcloud_ok) {
+    message("Using gcloud CLI")
+    return(TRUE)
+  } else {
+    message("No access to Google cloud", "\n", "Exiting")
+    return(FALSE)}
+}
+
+
+acquire_scihub <- function(aoi_file,
+                           from_date, to_date,
+                           max_cloud = 10,
+                           timeperiod = "full",
+                           output_dir = tempdir(),
+                           remove_safe = "yes",
+                           veg_index = "NDVI") {
+  # TODO: implement this function using new scihub API
+  # Check for token, etc...
+  # Write eval_functions (in javascript) for each vegetation index
+}
+
+acquire_openeo <- function(aoi_file,
+                           from_date, to_date,
+                           max_cloud = 10,
+                           timeperiod = "full",
+                           output_dir = tempdir(),
+                           remove_safe = "yes",
+                           veg_index = "NDVI") {
+  # TODO: implement this function using new openeo
+  # Check for token, etc...
+  # Write eval_functions (in javascript) for each vegetation index
 }

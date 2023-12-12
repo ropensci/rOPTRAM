@@ -39,7 +39,8 @@ after processing, default "yes"}
 \item{veg_index, }{string, which index to prepare. Default "NDVI".
 Can be "NDVI", "SAVI", "MSAVI", etc}
 
-\item{remote, }{string, from which archive to download imagery}
+\item{remote, }{string, from which archive to download imagery
+possible values: 'gcloud', 'scihub', 'openeo'}
 }
 \value{
 output_path, string, path to downloaded files

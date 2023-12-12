@@ -23,10 +23,11 @@
 #'      whether to delete downloaded SAFE directories
 #'      after processing, default "yes"
 #' @param remote, string, from which archive to download imagery
+#'    possible values: 'gcloud', 'scihub', 'openeo'
 #' @return output_path, string, path to downloaded files
 #' @export
 #' @note
-#' This wrapper function calls one of multiple download functions, 
+#' This wrapper function calls one of multiple download functions,
 #' each accessing a different cloud-based resource.
 #' The cloud based resource can be one of:
 #' "gcloud",...
@@ -39,7 +40,7 @@
 #'  - furthermore, the cirrus band B09 is not relevant for BOA level
 #'  - so band 10 is the SWIR reflectance at 1600 nm,
 #'    and band 11 is reflectance at 2200 nm.
-#' The \CRANpkg{sen2r} package uses `gsutil`, a utility in the Google Cloud SDK 
+#' The \CRANpkg{sen2r} package uses `gsutil`, a utility in the Google Cloud SDK
 #' to download imagery. Please first install `gcloud` following instructions:
 #' https://cloud.google.com/sdk/docs/install
 #' for your operating system.
@@ -67,50 +68,34 @@ optram_acquire_s2 <- function(
       veg_index = "NDVI",
       remote = "gcloud") {
   # Avoid "no visible binding for global variable" NOTE
-  sen2r_version <- sen2r_ok <- gcloud_ok <- gsutil_path <- NULL
-  aoi_name <- result_list <- NULL
+  gcloud <- scihub <- openeo <- NULL
 
   # Pre flight checks...
   if (!check_aoi(aoi_file)) return(NULL)
 
-  # One option, Google Cloud CLI
-  if (remote == "gcloud") {
-    # Pre flight tests, check for `sen2r` and gsutil 
-    sen2r_ok <- "sen2r" %in% utils::installed.packages()
-    if (!sen2r_ok) {
-      message("sen2r package is missing. Download is not possible")
-      return(NULL)
-    }
+  remote <- match.arg(remote)
 
-    # Where is 'gsutil' installed?
-    if (Sys.info()['sysname'] == 'Windows') {
-      # Assume that gcloud-sdk is installed in USER's home dir
-      # Get the first instance of gsutil file
-      homedir <- Sys.getenv("USERPROFILE")
-      gsutil_path <- system2("WHERE",
-                            paste("/R", homedir, "gsutil"), stdout = TRUE)[1]
-    } else {
-      gsutil_path <- Sys.which("gsutil")
-    }
-    gcloud_ok <- ifelse(is.null(gsutil_path) | gsutil_path == "" | 
-                        is.na(gsutil_path) | !sen2r::is_gcloud_configured(),
-                        FALSE, sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
-    
-    if (gcloud_ok) {message("Using gcloud CLI")} else {
-          message("No access to Google cloud", "\n", "Exiting")
-          return(NULL)}
-
-    # Checks OK, proceed to download
-    # Make sure output_dir exists
-    if (!dir.exists(output_dir)) {
-      dir.create(output_dir, recursive = TRUE)
-    }
-    result_list <- acquire_gcloud(aoi_file = aoi_file,
-                                  from_date = from_date, to_date = to_date,
-                                  max_cloud = max_cloud, timeperiod = timeperiod,
-                                  output_dir = output_dir, remove_safe = remove_safe,
-                                  veg_index = veg_index)
-    return(result_list)
-    # else { Additional download option }
-    }
+  switch(remote,
+         gcloud = acquire_gcloud(aoi_file,
+                                 from_date, to_date,
+                                 max_cloud = 10,
+                                 timeperiod = "full",
+                                 output_dir = tempdir(),
+                                 remove_safe = "yes",
+                                 veg_index = "NDVI"),
+         scihub = acquire_scihub(aoi_file,
+                                from_date, to_date,
+                                max_cloud = 10,
+                                timeperiod = "full",
+                                output_dir = tempdir(),
+                                remove_safe = "yes",
+                                veg_index = "NDVI"),
+         openeo = acquire_openeo(aoi_file,
+                                 from_date, to_date,
+                                 max_cloud = 10,
+                                 timeperiod = "full",
+                                 output_dir = tempdir(),
+                                 remove_safe = "yes",
+                                 veg_index = "NDVI")
+         )
 }
