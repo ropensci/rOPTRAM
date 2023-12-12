@@ -124,11 +124,13 @@ acquire_gcloud <- function(aoi_file,
 }
 
 
-#' @title: Check if gcloud is installed
-#' @description:  Check for sen2r dependency, and gcloud utility
-#' @return: boolean
+#' @title Check if gcloud is installed
+#' @description  Check for sen2r dependency, and gcloud utility
+#' @return boolean
 #' @examples
+#' \dontrun{
 #' gcloud_ok <- check_gcloud()
+#' }
 #'
 check_gcloud <- function() {
   # Pre flight checks

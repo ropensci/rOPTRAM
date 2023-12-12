@@ -2,17 +2,19 @@
 % Please edit documentation in R/acquire_utilities.R
 \name{check_gcloud}
 \alias{check_gcloud}
-\title{: Check if gcloud is installed}
+\title{Check if gcloud is installed}
 \usage{
 check_gcloud()
 }
 \value{
-: boolean
+boolean
 }
 \description{
-:  Check for sen2r dependency, and gcloud utility
+Check for sen2r dependency, and gcloud utility
 }
 \examples{
+\dontrun{
 gcloud_ok <- check_gcloud()
+}
 
 }
