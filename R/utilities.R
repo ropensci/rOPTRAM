@@ -72,7 +72,7 @@ check_aoi <- function(aoi_file) {
 #' @title Check Date Format
 #' @description
 #' Check that date string is formatted correctly "YYYY-MM-DD"
-#' @param date_string
+#' @param date_string, string
 #' @return boolean, TRUE when formatted correctly
 #' @noRd
 #' @examples
