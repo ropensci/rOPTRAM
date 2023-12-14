@@ -96,6 +96,6 @@ optram_acquire_s2 <- function(
                                  timeperiod = timeperiod,
                                  output_dir = output_dir,
                                  remove_safe = remove_safe,
-                                 veg_index = veg_index))
+                                 veg_index = veg_index)
          )
 }
