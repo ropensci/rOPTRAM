@@ -81,7 +81,7 @@ check_aoi <- function(aoi_file) {
 
 check_date_string <- function(date_string) {
   if (!is.character(date_string)) return(FALSE)
-  yr <- unlist(strsplit(date_string), "-")[1]
+  yr <- unlist(strsplit(date_string, "-"))[1]
   if (nchar(yr) != 4) return(FALSE)
   d <- as.Date(date_string, format = "%Y-%m-%d")
   if (is.na(d)) return(FALSE)
