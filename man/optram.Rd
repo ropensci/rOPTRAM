@@ -13,7 +13,8 @@ optram(
   remove_safe = "yes",
   timeperiod = "full",
   S2_output_dir = tempdir(),
-  data_output_dir = tempdir()
+  data_output_dir = tempdir(),
+  remote = "gcloud"
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ and the derived products, defaults to tempdir()}
 
 \item{data_output_dir, }{string, path to save coeffs_file
 and STR-VI data.frame, default is tempdir()}
+
+\item{remote, }{string, which Copernicus API to use,
+one of "gcloud", "scihub", or "openeo"}
 }
 \value{
 coeffs_file, string, full path to saved CSV of wet-dry coefficients

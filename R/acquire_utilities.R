@@ -54,7 +54,7 @@ acquire_gcloud <- function(aoi_file,
     # Avoid "no visible binding for global variable" NOTE
     result_list <- aoi_name <- NULL
 
-    stopifnot(check_gcloud())
+    if(!check_gcloud()) return(NULL)
     # Make sure output_dir exists
     if (!dir.exists(output_dir)) {
       dir.create(output_dir, recursive = TRUE)
@@ -127,6 +127,7 @@ acquire_gcloud <- function(aoi_file,
 #' @title Check if gcloud is installed
 #' @description  Check for sen2r dependency, and gcloud utility
 #' @return boolean
+#' @noRd
 #' @examples
 #' \dontrun{
 #' gcloud_ok <- check_gcloud()
@@ -150,8 +151,9 @@ check_gcloud <- function() {
     gsutil_path <- Sys.which("gsutil")
   }
   gcloud_ok <- ifelse(is.null(gsutil_path) | gsutil_path == "" |
-                        is.na(gsutil_path) | !sen2r::is_gcloud_configured(),
-                      FALSE, sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
+                      is.na(gsutil_path) | !sen2r::is_gcloud_configured(),
+                      FALSE,
+                      sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
 
   if (gcloud_ok) {
     message("Using gcloud CLI")
@@ -172,6 +174,22 @@ acquire_scihub <- function(aoi_file,
   # TODO: implement this function using new scihub API
   # Check for token, etc...
   # Write eval_functions (in javascript) for each vegetation index
+  if(!check_scihub()) return(NULL)
+}
+
+
+#' @title Check access to scihub API
+#' @description  Check access, and Oauth to scihub API
+#' @return boolean
+#' @noRd
+#' @examples
+#' \dontrun{
+#' scihub_ok <- check_scihub()
+#' }
+#'
+check_scihub <- function() {
+  # TODO: this is a stub, just for test_that
+  return(FALSE)
 }
 
 acquire_openeo <- function(aoi_file,
@@ -184,4 +202,19 @@ acquire_openeo <- function(aoi_file,
   # TODO: implement this function using new openeo
   # Check for token, etc...
   # Write eval_functions (in javascript) for each vegetation index
+  if(!check_openeo()) return(NULL)
+}
+
+#' @title Check access to Copernicus openEO
+#' @description  Check access and Oauth to openEO platform
+#' @return boolean
+#' @noRd
+#' @examples
+#' \dontrun{
+#' openeo_ok <- check_openeo()
+#' }
+#'
+check_openeo <- function() {
+  # TODO: this is a stub, just for test_that
+  return(FALSE)
 }

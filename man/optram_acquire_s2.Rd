@@ -13,7 +13,7 @@ optram_acquire_s2(
   output_dir = tempdir(),
   remove_safe = "yes",
   veg_index = "NDVI",
-  remote = "gcloud"
+  remote = c("gcloud", "scihub", "openeo")
 )
 }
 \arguments{

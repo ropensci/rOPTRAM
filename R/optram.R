@@ -25,6 +25,8 @@
 #'      SAFE directories after processing. Default "yes"
 #' @param timeperiod, string, either "full" for the whole date range,
 #' or "seasonal" for only months specified, but over the full date range.
+#' @param remote, string, which Copernicus API to use,
+#'  one of "gcloud", "scihub", or "openeo"
 #' @return coeffs_file, string, full path to saved CSV of wet-dry coefficients
 #' the coefficients are also saved to a csv file in `data_output_dir`.
 #' @note
@@ -65,7 +67,8 @@ optram <- function(aoi_file,
                    remove_safe = "yes",
                    timeperiod = "full",
                    S2_output_dir = tempdir(),
-                   data_output_dir = tempdir()) {
+                   data_output_dir = tempdir(),
+                   remote = "gcloud") {
 
   # Avoid "no visible binding for global variable" NOTE
   access_ok <- s2_list <- s2_dirs <- BOA_dir <- NULL
@@ -80,7 +83,8 @@ optram <- function(aoi_file,
                     veg_index = veg_index,
                     remove_safe = remove_safe,
                     timeperiod = timeperiod,
-                    output_dir = S2_output_dir)
+                    output_dir = S2_output_dir,
+                    remote = remote)
 
     # Get full output directories for BOA, STR and NDVI
     s2_dirs <- list.dirs(S2_output_dir,  full.names = TRUE)

@@ -66,7 +66,7 @@ optram_acquire_s2 <- function(
       output_dir = tempdir(),
       remove_safe = "yes",
       veg_index = "NDVI",
-      remote = "gcloud") {
+      remote = c("gcloud", "scihub", "openeo")) {
   # Avoid "no visible binding for global variable" NOTE
   gcloud <- scihub <- openeo <- NULL
 
