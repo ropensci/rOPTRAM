@@ -19,7 +19,7 @@ check_scihub_access <- function(site = "http://scihub.copernicus.eu") {
         error = {function(e) {message("No internet connection to SCIHUB.",
              "\n", "Downloading data is not currently possible"); FALSE}
     })
-    
+
     if (internet_online) {
         #message("In covr 2:", covr::in_covr())
         # Is sen2r installed?
@@ -69,6 +69,24 @@ check_aoi <- function(aoi_file) {
     return(TRUE)
 }
 
+#' @title Check Date Format
+#' @description
+#' Check that date string is formatted correctly "YYYY-MM-DD"
+#' @param date_string
+#' @return boolean, TRUE when formatted correctly
+#' @noRd
+#' @examples
+#' (date_ok <- check_date_string("2023-01-31")) # returns TRUE
+#' (date_ok <- check_date_string("2023-02-30")) # returns FALSE
+
+check_date_string <- function(date_string) {
+  if (!is.character(date_string)) return(FALSE)
+  d <- as.Date(date_string, format = "%Y-$m-$d")
+  if (is.na(d)) return(FALSE)
+  return(TRUE)
+}
+
+
 
 #' @title Calculate Vegetation Index from Bottom of Atmosphere Image Bands
 #' @description
@@ -108,12 +126,12 @@ calculate_vi <- function(img_stk, viname = "NDVI",
     } else if (viname == "SAVI") {
         vi_rast <- ((1.5 * (nir - red)) / (nir + red + 0.5) )
     } else if (viname == "MSAVI") {
-        vi_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 
+        vi_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 -
             8 * (nir - red))) / 2)
     } else if (viname == "CI") {
         vi_rast <- (1-((red - blue) / (red + blue)))
     } else if (viname == "BSCI") {
-        vi_rast <- ((1-(2*(red - green))) / 
+        vi_rast <- ((1-(2*(red - green))) /
             (terra::mean(green, red, nir, na.rm = TRUE)))
     } else {
         message("Unrecognized index: ", viname)
@@ -175,7 +193,7 @@ calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
 #' @description
 #' Extract a string from the full path to area of interest (AOI) file
 #' @param aoi_file, string, full path to AOI file
-#' @noRd 
+#' @noRd
 #' @keywords Internal
 #' @return aoi_name, string
 #' @examples

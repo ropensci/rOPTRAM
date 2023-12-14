@@ -72,6 +72,7 @@ optram_acquire_s2 <- function(
 
   # Pre flight checks...
   if (!check_aoi(aoi_file)) return(NULL)
+  if (!check_date_string(from_date) | !check_date_string(to_date)) return(NULL)
 
   remote <- match.arg(remote)
 
