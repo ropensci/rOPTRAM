@@ -47,6 +47,15 @@ test_that("Check aoi_to_name return value",{
     expect_equal(aoi_to_name(aoi_file), "somearea")
 })
 
+test_that("Check format of from_date, to_date",{
+  expect_false(check_date_string(2023-01-01))
+  expect_false(check_date_string("2023/01/01"))
+  expect_false(check_date_string("23-01-01"))
+  expect_false(check_date_string("30-01-2023"))
+  expect_false(check_date_string("2023-13-01"))
+  expect_false(check_date_string("2023-10-32"))
+  expect_true(check_date_string("2023-10-31"))
+})
 
 skip_if_not_installed("sen2r")
 site <- "http://scihub.copernicus.eu"

@@ -6,7 +6,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{tmap}
-  %\VignetteDepends{here}
 bibliography: "bibliography.bib"
 ---
 
@@ -39,25 +38,18 @@ https://cloud.google.com/sdk/docs/install
 
 ```r
 remotes::install_gitlab("rsl-bidr/roptram")
-#> ── R CMD build ──────────────────────────────────────────────────────────────────────
-#>      checking for file ‘/tmp/RtmpsGKjp8/remotes2a04b02f9b02fe/roptram-HEAD-fcd58f3171658d2544ed78f7fae50554769cacda/DESCRIPTION’ ...  ✔  checking for file ‘/tmp/RtmpsGKjp8/remotes2a04b02f9b02fe/roptram-HEAD-fcd58f3171658d2544ed78f7fae50554769cacda/DESCRIPTION’
-#>   ─  preparing ‘rOPTRAM’:
-#>    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
-#>   ─  checking for LF line-endings in source and make files and shell scripts
-#>   ─  checking for empty or unneeded directories
-#> ─  building ‘rOPTRAM_0.0.1.000.tar.gz’
-#>      
-#> 
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
-#>  [1] "acquire_gcloud"                 "aoi_to_name"                   
-#>  [3] "calculate_str"                  "calculate_vi"                  
-#>  [5] "check_aoi"                      "check_scihub_access"           
-#>  [7] "optram"                         "optram_acquire_s2"             
-#>  [9] "optram_calculate_soil_moisture" "optram_calculate_str"          
-#> [11] "optram_landsat"                 "optram_ndvi_str"               
-#> [13] "optram_prepare_other_vi_str"    "optram_safe"                   
-#> [15] "optram_wetdry_coefficients"     "plot_ndvi_str_cloud"
+#>  [1] "acquire_gcloud"                 "acquire_openeo"                
+#>  [3] "acquire_scihub"                 "aoi_to_name"                   
+#>  [5] "calculate_str"                  "calculate_vi"                  
+#>  [7] "check_aoi"                      "check_date_string"             
+#>  [9] "check_gcloud"                   "check_scihub_access"           
+#> [11] "optram"                         "optram_acquire_s2"             
+#> [13] "optram_calculate_soil_moisture" "optram_calculate_str"          
+#> [15] "optram_landsat"                 "optram_ndvi_str"               
+#> [17] "optram_prepare_other_vi_str"    "optram_safe"                   
+#> [19] "optram_wetdry_coefficients"     "plot_ndvi_str_cloud"
 # The `sen2r` package is required for downloading Sentinel imagery
 if (!require("sen2r")) install.packages("sen2r", dependencies = TRUE)
 ```
@@ -79,7 +71,8 @@ Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, out
 ```r
 from_date <- "2021-11-01"
 to_date <- "2023-03-31"
-output_dir <- here::here("inst", "extdata", "S2A", "seasonal")
+S2_dir <- tempdir()
+output_dir <- file.path(S2_dir, "Migda_season")
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
@@ -125,7 +118,7 @@ so all images between from_date and to_date will be used.
 from_date <- "2022-10-01"
 to_date <- "2023-04-30"
 aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
-output_dir <- here::here("inst", "extdata", "S2A", "full")
+output_dir <- file.path(S2_dir, "Migda_full")
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
