@@ -79,12 +79,16 @@ check_aoi <- function(aoi_file) {
 #' (date_ok <- check_date_string("2023-01-31")) # returns TRUE
 #' (date_ok <- check_date_string("2023-02-30")) # returns FALSE
 
-check_date_string <- function(date_string) {
-  if (!is.character(date_string)) return(FALSE)
-  yr <- unlist(strsplit(date_string, "-"))[1]
-  if (nchar(yr) != 4) return(FALSE)
-  d <- as.Date(date_string, format = "%Y-%m-%d")
-  if (is.na(d)) return(FALSE)
+check_date_string <- function(from_string, to_string) {
+  if (!is.character(from_string) |
+      !is.character(to_string)) return(FALSE)
+  fryr <- unlist(strsplit(from_string, "-"))[1]
+  toyr <- unlist(strsplit(to_string, "-"))[1]
+  if (nchar(fryr) != 4 | nchar(toyr) != 4) return(FALSE)
+  frd <- as.Date(from_string, format = "%Y-%m-%d")
+  tod <- as.Date(to_string, format = "%Y-%m-%d")
+  if (is.na(frd) | is.na(tod)) return(FALSE)
+  if (tod <= frd) return(FALSE)
   return(TRUE)
 }
 

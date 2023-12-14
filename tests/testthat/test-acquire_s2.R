@@ -12,8 +12,17 @@ test_that("AOI file is not spatial", {
   to_date  <- "2023-04-30"
   aoi_file <- system.file("extdata", "Migda_9_SM.csv", package = "rOPTRAM")
   expect_null(optram_acquire_s2(aoi_file, from_date, to_date))
+  from_date <- "2023-03-01"
+  to_date <- "2023-04-32"
+  expect_null(optram_acquire_s2(aoi_file, from_date, to_date))
 })
 
+test_that("from_date correctly formatted", {
+  from_date <- "2023-13-01"
+  to_date <- "2023-04-30"
+  aoi_file <- system.file("extdata", "Migda_9_SM.csv", package = "rOPTRAM")
+  expect_null(optram_acquire_s2(aoi_file, from_date, to_date))
+})
 
 test_that("API access to scihub ", {
   # Short time interval to get only one downloaded file
@@ -37,7 +46,7 @@ test_that("API access to scihub ", {
           !sen2r::is_gcloud_configured(),
     gcloud_ok <- FALSE,
     gcloud_ok <- sen2r::check_gcloud(gsutil_path, check_creds = FALSE))
-  
+
   if (!gcloud_ok) {
     expect_null(optram_acquire_s2(aoi_file, from_date, to_date))
   } else if (sen2r::is_gcloud_configured()) {
