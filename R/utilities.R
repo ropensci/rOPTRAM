@@ -82,8 +82,8 @@ check_aoi <- function(aoi_file) {
 check_date_string <- function(from_string, to_string) {
   if (!is.character(from_string) |
       !is.character(to_string)) return(FALSE)
-  fryr <- unlist(strsplit(from_string, "-"))[1]
-  toyr <- unlist(strsplit(to_string, "-"))[1]
+  fryr <- unlist(strsplit(x = from_string, split = "-", fixed = TRUE))[1]
+  toyr <- unlist(strsplit(x = to_string, split = "-", fixed = TRUE))[1]
   if (nchar(fryr) != 4 | nchar(toyr) != 4) return(FALSE)
   frd <- as.Date(from_string, format = "%Y-%m-%d")
   tod <- as.Date(to_string, format = "%Y-%m-%d")
