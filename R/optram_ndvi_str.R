@@ -48,6 +48,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     message("No raster files in directories")
     return(NULL)
   }
+  if (!dir.exists(output_dir)) dir.create(output_dir)
 
   # Get index of rows for sampling
   # Use the first raster (first date) list of STR rasters
