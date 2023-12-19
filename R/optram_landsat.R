@@ -101,9 +101,9 @@
          dir.create(BOA_dir, recursive = TRUE)
     }
 
-    NDVI_dir <- file.path(LC_output_dir, "NDVI")
-    if (!dir.exists(NDVI_dir)) {
-        dir.create(NDVI_dir)
+    VI_dir <- file.path(LC_output_dir, veg_index)
+    if (!dir.exists(VI_dir)) {
+        dir.create(VI_dir)
     }
 
     STR_dir <- file.path(LC_output_dir, "STR")
@@ -194,13 +194,13 @@
       full_df <- dplyr::full_join(STR_df, VI_df)
       full_df <- full_df[stats::complete.cases(full_df),]
 
-      # Save VI to NDVI_dir
+      # Save VI to VI_dir
       # Prepare file name parts for saving rasters
       s_parts <- unlist(strsplit(basename(landsat_list[x]), "_"))
       VI_file <- paste(s_parts[1], s_parts[2],s_parts[3],s_parts[4],s_parts[6],
                        aoi_name, "NDVI.tif", sep = "_")
       terra::writeRaster(VI_idx,
-                         file.path(NDVI_dir, VI_file), overwrite = TRUE)
+                         file.path(VI_dir, VI_file), overwrite = TRUE)
       # Save STR to BOA_dir
       STR_file <- paste(s_parts[1], s_parts[2],
                         s_parts[3],s_parts[4],s_parts[6],

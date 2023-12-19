@@ -4,7 +4,7 @@
 #' SWIR Transformed Reflectance (STR) rasters
 #' when you have already downloaded Sentinel 2 image files in advance
 #' (without using \CRANpkg{sen2r}).
-#' Unzip the downloaded Sentinel 2 files 
+#' Unzip the downloaded Sentinel 2 files
 #'      and do not change the folder structure.
 #' This function assumes that atmospheric correction has been applied.
 #' i.e. using the SNAP L2A_Process,
@@ -104,7 +104,7 @@ optram_safe <- function(safe_dir,
          dir.create(BOA_dir, recursive = TRUE)
     }
 
-    VI_dir <- file.path(S2_output_dir, "VI")
+    VI_dir <- file.path(S2_output_dir, veg_index)
     if (!dir.exists(VI_dir)) {
         dir.create(VI_dir)
     }
@@ -114,8 +114,8 @@ optram_safe <- function(safe_dir,
         dir.create(STR_dir)
     }
 
-    # Collect list of the BOA file paths 
-    # created from cropped Sentinel-2 imagery 
+    # Collect list of the BOA file paths
+    # created from cropped Sentinel-2 imagery
     cropped_rast_list <- lapply(safe_list, function(s) {
         # Get file paths to 10m and 20m jpeg images
         xml_file <- list.files(s, pattern = "MTD.*xml$", full.names = TRUE)
@@ -131,7 +131,7 @@ optram_safe <- function(safe_dir,
             message("No metadata file in SAFE dir: ", s, "Skipping...")
             return(NULL)
         }
-        # Get CRS for each S2 tile 
+        # Get CRS for each S2 tile
         # (the list could have tiles in different UTM zones)
         mtd <- xml2::read_xml(mtd_file)
         epsg_code <- xml2::xml_text(
@@ -144,7 +144,7 @@ optram_safe <- function(safe_dir,
         BOA_file <- paste(s_parts[1], s_parts[3], s_parts[5],
                         aoi_name, "BOA_10.tif", sep = "_")
         BOA_path <- file.path(BOA_dir, BOA_file)
-        # Read in the bands, prepare mask and save 
+        # Read in the bands, prepare mask and save
         # Only if BOA file does not exist, or overwrite requested
         if (!file.exists(BOA_path) || overwrite == TRUE) {
             # Read in jp2 files
