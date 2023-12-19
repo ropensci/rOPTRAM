@@ -64,7 +64,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # Set sample size as:
     # maximum table / number of dates in date range
     samp_size <- max_tbl_size / length(STR_list)
-    idx <- sample(nrow(r_df), samp_size)
+    idx <- sample(nr, samp_size)
   } else {
     idx <- seq(1, nr)
   }
