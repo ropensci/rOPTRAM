@@ -51,23 +51,28 @@ optram_ndvi_str <- function(STR_list, VI_list,
   if (!dir.exists(output_dir)) dir.create(output_dir)
 
   # Get index of rows for sampling
-  # Use the first raster (first date) list of STR rasters
-  # to determine index for random sampling
-  r <- terra::rast(STR_list[1])
-  r_df <- terra::as.data.frame(r, xy = TRUE)
-  if (nrow(r_df) > max_tbl_size) {
+  # Use the first raster (first date) list of both STR rasters
+  # and VI rasters to determine index for random sampling
+  # Get minimum length of non-NA values from both rasters
+  rs <- terra::rast(STR_list[1])
+  rs_df <- terra::as.data.frame(rs, xy = TRUE, na.rm = TRUE)
+  rv <- terra::rast(VI_list[1])
+  rv_df <- terra::as.data.frame(rv, xy = TRUE, na.rm = TRUE)
+  # nr is the number of values to use, if < max_tbl_size
+  nr <- min(nrow(rv_df), nrow(rs_df))
+  if (nr > max_tbl_size) {
     # Set sample size as:
     # maximum table / number of dates in date range
     samp_size <- max_tbl_size / length(STR_list)
     idx <- sample(nrow(r_df), samp_size)
   } else {
-    idx <- seq(1, nrow(r_df))
+    idx <- seq(1, nr)
   }
 
   STR_df_list <- lapply(STR_list, function(f){
     date_str <- unlist(strsplit(basename(f), split = "_", fixed = TRUE))[2]
     STR <- terra::rast(f)
-    STR_1_df <- terra::as.data.frame(STR, xy=TRUE, na.rm = FALSE)
+    STR_1_df <- terra::as.data.frame(STR, xy=TRUE, na.rm = TRUE)
     names(STR_1_df) <- c("x", "y", "STR")
     STR_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
     # Keep only sampled rows
@@ -83,7 +88,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # Revert to original scale
     VI <- VI/10000.0
 
-    VI_1_df <- terra::as.data.frame(VI, xy=TRUE, na.rm = FALSE)
+    VI_1_df <- terra::as.data.frame(VI, xy=TRUE, na.rm = TRUE)
     names(VI_1_df) <- c("x", "y", "VI")
 
     # Apply rm.low.vi parameter
