@@ -103,7 +103,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
   VI_df <- do.call(rbind, VI_df_list)
 
   # Merge VI and STR pixel data
-  full_df <- dplyr::full_join(STR_df, VI_df)
+  full_df <- dplyr::left_join(VI_df, STR_df)
   full_df <- full_df[stats::complete.cases(full_df),]
   df_file <- file.path(output_dir, "VI_STR_data.rds")
   saveRDS(full_df, df_file)
