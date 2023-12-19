@@ -14,6 +14,18 @@ test_that("optram_ndvi_str() function returns data.frame", {
   expect_true(inherits(optram_ndvi_str(STR_list, VI_list), "data.frame"))
 })
 
+test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
+  VI_list <- list.files(system.file("extdata", "SAVI", package = "rOPTRAM"),
+                        full.names = TRUE)
+  STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
+                         pattern = ".*STR.*tif$",
+                         full.names = TRUE)
+  output_dir <- file.path(tempdir(), "XXX")
+  expect_true(inherits(optram_ndvi_str(STR_list, VI_list,
+                                       output_dir = output_dir),
+                       "data.frame"))
+})
+
 test_that("Check that rm.low.vi works", {
   VI_list <- list.files(system.file("extdata", "SAVI", package = "rOPTRAM"),
                         full.names = TRUE)
