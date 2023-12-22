@@ -184,7 +184,10 @@ optram_safe <- function(safe_dir,
     # use that to determine index for random sampling
     r <- terra::rast(cropped_rast_list[[1]])[[3]]
     r_df <- terra::as.data.frame(r, xy = TRUE)
-    if (nrow(r_df) > max_tbl_size) {
+    # Make sure length of data.frame is less than:
+    # max_tbl_size / number of raster dates.
+    # Other wise, take a sample
+    if (nrow(r_df) > (max_tbl_size / length(cropped_rast_list))) {
         # Set sample size as:
         # maximum table / number of dates in date range
         samp_size <- max_tbl_size / length(cropped_rast_list)

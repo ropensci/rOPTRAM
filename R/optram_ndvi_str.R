@@ -58,9 +58,11 @@ optram_ndvi_str <- function(STR_list, VI_list,
   rs_df <- terra::as.data.frame(rs, xy = TRUE, na.rm = TRUE)
   rv <- terra::rast(VI_list[1])
   rv_df <- terra::as.data.frame(rv, xy = TRUE, na.rm = TRUE)
-  # nr is the number of values to use, if < max_tbl_size
+  # Make sure length of data.frame is less than:
+  # max_tbl_size / number of raster dates.
+  # Other wise, take a sample
   nr <- min(nrow(rv_df), nrow(rs_df))
-  if (nr > max_tbl_size) {
+  if (nr > (max_tbl_size / length(STR_list))) {
     # Set sample size as:
     # maximum table / number of dates in date range
     samp_size <- max_tbl_size / length(STR_list)
