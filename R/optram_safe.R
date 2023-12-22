@@ -233,7 +233,7 @@ optram_safe <- function(safe_dir,
         # Get the subset sample using the idx values from above
         STR_df <- STR_df[idx, ]
 
-        full_df <- dplyr::full_join(STR_df, VI_df)
+        full_df <- dplyr::full_join(STR_df, VI_df, by = c("x", "y"))
         full_df <- full_df[stats::complete.cases(full_df),]
 
         # Save VI to NDVI_dir
