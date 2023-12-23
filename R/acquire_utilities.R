@@ -192,6 +192,38 @@ check_scihub <- function() {
   return(FALSE)
 }
 
+#' @title Utility Function to Acquire Sentinel-2 Imagery using openeo and the 
+#' dataspace of Copernicus
+#' @description This non-exported function uses the `openeo` package
+#' to send a request to Copernicus dataspace, and prepare the products.
+#' Called by optram_acquire_s2
+#' @param aoi_file, string, full path to polygon spatial file of
+#'      boundary of area of interest
+#' @param from_date, string, represents start of date range,
+#'      formatted as "YYYY-MM-DD"
+#' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
+#' @param max_cloud, integer, maximum percent of cloud cover. Default 10.
+#' @param timeperiod, string, either "full" for the whole date range,
+#' or "seasonal" for only months specified, but over the full date range - currently not in used
+#' @param output_dir, string, path to save downloaded, and processed imagery
+#' @param veg_index, string, which index to prepare. Default "NDVI".
+#'  Can be "NDVI", "SAVI", "MSAVI", etc
+#' @param remove_safe, string, "yes" or "no":
+#'      whether to delete downloaded SAFE directories
+#'      after processing, default "yes" - - currently not in used
+#' @return void - extracting the images inside the function
+#' @note
+#' This function using: `openeo`, `sf`, `terra` libraries.
+#'
+#' @examples
+#' \dontrun{
+#' from_date <- "2018-12-01"
+#' to_date <- "2019-04-30"
+#' aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
+#' acquire_openeo(aoi, from_date, to_date,
+#'                timeperiod = "full",
+#'                veg_index = "SAVI")
+#' }
 acquire_openeo <- function(aoi_file,
                            from_date, to_date,
                            max_cloud = 10,
@@ -315,14 +347,22 @@ acquire_openeo <- function(aoi_file,
 }
 
 #' @title Check access to Copernicus openEO
-#' @description  Check access and Oauth to openEO platform
+#' @description  Check access and Oauth to openEO platform and check the 
+#' libraries: openeo, sf, terra are installed
 #' @return boolean
 #' @noRd
 #' @examples
 #' \dontrun{
 #' openeo_ok <- check_openeo()
 #' }
-#'
+#'@note
+#' Instructions for login:
+#' A. When the message "Press <enter> to proceed:" appears in the console, 
+#' press enter.
+#' B. You will be redirected to "https://identity.dataspace.copernicus.eu/". 
+#' Ensure you have an account and are logged in. You will be required to 
+#' grant access - press "yes".
+
 check_openeo <- function() {
   openeo_ok <- "openeo" %in% utils::installed.packages()
   if (!openeo_ok) {
