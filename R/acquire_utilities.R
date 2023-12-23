@@ -203,6 +203,115 @@ acquire_openeo <- function(aoi_file,
   # Check for token, etc...
   # Write eval_functions (in javascript) for each vegetation index
   if(!check_openeo()) return(NULL)
+  
+  # Extracting bbox from the aoi file
+  catchment = sf::st_read(aoi_file)
+  bbox = sf::st_bbox(obj = catchment)
+  
+  # get the process collection to use the predefined processes of the back-end
+  p = processes()
+  
+  # get the collection list to get easier access to the collection ids, via auto completion
+  collections = list_collections()
+  
+  # get the formats
+  formats = list_file_formats()
+  
+  # load the initial data collection and limit the amount of data loaded
+  # note: for the collection id and later the format you can also use the its character value
+  cube_s2 = p$load_collection(id = collections$SENTINEL2_L2A,
+                              spatial_extent = bbox,
+                              temporal_extent = c(from_date, to_date),
+                              bands = c("B02", "B03", "B04", "B08"),
+                              properties = list(
+                                "eo:cloud_cover" = function(x) x <= max_cloud))
+  
+  # Create a folder for the BOA in the output directory
+  result_folder_BOA <- file.path(output_dir, "BOA")
+  
+  # Check if the folder already exists; if not, create it
+  if (!dir.exists(result_folder_BOA)) {
+    dir.create(result_folder_BOA)
+  }
+  
+  # Create a folder named after veg_index in the output directory
+  result_folder_vi <- file.path(output_dir, veg_index)
+  
+  # Check if the folder already exists; if not, create it
+  if (!dir.exists(result_folder_vi)) {
+    dir.create(result_folder_vi)
+  }
+  
+  # Calculate Vegetation Index function
+  calculate_vi_ <- function(x, context){
+    
+    # loading bands colors
+    blue = x[1]
+    green = x[2]
+    red = x[3]
+    nir = x[4]
+    
+    if (veg_index == "NDVI") {
+      vi_rast = ((nir - red) / (nir + red))
+    } else if (veg_index == "SAVI") {
+      vi_rast = ((1.5 * (nir - red)) / (nir + red + 0.5) )
+    } else if (veg_index == "MSAVI") {
+      vi_rast = ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 
+                                       8 * (nir - red))) / 2)
+    } else if (veg_index == "CI") {
+      vi_rast = (1-((red - blue) / (red + blue)))
+    } else if (veg_index == "BSCI") {
+      vi_rast = ((1-(2*(red - green))) / 
+                   (terra::mean(green, red, nir, na.rm = TRUE)))
+    } else {
+      message("Unrecognized index: ", veg_index)
+      vi_rast = NULL
+      return(NULL)
+    }
+    return(vi_rast)
+  }
+  
+  cube_s2_vi = p$reduce_dimension(data = cube_s2, reducer = calculate_vi_, dimension = "bands")
+  cube_S2_boa = p$resample_spatial(data = cube_s2, resolution = 10, method = "near")
+  
+  result_vi = p$save_result(data = cube_s2_vi, format = formats$output$GTiff)
+  result_boa = p$save_result(data = cube_S2_boa, format = formats$output$GTiff)
+  
+  job_vi = create_job(graph = result_vi, title = "vi files")
+  job_BOA = create_job(graph = result_boa, title = "BOA files") 
+  
+  # then start the processing of the job and turn on logging (messages that are captured on the back-end during the process   execution)
+  start_job(job = job_vi, log = TRUE)
+  start_job(job = job_BOA, log = TRUE)
+  
+  check_job_status <- function(job) {
+    while (describe_job(job)$status != "finished") {
+      Sys.sleep(2)  # Sleep for 2 seconds before checking again
+      print("job still running")
+      if (describe_job(job)$status == "error") {
+        print("Error: Job status is 'error'. Additional details:")
+        print(describe_job(job))
+        return(NULL)
+      }
+    }
+    return("finished")
+  }
+  
+  job_BOA_status = check_job_status(job_BOA)
+  job_vi_status = check_job_status(job_vi)
+  
+  if(job_BOA_status != "finished" | job_vi_status != "finished") return(NULL)
+  
+  print("finished succesfully")
+  Sys.sleep(5)
+  
+  # list the processed results
+  jobs_boa = list_results(job = job_BOA)
+  jobs_vi = list_results(job = job_vi)
+  
+  # download all the files into a folder on the file system
+  download_results(job = job_BOA, folder = result_folder_BOA)
+  download_results(job = job_vi, folder = result_folder_vi)
 }
 
 #' @title Check access to Copernicus openEO
@@ -215,6 +324,58 @@ acquire_openeo <- function(aoi_file,
 #' }
 #'
 check_openeo <- function() {
-  # TODO: this is a stub, just for test_that
-  return(FALSE)
+  openeo_ok <- "openeo" %in% utils::installed.packages()
+  if (!openeo_ok) {
+    message("openeo package is missing. Download is not possible",
+            "\n", "Exiting...")
+    return(FALSE)
+  }
+  
+  sf_ok <- "sf" %in% utils::installed.packages()
+  if (!sf_ok) {
+    message("sf package is missing. Download is not possible",
+            "\n", "Exiting...")
+    return(FALSE)
+  }
+  
+  terra_ok <- "terra" %in% utils::installed.packages()
+  if (!terra_ok) {
+    message("terra package is missing. Download is not possible",
+            "\n", "Exiting...")
+    return(FALSE)
+  }
+  
+  # Connect to the back-end
+  tryCatch({
+    conn <- connect(host = "https://openeo.dataspace.copernicus.eu")
+    
+    # Check if the connection is successful
+    if (!conn$isConnected()) {
+      stop("Connection to the back-end failed.")
+    }
+  }, error = function(e) {
+    cat("Error connecting to the back-end: ", conditionMessage(e), "\n")
+    return(FALSE)
+  })
+  
+  # Login
+  tryCatch({
+    # Check if the connection object exists
+    if (exists("conn") && !is.null(conn)) {
+      # Attempt to log in
+      login()
+      
+      # Check if the login is successful
+      if (!conn$isLoggedIn()) {
+        stop("Login failed.")
+      }
+    } else {
+      stop("Connection object is missing.")
+    }
+  }, error = function(e) {
+    cat("Error during login: ", conditionMessage(e), "\n")
+    return(FALSE)
+  })
+  
+  return(TRUE)
 }
