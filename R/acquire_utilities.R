@@ -204,16 +204,18 @@ check_scihub <- function() {
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
 #' @param max_cloud, integer, maximum percent of cloud cover. Default 10.
 #' @param timeperiod, string, either "full" for the whole date range,
-#' or "seasonal" for only months specified, but over the full date range - currently not in used
+#' or "seasonal" for only months specified, but over the full date range 
+#' - currently not in use
 #' @param output_dir, string, path to save downloaded, and processed imagery
 #' @param veg_index, string, which index to prepare. Default "NDVI".
 #'  Can be "NDVI", "SAVI", "MSAVI", etc
 #' @param remove_safe, string, "yes" or "no":
 #'      whether to delete downloaded SAFE directories
-#'      after processing, default "yes" - - currently not in used
+#'      after processing, default "yes" - - currently not in use
 #' @return void - extracting the images inside the function
 #' @note
-#' This function using: `openeo`, `sf`, `terra` libraries.
+#' This function utilizes the `openeo`, `sf`, and `terra` libraries.
+.
 #'
 #' @examples
 #' \dontrun{
@@ -347,8 +349,9 @@ acquire_openeo <- function(aoi_file,
 }
 
 #' @title Check access to Copernicus openEO
-#' @description  Check access and Oauth to openEO platform and check the 
-#' libraries: openeo, sf, terra are installed
+#' @description  #Check access and OAuth to the openEO platform and ensure that 
+#' the following libraries—openeo, sf, and terra—are installed.
+
 #' @return boolean
 #' @noRd
 #' @examples
