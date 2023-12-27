@@ -222,14 +222,14 @@ optram_safe <- function(safe_dir,
         VI_idx <- rOPTRAM::calculate_vi(stk, veg_index,
                                         redband = 3, nirband = 4,
                                         blueband = 1, greenband = 2)
-        VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
+        VI_df <- terra::as.data.frame(VI_idx, xy = TRUE, na.rm = FALSE)
         # Add image date to dataframe
         VI_df['Date'] <- datestr
         # Get the subset sample using the idx values from above
         VI_df <- VI_df[idx, ]
 
         STR <- rOPTRAM::calculate_str(stk, swirband = 5)
-        STR_df <- terra::as.data.frame(STR, xy = TRUE)
+        STR_df <- terra::as.data.frame(STR, xy = TRUE,  na.rm = FALSE)
         # Get the subset sample using the idx values from above
         STR_df <- STR_df[idx, ]
 
