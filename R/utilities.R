@@ -126,10 +126,10 @@ check_date_string <- function(from_string, to_string) {
 #' vi <- calculate_vi(img_stk)
 
 calculate_vi <- function(img_stk, viname = "NDVI",
-                         redband = 3,
-                         greenband = 2,
-                         blueband = 1,
-                         nirband = 4,
+                         redband = 4,
+                         greenband = 3,
+                         blueband = 2,
+                         nirband = 5,
                          scale_factor = 2^15) {
     # Avoid "no visible binding for global variable" NOTE
     nir <- red <- blue <- green <- vi_rast <- NULL
