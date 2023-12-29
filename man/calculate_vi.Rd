@@ -7,10 +7,10 @@
 calculate_vi(
   img_stk,
   viname = "NDVI",
-  redband = 3,
-  greenband = 2,
-  blueband = 1,
-  nirband = 4,
+  redband = 4,
+  greenband = 3,
+  blueband = 2,
+  nirband = 5,
   scale_factor = 2^15
 )
 }
