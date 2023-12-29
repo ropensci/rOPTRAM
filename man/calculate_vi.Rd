@@ -10,7 +10,8 @@ calculate_vi(
   redband = 3,
   greenband = 2,
   blueband = 1,
-  nirband = 4
+  nirband = 4,
+  scale_factor = 2^15
 )
 }
 \arguments{
@@ -27,6 +28,10 @@ either 'NDVI' (default) or 'SAVI' or 'MSAVI'}
 \item{blueband, }{integer, number of blue band}
 
 \item{nirband, }{integer, number of NIR band}
+
+\item{scale_factor, }{numeric, scales Sentinel-2 15 bit values
+down to range (0,255) as expected for vegetation indices
+default 32768 (2^15)}
 }
 \value{
 vi_rast, SpatRaster of vegetation index
@@ -35,6 +40,14 @@ vi_rast, SpatRaster of vegetation index
 Use this function to prepare vegetation index from SAFE imagery
 when you have already downloaded Sentinel 2 image files in advance
 (without using \code{sen2r}).
+}
+\note{
+The scale_factor parameter reduces numeric range "digital number",
+(DN) of Sentinel-2 images from 15 bit integer to 8 bit.
+Vegetation indices such as SAVI expect values in the range (0, 255).
+This scale_factor produces values in that range.
+When using Landsat 8 images (DN already in range of (0, 255)) then
+set scale_factor to 255.
 }
 \examples{
 img_stk <- terra::rast(system.file("extdata",
