@@ -214,8 +214,27 @@ check_scihub <- function() {
 #'      after processing, default "yes" - - currently not in use
 #' @return void - extracting the images inside the function
 #' @note
-#' This function utilizes the `openeo`, `sf`, and `terra` libraries.
-.
+#' This function utilizes the `openeo` library.
+#' Instructions for the login process:
+#' First of all, to authenticate your account on the backend of the Copernicus
+#' Data Space Ecosystem, it is necessary for you to complete the registration 
+#' process. Follow these instructions for registration:
+#' https://documentation.dataspace.copernicus.eu/Registration.html
+#' After you have registered and installed the openeo package, you can run the
+#' 'acquire_openeo' function.
+#' During the process of connecting to the server and logging in, you need to 
+#' follow these steps:
+#' A. When the message "Press <enter> to proceed:" appears in the console, 
+#' press enter. 
+#' Calling this method opens your system web browser, with which 
+#' you can authenticate yourself on the back-end authentication system. After 
+#' that, the website will give you instructions to go back to the R client, 
+#' where your connection has logged your account in. This means that every 
+#' call that comes after that via the connection variable is executed by your 
+#' user account.
+#' B. You will be redirected to "https://identity.dataspace.copernicus.eu/". 
+#' Ensure you have an account and are logged in. You will be required to 
+#' grant access - press "yes".
 #'
 #' @examples
 #' \dontrun{
@@ -226,16 +245,15 @@ check_scihub <- function() {
 #'                timeperiod = "full",
 #'                veg_index = "SAVI")
 #' }
-acquire_openeo <- function(aoi_file,
-                           from_date, to_date,
-                           max_cloud = 10,
-                           timeperiod = "full",
-                           output_dir = tempdir(),
-                           remove_safe = "yes",
-                           veg_index = "NDVI") {
-  # TODO: implement this function using new openeo
-  # Check for token, etc...
-  # Write eval_functions (in javascript) for each vegetation index
+acquire_openeo <- function(
+    aoi_file,
+    from_date, to_date,
+    max_cloud = 10,
+    timeperiod = "full",
+    output_dir = tempdir(),
+    remove_safe = "yes",
+    veg_index = "NDVI") { 
+  
   if(!check_openeo()) return(NULL)
   
   # Extracting bbox from the aoi file
@@ -243,29 +261,29 @@ acquire_openeo <- function(aoi_file,
   bbox = sf::st_bbox(obj = catchment)
   
   # get the process collection to use the predefined processes of the back-end
-  p = processes()
+  p = openeo::processes()
   
   # get the collection list to get easier access to the collection ids, via auto completion
-  collections = list_collections()
+  collections = openeo::list_collections()
   
   # get the formats
-  formats = list_file_formats()
+  formats = openeo::list_file_formats()
   
   # load the initial data collection and limit the amount of data loaded
   # note: for the collection id and later the format you can also use the its character value
   cube_s2 = p$load_collection(id = collections$SENTINEL2_L2A,
                               spatial_extent = bbox,
                               temporal_extent = c(from_date, to_date),
-                              bands = c("B02", "B03", "B04", "B08"),
+                              bands = c('B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B8A', 'B09', 'B11', 'B12'),
                               properties = list(
                                 "eo:cloud_cover" = function(x) x <= max_cloud))
   
   # Create a folder for the BOA in the output directory
-  result_folder_BOA <- file.path(output_dir, "BOA")
+  result_folder_boa <- file.path(output_dir, "BOA")
   
   # Check if the folder already exists; if not, create it
-  if (!dir.exists(result_folder_BOA)) {
-    dir.create(result_folder_BOA)
+  if (!dir.exists(result_folder_boa)) {
+    dir.create(result_folder_boa)
   }
   
   # Create a folder named after veg_index in the output directory
@@ -276,14 +294,22 @@ acquire_openeo <- function(aoi_file,
     dir.create(result_folder_vi)
   }
   
-  # Calculate Vegetation Index function
+  # Create a folder for the STR in the output directory
+  result_folder_str <- file.path(output_dir, "STR")
+  
+  # Check if the folder already exists; if not, create it
+  if (!dir.exists(result_folder_str)) {
+    dir.create(result_folder_str)
+  }
+  
+  #' @title Calculate Vegetation Index function
   calculate_vi_ <- function(x, context){
     
     # loading bands colors
-    blue = x[1]
-    green = x[2]
-    red = x[3]
-    nir = x[4]
+    blue = x["B02"]
+    green = x["B03"]
+    red = x["B04"]
+    nir = x["B08"]
     
     if (veg_index == "NDVI") {
       vi_rast = ((nir - red) / (nir + red))
@@ -300,57 +326,79 @@ acquire_openeo <- function(aoi_file,
     } else {
       message("Unrecognized index: ", veg_index)
       vi_rast = NULL
-      return(NULL)
     }
     return(vi_rast)
   }
   
+  #' @title Calculate STR from SWIR Bottom of Atmosphere Band
+  #' @param scale_factor, integer, scaling factor for EO data source
+  #'      default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)
+  calculate_str_ <- function(x, context){ 
+    
+    scale_factor = 10000
+    SWIR_DN <- x['B11']
+    SWIR <-  SWIR_DN / scale_factor
+    # Convert from Solar irradiance
+    # solar_irradiance_12 <- 87.25
+    # SWIR <- (SWIR_irr/10) * solar_irradiance_12
+    STR <- (1 - SWIR)^2 / (2*SWIR)
+    return(STR)
+  }
+  
+  
   cube_s2_vi = p$reduce_dimension(data = cube_s2, reducer = calculate_vi_, dimension = "bands")
+  cube_s2_str = p$reduce_dimension(data = cube_s2, reducer = calculate_str_, dimension = "bands")
   cube_S2_boa = p$resample_spatial(data = cube_s2, resolution = 10, method = "near")
   
   result_vi = p$save_result(data = cube_s2_vi, format = formats$output$GTiff)
+  result_str = p$save_result(data = cube_s2_str, format = formats$output$GTiff)
   result_boa = p$save_result(data = cube_S2_boa, format = formats$output$GTiff)
   
-  job_vi = create_job(graph = result_vi, title = "vi files")
-  job_BOA = create_job(graph = result_boa, title = "BOA files") 
+  job_vi = openeo::create_job(graph = result_vi, title = "vi files")
+  job_str = openeo::create_job(graph = result_str, title = "str files")
+  job_boa = openeo::create_job(graph = result_boa, title = "BOA files") 
   
-  # then start the processing of the job and turn on logging (messages that are captured on the back-end during the process   execution)
-  start_job(job = job_vi, log = TRUE)
-  start_job(job = job_BOA, log = TRUE)
+  # then start the processing of the job and turn on logging (messages that are captured on the back-end during the process         execution)
+  openeo::start_job(job = job_vi, log = TRUE)
+  openeo::start_job(job = job_str, log = TRUE)
+  openeo::start_job(job = job_boa, log = TRUE)
   
   check_job_status <- function(job) {
-    while (describe_job(job)$status != "finished") {
+    while (openeo::describe_job(job)$status != "finished") {
       Sys.sleep(2)  # Sleep for 2 seconds before checking again
       print("job still running")
-      if (describe_job(job)$status == "error") {
+      if (openeo::describe_job(job)$status == "error") {
         print("Error: Job status is 'error'. Additional details:")
-        print(describe_job(job))
+        print(openeo::describe_job(job))
         return(NULL)
       }
     }
     return("finished")
   }
   
-  job_BOA_status = check_job_status(job_BOA)
   job_vi_status = check_job_status(job_vi)
+  job_str_status = check_job_status(job_str)
+  job_boa_status = check_job_status(job_boa)
   
-  if(job_BOA_status != "finished" | job_vi_status != "finished") return(NULL)
+  if(job_boa_status != "finished" | job_vi_status != "finished" | job_str_status != "finished") return(NULL)
   
   print("finished succesfully")
   Sys.sleep(5)
   
   # list the processed results
-  jobs_boa = list_results(job = job_BOA)
-  jobs_vi = list_results(job = job_vi)
+  jobs_vi = openeo::list_results(job = job_vi)
+  jobs_str = openeo::list_results(job = job_str)
+  jobs_boa = openeo::list_results(job = job_boa)
   
   # download all the files into a folder on the file system
-  download_results(job = job_BOA, folder = result_folder_BOA)
-  download_results(job = job_vi, folder = result_folder_vi)
+  openeo::download_results(job = job_vi, folder = result_folder_vi)
+  openeo::download_results(job = job_str, folder = result_folder_str)
+  openeo::download_results(job = job_boa, folder = result_folder_boa)
 }
 
-#' @title Check access to Copernicus openEO
-#' @description  #Check access and OAuth to the openEO platform and ensure that 
-#' the following libraries—openeo, sf, and terra—are installed.
+#' @title Check Access to Copernicus openEO
+#' @description Check access and OAuth authentication to the openEO platform, 
+#' and ensure that the openeo library is installed.
 
 #' @return boolean
 #' @noRd
@@ -359,7 +407,7 @@ acquire_openeo <- function(aoi_file,
 #' openeo_ok <- check_openeo()
 #' }
 #'@note
-#' Instructions for login:
+#' Instructions for the login process:
 #' A. When the message "Press <enter> to proceed:" appears in the console, 
 #' press enter.
 #' B. You will be redirected to "https://identity.dataspace.copernicus.eu/". 
@@ -367,6 +415,7 @@ acquire_openeo <- function(aoi_file,
 #' grant access - press "yes".
 
 check_openeo <- function() {
+  
   openeo_ok <- "openeo" %in% utils::installed.packages()
   if (!openeo_ok) {
     message("openeo package is missing. Download is not possible",
@@ -374,30 +423,16 @@ check_openeo <- function() {
     return(FALSE)
   }
   
-  sf_ok <- "sf" %in% utils::installed.packages()
-  if (!sf_ok) {
-    message("sf package is missing. Download is not possible",
-            "\n", "Exiting...")
-    return(FALSE)
-  }
-  
-  terra_ok <- "terra" %in% utils::installed.packages()
-  if (!terra_ok) {
-    message("terra package is missing. Download is not possible",
-            "\n", "Exiting...")
-    return(FALSE)
-  }
-  
   # Connect to the back-end
   tryCatch({
-    conn <- connect(host = "https://openeo.dataspace.copernicus.eu")
+    conn <- openeo::connect(host = "https://openeo.dataspace.copernicus.eu")
     
     # Check if the connection is successful
     if (!conn$isConnected()) {
-      stop("Connection to the back-end failed.")
+      message("Connection to the back-end failed.")
     }
   }, error = function(e) {
-    cat("Error connecting to the back-end: ", conditionMessage(e), "\n")
+    message("Error connecting to the back-end: ", conditionMessage(e), "\n")
     return(FALSE)
   })
   
@@ -406,17 +441,17 @@ check_openeo <- function() {
     # Check if the connection object exists
     if (exists("conn") && !is.null(conn)) {
       # Attempt to log in
-      login()
+      openeo::login()
       
       # Check if the login is successful
       if (!conn$isLoggedIn()) {
-        stop("Login failed.")
+        message("Login failed.")
       }
     } else {
-      stop("Connection object is missing.")
+      message("Connection object is missing.")
     }
   }, error = function(e) {
-    cat("Error during login: ", conditionMessage(e), "\n")
+    message("Error during login: ", conditionMessage(e), "\n")
     return(FALSE)
   })
   
