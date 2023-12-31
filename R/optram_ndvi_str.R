@@ -95,7 +95,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # Join two DF's
     df_1 <- dplyr::inner_join(VI_1_df, STR_1_df, by = c("x", "y"))
     # Remove NA and keep only sampled number of rows
-    df_1 <- df_1[complete.cases(df_1),]
+    df_1 <- df_1[stats::complete.cases(df_1),]
     df_1 <- df_1[idx, ]
     return(df_1)
   })
