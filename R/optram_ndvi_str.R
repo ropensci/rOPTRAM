@@ -71,45 +71,57 @@ optram_ndvi_str <- function(STR_list, VI_list,
     idx <- seq(1, nr)
   }
 
-  STR_df_list <- lapply(STR_list, function(f){
+  df_list <- lapply(STR_list, function(f){
+    # Get date from file name, and load STR raster
     date_str <- unlist(strsplit(basename(f), split = "_", fixed = TRUE))[2]
     STR <- terra::rast(f)
-    # Convert to data.frame,
+    # Also get the vegetation index raster for this date
+    VI_f <- VI_list[grep(date_str, basename(VI_list))]
+    VI <- terra::rast(VI_f)
+    # Revert to original scale
+    VI <- VI/10000.0
+
+    # Convert to data.frames,
     # keep NA's so that number of rows in STR and VI still match
     STR_1_df <- terra::as.data.frame(STR, xy=TRUE, na.rm = FALSE)
     names(STR_1_df) <- c("x", "y", "STR")
     STR_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
-    # Keep only sampled rows
-    STR_1_df <- STR_1_df[idx, ]
-    return(STR_1_df)
-  })
-  STR_df <- do.call(rbind, STR_df_list)
-
-  VI_df_list <- lapply(VI_list, function(f){
-    # Get image date
-    date_str <- unlist(strsplit(basename(f), split="_", fixed=TRUE))[2]
-    VI <- terra::rast(f)
-    # Revert to original scale
-    VI <- VI/10000.0
-
     VI_1_df <- terra::as.data.frame(VI, xy=TRUE, na.rm = FALSE)
     names(VI_1_df) <- c("x", "y", "VI")
-
     # Apply rm.low.vi parameter
     if (rm.low.vi) {
-      VI_1_df$VI[VI_1_df$VI <= 0.005]  <- NA
+       VI_1_df$VI[VI_1_df$VI <= 0.005]  <- NA
     }
-    VI_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
-    # Keep only sampled rows
-    VI_1_df <- VI_1_df[idx, ]
-    return(VI_1_df)
+    # Join two DF's
+    df_1 <- dplyr::inner_join(VI_1_df, STR_1_df, by = c("x", "y"))
+    # Remove NA and keep only sampled number of rows
+    df_1 <- df_1[complete.cases(df_1),]
+    df_1 <- df_1[idx, ]
+    return(df_1)
   })
-  VI_df <- do.call(rbind, VI_df_list)
+  full_df <- do.call(rbind, df_list)
 
-  # Merge VI and STR pixel data
-  full_df <- dplyr::inner_join(VI_df, STR_df,
-                               by = c("x", "y", "Date"))
-  full_df <- full_df[stats::complete.cases(full_df),]
+  # VI_df_list <- lapply(VI_list, function(f){
+  #   # Get image date
+  #   date_str <- unlist(strsplit(basename(f), split="_", fixed=TRUE))[2]
+  #   VI <- terra::rast(f)
+  #   # Revert to original scale
+  #   VI <- VI/10000.0
+  #
+  #   VI_1_df <- terra::as.data.frame(VI, xy=TRUE, na.rm = FALSE)
+  #   names(VI_1_df) <- c("x", "y", "VI")
+  #
+  #   # Apply rm.low.vi parameter
+  #   if (rm.low.vi) {
+  #     VI_1_df$VI[VI_1_df$VI <= 0.005]  <- NA
+  #   }
+  #   VI_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
+  #   # Keep only sampled rows
+  #   VI_1_df <- VI_1_df[idx, ]
+  #   return(VI_1_df)
+  # })
+  # VI_df <- do.call(rbind, VI_df_list)
+
   df_file <- file.path(output_dir, "VI_STR_data.rds")
   saveRDS(full_df, df_file)
   message("Saved: ", nrow(full_df), " rows of VI-STR data to: ", df_file)
