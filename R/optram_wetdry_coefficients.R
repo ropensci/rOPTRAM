@@ -179,7 +179,7 @@ plot_ndvi_str_cloud <- function(full_df,
   # STR (y) axis limits
   y_min <- 0.1
   #y_max <- 3.6
-  y_max <- max(plot_df$STR)*1.1
+  y_max <- max(plot_df$STR)*0.95
   # Text to add to plot
   coeffs_text <- paste("Dry intercept:", i_dry, "\n Dry slope:", s_dry,
                        "\n Wet intercept:", i_wet, "\n Wet slope:", s_wet)
@@ -199,7 +199,7 @@ plot_ndvi_str_cloud <- function(full_df,
     labs(x="Vegetation Index", y="SWIR Transformed") +
     ggtitle(paste("Trapezoid Plot - ", aoi_name)) +
     # Add coeffs as text
-    annotate("text", x=0.1, y=max(plot_df$STR)*0.95,
+    annotate("text", x=0.1, y=max(plot_df$STR)*0.8,
             label = coeffs_text, size = 5) +
     # Set theme
     theme_bw() +
