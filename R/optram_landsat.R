@@ -184,7 +184,9 @@
       datestr <- as.Date(xml2::xml_text(
         xml2::xml_find_first(mtl, ".//DATE_ACQUIRED")))
       # Find VI values, and create data.frame
-      VI_idx <- rOPTRAM::calculate_vi(stk, veg_index, redband = 1, nirband = 2)
+      VI_idx <- rOPTRAM::calculate_vi(stk, veg_index,
+                                      redband = 1, nirband = 2,
+                                      scale_factor = 255)
       VI_df <- terra::as.data.frame(VI_idx, xy = TRUE)
       # Add image date to data.frame
       VI_df['Date'] <- datestr

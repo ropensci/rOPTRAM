@@ -80,17 +80,17 @@ optram_safe <- function(safe_dir,
         return(NULL)
     }
 
-    # The strings below are used to select the needed bands from Sentinel
+    # The strings below are used to select the needed bands from Sentinel-2
     band_ids <- c(
-        #"AOT_10m", #Coastal blue
+        "AOT_10m", #Coastal blue
         "B02_10m", #blue
         "B03_10m", #green
         "B04_10m", #red
         "B08_10m", #NIR wide
-        #"B05_20m", #rededge
-        #"B06_20m", #rededge
-        #"B07_20m", #rededge
-        #"B8A_20m", #NIR narrow
+        "B05_20m", #rededge
+        "B06_20m", #rededge
+        "B07_20m", #rededge
+        "B8A_20m", #NIR narrow
         "B11_20m", #SWIR 1600
         "B12_20m"  #SWIR 2200
     )

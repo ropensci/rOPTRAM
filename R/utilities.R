@@ -107,6 +107,15 @@ check_date_string <- function(from_string, to_string) {
 #' @param nirband, integer, number of NIR band
 #' @param viname, string, which VI to prepare,
 #'            either 'NDVI' (default) or 'SAVI' or 'MSAVI'
+#' @param scale_factor, numeric, scales Sentinel-2 15 bit values
+#'            down to range (0,255) as expected for vegetation indices
+#'            default 32768 (2^15)
+#' @note The scale_factor parameter reduces numeric range "digital number",
+#'  (DN) of Sentinel-2 images from 15 bit integer to 8 bit.
+#'  Vegetation indices such as SAVI expect values in the range (0, 255).
+#'  This scale_factor produces values in that range.
+#'  When using Landsat 8 images (DN already in range of (0, 255)) then
+#'  set scale_factor to 255.
 #' @export
 #' @return vi_rast, SpatRaster of vegetation index
 #' @examples
@@ -117,15 +126,23 @@ check_date_string <- function(from_string, to_string) {
 #' vi <- calculate_vi(img_stk)
 
 calculate_vi <- function(img_stk, viname = "NDVI",
-                         redband = 3, greenband = 2,
-                         blueband = 1, nirband = 4) {
+                         redband = 4,
+                         greenband = 3,
+                         blueband = 2,
+                         nirband = 5,
+                         scale_factor = 2^15) {
     # Avoid "no visible binding for global variable" NOTE
-    nir <- red <- vi_rast <- NULL
+    nir <- red <- blue <- green <- vi_rast <- NULL
 
     nir <- img_stk[[nirband]]
     red <- img_stk[[redband]]
     blue <- img_stk[[blueband]]
     green <- img_stk[[greenband]]
+    # Rescaling
+    nir <- 255 * (nir - min(terra::values(nir))) / scale_factor
+    red <- 255 * (red - min(terra::values(red))) / scale_factor
+    blue <- 255 * (blue - min(terra::values(blue))) / scale_factor
+    green <- 255 * (green - min(terra::values(green))) / scale_factor
 
     if (viname == "NDVI") {
         vi_rast <- ((nir - red) / (nir + red))
