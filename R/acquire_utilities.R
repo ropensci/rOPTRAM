@@ -366,10 +366,10 @@ acquire_openeo <- function(
   check_job_status <- function(job) {
     while (openeo::describe_job(job)$status != "finished") {
       Sys.sleep(2)  # Sleep for 2 seconds before checking again
-      print("job still running")
+      message("job still running")
       if (openeo::describe_job(job)$status == "error") {
-        print("Error: Job status is 'error'. Additional details:")
-        print(openeo::describe_job(job))
+        message("Error: Job status is 'error'. Additional details:")
+        message(openeo::describe_job(job))
         return(NULL)
       }
     }
@@ -382,7 +382,7 @@ acquire_openeo <- function(
   
   if(job_boa_status != "finished" | job_vi_status != "finished" | job_str_status != "finished") return(NULL)
   
-  print("finished succesfully")
+  message("finished succesfully")
   Sys.sleep(5)
   
   # list the processed results
