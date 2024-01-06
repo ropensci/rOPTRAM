@@ -49,7 +49,7 @@ ls(getNamespace('rOPTRAM'))
 #> [13] "optram_calculate_soil_moisture" "optram_calculate_str"          
 #> [15] "optram_landsat"                 "optram_ndvi_str"               
 #> [17] "optram_prepare_other_vi_str"    "optram_safe"                   
-#> [19] "optram_wetdry_coefficients"     "plot_ndvi_str_cloud"
+#> [19] "optram_wetdry_coefficients"     "plot_vi_str_cloud"
 # The `sen2r` package is required for downloading Sentinel imagery
 if (!require("sen2r")) install.packages("sen2r", dependencies = TRUE)
 ```
@@ -155,7 +155,7 @@ ttl <- "Migda"
 coeffs <- read.csv(file.path(output_dir, "coefficients.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
-plot_ndvi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
+plot_vi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
 knitr::include_graphics("trapezoid_Migda.png")
 ```
 

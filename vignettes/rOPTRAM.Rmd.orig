@@ -118,7 +118,7 @@ ttl <- "Migda"
 coeffs <- read.csv(file.path(output_dir, "coefficients.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
-plot_ndvi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
+plot_vi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
 knitr::include_graphics("trapezoid_Migda.png")
 ```
 

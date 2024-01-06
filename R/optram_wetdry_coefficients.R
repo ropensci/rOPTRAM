@@ -104,7 +104,7 @@ optram_wetdry_coefficients <- function(full_df,
             row.names=FALSE)
 
   if (save_plot) {
-    rOPTRAM::plot_ndvi_str_cloud(full_df,
+    rOPTRAM::plot_vi_str_cloud(full_df,
                                 coeffs,
                                 aoi_name,
                                 output_dir = output_dir)
@@ -122,6 +122,8 @@ optram_wetdry_coefficients <- function(full_df,
 #'   of wet and dry regression lines
 #' @param aoi_name, string, used in plot title
 #' @param output_dir, string, directory to save plot png file.
+#' @param trapezoid_method, string, how to plot trapezoid line.
+#'    either "linear" or "exponential", default is "linear"
 #' @return None
 #' @export
 #' @import ggplot2
@@ -131,12 +133,15 @@ optram_wetdry_coefficients <- function(full_df,
 #'         package = "rOPTRAM"))
 #' coeffs <- read.csv(system.file("extdata", "coefficients.csv",
 #'         package = "rOPTRAM"))
-#' plot_ndvi_str_cloud(full_df, coeffs, aoi_name)
+#' plot_vi_str_cloud(full_df, coeffs, aoi_name)
+#' plot_vi_str_cloud(full_df, coeffs, aoi_name,
+#'                     trapezoid_method = "exponential")
 
-plot_ndvi_str_cloud <- function(full_df,
-                                coeffs,
-                                aoi_name,
-                                output_dir = tempdir()) {
+plot_vi_str_cloud <- function(full_df,
+                              coeffs,
+                              aoi_name,
+                              output_dir = tempdir(),
+                              trapezoid_method = "linear") {
   # Avoid "no visible binding for global variable" NOTE
   i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
   x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- VI <- STR <- NULL
@@ -183,7 +188,7 @@ plot_ndvi_str_cloud <- function(full_df,
   # Text to add to plot
   coeffs_text <- paste("Dry intercept:", i_dry, "\n Dry slope:", s_dry,
                        "\n Wet intercept:", i_wet, "\n Wet slope:", s_wet)
-  ggplot2::ggplot(plot_df) +
+  pl <- ggplot2::ggplot(plot_df) +
     geom_point(aes(x=VI, y=STR),
                color = "#0070000b", alpha = 0.3, size = 0.2) +
     # Wet edge
@@ -207,6 +212,21 @@ plot_ndvi_str_cloud <- function(full_df,
           axis.text = element_text(size = 12),
           plot.title = element_text(size = 18))
 
+  if (trapezoid_method == "exponential") {
+    # Add exponential function lines to the graphs
+    str_wet  <- function(VI = full_df$VI) {
+      return(i_wet * exp(s_wet * VI))
+    }
+    str_dry  <- function(VI = full_df$VI) {
+      return(i_dry * exp(s_dry * VI))
+    }
+    pl <- pl +
+      geom_function(color = "#2E94B9", linewidth = 1.2, linetype = 2,
+        fun = str_wet) +
+      geom_function(color = "#FD5959", linewidth = 1.2, linetype = 2,
+        fun = str_dry)
+  }
+  pl
   plot_path <- file.path(output_dir, paste0("trapezoid_", aoi_name, ".png"))
   ggsave(plot_path, width = 10, height = 7)
   message("Scatterplot of: ", num_rows_plotted,
