@@ -180,11 +180,13 @@ plot_vi_str_cloud <- function(full_df,
   # NDVI (x) axis limits
   # Set fixed plot limits
   x_min <- 0.0
-  x_max <- 0.9
+  x_max <- max(plot_df$VI, na.rm = TRUE)
   # STR (y) axis limits
   y_min <- 0.1
+  # Set max using median and (2 * IQR) as in outlier detection 
   #y_max <- 3.6
-  y_max <- max(plot_df$STR)*0.95
+  str_q3 <- stats::quantile(plot_df$STR, 0.75, na.rm = TRUE)
+  y_max <- str_q3 + stats::IQR(plot_df$STR, na.rm = TRUE) * 2
   # Text to add to plot
   coeffs_text <- paste("Dry intercept:", i_dry, "\n Dry slope:", s_dry,
                        "\n Wet intercept:", i_wet, "\n Wet slope:", s_wet)
