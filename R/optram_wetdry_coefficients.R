@@ -41,7 +41,7 @@ optram_wetdry_coefficients <- function(full_df,
 
   # Avoid "no visible binding for global variable" NOTE
   VI_min_max <- VI_series <- VI_STR_list <- VI_STR_df <- NULL
-  Qs <- str_max <- str_min <- interval_df <- VI_STR_df1 <- NULL
+  Qs <- str_max <- str_min <- interval_df <- linreg_df1 <- NULL
 
   #  Pre-flight Check
   if (is.null(aoi_file)) {
@@ -76,9 +76,9 @@ optram_wetdry_coefficients <- function(full_df,
     #str_min <- min(interval_df$STR, na.rm = TRUE)
     str_max <- Qs[[2]]
     str_min <- Qs[[1]]
-    linreg__df1 <- data.frame("VI" = vi_val,
-                               "STR_wet" = str_max,
-                               "STR_dry" = str_min)
+    linreg_df1 <- data.frame("VI" = vi_val,
+                              "STR_wet" = str_max,
+                              "STR_dry" = str_min)
     return(linreg_df1)
   })
   # Bind all interval results into one long DF
