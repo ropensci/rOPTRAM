@@ -202,7 +202,7 @@ plot_vi_str_cloud <- function(full_df,
     # Set gradient color
     scale_color_gradient(low = "#FD5959",
                          high = "#2E94B9") +
-    expand_limits(y=c(y_min, y_max), x=c(x_min, x_max)) +
+    lims(y=c(y_min, y_max), x=c(x_min, x_max)) +
     labs(x="Vegetation Index", y="SWIR Transformed") +
     ggtitle(paste("Trapezoid Plot - ", aoi_name)) +
     # Add coeffs as text
