@@ -55,7 +55,7 @@ optram_wetdry_coefficients <- function(full_df,
   VI_min_max <- round(stats::quantile(full_df$VI, c(0.1, 0.98)), 2)
   VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], step)
   message("VI series length:", length(VI_series))
-  VI_STR_list <- lapply(VI_series, function(i){
+  linreq_list <- lapply(VI_series, function(i){
     # Set NDVI value at midpoint of each interval
     vi_val <- i + step/2.0
 
@@ -65,29 +65,32 @@ optram_wetdry_coefficients <- function(full_df,
     if (nrow(interval_df) < 4) {
       return(NA)
     }
-    # Remove lower than 2% and more than 98% quartile of STR values
+    # Remove lower than 1% and more than 99% quantile of STR values
+    # Use upper 99% quantile and lower 1% quantile as min/max values
     Qs <- stats::quantile(interval_df$STR, c(0.01, 0.99), na.rm=TRUE)
-    interval_df <- interval_df[interval_df$STR<=Qs[[2]] &
-                                 interval_df$STR>=Qs[[1]],]
+    #interval_df <- interval_df[interval_df$STR<=Qs[[2]] &
+    #                             interval_df$STR>=Qs[[1]],]
     # Now, with outliers removed, find min (dry) and max (wet)
     # Within each interval
-    str_max <- max(interval_df$STR, na.rm = TRUE)
-    str_min <- min(interval_df$STR, na.rm = TRUE)
-    VI_STR_df1 <- data.frame("VI" = vi_val,
+    #str_max <- max(interval_df$STR, na.rm = TRUE)
+    #str_min <- min(interval_df$STR, na.rm = TRUE)
+    str_max <- Qs[[2]]
+    str_min <- Qs[[1]]
+    linreg__df1 <- data.frame("VI" = vi_val,
                                "STR_wet" = str_max,
                                "STR_dry" = str_min)
-    return(VI_STR_df1)
+    return(linreg_df1)
   })
   # Bind all interval results into one long DF
-  VI_STR_list <- VI_STR_list[ !is.na(VI_STR_list) ]
-  VI_STR_df <- do.call(rbind, VI_STR_list)
+  linreg_list <- linreg_list[ !is.na(linreg_list) ]
+  linreg_df <- do.call(rbind, linreg_list)
 
   # Save STR and VI values to CSV
   if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
   }
-  utils::write.csv(VI_STR_df,
-            file.path(output_dir, "VI_STR_df.csv"),
+  utils::write.csv(linreg_df,
+            file.path(output_dir, "linear_regression.csv"),
             row.names = FALSE)
   # Run linear regression between STR and NDVI
   # to determine the intercept and slope for both wet and dry data
