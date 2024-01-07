@@ -94,8 +94,8 @@ optram_wetdry_coefficients <- function(full_df,
             row.names = FALSE)
   # Run linear regression between STR and NDVI
   # to determine the intercept and slope for both wet and dry data
-  wet_fit <- stats::lm(STR_wet ~ VI, data=linreg_df)
-  dry_fit <- stats::lm(STR_dry ~ VI, data=linreg_df)
+  wet_fit <- stats::lm(STR_wet ~ VI, data = linreg_df)
+  dry_fit <- stats::lm(STR_dry ~ VI, data = linreg_df)
   i_wet <- wet_fit$coefficients[[1]]
   s_wet <- wet_fit$coefficients[[2]]
   i_dry <- dry_fit$coefficients[[1]]
@@ -247,10 +247,10 @@ plot_vi_str_cloud <- function(full_df,
       } else {
         pl <- pl + 
             geom_point(aes(x=VI, y=STR_wet),
-                      color = "black", size=5, shape=4,
+                      color = "black", size=4, shape=2,
                       data = linreg_pts) +
             geom_point(aes(x=VI, y=STR_dry),
-                      color = "black", size=5, shape=3,
+                      color = "black", size=4, shape=6,
                       data = linreg_pts)
       }
       
