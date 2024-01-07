@@ -186,7 +186,7 @@ plot_vi_str_cloud <- function(full_df,
   # Set max using median and (2 * IQR) as in outlier detection 
   #y_max <- 3.6
   str_q3 <- stats::quantile(plot_df$STR, 0.75, na.rm = TRUE)
-  y_max <- str_q3 + stats::IQR(plot_df$STR, na.rm = TRUE) * 2
+  y_max <- str_q3 + stats::IQR(plot_df$STR, na.rm = TRUE) * 3
   # Text to add to plot
   coeffs_text <- paste("Dry intercept:", i_dry, "\n Dry slope:", s_dry,
                        "\n Wet intercept:", i_wet, "\n Wet slope:", s_wet)
@@ -223,9 +223,9 @@ plot_vi_str_cloud <- function(full_df,
       return(i_dry * exp(s_dry * VI))
     }
     pl <- pl +
-      geom_function(color = "#2E94B9", linewidth = 1.2, linetype = 2,
+      geom_function(color = "#10607e", linewidth = 1.5, linetype = 2,
         fun = str_wet) +
-      geom_function(color = "#FD5959", linewidth = 1.2, linetype = 2,
+      geom_function(color = "#8b412a62", linewidth = 1.5, linetype = 2,
         fun = str_dry)
   }
   pl
