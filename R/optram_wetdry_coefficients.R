@@ -127,6 +127,9 @@ optram_wetdry_coefficients <- function(full_df,
 #' @param output_dir, string, directory to save plot png file.
 #' @param trapezoid_method, string, how to plot trapezoid line.
 #'    either "linear" or "exponential", default is "linear"
+#' @param linreg_points, boolean, whether to add to the plot the 
+#'    linear regression points that were used to derive coefficients.
+#'    default FALSE
 #' @return None
 #' @export
 #' @import ggplot2
@@ -144,7 +147,8 @@ plot_vi_str_cloud <- function(full_df,
                               coeffs,
                               aoi_name,
                               output_dir = tempdir(),
-                              trapezoid_method = "linear") {
+                              trapezoid_method = "linear",
+                              linreg_points = FALSE) {
   # Avoid "no visible binding for global variable" NOTE
   i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
   x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- VI <- STR <- NULL
@@ -230,6 +234,27 @@ plot_vi_str_cloud <- function(full_df,
         fun = str_wet) +
       geom_function(color = "#8b412a62", linewidth = 1.5, linetype = "dotted",
         fun = str_dry)
+  }
+
+  if (linreg_points) {
+    linreg_file <- file.path(output_dir, "linear_regression.csv")
+    if (!file.exists(linreg_file)) {
+      message("No linear regression point file:", linreg_file, "Skipping...")
+    } else {
+      linreg_pts <- read.csv(linreg_file)
+      if (!inherits(linreg_pts, "data.frame")) {
+        message("Unformatted regression points file:", linreg_file, "Skipping...")
+      } else {
+        pl <- pl + 
+            geom_point(aes(x=VI, y=STR_wet),
+                      color = "black", size=5, shape=4,
+                      data = linreg_pts) +
+            geom_point(aes(x=VI, y=STR_dry),
+                      color = "black", size=5, shape=3,
+                      data = linreg_pts)
+      }
+      
+    }
   }
   pl
   plot_path <- file.path(output_dir, paste0("trapezoid_", aoi_name, ".png"))
