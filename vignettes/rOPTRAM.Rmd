@@ -73,7 +73,7 @@ from_date <- "2021-11-01"
 to_date <- "2023-03-31"
 S2_dir <- tempdir()
 output_dir <- file.path(S2_dir, "Migda_season")
-aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = c("SAVI"),
@@ -81,8 +81,8 @@ coeffs <- optram(aoi_file,
                  remove_safe = "no",
                  timeperiod = "seasonal",
                  data_output_dir = output_dir)
-#> Reading layer `migda_aoi' from data source 
-#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/migda_aoi.gpkg' 
+#> Reading layer `migda' from data source 
+#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/migda.gpkg' 
 #>   using driver `GPKG'
 #> Simple feature collection with 1 feature and 2 fields
 #> Geometry type: POLYGON
@@ -118,7 +118,7 @@ so all images between from_date and to_date will be used.
 ```r
 from_date <- "2022-10-01"
 to_date <- "2023-04-30"
-aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
 output_dir <- file.path(S2_dir, "Migda_full")
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
@@ -126,8 +126,8 @@ s2_file_list <- optram_acquire_s2(aoi_file,
                             remove_safe = "no",
                             timeperiod = "full",
                             veg_index ="SAVI")
-#> Reading layer `migda_aoi' from data source 
-#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/migda_aoi.gpkg' 
+#> Reading layer `migda' from data source 
+#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/migda.gpkg' 
 #>   using driver `GPKG'
 #> Simple feature collection with 1 feature and 2 fields
 #> Geometry type: POLYGON

@@ -9,7 +9,8 @@ plot_vi_str_cloud(
   coeffs,
   aoi_name,
   output_dir = tempdir(),
-  trapezoid_method = "linear"
+  trapezoid_method = "linear",
+  linreg_points = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,10 @@ of wet and dry regression lines}
 
 \item{trapezoid_method, }{string, how to plot trapezoid line.
 either "linear" or "exponential", default is "linear"}
+
+\item{linreg_points, }{boolean, whether to add to the plot the
+linear regression points that were used to derive coefficients.
+default FALSE}
 }
 \value{
 None

@@ -68,7 +68,7 @@ If the Google Cloud CLI is not installed, this function fails
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
+aoi <- system.file("extdata", "migda.gpkg", package = 'rOPTRAM')
 s2_file_list <- optram_acquire_s2(aoi,
                                  from_date, to_date,
                                  timeperiod = "full",

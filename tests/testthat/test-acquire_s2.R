@@ -36,7 +36,7 @@ test_that("API access to scihub ", {
   # Short time interval to get only one downloaded file
   from_date <- "2019-04-24"
   to_date <- "2019-04-30"
-  aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+  aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
   gsutil_path <- NULL
   if (Sys.info()['sysname'] == 'Windows') {
     # Assume that gcloud-sdk is installed in USER's home dir
@@ -71,7 +71,7 @@ test_that("Access to scihub API and openEO platform", {
   # to be revised when acquire_openeo() and acquire_scihub() are written
   from_date <- "2019-04-24"
   to_date <- "2019-04-30"
-  aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+  aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
   expect_null(optram_acquire_s2(aoi_file, from_date, to_date, remote="openeo"))
   expect_null(optram_acquire_s2(aoi_file, from_date, to_date, remote="scihub"))
 })

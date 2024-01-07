@@ -152,6 +152,7 @@ plot_vi_str_cloud <- function(full_df,
   # Avoid "no visible binding for global variable" NOTE
   i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
   x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- VI <- STR <- NULL
+  STR_dry <- STR_wet <- NULL
 
   # Pre-flight test
   if (!ncol(coeffs) == 4) {
@@ -241,16 +242,16 @@ plot_vi_str_cloud <- function(full_df,
     if (!file.exists(linreg_file)) {
       message("No linear regression point file:", linreg_file, "Skipping...")
     } else {
-      linreg_pts <- read.csv(linreg_file)
+      linreg_pts <- utils::read.csv(linreg_file)
       if (!inherits(linreg_pts, "data.frame")) {
         message("Unformatted regression points file:", linreg_file, "Skipping...")
       } else {
         pl <- pl + 
             geom_point(aes(x=VI, y=STR_wet),
-                      color = "black", size=4, shape=2,
+                      color = "black", size=3, shape=2,
                       data = linreg_pts) +
             geom_point(aes(x=VI, y=STR_dry),
-                      color = "black", size=4, shape=6,
+                      color = "black", size=3, shape=6,
                       data = linreg_pts)
       }
       
