@@ -172,7 +172,7 @@ plot_vi_str_cloud <- function(full_df,
     plot_df <- full_df
   } else {
     # This trick drops the num of plotted points by orders of magnitude
-    samp_num <- num_rows  / log2(num_rows)
+    samp_num <- num_rows  / log(num_rows)
     sample_idx <- sample(num_rows, samp_num)
     plot_df <- full_df[sample_idx, ]
   }
@@ -216,16 +216,16 @@ plot_vi_str_cloud <- function(full_df,
 
   if (trapezoid_method == "exponential") {
     # Add exponential function lines to the graphs
-    str_wet  <- function(VI = full_df$VI) {
+    str_wet  <- function(VI = plot_df$VI) {
       return(i_wet * exp(s_wet * VI))
     }
-    str_dry  <- function(VI = full_df$VI) {
+    str_dry  <- function(VI = plot_df$VI) {
       return(i_dry * exp(s_dry * VI))
     }
     pl <- pl +
-      geom_function(color = "#10607e", linewidth = 1.5, linetype = 2,
+      geom_function(color = "#10607e", linewidth = 1.5, linetype = "dotted",
         fun = str_wet) +
-      geom_function(color = "#8b412a62", linewidth = 1.5, linetype = 2,
+      geom_function(color = "#8b412a62", linewidth = 1.5, linetype = "dotted",
         fun = str_dry)
   }
   pl
