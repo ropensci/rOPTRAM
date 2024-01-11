@@ -51,7 +51,7 @@ i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 }
 \examples{
 \dontrun{
-aoi_file <- system.file("extdata", "migda_aoi.gpkg", package = "rOPTRAM")
+aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
 optram_landsat(landsat_dir,  aoi_file,
                veg_index = 'SAVI',
                LC_output_dir = tempdir(), data_output_dir = tempdir())

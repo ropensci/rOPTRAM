@@ -41,7 +41,7 @@ optram_wetdry_coefficients <- function(full_df,
 
   # Avoid "no visible binding for global variable" NOTE
   VI_min_max <- VI_series <- VI_STR_list <- VI_STR_df <- NULL
-  Qs <- str_max <- str_min <- interval_df <- VI_STR_df1 <- NULL
+  Qs <- str_max <- str_min <- interval_df <- linreg_df1 <- NULL
 
   #  Pre-flight Check
   if (is.null(aoi_file)) {
@@ -55,7 +55,7 @@ optram_wetdry_coefficients <- function(full_df,
   VI_min_max <- round(stats::quantile(full_df$VI, c(0.1, 0.98)), 2)
   VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], step)
   message("VI series length:", length(VI_series))
-  VI_STR_list <- lapply(VI_series, function(i){
+  linreg_list <- lapply(VI_series, function(i){
     # Set NDVI value at midpoint of each interval
     vi_val <- i + step/2.0
 
@@ -65,34 +65,37 @@ optram_wetdry_coefficients <- function(full_df,
     if (nrow(interval_df) < 4) {
       return(NA)
     }
-    # Remove lower than 2% and more than 98% quartile of STR values
+    # Remove lower than 1% and more than 99% quantile of STR values
+    # Use upper 99% quantile and lower 1% quantile as min/max values
     Qs <- stats::quantile(interval_df$STR, c(0.01, 0.99), na.rm=TRUE)
-    interval_df <- interval_df[interval_df$STR<=Qs[[2]] &
-                                 interval_df$STR>=Qs[[1]],]
+    #interval_df <- interval_df[interval_df$STR<=Qs[[2]] &
+    #                             interval_df$STR>=Qs[[1]],]
     # Now, with outliers removed, find min (dry) and max (wet)
     # Within each interval
-    str_max <- max(interval_df$STR, na.rm = TRUE)
-    str_min <- min(interval_df$STR, na.rm = TRUE)
-    VI_STR_df1 <- data.frame("VI" = vi_val,
-                               "STR_wet" = str_max,
-                               "STR_dry" = str_min)
-    return(VI_STR_df1)
+    #str_max <- max(interval_df$STR, na.rm = TRUE)
+    #str_min <- min(interval_df$STR, na.rm = TRUE)
+    str_max <- Qs[[2]]
+    str_min <- Qs[[1]]
+    linreg_df1 <- data.frame("VI" = vi_val,
+                              "STR_wet" = str_max,
+                              "STR_dry" = str_min)
+    return(linreg_df1)
   })
   # Bind all interval results into one long DF
-  VI_STR_list <- VI_STR_list[ !is.na(VI_STR_list) ]
-  VI_STR_df <- do.call(rbind, VI_STR_list)
+  linreg_list <- linreg_list[ !is.na(linreg_list) ]
+  linreg_df <- do.call(rbind, linreg_list)
 
   # Save STR and VI values to CSV
   if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
   }
-  utils::write.csv(VI_STR_df,
-            file.path(output_dir, "VI_STR_df.csv"),
+  utils::write.csv(linreg_df,
+            file.path(output_dir, "linear_regression.csv"),
             row.names = FALSE)
   # Run linear regression between STR and NDVI
   # to determine the intercept and slope for both wet and dry data
-  wet_fit <- stats::lm(STR_wet ~ VI, data=VI_STR_df)
-  dry_fit <- stats::lm(STR_dry ~ VI, data=VI_STR_df)
+  wet_fit <- stats::lm(STR_wet ~ VI, data = linreg_df)
+  dry_fit <- stats::lm(STR_dry ~ VI, data = linreg_df)
   i_wet <- wet_fit$coefficients[[1]]
   s_wet <- wet_fit$coefficients[[2]]
   i_dry <- dry_fit$coefficients[[1]]
@@ -104,10 +107,10 @@ optram_wetdry_coefficients <- function(full_df,
             row.names=FALSE)
 
   if (save_plot) {
-    rOPTRAM::plot_ndvi_str_cloud(full_df,
-                                coeffs,
-                                aoi_name,
-                                output_dir = output_dir)
+    rOPTRAM::plot_vi_str_cloud(full_df,
+                               coeffs,
+                               aoi_name,
+                               output_dir = output_dir)
   }
   return(coeffs)
 }
@@ -122,6 +125,11 @@ optram_wetdry_coefficients <- function(full_df,
 #'   of wet and dry regression lines
 #' @param aoi_name, string, used in plot title
 #' @param output_dir, string, directory to save plot png file.
+#' @param trapezoid_method, string, how to plot trapezoid line.
+#'    either "linear" or "exponential", default is "linear"
+#' @param linreg_points, boolean, whether to add to the plot the 
+#'    linear regression points that were used to derive coefficients.
+#'    default FALSE
 #' @return None
 #' @export
 #' @import ggplot2
@@ -131,15 +139,20 @@ optram_wetdry_coefficients <- function(full_df,
 #'         package = "rOPTRAM"))
 #' coeffs <- read.csv(system.file("extdata", "coefficients.csv",
 #'         package = "rOPTRAM"))
-#' plot_ndvi_str_cloud(full_df, coeffs, aoi_name)
+#' plot_vi_str_cloud(full_df, coeffs, aoi_name)
+#' plot_vi_str_cloud(full_df, coeffs, aoi_name,
+#'                     trapezoid_method = "exponential")
 
-plot_ndvi_str_cloud <- function(full_df,
-                                coeffs,
-                                aoi_name,
-                                output_dir = tempdir()) {
+plot_vi_str_cloud <- function(full_df,
+                              coeffs,
+                              aoi_name,
+                              output_dir = tempdir(),
+                              trapezoid_method = "linear",
+                              linreg_points = FALSE) {
   # Avoid "no visible binding for global variable" NOTE
   i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
   x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- VI <- STR <- NULL
+  STR_dry <- STR_wet <- NULL
 
   # Pre-flight test
   if (!ncol(coeffs) == 4) {
@@ -167,7 +180,7 @@ plot_ndvi_str_cloud <- function(full_df,
     plot_df <- full_df
   } else {
     # This trick drops the num of plotted points by orders of magnitude
-    samp_num <- num_rows  / log2(num_rows)
+    samp_num <- num_rows  / log(num_rows)
     sample_idx <- sample(num_rows, samp_num)
     plot_df <- full_df[sample_idx, ]
   }
@@ -175,15 +188,17 @@ plot_ndvi_str_cloud <- function(full_df,
   # NDVI (x) axis limits
   # Set fixed plot limits
   x_min <- 0.0
-  x_max <- 0.9
+  x_max <- max(plot_df$VI, na.rm = TRUE)
   # STR (y) axis limits
   y_min <- 0.1
+  # Set max using median and (2 * IQR) as in outlier detection 
   #y_max <- 3.6
-  y_max <- max(plot_df$STR)*0.95
+  str_q3 <- stats::quantile(plot_df$STR, 0.75, na.rm = TRUE)
+  y_max <- str_q3 + stats::IQR(plot_df$STR, na.rm = TRUE) * 3
   # Text to add to plot
   coeffs_text <- paste("Dry intercept:", i_dry, "\n Dry slope:", s_dry,
                        "\n Wet intercept:", i_wet, "\n Wet slope:", s_wet)
-  ggplot2::ggplot(plot_df) +
+  pl <- ggplot2::ggplot(plot_df) +
     geom_point(aes(x=VI, y=STR),
                color = "#0070000b", alpha = 0.3, size = 0.2) +
     # Wet edge
@@ -195,7 +210,7 @@ plot_ndvi_str_cloud <- function(full_df,
     # Set gradient color
     scale_color_gradient(low = "#FD5959",
                          high = "#2E94B9") +
-    expand_limits(y=c(y_min, y_max), x=c(x_min, x_max)) +
+    lims(y=c(y_min, y_max), x=c(x_min, x_max)) +
     labs(x="Vegetation Index", y="SWIR Transformed") +
     ggtitle(paste("Trapezoid Plot - ", aoi_name)) +
     # Add coeffs as text
@@ -207,6 +222,42 @@ plot_ndvi_str_cloud <- function(full_df,
           axis.text = element_text(size = 12),
           plot.title = element_text(size = 18))
 
+  if (trapezoid_method == "exponential") {
+    # Add exponential function lines to the graphs
+    str_wet  <- function(VI = plot_df$VI) {
+      return(i_wet * exp(s_wet * VI))
+    }
+    str_dry  <- function(VI = plot_df$VI) {
+      return(i_dry * exp(s_dry * VI))
+    }
+    pl <- pl +
+      geom_function(color = "#10607e", linewidth = 1.5, linetype = "dotted",
+        fun = str_wet) +
+      geom_function(color = "#8b412a62", linewidth = 1.5, linetype = "dotted",
+        fun = str_dry)
+  }
+
+  if (linreg_points) {
+    linreg_file <- file.path(output_dir, "linear_regression.csv")
+    if (!file.exists(linreg_file)) {
+      message("No linear regression point file:", linreg_file, "Skipping...")
+    } else {
+      linreg_pts <- utils::read.csv(linreg_file)
+      if (!inherits(linreg_pts, "data.frame")) {
+        message("Unformatted regression points file:", linreg_file, "Skipping...")
+      } else {
+        pl <- pl + 
+            geom_point(aes(x=VI, y=STR_wet),
+                      color = "black", size=3, shape=2,
+                      data = linreg_pts) +
+            geom_point(aes(x=VI, y=STR_dry),
+                      color = "black", size=3, shape=6,
+                      data = linreg_pts)
+      }
+      
+    }
+  }
+  pl
   plot_path <- file.path(output_dir, paste0("trapezoid_", aoi_name, ".png"))
   ggsave(plot_path, width = 10, height = 7)
   message("Scatterplot of: ", num_rows_plotted,
