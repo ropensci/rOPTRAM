@@ -212,6 +212,9 @@ check_scihub <- function() {
 #' @param remove_safe, string, "yes" or "no":
 #'      whether to delete downloaded SAFE directories
 #'      after processing, default "yes" - - currently not in use
+#' @param scale_factor, integer, scaling factor for EO data source default 10000
+#' , to scale Sentinel-2 15 bit DN to range (0, 1)
+
 #' @return void - extracting the images inside the function
 #' @note
 #' This function utilizes the `openeo` library.
@@ -252,7 +255,8 @@ acquire_openeo <- function(
     timeperiod = "full",
     output_dir = tempdir(),
     remove_safe = "yes",
-    veg_index = "NDVI") { 
+    veg_index = "NDVI",
+    scale_factor = 10000) { 
   
   if(!check_openeo()) return(NULL)
   
@@ -302,7 +306,7 @@ acquire_openeo <- function(
     dir.create(result_folder_str)
   }
   
-  #' @title Calculate Vegetation Index function
+  # Calculate Vegetation Index function
   calculate_vi_ <- function(x, context){
     
     # loading bands colors
@@ -330,12 +334,8 @@ acquire_openeo <- function(
     return(vi_rast)
   }
   
-  #' @title Calculate STR from SWIR Bottom of Atmosphere Band
-  #' @param scale_factor, integer, scaling factor for EO data source
-  #'      default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)
+  # Calculate STR from SWIR Bottom of Atmosphere Band
   calculate_str_ <- function(x, context){ 
-    
-    scale_factor = 10000
     SWIR_DN <- x['B11']
     SWIR <-  SWIR_DN / scale_factor
     # Convert from Solar irradiance
@@ -358,14 +358,14 @@ acquire_openeo <- function(
   job_str = openeo::create_job(graph = result_str, title = "str files")
   job_boa = openeo::create_job(graph = result_boa, title = "BOA files") 
   
-  # then start the processing of the job and turn on logging (messages that are captured on the back-end during the process         execution)
+  # then start the processing of the job and turn on logging (messages that are captured on the back-end during the process execution)
   openeo::start_job(job = job_vi, log = TRUE)
   openeo::start_job(job = job_str, log = TRUE)
   openeo::start_job(job = job_boa, log = TRUE)
   
   check_job_status <- function(job) {
     while (openeo::describe_job(job)$status != "finished") {
-      Sys.sleep(2)  # Sleep for 2 seconds before checking again
+      Sys.sleep(8)  # Sleep for 8 seconds before checking again
       message("job still running")
       if (openeo::describe_job(job)$status == "error") {
         message("Error: Job status is 'error'. Additional details:")
@@ -397,7 +397,7 @@ acquire_openeo <- function(
 }
 
 #' @title Check Access to Copernicus openEO
-#' @description Check access and OAuth authentication to the openEO platform, 
+#' @description Check access and authentication to the openEO platform, 
 #' and ensure that the openeo library is installed.
 
 #' @return boolean
