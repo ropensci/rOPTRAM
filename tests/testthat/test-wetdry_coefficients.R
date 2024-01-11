@@ -27,10 +27,10 @@ test_that("Output coefficients is a data.frame of length 4", {
   expect_true(inherits(coeffs, "data.frame"))
   expect_equal(length(coeffs), 4)
   # Check length of coeffs data.frame
-  expect_null(plot_ndvi_str_cloud(full_df, coeffs[1:3],
+  expect_null(plot_vi_str_cloud(full_df, coeffs[1:3],
                                 aoi_name, output_dir = tempdir()))
   # Check columns in full_df
   full_df2 <- full_df[, 1:3]
-  expect_null(plot_ndvi_str_cloud(full_df[1:3], coeffs,
+  expect_null(plot_vi_str_cloud(full_df[1:3], coeffs,
                                 aoi_name, output_dir = tempdir()))
 })
