@@ -12,6 +12,7 @@ acquire_gcloud(
   timeperiod = "full",
   output_dir = tempdir(),
   remove_safe = "yes",
+  safe_dir = output_dir,
   veg_index = "NDVI"
 )
 }
@@ -34,6 +35,8 @@ or "seasonal" for only months specified, but over the full date range.}
 \item{remove_safe, }{string, "yes" or "no":
 whether to delete downloaded SAFE directories
 after processing, default "yes"}
+
+\item{safe_dir, }{string, path to directory to save downloaded SAFE imagery}
 
 \item{veg_index, }{string, which index to prepare. Default "NDVI".
 Can be "NDVI", "SAVI", "MSAVI", etc}

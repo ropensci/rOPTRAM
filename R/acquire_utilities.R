@@ -16,6 +16,7 @@
 #' @param remove_safe, string, "yes" or "no":
 #'      whether to delete downloaded SAFE directories
 #'      after processing, default "yes"
+#' @param safe_dir, string, path to directory to save downloaded SAFE imagery
 #' @return output_path, string, path to downloaded files
 #' @note
 #' This function calls the `sen2r` function from the \CRANpkg{sen2r} package.
@@ -50,6 +51,7 @@ acquire_gcloud <- function(aoi_file,
                         timeperiod = "full",
                         output_dir = tempdir(),
                         remove_safe = "yes",
+                        safe_dir = output_dir,
                         veg_index = "NDVI") {
     # Avoid "no visible binding for global variable" NOTE
     result_list <- aoi_name <- NULL
@@ -77,7 +79,7 @@ acquire_gcloud <- function(aoi_file,
         extent = aoi_file,
         extent_name = aoi_name,
         extent_as_mask = TRUE,
-        path_l2a = output_dir,
+        path_l2a = safe_dir,
         path_out = output_dir,
         path_indices = output_dir,
         thumbnails = FALSE,
@@ -170,6 +172,7 @@ acquire_scihub <- function(aoi_file,
                            timeperiod = "full",
                            output_dir = tempdir(),
                            remove_safe = "yes",
+                           safe_dir = output_dir,
                            veg_index = "NDVI") {
   # TODO: implement this function using new scihub API
   # Check for token, etc...
@@ -197,6 +200,7 @@ acquire_openeo <- function(aoi_file,
                            max_cloud = 10,
                            timeperiod = "full",
                            output_dir = tempdir(),
+                           safe_dir = output_dir,
                            remove_safe = "yes",
                            veg_index = "NDVI") {
   # TODO: implement this function using new openeo

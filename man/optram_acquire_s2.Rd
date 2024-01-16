@@ -12,6 +12,7 @@ optram_acquire_s2(
   timeperiod = "full",
   output_dir = tempdir(),
   remove_safe = "yes",
+  safe_dir = output_dir,
   veg_index = "NDVI",
   remote = c("gcloud", "scihub", "openeo")
 )
@@ -30,11 +31,15 @@ formatted as "YYYY-MM-DD"}
 \item{timeperiod, }{string, either "full" for the whole date range,
 or "seasonal" for only months specified, but over the full date range.}
 
-\item{output_dir, }{string, path to save downloaded, and processed imagery}
+\item{output_dir, }{string, path to save processed imagery.}
 
 \item{remove_safe, }{string, "yes" or "no":
 whether to delete downloaded SAFE directories
 after processing, default "yes"}
+
+\item{safe_dir, }{string, path to save downloaded Sentinel imagery,
+If \code{remove_safe} is "no" then SAFE directories will be saved here.
+Default is \code{output_dir}, the same directory as processed images.}
 
 \item{veg_index, }{string, which index to prepare. Default "NDVI".
 Can be "NDVI", "SAVI", "MSAVI", etc}
