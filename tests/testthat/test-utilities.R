@@ -12,7 +12,7 @@ test_that("calculate_vi returns SpatRaster", {
 
 test_that("calculate_vi returns NULL for non-existant VI", {
     img_stk <- terra::rast(system.file("extdata",
-              "BOA", "S2A2A_20230301_121_migda_BOA_10.tif",
+              "BOA", "S2A2A_20230311_121_migda_BOA_10.tif",
               package = "rOPTRAM"))
     expect_null(calculate_vi(img_stk, viname = "XXX"))
 })
