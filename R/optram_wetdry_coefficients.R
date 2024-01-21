@@ -248,10 +248,10 @@ plot_vi_str_cloud <- function(full_df,
       } else {
         pl <- pl + 
             geom_point(aes(x=VI, y=STR_wet),
-                      color = "black", size=3, shape=2,
+                      color = "black", size=2, shape=2,
                       data = linreg_pts) +
             geom_point(aes(x=VI, y=STR_dry),
-                      color = "black", size=3, shape=6,
+                      color = "black", size=2, shape=6,
                       data = linreg_pts)
       }
       

@@ -50,7 +50,6 @@ acquire_gcloud <- function(aoi_file,
                         timeperiod = "full",
                         output_dir = tempdir(),
                         remove_safe = "yes",
-                        safe_dir = output_dir,
                         veg_index = "NDVI") {
     # Avoid "no visible binding for global variable" NOTE
     result_list <- aoi_name <- NULL
@@ -256,6 +255,7 @@ acquire_openeo <- function(
     timeperiod = "full",
     output_dir = tempdir(),
     remove_safe = "yes",
+    safe_dir = output_dir,
     veg_index = "NDVI",
     scale_factor = 10000) { 
   
@@ -441,7 +441,7 @@ check_openeo <- function() {
     if (!conn$isConnected()) {
       message("Connection to the back-end failed.")
     }
-  }, error <- function(e) {
+  }, error = function(e) {
     message("Error connecting to the back-end: ", conditionMessage(e), "\n")
     return(FALSE)
   })
@@ -460,6 +460,7 @@ check_openeo <- function() {
     } else {
       message("Connection object is missing.")
     }
+  }, error = function(e) {
     message("Error during login: ", conditionMessage(e), "\n")
     return(FALSE)
   })

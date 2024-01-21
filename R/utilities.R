@@ -121,7 +121,7 @@ check_date_string <- function(from_string, to_string) {
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata",
 #'          "BOA",
-#'          "S2A2A_20230301_121_migdaaoi_BOA_10.tif",
+#'          "S2A2A_20230301_121_migda_BOA_10.tif",
 #'          package = "rOPTRAM"))
 #' vi <- calculate_vi(img_stk)
 
@@ -185,7 +185,7 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata",
 #'          "BOA",
-#'          "S2A2A_20230301_121_migdaaoi_BOA_10.tif",
+#'          "S2A2A_20230301_121_migda_BOA_10.tif",
 #'          package = "rOPTRAM"))
 #' str <- calculate_str(img_stk)
 

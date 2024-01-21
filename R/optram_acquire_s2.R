@@ -16,12 +16,15 @@
 #' @param max_cloud, integer, maximum percent of cloud cover. Default 15.
 #' @param timeperiod, string, either "full" for the whole date range,
 #' or "seasonal" for only months specified, but over the full date range.
-#' @param output_dir, string, path to save downloaded, and processed imagery
+#' @param output_dir, string, path to save processed imagery.
 #' @param veg_index, string, which index to prepare. Default "NDVI".
 #'  Can be "NDVI", "SAVI", "MSAVI", etc
 #' @param remove_safe, string, "yes" or "no":
 #'      whether to delete downloaded SAFE directories
 #'      after processing, default "yes"
+#' @param safe_dir, string, path to save downloaded Sentinel imagery,
+#'      If `remove_safe` is "no" then SAFE directories will be saved here.
+#'      Default is `output_dir`, the same directory as processed images.
 #' @param remote, string, from which archive to download imagery
 #'    possible values: 'gcloud', 'scihub', 'openeo'
 #' @return output_path, string, path to downloaded files
@@ -65,6 +68,7 @@ optram_acquire_s2 <- function(
       timeperiod = "full",
       output_dir = tempdir(),
       remove_safe = "yes",
+      safe_dir = output_dir,
       veg_index = "NDVI",
       remote = c("gcloud", "scihub", "openeo")) {
   # Avoid "no visible binding for global variable" NOTE
@@ -83,6 +87,7 @@ optram_acquire_s2 <- function(
                                  timeperiod = timeperiod,
                                  output_dir = output_dir,
                                  remove_safe = remove_safe,
+                                 safe_dir = safe_dir,
                                  veg_index = veg_index),
          scihub = acquire_scihub(aoi_file = aoi_file,
                                  from_date = from_date, to_date = to_date,
@@ -90,6 +95,7 @@ optram_acquire_s2 <- function(
                                  timeperiod = timeperiod,
                                  output_dir = output_dir,
                                  remove_safe = remove_safe,
+                                 safe_dir = safe_dir,
                                  veg_index = veg_index),
          openeo = acquire_openeo(aoi_file = aoi_file,
                                  from_date = from_date, to_date = to_date,
@@ -97,6 +103,7 @@ optram_acquire_s2 <- function(
                                  timeperiod = timeperiod,
                                  output_dir = output_dir,
                                  remove_safe = remove_safe,
+                                 safe_dir = safe_dir,
                                  veg_index = veg_index)
          )
 }

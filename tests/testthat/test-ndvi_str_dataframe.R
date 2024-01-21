@@ -33,6 +33,6 @@ test_that("Check that rm.low.vi works", {
                         pattern = ".*STR.*tif$",
                         full.names = TRUE)
   full_df <- optram_ndvi_str(STR_list, VI_list, rm.low.vi = TRUE)
-  min_ndvi <- min(full_df$VI)
+  min_ndvi <- min(full_df$VI, na.rm = TRUE)
   expect_gte(min_ndvi, 0)
 })
