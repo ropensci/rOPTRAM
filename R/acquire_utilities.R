@@ -50,6 +50,7 @@ acquire_gcloud <- function(aoi_file,
                         timeperiod = "full",
                         output_dir = tempdir(),
                         remove_safe = "yes",
+                        safe_dir = output_dir,
                         veg_index = "NDVI") {
     # Avoid "no visible binding for global variable" NOTE
     result_list <- aoi_name <- NULL
@@ -261,24 +262,28 @@ acquire_openeo <- function(
   if(!check_openeo()) return(NULL)
   
   # Extracting bbox from the aoi file
-  catchment = sf::st_read(aoi_file)
-  bbox = sf::st_bbox(obj = catchment)
+  catchment <- sf::st_read(aoi_file)
+  bbox <- sf::st_bbox(obj = catchment)
   
   # get the process collection to use the predefined processes of the back-end
-  p = openeo::processes()
+  p <- openeo::processes()
   
-  # get the collection list to get easier access to the collection ids, via auto completion
-  collections = openeo::list_collections()
+  # get the collection list to get easier access to the collection ids, 
+  # via auto completion
+  collections <- openeo::list_collections()
   
   # get the formats
-  formats = openeo::list_file_formats()
+  formats <- openeo::list_file_formats()
   
   # load the initial data collection and limit the amount of data loaded
-  # note: for the collection id and later the format you can also use the its character value
-  cube_s2 = p$load_collection(id = collections$SENTINEL2_L2A,
+  # note: for the collection id and later the format you can also use the
+  # its character value
+  cube_s2 <- p$load_collection(id = collections$SENTINEL2_L2A,
                               spatial_extent = bbox,
                               temporal_extent = c(from_date, to_date),
-                              bands = c('B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B8A', 'B09', 'B11', 'B12'),
+                              bands = c('B01', 'B02', 'B03', 'B04', 'B05', 
+                                        'B06', 'B07', 'B08', 'B8A', 'B09', 
+                                        'B11', 'B12'),
                               properties = list(
                                 "eo:cloud_cover" = function(x) x <= max_cloud))
   
@@ -310,26 +315,26 @@ acquire_openeo <- function(
   calculate_vi_ <- function(x, context){
     
     # loading bands colors
-    blue = x["B02"]
-    green = x["B03"]
-    red = x["B04"]
-    nir = x["B08"]
+    blue <- x["B02"]
+    green <- x["B03"]
+    red <- x["B04"]
+    nir <- x["B08"]
     
     if (veg_index == "NDVI") {
-      vi_rast = ((nir - red) / (nir + red))
+      vi_rast <- ((nir - red) / (nir + red))
     } else if (veg_index == "SAVI") {
-      vi_rast = ((1.5 * (nir - red)) / (nir + red + 0.5) )
+      vi_rast <- ((1.5 * (nir - red)) / (nir + red + 0.5) )
     } else if (veg_index == "MSAVI") {
-      vi_rast = ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 
+      vi_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 - 
                                        8 * (nir - red))) / 2)
     } else if (veg_index == "CI") {
-      vi_rast = (1-((red - blue) / (red + blue)))
+      vi_rast <- (1-((red - blue) / (red + blue)))
     } else if (veg_index == "BSCI") {
-      vi_rast = ((1-(2*(red - green))) / 
+      vi_rast <- ((1-(2*(red - green))) / 
                    (terra::mean(green, red, nir, na.rm = TRUE)))
     } else {
       message("Unrecognized index: ", veg_index)
-      vi_rast = NULL
+      vi_rast <- NULL
     }
     return(vi_rast)
   }
@@ -346,19 +351,23 @@ acquire_openeo <- function(
   }
   
   
-  cube_s2_vi = p$reduce_dimension(data = cube_s2, reducer = calculate_vi_, dimension = "bands")
-  cube_s2_str = p$reduce_dimension(data = cube_s2, reducer = calculate_str_, dimension = "bands")
-  cube_S2_boa = p$resample_spatial(data = cube_s2, resolution = 10, method = "near")
+  cube_s2_vi <- p$reduce_dimension(data = cube_s2, reducer = calculate_vi_, 
+                                  dimension = "bands")
+  cube_s2_str <- p$reduce_dimension(data = cube_s2, reducer = calculate_str_, 
+                                   dimension = "bands")
+  cube_S2_boa <- p$resample_spatial(data = cube_s2, resolution = 10, 
+                                   method = "near")
   
-  result_vi = p$save_result(data = cube_s2_vi, format = formats$output$GTiff)
-  result_str = p$save_result(data = cube_s2_str, format = formats$output$GTiff)
-  result_boa = p$save_result(data = cube_S2_boa, format = formats$output$GTiff)
+  result_vi <- p$save_result(data = cube_s2_vi, format = formats$output$GTiff)
+  result_str <- p$save_result(data = cube_s2_str, format = formats$output$GTiff)
+  result_boa <- p$save_result(data = cube_S2_boa, format = formats$output$GTiff)
   
-  job_vi = openeo::create_job(graph = result_vi, title = "vi files")
-  job_str = openeo::create_job(graph = result_str, title = "str files")
-  job_boa = openeo::create_job(graph = result_boa, title = "BOA files") 
+  job_vi <- openeo::create_job(graph = result_vi, title = "vi files")
+  job_str <- openeo::create_job(graph = result_str, title = "str files")
+  job_boa <- openeo::create_job(graph = result_boa, title = "BOA files") 
   
-  # then start the processing of the job and turn on logging (messages that are captured on the back-end during the process execution)
+  # then start the processing of the job and turn on logging,
+  # (messages that are captured on the back-end during the process execution)
   openeo::start_job(job = job_vi, log = TRUE)
   openeo::start_job(job = job_str, log = TRUE)
   openeo::start_job(job = job_boa, log = TRUE)
@@ -376,19 +385,20 @@ acquire_openeo <- function(
     return("finished")
   }
   
-  job_vi_status = check_job_status(job_vi)
-  job_str_status = check_job_status(job_str)
-  job_boa_status = check_job_status(job_boa)
+  job_vi_status <- check_job_status(job_vi)
+  job_str_status <- check_job_status(job_str)
+  job_boa_status <- check_job_status(job_boa)
   
-  if(job_boa_status != "finished" | job_vi_status != "finished" | job_str_status != "finished") return(NULL)
+  if(job_boa_status != "finished" | job_vi_status != "finished" 
+     | job_str_status != "finished") return(NULL)
   
   message("finished succesfully")
   Sys.sleep(5)
   
   # list the processed results
-  jobs_vi = openeo::list_results(job = job_vi)
-  jobs_str = openeo::list_results(job = job_str)
-  jobs_boa = openeo::list_results(job = job_boa)
+  jobs_vi <- openeo::list_results(job = job_vi)
+  jobs_str <- openeo::list_results(job = job_str)
+  jobs_boa <- openeo::list_results(job = job_boa)
   
   # download all the files into a folder on the file system
   openeo::download_results(job = job_vi, folder = result_folder_vi)
@@ -431,7 +441,7 @@ check_openeo <- function() {
     if (!conn$isConnected()) {
       message("Connection to the back-end failed.")
     }
-  }, error = function(e) {
+  }, error <- function(e) {
     message("Error connecting to the back-end: ", conditionMessage(e), "\n")
     return(FALSE)
   })
@@ -450,7 +460,6 @@ check_openeo <- function() {
     } else {
       message("Connection object is missing.")
     }
-  }, error = function(e) {
     message("Error during login: ", conditionMessage(e), "\n")
     return(FALSE)
   })
