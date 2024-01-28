@@ -37,7 +37,9 @@ Suggests:
     testthat (>= 3.0.0),
     tmap, 
     xml2,
-    openeo
+    openeo,
+	CDSE,
+	jsonlite
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Spelling: en-US

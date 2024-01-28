@@ -163,33 +163,213 @@ check_gcloud <- function() {
     return(FALSE)}
 }
 
-
-acquire_scihub <- function(aoi_file,
-                           from_date, to_date,
-                           max_cloud = 10,
-                           timeperiod = "full",
-                           output_dir = tempdir(),
-                           remove_safe = "yes",
-                           veg_index = "NDVI") {
-  # TODO: implement this function using new scihub API
-  # Check for token, etc...
-  # Write eval_functions (in javascript) for each vegetation index
-  if(!check_scihub()) return(NULL)
+#' @title Utility Function to Acquire Sentinel-2 Imagery using CDSE and the 
+#' dataspace of Copernicus
+#' @description This non-exported function uses the `CDSE` package
+#' to send a request to Copernicus dataspace, and prepare the products.
+#' Called by optram_acquire_s2
+#' @param aoi_file, string, full path to polygon spatial file of
+#'      boundary of area of interest
+#' @param from_date, string, represents start of date range,
+#'      formatted as "YYYY-MM-DD"
+#' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
+#' @param max_cloud, integer, maximum percent of cloud cover. Default 10.
+#' @param timeperiod, string, either "full" for the whole date range,
+#' or "seasonal" for only months specified, but over the full date range 
+#' - currently not in use
+#' @param output_dir, string, path to save downloaded, and processed imagery
+#' @param veg_index, string, which index to prepare. Default "NDVI".
+#'  Can be "NDVI", "SAVI", "MSAVI", etc
+#' @param remove_safe, string, "yes" or "no":
+#'      whether to delete downloaded SAFE directories
+#'      after processing, default "yes" - currently not in use
+#'
+#' @return void - extracting the images inside the function
+#' @note
+#' This function utilizes the `CDSE` library.
+#' Make sure to install the CDSE and jsonlite packages.
+#' Create OAuth account and token:
+#' Creating an Account:
+#'  1. Navigate to the [Copernicus portal](https://dataspace.copernicus.eu/).
+#'  2. Click the "Register" button to access the account creation page.
+#'  3. If already registered, enter your username and password, 
+#'    and click "Login."
+#'  4. Once logged in, go to the User dashboard and click "User Settings" to 
+#'    access the Settings page.
+#' 
+#' Creating OAuth Client:
+#'  1. On the Settings page, click the green "Create New" button located on the right.
+#'  2. Enter a suitable "Client Name" and click the green "Create Client" button.
+#'  3. A Client secret is generated.
+#' 
+#' Using Credentials with `aquire_scihub`:
+#'  - Now, you can utilize the generated `clientid` and `secret` in 
+#'    the `aquire_scihub` function.
+#'  - If you want to store your credentials on your computer, ensure that when 
+#'    running `aquire_scihub`, the `save_creds` parameter is set to `TRUE`.
+#'  - During the first run of `aquire_scihub`, manually input your `clientid` 
+#'    and `secret` in the function's signature. Subsequent runs will use the stored credentials.
+#' @examples
+#' \dontrun{
+#' from_date <- "2018-12-01"
+#' to_date <- "2019-04-30"
+#' aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
+#' acquire_scihub(aoi, from_date, to_date,
+#'                timeperiod = "full",
+#'                veg_index = "SAVI")
+#' }
+acquire_scihub <- function(
+    aoi_file,
+    from_date, to_date,
+    max_cloud = 10,
+    timeperiod = "full",
+    output_dir = tempdir(),
+    remove_safe = "yes",
+    safe_dir = output_dir,
+    veg_index = "NDVI",
+    save_creds = TRUE,
+    clientid = NULL,
+    secret = NULL) {
+  
+  aoi <- sf::read_sf(aoi_file, as_tibble = FALSE)
+  
+  # Retrieve OAuth token using credentials from file directory
+  tok <- check_scihub(clientid = clientid, secret = secret, save_creds = save_creds)
+  if (is.null(tok)){
+    message("No CDSE token found. Exiting...")
+    return(NULL)
+  }
+  # Create a folder for the BOA in the output directory
+  result_folder_boa <- file.path(output_dir, "BOA")
+  
+  # Check if the folder already exists; if not, create it
+  if (!dir.exists(result_folder_boa)) {
+    dir.create(result_folder_boa)
+  }
+  
+  # Create a folder named after veg_index in the output directory
+  result_folder_vi <- file.path(output_dir, veg_index)
+  
+  # Check if the folder already exists; if not, create it
+  if (!dir.exists(result_folder_vi)) {
+    dir.create(result_folder_vi)
+  }
+  
+  # Create a folder for the STR in the output directory
+  result_folder_str <- file.path(output_dir, "STR")
+  
+  # Check if the folder already exists; if not, create it
+  if (!dir.exists(result_folder_str)) {
+    dir.create(result_folder_str)
+  }
+  
+  # Retrieve the necessary scripts
+  script_file_boa <- system.file("scripts", "BOA.js", package = "rOPTRAM")
+  script_file_str <- system.file("scripts", "STR.js", package = "rOPTRAM")
+  script_filename_vi <- paste0(veg_index, ".js")
+  script_path_vi <- file.path("scripts", script_filename_vi)
+  script_file_vi <- system.file("scripts", script_path_vi, package = "rOPTRAM")
+  
+  img_list <- CDSE::SearchCatalog(aoi = aoi,
+                                  from = from_date, to = to_date,
+                                  collection = "sentinel-2-l2a",
+                                  with_geometry = TRUE,
+                                  token = tok)
+  # filter out cloud cover
+  img_list <- img_list[img_list$tileCloudCover < 10,]
+  
+  # Retrieve the images in BOA,STR and VI formats
+  get_result_list <- function(script_vi, s_dir){
+    result_list <- lapply(img_list$acquisitionDate, function(d){
+      time_range <- as.character(d)
+      result_rast <- CDSE::GetArchiveImage(aoi = aoi,
+                                     time_range = time_range,
+                                     script = script_vi,
+                                     collection = "sentinel-2-l2a",
+                                     format = "image/tiff",
+                                     mask = TRUE,
+                                     resolution = c(10,10),
+                                     token = tok)
+      
+      raster_file <- file.path(s_dir, paste0("CDSE_",
+                                             as.character(time_range),
+                                             ".tif"))
+      writeRaster(result_rast, raster_file, overwrite = TRUE)
+      return(raster_file)
+    })
+    return(result_list)
+  }
+  
+  result_boa <- unlist(get_result_list(script_file_boa, result_folder_boa))
+  result_str <- unlist(get_result_list(script_file_str, result_folder_str))
+  result_vi <- unlist(get_result_list(script_file_vi, result_folder_vi))
+  
+  saveRDS(result_boa, file.path(output_dir, "result_list_boa.rds"))
+  saveRDS(result_str, file.path(output_dir, "result_list_str.rds"))
+  saveRDS(result_vi, file.path(output_dir, "result_list_vi.rds"))
+  
 }
 
 
 #' @title Check access to scihub API
-#' @description  Check access, and Oauth to scihub API
-#' @return boolean
+#' @description  The check_scihub function verifies the availability of a 
+#' CDSE API, retrieves credentials from a file or by provided clientid and 
+#' secret, obtains an OAuthClient through CDSE::GetOAuthClient(), and 
+#' optionally saves the credentials to a file before returning the OAuthClient.
+#' @param clientid The client identifier used for authentication with CDSE.
+#' @param secret The secret key used for authentication with CDSE.
+#' @param save_creds A logical parameter indicating whether to save the 
+#' provided credentials to a file for future use.
+#' @return OAuthClient
 #' @noRd
 #' @examples
 #' \dontrun{
-#' scihub_ok <- check_scihub()
+#' scihub_ok <- check_scihub(clientid = NULL, secret = NULL, save_creds = FALSE)
 #' }
 #'
-check_scihub <- function() {
-  # TODO: this is a stub, just for test_that
-  return(FALSE)
+check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
+  
+  cdse_ok <- "CDSE" %in% utils::installed.packages()
+  if (!cdse_ok) {
+    message("cdse package is missing. Download is not possible",
+            "\n", "Exiting...")
+    return(NULL)
+  }
+  
+  jsonlite_ok <- "jsonlite" %in% utils::installed.packages()
+  if (!jsonlite_ok) {
+    message("jsonlite package is missing. Download is not possible",
+            "\n", "Exiting...")
+    return(NULL)
+  }
+  
+  # If clientid or secret is null, look for cdse_credentials file
+  if (is.null(clientid) || is.null(secret)) {
+    creds <- retrieve_cdse_credentials()
+    if (is.null(creds)) {
+      message("No CDSE credentials found. Exiting...")
+      return(NULL)
+    }
+    else {
+      clientid_value <- as.character(creds[[1]]$clientid)
+      secret_value <- as.character(creds[[1]]$secret)
+      oAuthClient <- CDSE::GetOAuthToken(id = clientid_value
+                                         ,secret = secret_value)
+    }
+  } else {
+    # If clientid and secret are NOT null, run CDSE::GetOAuthToken()
+    tryCatch({
+      oAuthClient <- CDSE::GetOAuthToken(id = clientid, secret = secret)
+      if (save_creds) {
+        # If successful and save_creds is TRUE, write clientid and secret to cdse_credentials file
+        store_cdse_credentials(clientid = clientid, secret = secret)
+      }
+      return(oAuthClient)
+    }, error = function(e) {
+      message("Error in retrieving CDSE credentials: ", conditionMessage(e), "\n")
+      return(NULL)
+    })
+  }
 }
 
 #' @title Utility Function to Acquire Sentinel-2 Imagery using openeo and the 
@@ -223,8 +403,8 @@ check_scihub <- function() {
 #' Data Space Ecosystem, it is necessary for you to complete the registration 
 #' process. Follow these instructions for registration:
 #' https://documentation.dataspace.copernicus.eu/Registration.html
-#' After you have registered and installed the openeo package, you can run the
-#' 'acquire_openeo' function.
+#' After you have registered and installed the `openeo` package, you can run the
+#' `acquire_openeo` function.
 #' During the process of connecting to the server and logging in, you need to 
 #' follow these steps:
 #' A. When the message "Press <enter> to proceed:" appears in the console, 
