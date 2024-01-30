@@ -183,10 +183,13 @@ check_gcloud <- function() {
 #' @param remove_safe, string, "yes" or "no":
 #'      whether to delete downloaded SAFE directories
 #'      after processing, default "yes" - currently not in use
-#'
+#' @param save_creds, logical, whether to save CDSE credentials. Default TRUE.
+#' @param clientid, string, user's OAuth client id. Required if `save_creds` 
+#'      is TRUE.
+#' @param secret, string, user's OAuth secret. Required if `save_creds` is TRUE.
 #' @return void - extracting the images inside the function
 #' @note
-#' This function utilizes the `CDSE` library.
+#' This function utilizes the `CDSE` package.
 #' Make sure to install the CDSE and jsonlite packages.
 #' Create OAuth account and token:
 #' Creating an Account:
@@ -198,9 +201,18 @@ check_gcloud <- function() {
 #'    access the Settings page.
 #' 
 #' Creating OAuth Client:
-#'  1. On the Settings page, click the green "Create New" button located on the right.
-#'  2. Enter a suitable "Client Name" and click the green "Create Client" button.
+#'  1. On the Settings page, click the green "Create New" button located on 
+#'    the right.
+#'  2. Enter a suitable "Client Name" and click the green "Create Client" 
+#'    button.
 #'  3. A Client secret is generated.
+#' the user must save her secret and clientid somewhere.
+#' these credentials will be saved automatically to a standard filesystem 
+#' location if the user calls check_scihub() with the argument save_creds 
+#' set to TRUE (recommended).
+#' if the user chooses not to save credentials to the standard filesystem 
+#' location, then she will need to add both clientid and secret to each 
+#' acquire_scihub() function call.
 #' 
 #' Using Credentials with `aquire_scihub`:
 #'  - Now, you can utilize the generated `clientid` and `secret` in 
@@ -208,7 +220,8 @@ check_gcloud <- function() {
 #'  - If you want to store your credentials on your computer, ensure that when 
 #'    running `aquire_scihub`, the `save_creds` parameter is set to `TRUE`.
 #'  - During the first run of `aquire_scihub`, manually input your `clientid` 
-#'    and `secret` in the function's signature. Subsequent runs will use the stored credentials.
+#'    and `secret` in the function's signature. Subsequent runs will use the 
+#'    stored credentials.
 #' @examples
 #' \dontrun{
 #' from_date <- "2018-12-01"
@@ -234,7 +247,8 @@ acquire_scihub <- function(
   aoi <- sf::read_sf(aoi_file, as_tibble = FALSE)
   
   # Retrieve OAuth token using credentials from file directory
-  tok <- check_scihub(clientid = clientid, secret = secret, save_creds = save_creds)
+  tok <- check_scihub(clientid = clientid, secret = secret, 
+                      save_creds = save_creds)
   if (is.null(tok)){
     message("No CDSE token found. Exiting...")
     return(NULL)
@@ -266,17 +280,15 @@ acquire_scihub <- function(
   # Retrieve the necessary scripts
   script_file_boa <- system.file("scripts", "BOA.js", package = "rOPTRAM")
   script_file_str <- system.file("scripts", "STR.js", package = "rOPTRAM")
-  script_filename_vi <- paste0(veg_index, ".js")
-  script_path_vi <- file.path("scripts", script_filename_vi)
-  script_file_vi <- system.file("scripts", script_path_vi, package = "rOPTRAM")
+  script_file_vi <- system.file("scripts", paste0(veg_index, ".js"), 
+                                package = "rOPTRAM")
   
   img_list <- CDSE::SearchCatalog(aoi = aoi,
                                   from = from_date, to = to_date,
                                   collection = "sentinel-2-l2a",
-                                  with_geometry = TRUE,
                                   token = tok)
   # filter out cloud cover
-  img_list <- img_list[img_list$tileCloudCover < 10,]
+  img_list <- img_list[img_list$tileCloudCover < max_cloud,]
   
   # Retrieve the images in BOA,STR and VI formats
   get_result_list <- function(script_vi, s_dir){
@@ -329,9 +341,9 @@ acquire_scihub <- function(
 #'
 check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
   
-  cdse_ok <- "CDSE" %in% utils::installed.packages()
-  if (!cdse_ok) {
-    message("cdse package is missing. Download is not possible",
+  CDSE_ok <- "CDSE" %in% utils::installed.packages()
+  if (!CDSE_ok) {
+    message("CDSE package is missing. Download is not possible",
             "\n", "Exiting...")
     return(NULL)
   }
@@ -361,12 +373,14 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
     tryCatch({
       oAuthClient <- CDSE::GetOAuthToken(id = clientid, secret = secret)
       if (save_creds) {
-        # If successful and save_creds is TRUE, write clientid and secret to cdse_credentials file
+        # If successful and save_creds is TRUE, write clientid and secret 
+        # to cdse_credentials file
         store_cdse_credentials(clientid = clientid, secret = secret)
       }
       return(oAuthClient)
     }, error = function(e) {
-      message("Error in retrieving CDSE credentials: ", conditionMessage(e), "\n")
+      message("Error in retrieving CDSE credentials: ", 
+              conditionMessage(e), "\n")
       return(NULL)
     })
   }
@@ -397,7 +411,7 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 
 #' @return void - extracting the images inside the function
 #' @note
-#' This function utilizes the `openeo` library.
+#' This function utilizes the `openeo` package.
 #' Instructions for the login process:
 #' First of all, to authenticate your account on the backend of the Copernicus
 #' Data Space Ecosystem, it is necessary for you to complete the registration 
