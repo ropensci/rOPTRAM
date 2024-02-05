@@ -7,7 +7,7 @@ function setup() {
             }],
         output: { // this defines the output image type
             bands: 1,
-            sampleType: "UINT8"
+            sampleType: "FLOAT32"
         }
     };
 }

@@ -16,6 +16,9 @@
 #' @param remove_safe, string, "yes" or "no":
 #'      whether to delete downloaded SAFE directories
 #'      after processing, default "yes"
+#' @param safe_dir, string, path to save downloaded Sentinel imagery,
+#'      If `remove_safe` is "no" then SAFE directories will be saved here.
+#'      Default is `output_dir`, the same directory as processed images.
 #' @return output_path, string, path to downloaded files
 #' @note
 #' This function calls the `sen2r` function from the \CRANpkg{sen2r} package.
@@ -50,6 +53,7 @@ acquire_gcloud <- function(aoi_file,
                         timeperiod = "full",
                         output_dir = tempdir(),
                         remove_safe = "yes",
+                        safe_dir = output_dir,
                         veg_index = "NDVI") {
     # Avoid "no visible binding for global variable" NOTE
     result_list <- aoi_name <- NULL
@@ -123,7 +127,6 @@ acquire_gcloud <- function(aoi_file,
     return(result_list)
 }
 
-
 #' @title Check if gcloud is installed
 #' @description  Check for sen2r dependency, and gcloud utility
 #' @return boolean
@@ -132,7 +135,7 @@ acquire_gcloud <- function(aoi_file,
 #' \dontrun{
 #' gcloud_ok <- check_gcloud()
 #' }
-#'
+
 check_gcloud <- function() {
   # Pre flight checks
   sen2r_ok <- "sen2r" %in% utils::installed.packages()
@@ -176,18 +179,20 @@ check_gcloud <- function() {
 #' @param max_cloud, integer, maximum percent of cloud cover. Default 10.
 #' @param timeperiod, string, either "full" for the whole date range,
 #' or "seasonal" for only months specified, but over the full date range 
-#' - currently not in use
 #' @param output_dir, string, path to save downloaded, and processed imagery
 #' @param veg_index, string, which index to prepare. Default "NDVI".
 #'  Can be "NDVI", "SAVI", "MSAVI", etc
 #' @param remove_safe, string, "yes" or "no":
 #'      whether to delete downloaded SAFE directories
-#'      after processing, default "yes" - currently not in use
+#'      after processing, default "yes"
+#' @param safe_dir, string, path to save downloaded Sentinel imagery,
+#'      If `remove_safe` is "no" then SAFE directories will be saved here.
+#'      Default is `output_dir`, the same directory as processed images.
 #' @param save_creds, logical, whether to save CDSE credentials. Default TRUE.
 #' @param clientid, string, user's OAuth client id. Required if `save_creds` 
 #'      is TRUE.
 #' @param secret, string, user's OAuth secret. Required if `save_creds` is TRUE.
-#' @return void - extracting the images inside the function
+#' @return list of BOA files
 #' @note
 #' This function utilizes the `CDSE` package.
 #' Make sure to install the CDSE and jsonlite packages.
@@ -231,6 +236,7 @@ check_gcloud <- function() {
 #'                timeperiod = "full",
 #'                veg_index = "SAVI")
 #' }
+
 acquire_scihub <- function(
     aoi_file,
     from_date, to_date,
@@ -306,22 +312,18 @@ acquire_scihub <- function(
       raster_file <- file.path(s_dir, paste0("CDSE_",
                                              as.character(time_range),
                                              ".tif"))
-      writeRaster(result_rast, raster_file, overwrite = TRUE)
+      terra::writeRaster(result_rast, raster_file, overwrite = TRUE)
       return(raster_file)
     })
     return(result_list)
   }
   
-  result_boa <- unlist(get_result_list(script_file_boa, result_folder_boa))
-  result_str <- unlist(get_result_list(script_file_str, result_folder_str))
-  result_vi <- unlist(get_result_list(script_file_vi, result_folder_vi))
+  result_boa <- get_result_list(script_file_boa, result_folder_boa)
+  result_str <- get_result_list(script_file_str, result_folder_str)
+  result_vi <- get_result_list(script_file_vi, result_folder_vi)
   
-  saveRDS(result_boa, file.path(output_dir, "result_list_boa.rds"))
-  saveRDS(result_str, file.path(output_dir, "result_list_str.rds"))
-  saveRDS(result_vi, file.path(output_dir, "result_list_vi.rds"))
-  
+  return(result_boa)
 }
-
 
 #' @title Check access to scihub API
 #' @description  The check_scihub function verifies the availability of a 
@@ -338,7 +340,7 @@ acquire_scihub <- function(
 #' \dontrun{
 #' scihub_ok <- check_scihub(clientid = NULL, secret = NULL, save_creds = FALSE)
 #' }
-#'
+
 check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
   
   CDSE_ok <- "CDSE" %in% utils::installed.packages()
@@ -405,11 +407,13 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #'  Can be "NDVI", "SAVI", "MSAVI", etc
 #' @param remove_safe, string, "yes" or "no":
 #'      whether to delete downloaded SAFE directories
-#'      after processing, default "yes" - - currently not in use
+#'      after processing, default "yes" 
+#' @param safe_dir, string, path to save downloaded Sentinel imagery,
+#'      If `remove_safe` is "no" then SAFE directories will be saved here.
+#'      Default is `output_dir`, the same directory as processed images.
 #' @param scale_factor, integer, scaling factor for EO data source default 10000
 #' , to scale Sentinel-2 15 bit DN to range (0, 1)
-
-#' @return void - extracting the images inside the function
+#' @return list of BOA files
 #' @note
 #' This function utilizes the `openeo` package.
 #' Instructions for the login process:
@@ -442,6 +446,7 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #'                timeperiod = "full",
 #'                veg_index = "SAVI")
 #' }
+
 acquire_openeo <- function(
     aoi_file,
     from_date, to_date,
@@ -598,6 +603,8 @@ acquire_openeo <- function(
   openeo::download_results(job = job_vi, folder = result_folder_vi)
   openeo::download_results(job = job_str, folder = result_folder_str)
   openeo::download_results(job = job_boa, folder = result_folder_boa)
+  
+  return(jobs_boa)
 }
 
 #' @title Check Access to Copernicus openEO

@@ -296,6 +296,6 @@ retrieve_cdse_credentials <- function() {
             " found. Credentials not available.")
     return(NULL)
   }
-  creds <- read_json(creds_file)
+  creds <- jsonlite::read_json(creds_file)
   return(creds)
 }
