@@ -38,8 +38,8 @@ Suggests:
     tmap, 
     xml2,
     openeo,
-	  CDSE,
-	  jsonlite
+    CDSE,
+    jsonlite
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Spelling: en-US
