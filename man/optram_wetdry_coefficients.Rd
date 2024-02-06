@@ -9,6 +9,7 @@ optram_wetdry_coefficients(
   aoi_file,
   output_dir = tempdir(),
   step = 0.01,
+  trapezoid_method = c("linear", "exponential", "polynomial"),
   save_plot = TRUE
 )
 }
@@ -20,7 +21,12 @@ optram_wetdry_coefficients(
 
 \item{output_dir, }{string, directory to save coefficients CSV file}
 
-\item{step, }{float}
+\item{step, }{float, width of intervals along VI axis
+default 0.01}
+
+\item{trapezoid_method, }{string, how to prepare wet and dry trapezoid edges
+Possible values: "linear", "exponential", "polynomial". See notes.
+Default "linear"}
 
 \item{save_plot, }{boolean, If TRUE (default) save scatterplot to output_dir}
 }
@@ -31,11 +37,36 @@ coeffs, list of float, coefficients of wet-dry trapezoid
 Derive slope and intercept coefficients
 for both wet and dry trapezoid lines.
 Write coefficients to a CSV file
-(as input to \code{optram_soilmoisture()} function)
+(as input to \code{optram_calculate_soil_moisture()} function)
 }
 \note{
 The vegetation index column is named "VI" though it can represent
 several vegetation indices, such as SAVI, or MSAVI.
+
+The \verb{trapezoid method} parameter allows to choose one of three models
+for creating the edge coefficients of the trapezoid.
+\itemize{
+\item "linear" prepares a simple OLS regression line
+along the wet and dry edges of the trapezoid.
+Four coefficients are returned: intercept and slope for both edges.
+\item "exponential" creates an exponential curve fitted
+to the intercept and slope, following:
+Ambrosone, Mariapaola, Alessandro Matese, et al. 2020.
+“Retrieving Soil Moisture in Rainfed and Irrigated Fields
+Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
+International Journal of Applied Earth Observation and Geoinformation
+https://doi.org/10.1016/j.jag.2020.102113.
+The same four coefficients as the linear model are returned.
+\item "polynomial" fits a second order polynomial curve to the
+wet and dry edges of the trapezoid, following:
+Ma, Chunfeng, Kasper Johansen, and Matthew F. McCabe. 2022.
+“Combining Sentinel-2 Data with an Optical-Trapezoid Approach to Infer within-Field Soil Moisture Variability
+and Monitor Agricultural Production Stages.”
+Agricultural Water Management 274 (December): 107942.
+https://doi.org/10.1016/j.agwat.2022.107942.
+This curve fitting function returns six coefficients:
+alpha, beta_1, and beta_2 for both wet and dry edges
+}
 }
 \examples{
 aoi_file <- "Test"
@@ -44,4 +75,10 @@ full_df <- readRDS(system.file("extdata",
               package = "rOPTRAM"))
 coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
 print(coeffs)
+\dontrun{
+coeffs_poly <- optram_wetdry_coefficients(full_df,
+                  aoi_file,
+                  trapezoid_method = "polynomial")
+print(coeffs_poly)
+}
 }

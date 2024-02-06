@@ -7,7 +7,8 @@ test_that("Missing AOI file input", {
   # NA allowd for aoi_file name
   aoi_file <- NULL
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
-  coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
+  coeffs <- optram_wetdry_coefficients(full_df, aoi_file,
+                                       trapezoid_method = "linear")
   expect_true(inherits(coeffs, "data.frame"))
   expect_equal(length(coeffs), 4)
 })
@@ -15,7 +16,8 @@ test_that("Missing AOI file input", {
 test_that("aoi_file does not exist", {
   aoi_file <- "xxx.gpkg"
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
-  coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
+  coeffs <- optram_wetdry_coefficients(full_df, aoi_file,
+                                       trapezoid_method = "linear")
   expect_true(inherits(coeffs, "data.frame"))
   expect_equal(length(coeffs), 4)
 })
@@ -23,7 +25,9 @@ test_that("aoi_file does not exist", {
 test_that("Output coefficients is a data.frame of length 4", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
   aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
-  coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
+  coeffs <- optram_wetdry_coefficients(full_df,
+                                       aoi_file,
+                                       trapezoid_method = "linear")
   expect_true(inherits(coeffs, "data.frame"))
   expect_equal(length(coeffs), 4)
   # Check length of coeffs data.frame
@@ -33,4 +37,14 @@ test_that("Output coefficients is a data.frame of length 4", {
   full_df2 <- full_df[, 1:3]
   expect_null(plot_vi_str_cloud(full_df[1:3], coeffs,
                                 aoi_name, output_dir = tempdir()))
+})
+
+test_that("Polynomial trapezoid method returns data.frame of length 6", {
+  full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
+                                 package = "rOPTRAM"))
+  aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+  coeffs <- optram_wetdry_coefficients(full_df, aoi_file,
+                                       trapezoid_method = "polynomial")
+  expect_true(inherits(coeffs, "data.frame"))
+  expect_equal(length(coeffs), 6)
 })
