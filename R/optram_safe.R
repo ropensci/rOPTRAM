@@ -18,6 +18,12 @@
 #'    or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
+#' @param step, numeric, width of slice along VI axis
+#'    to prepare edge values, default 0.01
+#' @param trapezoid_method, string,
+#'    one of "linear", "exponential", "polynomial"
+#'    how to prepare fitted model to trapezoid edge values
+#'    default "linear"
 #' @param overwrite, boolean, overwrite derived products
 #'      that already were created,
 #'      defaults to TRUE
@@ -50,7 +56,9 @@ optram_safe <- function(safe_dir,
                         S2_output_dir = tempdir(),
                         overwrite = TRUE,
                         data_output_dir = tempdir(),
-                        max_tbl_size = 5e+6) {
+                        max_tbl_size = 5e+6,
+                        trapezoid_method = c("linear", "exponential", "polynomial"),
+                        step = 0.01) {
 
     # Avoid "no visible binding for global variable" NOTE
     safe_list <- band_ids <- aoi <- cropped_rast_list <- xml_file <- NULL
@@ -260,9 +268,12 @@ optram_safe <- function(safe_dir,
     saveRDS(full_VI_STR, full_df_path)
     message("VI-STR data saved to: ", full_df_path)
     # Now continue with regular process
-    coeffs <- rOPTRAM::optram_wetdry_coefficients(full_VI_STR,
-                                                  aoi_file,
-                                                  data_output_dir)
+    coeffs <- rOPTRAM::optram_wetdry_coefficients(
+      full_VI_STR,
+      aoi_file,
+      trapezoid_method = trapezoid_method,
+      step = step,
+      output_dir = data_output_dir)
 
     return(coeffs)
 }

@@ -10,7 +10,7 @@ optram_calculate_soil_moisture(
   STR_dir,
   coeffs_file,
   output_dir = tempdir(),
-  trapezoid_method = "linear"
+  trapezoid_method = c("linear", "exponential", "polynomial")
 )
 }
 \arguments{
@@ -26,8 +26,8 @@ formatted as "YYYY-MM-DD"}
 \item{output_dir, }{string, full path to output directory
 for saving soil moisture raster}
 
-\item{trapezoid_method, }{string, either "linear" or "exponential"
-default "linear"}
+\item{trapezoid_method, }{string,
+either "linear", "exponential", or "polynomial", default is "linear"}
 }
 \value{
 rast, soil moisture grid
@@ -40,16 +40,23 @@ using the derived slope and intercept coefficients
 \note{
 This function is used after preparing the OPTRAM model coefficients with:
 \code{optram_wetdry_coefficients()}. Typically a new image date,
-(that was not used for preparing the model),
+(possibly an image that was not used for preparing the model),
 will be referenced in the \code{img_date} parameter.
 The resulting soil moisture raster is saved to \code{output_dir}.
-Two trapezoid models are offered throug the trapezoid_method parameter:
-either "linear" or "exponential". For further details see:
+
+Three trapezoid models are offered through the trapezoid_method parameter:
+either "linear", "exponential", or "polynomial".
+For further details see:
 Ambrosone, Mariapaola, et al. 2020.
 “Retrieving Soil Moisture in Rainfed and Irrigated Fields
 Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 International Journal of Applied Earth Observation and Geoinformation 89 (July):
 102113. https://doi.org/10.1016/j.jag.2020.102113.
+
+The coeffs_file string must be set to match the trapezoid_method.
+i.e. for "linear" method the file was saved as 'coefficients.csv'
+for "exponential" it was saved as 'coefficients_exp.csv'
+for "polynomial" it was saved as 'coefficients_poly.csv'
 }
 \examples{
 img_date <- "2023-03-11"
@@ -57,5 +64,7 @@ VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
 STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 coeffs_file <- system.file("extdata", "coefficients.csv",
         package = "rOPTRAM")
-SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
+SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
+                                     coeffs_file,
+                                     trapezoid_method = "linear")
 }

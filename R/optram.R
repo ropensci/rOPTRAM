@@ -25,8 +25,16 @@
 #'      SAFE directories after processing. Default "yes"
 #' @param timeperiod, string, either "full" for the whole date range,
 #' or "seasonal" for only months specified, but over the full date range.
+#' @param step, float, width of intervals along VI axis
+#'  default 0.01
 #' @param remote, string, which Copernicus API to use,
 #'  one of "gcloud", "scihub", or "openeo"
+#' @param trapezoid_method, string,
+#'  one of "linear", "exponential", "polynomial"
+#'  default "linear"
+#'  How to fit a curve to the values along trapezoid edges
+#'  See notes in optram_wetdry_coefficients()
+#'
 #' @return coeffs_file, string, full path to saved CSV of wet-dry coefficients
 #' the coefficients are also saved to a csv file in `data_output_dir`.
 #' @note
@@ -56,7 +64,8 @@
 #' coeffs <- optram(aoi_file,
 #'                  from_date, to_date,
 #'                  veg_index = c("SAVI"),
-#'                  timeperiod = "seasonal")
+#'                  timeperiod = "seasonal",
+#'                  trapezoid_method = "linear")
 #' }
 
 
@@ -68,7 +77,9 @@ optram <- function(aoi_file,
                    timeperiod = "full",
                    S2_output_dir = tempdir(),
                    data_output_dir = tempdir(),
-                   remote = "gcloud") {
+                   remote = "gcloud",
+                   step = 0.01,
+                   trapezoid_method = c("linear", "exponential", "polynomial")) {
 
   # Avoid "no visible binding for global variable" NOTE
   access_ok <- s2_list <- s2_dirs <- BOA_dir <- NULL
@@ -96,9 +107,12 @@ optram <- function(aoi_file,
     STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
     VI_list <- list.files(path = VI_dir, full.names = TRUE)
     VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)
-    coeffs <- rOPTRAM::optram_wetdry_coefficients(VI_STR_df,
-                                                  aoi_file = aoi_file,
-                                                  output_dir = data_output_dir)
+    coeffs <- rOPTRAM::optram_wetdry_coefficients(
+      VI_STR_df,
+      aoi_file = aoi_file,
+      output_dir = data_output_dir,
+      step = step,
+      trapezoid_method = trapezoid_method)
 
     return(coeffs)
 }
