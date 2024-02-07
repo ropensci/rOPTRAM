@@ -294,8 +294,8 @@ plot_cloud_linear <- function(pl_base, coeffs, aoi_name) {
     # Dry edge
     geom_abline(intercept = i_dry, slope = s_dry,
                 color = "#FD5959", linewidth = 1.0) +
-
-    ggtitle(paste("Trapezoid Plot - ", aoi_name), subtitle = "Linear fit") +
+    ggtitle(paste("Trapezoid Plot - ", aoi_name),
+            subtitle = "Linear fit") +
     # Add coeffs as text
     annotate("text", x=0.1, y=mean(pl_base$data$STR, na.rm = TRUE),
              label = coeffs_text, size = 5)
@@ -340,7 +340,8 @@ plot_cloud_exponential <- function(pl_base, plot_df, coeffs, aoi_name) {
                   fun = str_wet) +
     geom_function(color = "#8b412a62", linewidth = 1.5, linetype = "dotted",
                   fun = str_dry) +
-    ggtitle(paste("Trapezoid Plot - ", aoi_name), subtitle = "Exponential fit") +
+    ggtitle(paste("Trapezoid Plot - ", aoi_name),
+            subtitle = "Exponential fit")
 
   return(pl)
 }
@@ -382,7 +383,8 @@ plot_cloud_polynomial <- function(pl_base, output_dir, aoi_name) {
                 aes(x = VI, y = STR_poly_wet),
                 method = "loess",
                 color="purple", se = FALSE) +
-    ggtitle(paste("Trapezoid Plot - ", aoi_name), subtitle = "Polynomial fit")
+    ggtitle(paste("Trapezoid Plot - ", aoi_name),
+            subtitle = "Polynomial fit")
 
   return(pl)
 }
