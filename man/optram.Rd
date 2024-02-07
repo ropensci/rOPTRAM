@@ -14,7 +14,9 @@ optram(
   timeperiod = "full",
   S2_output_dir = tempdir(),
   data_output_dir = tempdir(),
-  remote = "gcloud"
+  remote = "gcloud",
+  step = 0.01,
+  trapezoid_method = c("linear", "exponential", "polynomial")
 )
 }
 \arguments{
@@ -44,6 +46,15 @@ and STR-VI data.frame, default is tempdir()}
 
 \item{remote, }{string, which Copernicus API to use,
 one of "gcloud", "scihub", or "openeo"}
+
+\item{step, }{float, width of intervals along VI axis
+default 0.01}
+
+\item{trapezoid_method, }{string,
+one of "linear", "exponential", "polynomial"
+default "linear"
+How to fit a curve to the values along trapezoid edges
+See notes in optram_wetdry_coefficients()}
 }
 \value{
 coeffs_file, string, full path to saved CSV of wet-dry coefficients
@@ -88,6 +99,7 @@ aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = c("SAVI"),
-                 timeperiod = "seasonal")
+                 timeperiod = "seasonal",
+                 trapezoid_method = "linear")
 }
 }

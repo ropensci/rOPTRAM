@@ -11,7 +11,9 @@ optram_safe(
   S2_output_dir = tempdir(),
   overwrite = TRUE,
   data_output_dir = tempdir(),
-  max_tbl_size = 5e+06
+  max_tbl_size = 5e+06,
+  trapezoid_method = c("linear", "exponential", "polynomial"),
+  step = 0.01
 )
 }
 \arguments{
@@ -37,6 +39,14 @@ and STR-VI data.frame, default is tempdir()}
 
 \item{max_tbl_size, }{numeric, maximum size of VI/STR dta.frame.
 default is 5,000,000 rows}
+
+\item{trapezoid_method, }{string,
+one of "linear", "exponential", "polynomial"
+how to prepare fitted model to trapezoid edge values
+default "linear"}
+
+\item{step, }{numeric, width of slice along VI axis
+to prepare edge values, default 0.01}
 }
 \value{
 coeffs, list, the derived trapezoid coefficients

@@ -9,8 +9,8 @@ plot_vi_str_cloud(
   coeffs,
   aoi_name,
   output_dir = tempdir(),
-  trapezoid_method = "linear",
-  linreg_points = FALSE
+  trapezoid_method = c("linear", "exponential", "polynomial"),
+  edges_points = FALSE
 )
 }
 \arguments{
@@ -26,7 +26,7 @@ of wet and dry regression lines}
 \item{trapezoid_method, }{string, how to plot trapezoid line.
 either "linear" or "exponential", default is "linear"}
 
-\item{linreg_points, }{boolean, whether to add to the plot the
+\item{edges_points, }{boolean, whether to add to the plot the
 linear regression points that were used to derive coefficients.
 default FALSE}
 }
@@ -44,6 +44,8 @@ full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 coeffs <- read.csv(system.file("extdata", "coefficients.csv",
         package = "rOPTRAM"))
 plot_vi_str_cloud(full_df, coeffs, aoi_name)
+\dontrun{
 plot_vi_str_cloud(full_df, coeffs, aoi_name,
                     trapezoid_method = "exponential")
+}
 }
