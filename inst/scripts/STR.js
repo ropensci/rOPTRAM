@@ -3,25 +3,22 @@
 function setup() {
     return {
         input: [{ // this sets which bands to use
-            bands: ["B11"],
-            units: "DN"
+            bands: ["B11"]
             }],
         output: { // this defines the output image type
             bands: 1,
-            sampleType: "FLOAT32"
+            sampleType: "FLOAT32",
+            nodataValue: 0
         }
     };
 }
 
 function evaluatePixel(sample) {
-  // this computes the STR value
-    SWIR_DN = sample.B11;
-    SWIR =  SWIR_DN / 10000;
-    // Convert from Solar irradiance
-    // solar_irradiance_12 <- 87.25
-    // SWIR <- (SWIR_irr/10) * solar_irradiance_12
-    
-    let str = (1 - SWIR)**2 / (2*SWIR);
+    var value = sample.B11;
+    if (value != 0) {
+      str = (1 - value)**2 / (2*value);
+    } else {
+      str = 0
+    };
     return [ str ];
 }
-

@@ -92,7 +92,19 @@
 #'  - During the first run of `aquire_scihub`, manually input your `clientid` 
 #'    and `secret` in the function's signature. Subsequent runs will use the 
 #'    stored credentials.
-#'    
+#' Subject Area Constraint:
+#'  The downloadable images are restricted to a maximum size of 2500 pixels on 
+#'  each side. This limitation is established due to the final resolution set to 
+#'  10 meters using JavaScript. Consequently, the subject area available for 
+#'  download is limited to 25 kilometers in both directions. Please be aware of 
+#'  this restriction when selecting your desired area for download.
+
+#' Area of Interest (AOI) Specification:
+#'  When defining your Area of Interest (AOI), please ensure that it is 
+#'  represented as a polygonal layer with only one feature. This feature can 
+#'  either be a single POLYGON or a MULTIPOLYGON, which may consist of 
+#'  non-contiguous areas, but only one feature is permissible.
+#'      
 #' "openeo",...
 #' If "openeo" then: 
 #' This function utilizes the `openeo` package.
