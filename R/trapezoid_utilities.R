@@ -382,7 +382,7 @@ plot_cloud_polynomial <- function(pl_base, output_dir, aoi_name) {
                 aes(x = VI, y = STR_poly_wet),
                 method = "loess",
                 color="purple", se = FALSE) +
-    ggtitle(paste("Trapezoid Plot - ", aoi_name), subtitle = "Polynomial fit") +
+    ggtitle(paste("Trapezoid Plot - ", aoi_name), subtitle = "Polynomial fit")
 
   return(pl)
 }

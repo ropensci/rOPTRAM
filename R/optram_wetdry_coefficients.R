@@ -44,14 +44,12 @@
 
 #' @examples
 #' aoi_file <- "Test"
-#' full_df <- readRDS(system.file("extdata",
-#'               "VI_STR_data.rds",
-#'               package = "rOPTRAM"))
+#' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
+#'   package = "rOPTRAM"))
 #' coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
 #' print(coeffs)
 #' \dontrun{
-#' coeffs_poly <- optram_wetdry_coefficients(full_df,
-#'                   aoi_file,
+#' coeffs_poly <- optram_wetdry_coefficients(full_df, aoi_file,
 #'                   trapezoid_method = "polynomial")
 #' print(coeffs_poly)
 #' }
