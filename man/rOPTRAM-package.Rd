@@ -22,6 +22,8 @@ Useful links:
 Other contributors:
 \itemize{
   \item Arnon Karnieli \email{karnieli@bgu.ac.il} (\href{https://orcid.org/0000-0001-8065-9793}{ORCID}) [contributor, funder]
+  \item Ron Beiden \email{beiden@post.bgu.ac.il} [contributor]
+  \item Natalya Panov \email{npanov@bgu.ac.il} [contributor]
 }
 
 }
