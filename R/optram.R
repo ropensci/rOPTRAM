@@ -21,14 +21,12 @@
 #'  and the derived products, defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file
 #'  and STR-VI data.frame, default is tempdir()
-#' @param remove_safe, string, "yes" or "no", whether to delete downloaded
-#'      SAFE directories after processing. Default "yes"
 #' @param timeperiod, string, either "full" for the whole date range,
 #' or "seasonal" for only months specified, but over the full date range.
 #' @param step, float, width of intervals along VI axis
 #'  default 0.01
 #' @param remote, string, which Copernicus API to use,
-#'  one of "gcloud", "scihub", or "openeo"
+#'  one of "scihub", or "openeo". Default is "scihub"
 #' @param trapezoid_method, string,
 #'  one of "linear", "exponential", "polynomial"
 #'  default "linear"
@@ -77,7 +75,7 @@ optram <- function(aoi_file,
                    timeperiod = "full",
                    S2_output_dir = tempdir(),
                    data_output_dir = tempdir(),
-                   remote = "gcloud",
+                   remote = "scihub",
                    step = 0.01,
                    trapezoid_method = c("linear", "exponential", "polynomial")) {
 
@@ -92,7 +90,6 @@ optram <- function(aoi_file,
                     from_date, to_date,
                     max_cloud = max_cloud,
                     veg_index = veg_index,
-                    remove_safe = remove_safe,
                     timeperiod = timeperiod,
                     output_dir = S2_output_dir,
                     remote = remote)
@@ -103,8 +100,9 @@ optram <- function(aoi_file,
     STR_dir <- s2_dirs[basename(s2_dirs) == "STR"]
     VI_dir <- s2_dirs[basename(s2_dirs) == veg_index]
 
-    # Calculate SWIR Transformed Reflectance
-    STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
+    # Calculate SWIR Transformed Reflectance was done by optram_acquire_s2()
+    # STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
+    STR_list <- list.files(path = STR_dir, full.names = TRUE)
     VI_list <- list.files(path = VI_dir, full.names = TRUE)
     VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)
     coeffs <- rOPTRAM::optram_wetdry_coefficients(

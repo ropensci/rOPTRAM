@@ -2,7 +2,7 @@
 title: "rOPTRAM: Deriving Soil Moisture from Sentinel-2 Imagery"
 output: rmarkdown::html_document
 vignette: >
-  %\VignetteIndexEntry{rOPTRAM}
+  %\VignetteIndexEntry{Intro}
   %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{tmap}
@@ -28,15 +28,21 @@ A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression l
 
 #### Prerequisites
 
-This package uses the R package \CRANpkg{sen2r} for acquiring Sentinel-2 imagery.
-To install that package you will need some system dependencies.
-On Debian and derivatives please install in advance:
+Only a small number of commonly used R packages are required to use {rOPTRAM}. This includes:
+ - base packages {tools} and {utils}
+ - spatial packages {sf} and {terra}
+ - data.frame and plotting {dplyr}, {ggplot2}
 
-  - jq libv8-dev libjq-dev
-  - libprotobuf-dev protobuf-compiler
+Users can download Sentinel-2 tiles from the Copernicus manually, and run thru the steps one by one to produce the OPTRAM trapezoid, and predicted soil moisture maps. However, this approach is not optimal. By installing a few additional packages, the workflow can be initiated with a single function call to download, clip to area of interest, and produce the trapezoid coefficients. This all-inclusive approach is highly recommended since processing of the Sentinel-2 data is performed "in the cloud" and only the final products are downloaded, **greatly** reducing the download file sizes.
 
-That R package uses the Google Cloud infrastructure to download Sentinel-2 images. To install the Google Cloud CLI for acquiring images follow installation instructions here:
-https://cloud.google.com/sdk/docs/install
+To run the all-inclusive approach, the first step of acquiring Sentinel-2 imagery is handled by the R package \CRANpkg{CDSE}. (see @karaman_cdse_2023). The {jsonlite} package is also necessary.
+
+That R package interfaces with the Copernicus DataSpace Ecosystem in one of two ways:
+ - Thru the [Scihub API](https://shapps.dataspace.copernicus.eu/dashboard/#/).
+ - Thru the [openEO platform](https://openeo.dataspace.copernicus.eu/)
+
+Both methods require [registering](https://dataspace.copernicus.eu/) on the Copernicus DataSpace
+
 
 
 #### Prepare soil moisture maps covering an area of interest (AOI), over a date range.
@@ -45,8 +51,9 @@ https://cloud.google.com/sdk/docs/install
 remotes::install_gitlab("rsl-bidr/roptram")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
-# The `sen2r` package is required for downloading Sentinel imagery
-if (!require("sen2r")) install.packages("sen2r", dependencies = TRUE)
+# The {CDSE} and {jsonlite} packages are required for downloading Sentinel imagery from Copernicus DataSpace.
+if (!require("CDSE")) install.packages("sen2r", dependencies = TRUE)
+if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 ```
 
 ## Main wrapper function
@@ -71,7 +78,6 @@ coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = c("SAVI"),
                  S2_output_dir = output_dir,
-                 remove_safe = "no",
                  timeperiod = "seasonal",
                  data_output_dir = output_dir)
 knitr::kable(coeffs)
@@ -97,11 +103,11 @@ output_dir <- file.path(tempdir(), "full")
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
-                            remove_safe = "no",
                             timeperiod = "full",
                             veg_index ="SAVI")
 BOA_dir <- file.path(output_dir, "BOA")
-STR_list <- optram_calculate_str(BOA_dir)
+STR_list <- list.files(file.path(output_dir, "STR"),
+                      pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "SAVI"),
                       pattern = ".tif$", full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list,
