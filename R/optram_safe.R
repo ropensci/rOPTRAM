@@ -2,13 +2,11 @@
 #' @description
 #' Use this function to prepares vegetation index and
 #' SWIR Transformed Reflectance (STR) rasters
-#' when you have already downloaded Sentinel 2 image files in advance
-#' (without using \CRANpkg{sen2r}).
+#' when you have already downloaded Sentinel 2 image files in advance.
 #' Unzip the downloaded Sentinel 2 files
 #'      and do not change the folder structure.
 #' This function assumes that atmospheric correction has been applied.
-#' i.e. using the SNAP L2A_Process,
-#' or the  `sen2cor` function from the \CRANpkg{sen2r} R package.
+#' i.e. by downloading Level L2A product or using the SNAP L2A_Process,
 #' @param safe_dir, string, full path to containing folder of downloaded
 #'    (unzipped) Sentinel 2 data in original SAFE format,
 #'    after atmospheric correction (L2A)

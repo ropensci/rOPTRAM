@@ -7,7 +7,7 @@
 optram_calculate_str(BOA_dir)
 }
 \arguments{
-\item{BOA_dir, }{string, the path to the \CRANpkg{sen2r} Bottom of Atmosphere bands}
+\item{BOA_dir, }{string, the path to the Bottom of Atmosphere bands}
 }
 \value{
 list of string, the path to transformed raster
@@ -26,7 +26,7 @@ https://doi.org/10.1016/j.rse.2017.05.041
 
 SWIR Transformed Reflectance is calculated as
 STR = (1-SWIR)^2 / 2*SWIR
-SWIR is band 11 (2200 nm) from \code{sen2r()} since band B09 is not processed
+SWIR is band 11 (2200 nm) since band B09 is not processed
 }
 \examples{
 BOA_dir <- system.file("extdata", "BOA")

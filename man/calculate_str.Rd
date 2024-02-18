@@ -21,7 +21,6 @@ STR, SpatRaster of STR band
 \description{
 Use this function to prepare STR from SAFE imagery
 when you have already downloaded Sentinel 2 image files in advance
-(without using \CRANpkg{sen2r}).
 }
 \note{
 For Landsat images, scale_factor should be 1,

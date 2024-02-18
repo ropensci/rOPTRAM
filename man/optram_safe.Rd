@@ -54,13 +54,11 @@ coeffs, list, the derived trapezoid coefficients
 \description{
 Use this function to prepares vegetation index and
 SWIR Transformed Reflectance (STR) rasters
-when you have already downloaded Sentinel 2 image files in advance
-(without using \CRANpkg{sen2r}).
+when you have already downloaded Sentinel 2 image files in advance.
 Unzip the downloaded Sentinel 2 files
 and do not change the folder structure.
 This function assumes that atmospheric correction has been applied.
-i.e. using the SNAP L2A_Process,
-or the  \code{sen2cor} function from the \CRANpkg{sen2r} R package.
+i.e. by downloading Level L2A product or using the SNAP L2A_Process,
 }
 \note{
 Use the \code{max_tbl_size} parameter to limit the total number of rows

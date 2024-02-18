@@ -39,7 +39,6 @@ vi_rast, SpatRaster of vegetation index
 \description{
 Use this function to prepare vegetation index from SAFE imagery
 when you have already downloaded Sentinel 2 image files in advance
-(without using \code{sen2r}).
 }
 \note{
 The scale_factor parameter reduces numeric range "digital number",

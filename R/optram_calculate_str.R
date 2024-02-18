@@ -1,5 +1,5 @@
 #' @title Create SWIR Transformed Reflectance
-#' @param BOA_dir, string, the path to the \CRANpkg{sen2r} Bottom of Atmosphere bands
+#' @param BOA_dir, string, the path to the Bottom of Atmosphere bands
 #' @return list of string, the path to transformed raster
 #' @note
 #' This function follows:
@@ -12,7 +12,7 @@
 #'
 #' SWIR Transformed Reflectance is calculated as
 #'  STR = (1-SWIR)^2 / 2*SWIR
-#'  SWIR is band 11 (2200 nm) from `sen2r()` since band B09 is not processed
+#'  SWIR is band 11 (2200 nm) since band B09 is not processed
 #' @export
 #' @examples
 #' BOA_dir <- system.file("extdata", "BOA")
@@ -22,7 +22,7 @@ optram_calculate_str <- function(BOA_dir){
   # Returns: STR_list, list of paths to STR (SWIR Transformed) Raster files
   # Avoid "no visible binding for global variable" NOTE
   BOA_list <- STR_list <- SWIR_DN <- SWIR <- STR <- outfile <- outpath <- NULL
-  
+
   if (!dir.exists(BOA_dir)) return(NULL)
   BOA_list <- list.files(BOA_dir,
                         pattern = ".tif$", full.names = TRUE)

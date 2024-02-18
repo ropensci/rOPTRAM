@@ -1,46 +1,3 @@
-#' @title Check That sen2r Package is Installed
-#'
-#' @description
-#' Verify that \CRANpkg{sen2r} is installed, and site is available.
-#' Default download site: "https://scihub.copernicus.eu/"
-#' @param site, string, Default is copernicus download site
-#' @return boolean, whether online and using sen2r is possible
-#' @noRd
-#' @examples
-#' site <-  "http://scihub.copernicus.eu"
-#' check_scihub_access(site)
-
-check_scihub_access <- function(site = "http://scihub.copernicus.eu") {
-    #message("In check_scihub_access:", covr::in_covr())
-    # First check for internet connection
-    internet_online <- tryCatch({
-            readLines(site, n=1)
-            TRUE},
-        error = {function(e) {message("No internet connection to SCIHUB.",
-             "\n", "Downloading data is not currently possible"); FALSE}
-    })
-
-    if (internet_online) {
-        #message("In covr 2:", covr::in_covr())
-        # Is sen2r installed?
-        if (system.file(package='sen2r') == "") {
-            message("This function requires the `sen2r` package.", "\n",
-            "Please install that package first before running function")
-            return(FALSE)}
-        # Check sen2r version
-        sen2r_version <- utils::packageVersion("sen2r")
-        version_ok <- package_version(sen2r_version) > '1.5.0'
-        if (!version_ok) {
-            message("Version of sen2r package: ", sen2r_version,
-        " is too old. \n", "Please update to version > 1.5")
-            return(FALSE)
-        }
-        return(TRUE)
-    } else {
-        return(FALSE)
-    }
-}
-
 #' @title Check Area of Interest File
 #' @description
 #' Check that aoi file exists, and is a spatial file
@@ -93,12 +50,10 @@ check_date_string <- function(from_string, to_string) {
 }
 
 
-
 #' @title Calculate Vegetation Index from Bottom of Atmosphere Image Bands
 #' @description
 #' Use this function to prepare vegetation index from SAFE imagery
 #' when you have already downloaded Sentinel 2 image files in advance
-#' (without using `sen2r`).
 #' @param img_stk, terra SpatRaster, multiband stack of images,
 #'            already clipped to aoi
 #' @param redband, integer, number of red band
@@ -170,8 +125,6 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 #' @description
 #' Use this function to prepare STR from SAFE imagery
 #' when you have already downloaded Sentinel 2 image files in advance
-#' (without using \CRANpkg{sen2r}).
-#'
 #' @param img_stk, terra SpatRaster, multiband stack of images,
 #'          already clipped to aoi
 #' @param swirband, integer, number of red band
@@ -271,7 +224,7 @@ store_cdse_credentials <- function (clientid = NULL,
 #' @description Retrieve CDSE clientid and secret from file
 #' The file location is system specific. It would have been setup
 #' in advance using the `store_cdse_credentials()` function
-#' @return A data frame containing the retrieved CDSE clientid and secret, 
+#' @return A data frame containing the retrieved CDSE clientid and secret,
 #' or NULL if credentials are not available.
 #' @export
 

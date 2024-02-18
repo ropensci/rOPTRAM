@@ -58,15 +58,4 @@ test_that("Check format of from_date, to_date",{
   expect_true(check_date_string("2023-10-31", "2023-11-30"))
 })
 
-skip_if_not_installed("sen2r")
-site <- "http://scihub.copernicus.eu"
-if (package_version(utils::packageVersion("sen2r")) <= '1.5.0') {
-    test_that("Version of sen2r is recent", {
-        expect_false(check_scihub_access(site))
-    })
-} else {
-    test_that("sen2r can access scihub", {
-        expect_true(check_scihub_access(site))
-    })
-}
 
