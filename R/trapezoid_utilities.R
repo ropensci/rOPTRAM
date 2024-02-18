@@ -323,6 +323,7 @@ plot_cloud_linear <- function(pl_base, coeffs, aoi_name) {
 #' pl <- plot_cloud_exponential(plot_df, coeffs)
 #' }
 plot_cloud_exponential <- function(pl_base, plot_df, coeffs, aoi_name) {
+
   i_dry <- round(coeffs$intercept_dry, 3)
   s_dry <- round(coeffs$slope_dry, 3)
   i_wet <- round(coeffs$intercept_wet, 3)
@@ -361,12 +362,9 @@ plot_cloud_exponential <- function(pl_base, plot_df, coeffs, aoi_name) {
 #' pl <- plot_cloud_polynomial(pl_base, output_dir)
 #'}
 plot_cloud_polynomial <- function(pl_base, output_dir, aoi_name) {
-  # a_wet <- coeffs$alpha_wet
-  # a_dry <- coeffs$alpha_dry
-  # b1_wet <- coeffsbeta1_wet
-  # b1_dry <- coeffs$beta1_dry
-  # b2_wet <- coeffs$beta2_wet
-  # b2_dry <- coeffs$beta2_dry
+
+  # Avoid "no visible binding for global variable" NOTE
+  VI <- NULL
 
   # Add exponential edges points as smoothed lines to the graph
   edges <- utils::read.csv(file.path(output_dir,

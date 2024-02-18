@@ -64,13 +64,13 @@
 
     # The strings below are used to select the needed bands from Landsat
     # L89 - bands for LANDSAT 8/9
-    # L57 - bands for LANDSAT 5/7
+    # L457 - bands for LANDSAT 4/5/7
     band_L89 <- c(
         "_SR_B4", #red
         "_SR_B5", #NIR wide
         "_SR_B7"  #SWIR 2200
     )
-    band_L57 <- c(
+    band_L457 <- c(
       "_SR_B3", #red
       "_SR_B4", #NIR wide
       "_SR_B7"  #SWIR 2200
@@ -111,57 +111,9 @@
         dir.create(STR_dir)
     }
 
-    cropped_rast_list <- lapply(landsat_list, function(s) {
-        mtl_file <- list.files(s, pattern = "MTL.*xml$",
-                                recursive = TRUE, full.names = TRUE, )[1]
-        if (! file.exists(mtl_file)) {
-            message("No metadata file in landsat dir: ", s, "Skipping...")
-            return(NULL)
-        }
-        mtl <- xml2::read_xml(mtl_file)
-# Values for gain and offset are read from the XML metadata
-# https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
-        gain <- xml2::xml_text(
-          xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
-        offset <- xml2::xml_text(
-          xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
-        gain <- as.numeric(gain)
-        offset <- as.numeric(offset)
+    cropped_rast_list <- crop_landsat_list(landsat_list)
 
-        # Read in tifs
-        if (grepl("LC08", s) | grepl("LC09", s)) {
-          band_ids <- band_L89
-        }
-        if (grepl("LE07", s) | grepl("LT05", s)) {
-          band_ids <- band_L57
-        }
-       img_list <- lapply(band_ids, function(b){
-          # img_path - full names in only one landsat folder
-          # filter only sr bands
-          img_path <- dir(s)[grepl(pattern = "*_SR_B[0-9]*.TIF$", x = dir(s))]
-          img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
-          img_path <- file.path(s, img_path)
-# Use the `win` parameter of `terra::rast` to crop Landsat tile to aoi
-          rst <- terra::rast(img_path, win = terra::ext(aoi))
-          return(rst)
-        })
 
-        img_stk <- terra::rast(img_list)
-        # All bands use the same gain, offset
-        img_stk <- img_stk*gain + offset
-
-        # Save to BOA dir
-        # Create filename
-        # Prepare file name parts for saving rasters
-        # the name is formed from folder
-        s_parts <- unlist(strsplit(basename(s), "_"))
-        BOA_file <- paste(s_parts[1], s_parts[2], s_parts[3],
-                        s_parts[4], s_parts[6], aoi_name,
-                        "BOA.tif", sep = "_")
-        terra::writeRaster(img_stk,
-                         file.path(BOA_dir, BOA_file), overwrite = TRUE)
-        return(img_stk)
-    }) # end-of-cropped_rast_list
 
     # Get VI and STR from this list of raster stacks
     VI_STR_list <- lapply(seq_along(cropped_rast_list), function(x) {
@@ -225,3 +177,74 @@
 
     return(coeffs)
     }
+
+
+#' @title Crop List of Landsat Bands to AOI
+#' @description
+#' Utility function to prepare BOA bands cropped to Area of Interest
+#' @param landsat_list, list of char, full paths landsat images
+#' @return cropped_list, list, paths to derived BOA stacks, cropped to study area
+#' @export
+#' @examples
+#' \dontrun{
+#'  landsat_list <- list.dirs(landsat_dir)[
+#'                 grepl("L*_02_*",list.dirs(landsat_dir))]
+#' cropped_landsat_list <- crop_landsat_list(landsat_list)
+#' }
+crop_landsat_list <- function(landsat_list) {
+  # Avoid "no visible binding for global variable" NOTE
+  band_L89 <- band_L457 <- aoi <- BOA_dir <- aoi_name <- NULL
+
+  cropped_list <- lapply(landsat_list, function(s) {
+    mtl_file <- list.files(s, pattern = "MTL.*xml$",
+                           recursive = TRUE, full.names = TRUE, )[1]
+    if (! file.exists(mtl_file)) {
+      message("No metadata file in landsat dir: ", s, "Skipping...")
+      return(NULL)
+    }
+    mtl <- xml2::read_xml(mtl_file)
+    # Values for gain and offset are read from the XML metadata
+    # https://www.usgs.gov/faqs/how-do-i-use-a-scale-factor-landsat-level-2-science-products
+    gain <- xml2::xml_text(
+      xml2::xml_find_first(mtl, ".//REFLECTANCE_MULT_BAND_1"))
+    offset <- xml2::xml_text(
+      xml2::xml_find_first(mtl, ".//REFLECTANCE_ADD_BAND_1"))
+    gain <- as.numeric(gain)
+    offset <- as.numeric(offset)
+
+    # Read in tifs
+    if (grepl("LC08", s) | grepl("LC09", s)) {
+      band_ids <- band_L89
+    }
+    if (grepl("LE07", s) | grepl("LT05", s) | grepl("LT04", s)) {
+      band_ids <- band_L457
+    }
+    img_list <- lapply(band_ids, function(b){
+      # img_path - full names in only one landsat folder
+      # filter only sr bands
+      img_path <- dir(s)[grepl(pattern = "*_SR_B[0-9]*.TIF$", x = dir(s))]
+      img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
+      img_path <- file.path(s, img_path)
+      # Use the `win` parameter of `terra::rast` to crop Landsat tile to aoi
+      rst <- terra::rast(img_path, win = terra::ext(aoi))
+      return(rst)
+    })
+
+    img_stk <- terra::rast(img_list)
+    # All bands use the same gain, offset
+    img_stk <- img_stk*gain + offset
+
+    # Save to BOA dir
+    # Create filename
+    # Prepare file name parts for saving rasters
+    # the name is formed from folder
+    s_parts <- unlist(strsplit(basename(s), "_"))
+    BOA_file <- paste(s_parts[1], s_parts[2], s_parts[3],
+                      s_parts[4], s_parts[6], aoi_name,
+                      "BOA.tif", sep = "_")
+    terra::writeRaster(img_stk,
+                       file.path(BOA_dir, BOA_file), overwrite = TRUE)
+    return(img_stk)
+  }) # end of cropped_rast_list
+  return(cropped_list)
+}

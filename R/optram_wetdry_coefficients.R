@@ -241,7 +241,7 @@ plot_vi_str_cloud <- function(
           polynomial = plot_cloud_polynomial(pl_base, output_dir, aoi_name))
 
   if (edges_points) {
-    edges_pts <- read.csv(file.path(output_dir, "trapezoid_edges.csv"))
+    edges_pts <- utils::read.csv(file.path(output_dir, "trapezoid_edges.csv"))
     pl_edges <- geom_point(aes(x=VI, y=STR_wet),
                       color = "black", size=2, shape=2,
                       data = edges_pts) +
