@@ -38,7 +38,10 @@ Suggests:
     sen2r (> 1.5.0),
     testthat (>= 3.0.0),
     tmap, 
-    xml2
+    xml2,
+    openeo,
+    CDSE,
+    jsonlite
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Spelling: en-US

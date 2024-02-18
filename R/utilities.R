@@ -236,3 +236,66 @@ aoi_to_name <- function(aoi_file) {
 
     return(aoi_name)
 }
+
+#' @title Store CDSE Client Credentials
+#' @description Store CDSE clientid and secret into a file
+#' The file location is system specific.
+#' Users who chose to save CDSE credentials can use this function
+#' (and then the `retrieve_cdse_credentials()` afterwards)
+#' The clientid and secret are obtained from:
+#'
+#' @param clientid, string, user's OAuth client id
+#' @param secret, string, user's OAuth secret
+#' @return NULL
+#' @export
+
+store_cdse_credentials <- function (clientid = NULL,
+                                    secret = NULL) {
+  switch(Sys.info()['sysname'],
+         "Windows" = {creds_path =
+           file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
+         "Linux" = {creds_path =
+           file.path(Sys.getenv("HOME"), ".CDSE")},
+         "macOS" = {creds_path =
+           file.path(Sys.getenv("HOME"), "Library", "Preferences", "CDSE")},
+         {message("Platform is not identified. No credentials are saved")}
+  )
+  if (!dir.exists(creds_path)) dir.create(creds_path)
+  creds_file <- file.path(creds_path, "cdse_credentials.json")
+  creds <- data.frame("clientid" = clientid, "secret" = secret)
+  jsonlite::write_json(creds, creds_file)
+  message("Credentials are saved to:", creds_file)
+}
+
+#' @title Retrieve CDSE Client Credentials from File
+#' @description Retrieve CDSE clientid and secret from file
+#' The file location is system specific. It would have been setup
+#' in advance using the `store_cdse_credentials()` function
+#' @return A data frame containing the retrieved CDSE clientid and secret, 
+#' or NULL if credentials are not available.
+#' @export
+
+retrieve_cdse_credentials <- function() {
+  switch(Sys.info()['sysname'],
+         "Windows" = {creds_path =
+           file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
+         "Linux" = {creds_path =
+           file.path(Sys.getenv("HOME"), ".CDSE")},
+         "macOS" = {creds_path =
+           file.path(Sys.getenv("HOME"), "Library", "Preferences", ".CDSE")},
+         {message("Platform is not identified. No credentials are saved")}
+  )
+  if (!dir.exists(creds_path)) {
+    warning("No credentials directory:", creds_path,
+            " found. Credentials not available")
+    return(NULL)
+  }
+  creds_file <- file.path(creds_path, "cdse_credentials.json")
+  if (!file.exists(creds_file)) {
+    warning("No credentials file:", creds_file,
+            " found. Credentials not available.")
+    return(NULL)
+  }
+  creds <- jsonlite::read_json(creds_file)
+  return(creds)
+}
