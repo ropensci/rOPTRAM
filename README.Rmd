@@ -1,110 +1,6 @@
 ---
 output: github_document
-references:
-- type: article-journal
-  id: sadeghi_optical_2017
-  author:
-  - family: Sadeghi
-    given:  Morteza
-  - family: Babaeian
-    given: Ebrahim
-  - family: Tuller
-    given: Markus
-  - family: Jones
-    given: Scott B.
-  issued:
-    date-parts:
-    - 2017
-  title: 'The optical trapezoid model: A novel approach to remote sensing of soil moisture applied to Sentinel-2 and Landsat-8 observations'
-  title-short: The optical trapezoid model
-  container-title: Remote Sensing of Environment
-  volume: 198
-  pages: 52-58
-  DOI: 10.1016/j.rse.2017.05.041
-  language: en-GB
-  
-- type: article-journal
-  id: burdun_satellite_2020
-  author:
-    - family: Burdun
-      given: Iuliia
-    - family: Bechtold
-      given: Michel
-    - family: Sagris
-      given: Valentina
-    - family: Lohila
-      given: Annalea
-    - family: Humphreys
-      given: Elyn
-    - family: Desai
-      given: Ankur R.
-    - family: Nilsson
-      given: Mats B.
-    - family: De Lannoy
-      given: Gabrielle
-    - family: Mander
-      given: Ülo
-  issued:
-    date-parts:
-      - 2020
-  title: 'Satellite Determination of Peatland Water Table Temporal Dynamics by Localizing Representative Pixels of A SWIR Based Moisture Index'
-  container-title: Remote Sensing
-  volume: 12
-  DOI: 10.3390/rs12182936
-  language: en
-
-- type: article-journal
-  id: ambrosone_retrieving_2020
-  author: 
-    - family: Ambrosone
-      given: Mariapaola
-    - family: Matese
-      given: Alessandro
-    - family: Di Gennaro
-      given: Salvatore Filippo
-    - family: Gioli
-      given: Beniamino
-    - family: Tudoroiu
-      given: Marin
-    - family: Genesio
-      given: Lorenzo
-    - family: Miglietta
-      given: Franco
-    - family: Baronti
-      given: Silvia
-    - family: Maienza
-      given: Anita
-    - family: Ungaro
-      given: Fabrizio
-    - family: Toscano
-      given: Piero  
-  issued:
-    date-parts:
-      - 2020
-  title: 'Retrieving soil moisture in rainfed and irrigated fields using Sentinel-2 observations and a modified OPTRAM approach'
-  container-title: International Journal of Applied Earth Observation and Geoinformation
-  volume: 89
-  DOI: 10.1016/j.jag.2020.102113
-  language: en
-  
-- type: article-journal
-  id: ranghetti_sen2r_2020
-  author: 
-    - family: Ranghetti
-      given: Luigi
-    - family: Boschetti
-      given: Mirco
-    - family: Nutini
-      given: Francesco
-    - family: Busetto
-      given: Lorenzo
-  issued:
-    date-parts:
-      - 2020
-  title: 'Satellite Determination of Peatland Water Table Temporal Dynamics by Localizing Representative Pixels of A SWIR Based Moisture Index'
-  container-title: Computers & Geosciences
-  volume: 139
-  DOI: 10.1016/j.cageo.2020.104473
+bibliography: inst/references.bib
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -151,17 +47,21 @@ remotes::install_gitlab("rsl-bidr/roptram")
 
 #### Prerequisites
 
-This package uses the R package \CRANpkg{sen2r} for acquiring Sentinel-2 imagery.
-To install that package you will need some system dependencies. 
-On Debian and derivatives please install in advance:
- 
-  - jq libv8-dev libjq-dev
-  - libprotobuf-dev protobuf-compiler
+Only a small number of commonly used R packages are required to use {rOPTRAM}. This includes:
+ - base packages {tools} and {utils}
+ - spatial packages {sf} and {terra}
+ - data.frame and plotting {dplyr}, {ggplot2}
 
-That R package uses the Google Cloud infrastructure to download Sentinel-2 images. Install the Google Cloud CLI to allow acquiring images directly from Google.
-For installation instructions see:
-https://cloud.google.com/sdk/docs/install
+Users can download Sentinel-2 tiles from the Copernicus manually, and run thru the steps to produce the OPTRAM trapezoid, and predicted soil moisture maps. However, this approach is not optimal. By installing a few additional packages, the workflow can be initiated by a single function call to download, clip to area of interest, and produce the trapezoid coefficients. The all-inclusive approach is highly recommended since processing of the Sentinel-2 data is performed "in the cloud" and only the final products are downloaded, **greatly** reducing the download file sizes. 
+
+To run the all-inclusive approach, the first step of acquiring Sentinel-2 imagery is handled by the R package \CRANpkg{CDSE}. (see @karaman_cdse_2023). The {jsonlite} package is also necessary.
+
+That R package interfaces with the Copernicus DataSpace Ecosystem in one of two ways:
+ - Thru the [Scihub API](https://shapps.dataspace.copernicus.eu/dashboard/#/).
+ - Thru the [openEO platform](https://openeo.dataspace.copernicus.eu/) 
  
+Both methods require [registering](https://dataspace.copernicus.eu/) on the Copernicus DataSpace 
+
 ## Available functions
 
 ### Key functions
@@ -170,7 +70,7 @@ https://cloud.google.com/sdk/docs/install
 A main wrapper function to run the whole OPTRAM procedure. 
 This function performs the following steps:
 
-  - Acquire Sentinel 2 images covering the requested date range, and clipped to the input area of interest. This step relies on the sen2r package
+  - Acquire Sentinel 2 images covering the requested date range, and clipped to the input area of interest. This step relies on the {CDSE} package
   - Create the set of SWIR Transformed Reflectance (STR) rasters;
   - Prepare a dataframe of NDVI and STR values for all pixels from all images;
   - Calculate the trapezoid wet and dry regression lines, and save coefficients to a CSV file.
@@ -179,6 +79,8 @@ Returns: the set of four coefficients: wet slope, wet intercept, dry slope, and 
 
 #### optram_acquire_s2()
 Acquire Sentinel 2 images covering the requested date range, and clipped to the input area of interest.
+
+Among the function parameters, the `method` can be specified as either "scihub" or "openeo", thus choosing one of the two available acqquistion methods.
 
 Returns: a list of downloaded Sentinel 2 images
 
@@ -195,7 +97,9 @@ Returns: the full data.frame
 #### optram_wetdry_coefficients()
 Calculates the wet-dry trapezoid from the data.frame of NDVI and STR values, and obtains regression slope and intercept for both lines
 
-Returns: the set of four coefficients.
+Three possible fitting methods are offered in this function, thru the "trapezoid_method" parameter. The user can choose to match the upper (wet) and lower (dry) bounds of the trapezoid either as a linear regression line, an exponential curve, or a second order polynomial function.
+
+Returns: the set of four (or six, in the case of polynomial curve) coefficients.
 
 
 #### optram_soil_moisture()
@@ -210,10 +114,8 @@ Returns: the set of four coefficients.
 
 
 #### optram_safe()
-In case Sentinel images have been downloaded in advance, this function allows to prepare the STR and NDVI rasters, then calculate the trapezoid regression coefficients. It requires as input a directory containing the Sentinel 2 images in the original SAFE file format.
+In case Sentinel images have been downloaded in advance, this function prepares the STR and NDVI rasters, then calculate the trapezoid regression coefficients. It requires an input directory containing the Sentinel 2 images in the original SAFE file format.
 
-#### optram_validate()
-Test the OPTRAM model predicted soil moisture against a table of in situ measurements. Calculates the coefficient of determination between in situ soil moisture measurements and the OPTRAM results. Optionally, a scatterplot is prepared.
 
 ## Example
 
@@ -238,13 +140,11 @@ coeffs
 
 ## Note
 
-In order to download Sentinel 2 images, the `sen2r` package is used:
+In order to download Sentinel 2 images, the {CDSE} package is used: (@karaman_cdse_2023)
 
-@ranghetti_sen2r_2020
+That package should be installed in advance in order to run the `optram()` wrapper function.
 
-That package must be installed in advance in order to run the `optram()` wrapper function.
-
-If, on the other hand, Sentinel 2 imagery has been downloaded in advance, then `sen2r` is not necessary.
+If, on the other hand, Sentinel 2 imagery has been downloaded in advance, then {CDSE} is not strictly necessary.
 Instead, the following workflow can be used:
 
   - call `optram_safe()` to prepare NDVI and STR rasters

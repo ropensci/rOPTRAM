@@ -2,8 +2,7 @@
 % Please edit documentation in R/acquire_utilities.R
 \name{acquire_openeo}
 \alias{acquire_openeo}
-\title{Utility Function to Acquire Sentinel-2 Imagery using openeo and the
-dataspace of Copernicus}
+\title{Utility Function to Acquire Sentinel-2 Imagery using openEO}
 \usage{
 acquire_openeo(
   aoi_file,
@@ -12,7 +11,6 @@ acquire_openeo(
   max_cloud = 10,
   timeperiod = "full",
   output_dir = tempdir(),
-  remove_safe = "yes",
   veg_index = "NDVI",
   scale_factor = 10000
 )
@@ -36,10 +34,6 @@ or "seasonal" for only months specified, but over the full date range
 
 \item{output_dir, }{string, path to save downloaded, and processed imagery}
 
-\item{remove_safe, }{string, "yes" or "no":
-whether to delete downloaded SAFE directories
-after processing, default "yes" - - currently not in use}
-
 \item{veg_index, }{string, which index to prepare. Default "NDVI".
 Can be "NDVI", "SAVI", "MSAVI", etc}
 
@@ -47,22 +41,22 @@ Can be "NDVI", "SAVI", "MSAVI", etc}
 , to scale Sentinel-2 15 bit DN to range (0, 1)}
 }
 \value{
-void - extracting the images inside the function
+list of BOA files
 }
 \description{
-This non-exported function uses the \code{openeo} package
-to send a request to Copernicus dataspace, and prepare the products.
+This non-exported function uses the {openeo} package
+to send a request to Copernicus DataSpace, and prepare the products.
 Called by optram_acquire_s2
 }
 \note{
-This function utilizes the \code{openeo} library.
+This function utilizes the \code{openeo} package.
 Instructions for the login process:
 First of all, to authenticate your account on the backend of the Copernicus
 Data Space Ecosystem, it is necessary for you to complete the registration
 process. Follow these instructions for registration:
 https://documentation.dataspace.copernicus.eu/Registration.html
-After you have registered and installed the openeo package, you can run the
-'acquire_openeo' function.
+After you have registered and installed the \code{openeo} package, you can run the
+\code{acquire_openeo} function.
 During the process of connecting to the server and logging in, you need to
 follow these steps:
 A. When the message "Press \if{html}{\out{<enter>}} to proceed:" appears in the console,
