@@ -2,6 +2,7 @@
 
 export(calculate_str)
 export(calculate_vi)
+export(crop_landsat_list)
 export(optram)
 export(optram_acquire_s2)
 export(optram_calculate_soil_moisture)

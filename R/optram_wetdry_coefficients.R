@@ -182,7 +182,7 @@ plot_vi_str_cloud <- function(
   # Avoid "no visible binding for global variable" NOTE
   i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
   x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- VI <- STR <- NULL
-  STR_dry <- STR_wet <- NULL
+  STR_dry <- STR_wet <- edges_pts <- NULL
 
   # Pre-flight test
   if (ncol(coeffs) < 4) {
@@ -241,15 +241,15 @@ plot_vi_str_cloud <- function(
           polynomial = plot_cloud_polynomial(pl_base, output_dir, aoi_name))
 
   if (edges_points) {
-    pl <- pl +
-      geom_point(aes(x=VI, y=STR_wet),
+    edges_pts <- utils::read.csv(file.path(output_dir, "trapezoid_edges.csv"))
+    pl_edges <- geom_point(aes(x=VI, y=STR_wet),
                       color = "black", size=2, shape=2,
                       data = edges_pts) +
-      geom_point(aes(x=VI, y=STR_dry),
+                geom_point(aes(x=VI, y=STR_dry),
                       color = "black", size=2, shape=6,
                       data = edges_pts)
-      }
-
+    pl <- pl + pl_edges
+  }
   pl
   plot_path <- file.path(output_dir, paste0("trapezoid_", aoi_name, ".png"))
   ggsave(plot_path, width = 10, height = 7)
