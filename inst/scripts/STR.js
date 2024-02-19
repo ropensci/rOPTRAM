@@ -16,9 +16,9 @@ function setup() {
 function evaluatePixel(sample) {
     var value = sample.B11;
     if (value != 0) {
-      let str = (1 - value)**2 / (2*value);
+      str = (1 - value)**2 / (2*value);
     } else {
-      let str = 0
+      str = 0
     };
     return [ str ];
 }
