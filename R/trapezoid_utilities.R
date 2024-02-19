@@ -69,8 +69,8 @@ exponential_coefficients <- function(df, output_dir) {
 
   # The dry edge is exponential only above d0 = 0.2
   STR_lin <- i_dry + s_dry * df$VI[df$VI < d0]
-  i_d0 <- i_dry + s_dry * d0
-  STR_exp <- i_d0 * exp(s_dry * df$VI[df$VI >= d0])
+  #i_d0 <- i_dry + s_dry * d0
+  STR_exp <- i_dry * exp(s_dry * df$VI[df$VI >= d0])
   df$STR_exp_dry <- c(STR_lin, STR_exp)
 
   utils::write.csv(df,
@@ -367,9 +367,9 @@ plot_cloud_exponential <- function(pl_base, plot_df, coeffs, aoi_name) {
     return <- do.call(rbind, res_list)
   }
   pl <- pl_base +
-    geom_function(color = "#10607e", linewidth = 1.5, linetype = "dotted",
+    geom_function(color = "#10607e", linewidth = 1.5,
                   fun = str_wet) +
-    geom_function(color = "#8b412a62", linewidth = 1.5, linetype = "dotted",
+    geom_function(color = "#8b412a62", linewidth = 1.5,
                   fun = str_dry) +
     ggtitle(paste("Trapezoid Plot - ", aoi_name),
             subtitle = "Exponential fit")

@@ -251,13 +251,12 @@ plot_vi_str_cloud <- function(
 
   if (edges_points) {
     edges_pts <- utils::read.csv(file.path(output_dir, "trapezoid_edges.csv"))
-    pl_edges <- geom_point(aes(x=VI, y=STR_wet),
+    pl <- pl + geom_point(aes(x=VI, y=STR_wet),
                       color = "black", size=2, shape=2,
                       data = edges_pts) +
-                geom_point(aes(x=VI, y=STR_dry),
+               geom_point(aes(x=VI, y=STR_dry),
                       color = "black", size=2, shape=6,
                       data = edges_pts)
-    pl <- pl + pl_edges
   }
   pl
   plot_path <- file.path(output_dir,

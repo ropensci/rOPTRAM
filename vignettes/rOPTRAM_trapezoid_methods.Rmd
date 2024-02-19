@@ -61,9 +61,12 @@ meth <- "linear"
 coeffs <- optram_wetdry_coefficients(full_df,
                                      aoi_file = aoi_file,
                                      output_dir = output_dir,
-                                     trapezoid_method = meth)
+                                     trapezoid_method = meth,
+                                     save_plot = FALSE)
 plot_vi_str_cloud(full_df, coeffs, ttl,
-                  output_dir = output_dir, trapezoid_method = meth)
+                  output_dir = output_dir,
+                  trapezoid_method = meth,
+                  edges_points = TRUE)
 knitr::include_graphics("trapezoid_migda_linear.png")
 ```
 
@@ -75,10 +78,12 @@ meth <- "exponential"
 coeffs <- optram_wetdry_coefficients(full_df,
                                      aoi_file = aoi_file,
                                      output_dir = output_dir,
-                                     trapezoid_method = meth)
+                                     trapezoid_method = meth,
+                                     save_plot = FALSE)
 plot_vi_str_cloud(full_df, coeffs, ttl,
                   output_dir = output_dir,
-                  trapezoid_method = meth)
+                  trapezoid_method = meth,
+                  edges_points = TRUE)
 #knitr::include_graphics("trapezoid_migda_exp.png")
 ```
 
@@ -90,9 +95,11 @@ meth <- "polynomial"
 coeffs <- optram_wetdry_coefficients(full_df,
                                      aoi_file = aoi_file,
                                      output_dir = output_dir,
-                                     trapezoid_method = meth)
+                                     trapezoid_method = meth,
+                                     save_plot = FALSE)
 plot_vi_str_cloud(full_df, coeffs, ttl,
                   output_dir = output_dir,
-                  trapezoid_method = meth)
+                  trapezoid_method = meth,
+                  edges_points = TRUE)
 knitr::include_graphics("trapezoid_migda_polynomial.png")
 ```
