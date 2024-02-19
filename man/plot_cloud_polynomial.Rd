@@ -2,7 +2,7 @@
 % Please edit documentation in R/trapezoid_utilities.R
 \name{plot_cloud_polynomial}
 \alias{plot_cloud_polynomial}
-\title{Scatterplot, Exponential Fitted Curve}
+\title{Scatterplot, Polynomial Fitted Curve}
 \usage{
 plot_cloud_polynomial(pl_base, output_dir, aoi_name)
 }
@@ -17,7 +17,7 @@ plot_cloud_polynomial(pl_base, output_dir, aoi_name)
 ggplot object
 }
 \description{
-Plot of VI/STR points, with exponential fitted curve
+Plot of VI/STR points, with polynomial fitted curve
 }
 \note{
 This function is called from \code{plot_vi_str_cloud()}
