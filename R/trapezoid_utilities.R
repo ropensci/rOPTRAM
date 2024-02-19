@@ -52,8 +52,8 @@ linear_coefficients <- function(df, output_dir) {
 exponential_coefficients <- function(df, output_dir) {
   # Uses the same linear regression line,
   # but adds exponential curve to dry edge
-  # above the VI value d0 (default 0.4)
-  d0 <- 0.4
+  # above the VI value d0 (default 0.2)
+  d0 <- 0.2
   wet_fit <- stats::lm(STR_wet ~ VI, data = df)
   dry_fit <- stats::lm(STR_dry ~ VI, data = df)
   i_wet <- wet_fit$coefficients[[1]]
@@ -65,11 +65,14 @@ exponential_coefficients <- function(df, output_dir) {
 
   # Update the data.frame of trapezoid edges and save
   # The wet edge stays linear
-  # The dry edge is exponential only above d0 = 0.4
   df$STR_exp_wet <- i_wet + s_wet * df$VI
-  df[df$VI < d0]$STR_exp_dry <- i_dry + s_dry * df$VI
+
+  # The dry edge is exponential only above d0 = 0.2
+  STR_lin <- i_dry + s_dry * df$VI[df$VI < d0]
   i_d0 <- i_dry + s_dry * d0
-  df[df$VI >= d0]$STR_exp_dry <- i_d0 * exp(s_dry * df$VI)
+  STR_exp <- i_d0 * exp(s_dry * df$VI[df$VI >= d0])
+  df$STR_exp_dry <- c(STR_lin, STR_exp)
+
   utils::write.csv(df,
                    file.path(output_dir, "trapezoid_edges_exp.csv"),
                    row.names = FALSE)
@@ -201,7 +204,7 @@ exponential_soil_moisture <- function(coeffs, VI, STR) {
     message("Incorrect coefficients file. Exiting...")
     return(NULL)
   }
-  d0 <- 0.4
+  d0 <- 0.2
   i_dry <- coeffs$intercept_dry
   s_dry <- coeffs$slope_dry
   i_wet <- coeffs$intercept_wet
@@ -353,7 +356,7 @@ plot_cloud_exponential <- function(pl_base, plot_df, coeffs, aoi_name) {
   }
   # Add exponential function lines to dry graph
   str_dry  <- function(VI = plot_df$VI) {
-    d0 <- 0.4
+    d0 <- 0.2
     res_list <- lapply(VI, function(x) {
       if (x < d0) {
         return(i_dry + s_dry * x)
