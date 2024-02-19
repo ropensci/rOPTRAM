@@ -51,7 +51,9 @@ linear_coefficients <- function(df, output_dir) {
 #' }
 exponential_coefficients <- function(df, output_dir) {
   # Uses the same linear regression line,
-  # but adds exponential curve
+  # but adds exponential curve to dry edge
+  # above the VI value d0 (default 0.4)
+  d0 <- 0.4
   wet_fit <- stats::lm(STR_wet ~ VI, data = df)
   dry_fit <- stats::lm(STR_dry ~ VI, data = df)
   i_wet <- wet_fit$coefficients[[1]]
@@ -62,8 +64,12 @@ exponential_coefficients <- function(df, output_dir) {
                        "intercept_wet"=i_wet, "slope_wet"=s_wet)
 
   # Update the data.frame of trapezoid edges and save
-  df$STR_poly_wet <- i_wet * exp(s_wet * df$VI)
-  df$STR_poly_dry <- i_dry * exp(s_dry * df$VI)
+  # The wet edge stays linear
+  # The dry edge is exponential only above d0 = 0.4
+  df$STR_exp_wet <- i_wet + s_wet * df$VI
+  df[df$VI < d0]$STR_exp_dry <- i_dry + s_dry * df$VI
+  i_d0 <- i_dry + s_dry * d0
+  df[df$VI >= d0]$STR_exp_dry <- i_d0 * exp(s_dry * df$VI)
   utils::write.csv(df,
                    file.path(output_dir, "trapezoid_edges_exp.csv"),
                    row.names = FALSE)
@@ -185,18 +191,30 @@ exponential_soil_moisture <- function(coeffs, VI, STR) {
   #  International Journal of Applied Earth Observation and Geoinformation 89 (July):
   #   102113. https://doi.org/10.1016/j.jag.2020.102113.
   #
-  # W = (i_dry * exp(s_dry * VI) - STR) / (i_dry * exp(s_dry*VI) - i_wet * exp(s_wet * VI))
+  # Soil moisture calculated separately for VI values below and above d0
+  # Below uses linear fitted equation, above uses exponential
+  # W_lo = (i_dry + s_dry*VI_lo - STR) /
+  #        (i_dry - i_wet +  (s_dry-s_wet)*VI_lo)
+  # W_hi = (i_dry * exp(s_dry * VI_hi) - STR) /
+  #        (i_dry * exp(s_dry*VI_hi) - i_wet * exp(s_wet * VI_hi))
   if (ncol(coeffs) < 4) {
     message("Incorrect coefficients file. Exiting...")
     return(NULL)
   }
+  d0 <- 0.4
   i_dry <- coeffs$intercept_dry
   s_dry <- coeffs$slope_dry
   i_wet <- coeffs$intercept_wet
   s_wet <- coeffs$slope_wet
-  W <- (i_dry * exp(s_dry * VI) - STR) /
-    (i_dry * exp(s_dry * VI ) - i_wet * exp(s_wet * VI))
-
+  # Mask VI values below and above the d0 value
+  VI_lo <- terra::clamp(VI, upper = d0, values = FALSE)
+  VI_hi <- terra::clamp(VI, lower = d0, values = FALSE)
+  #
+  W_hi <- (i_dry * exp(s_dry * VI_hi) - STR) /
+          (i_dry * exp(s_dry * VI_hi ) - i_wet * exp(s_wet * VI_hi))
+  W_lo <- (i_dry + s_dry * VI_lo - STR) /
+          (i_dry - i_wet +(s_dry - s_wet)* VI_lo)
+  W <- terra::merge(W_lo, W_hi)
   return(W)
 }
 
@@ -329,12 +347,19 @@ plot_cloud_exponential <- function(pl_base, plot_df, coeffs, aoi_name) {
   i_wet <- round(coeffs$intercept_wet, 3)
   s_wet <- round(coeffs$slope_wet, 3)
 
-  # Add exponential function lines to the graphs
+  # Wet edge is still linear
   str_wet  <- function(VI = plot_df$VI) {
-    return(i_wet * exp(s_wet * VI))
+    return(i_wet + s_wet * VI)
   }
+  # Add exponential function lines to dry graph
   str_dry  <- function(VI = plot_df$VI) {
-    return(i_dry * exp(s_dry * VI))
+    d0 <- 0.4
+    if (VI < d0) {
+      res_lo <- i_dry + s_dry * VI
+    } else {
+      res_hi <- i_dry * exp(s_dry * VI)
+    }
+    return <- rbind(res_lo, res_hi)
   }
   pl <- pl_base +
     geom_function(color = "#10607e", linewidth = 1.5, linetype = "dotted",
@@ -348,8 +373,8 @@ plot_cloud_exponential <- function(pl_base, plot_df, coeffs, aoi_name) {
 }
 
 
-#' @title Scatterplot, Exponential Fitted Curve
-#' @description Plot of VI/STR points, with exponential fitted curve
+#' @title Scatterplot, Polynomial Fitted Curve
+#' @description Plot of VI/STR points, with polynomial fitted curve
 #' @param pl_base, ggplot object, additional lines are added to base plot
 #' @param output_dir, string, path to previously saved trapezoid_edges_poly.csv
 #' @param aoi_name, string, added to plot title

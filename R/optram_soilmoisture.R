@@ -48,17 +48,6 @@ optram_calculate_soil_moisture <- function(
   coeffs_file,
   output_dir = tempdir(),
   trapezoid_method = c("linear", "exponential", "polynomial")) {
-  # based on STR and two STR_dry and STR_wet bands
-  # W = (STR - STR_dry) / (STR_wet - STR_dry)
-  # W = (i_dry + s_dry * VI - STR) / (i_dry - i_wet +  (s_dry - s_wet) * VI)
-  #
-  # Parameters:
-  #   coeffs: array of float, dry and wet coefficients
-  #   STR_stack: rast of STR rasters
-  #   VI: rast, the NDVI or SAVI raster
-  #   img_date: string, which date was used
-  # Returns:
-  #   W: rast, the moisture raster
 
   # Avoid "no visible binding for global variable" NOTE
   VI_file <-  VI <- STR_file <- STR <- coeffs <- NULL
@@ -101,7 +90,13 @@ optram_calculate_soil_moisture <- function(
   STR <- terra::rast(STR_file[1])
   coeffs <- utils::read.csv(coeffs_file)
 
-  trapezoid_method <- match.arg(trapezoid_method)
+  tryCatch(
+    expr = {trapezoid_method <- match.arg(trapezoid_method)},
+    error = function(e) {
+             message("Unrecognized trapezoid_method:",
+                     trapezoid_method)
+             return(NULL)
+           })
   W <-  switch(trapezoid_method,
                linear = linear_soil_moisture(coeffs, VI, STR),
                exponential = exponential_soil_moisture(coeffs, VI, STR),

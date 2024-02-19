@@ -14,7 +14,7 @@ optram(
   timeperiod = "full",
   S2_output_dir = tempdir(),
   data_output_dir = tempdir(),
-  remote = "gcloud",
+  remote = "scihub",
   step = 0.01,
   trapezoid_method = c("linear", "exponential", "polynomial")
 )
@@ -32,9 +32,6 @@ Formatted as "YYYY-MM-DD"}
 
 \item{max_cloud, }{integer, maximum percent cloud cover, Default 15.}
 
-\item{remove_safe, }{string, "yes" or "no", whether to delete downloaded
-SAFE directories after processing. Default "yes"}
-
 \item{timeperiod, }{string, either "full" for the whole date range,
 or "seasonal" for only months specified, but over the full date range.}
 
@@ -45,7 +42,7 @@ and the derived products, defaults to tempdir()}
 and STR-VI data.frame, default is tempdir()}
 
 \item{remote, }{string, which Copernicus API to use,
-one of "gcloud", "scihub", or "openeo"}
+one of "scihub", or "openeo". Default is "scihub"}
 
 \item{step, }{float, width of intervals along VI axis
 default 0.01}

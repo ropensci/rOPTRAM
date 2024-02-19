@@ -6,10 +6,16 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{tmap}
-bibliography: "bibliography.bib"
+bibliography: "references.bib"
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  message = FALSE,
+  comment = "#>"
+)
+```
 
 ## Introduction
 
@@ -23,44 +29,29 @@ A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression l
 #### Prerequisites
 
 Only a small number of commonly used R packages are required to use {rOPTRAM}. This includes:
+
  - base packages {tools} and {utils}
  - spatial packages {sf} and {terra}
  - data.frame and plotting {dplyr}, {ggplot2}
 
-Also, to allow {rOPTRAM} to download Sentinel-2 images, clip to a study area, and prepare the necessary vegetation index and STR products, the R package \CRANpkg{CDSE} as well as {jsonlite} are required. (see @karaman_cdse_2023).
+Also, to allow {rOPTRAM} to download Sentinel-2 images, clip to a study area, and prepare the necessary vegetation index and STR products, the R package \CRANpkg{CDSE} (see @karaman_cdse_2023) as well as {jsonlite} are required.
 
-#### Workflows
+## Workflows
 
 Users can download Sentinel-2 tiles from the Copernicus manually, and run thru the steps one by one to produce the OPTRAM trapezoid, and predicted soil moisture maps. However, this approach is not optimal. The complete workflow can be initiated with a single function call to download, clip to area of interest, and produce the trapezoid coefficients. This all-inclusive approach is highly recommended since processing of the Sentinel-2 data is performed "in the cloud" and only the final products are downloaded, **greatly** reducing the download file sizes.
 
 That recommended R package {CDSE} interfaces with the Copernicus DataSpace Ecosystem in one of two ways:
+
  - Thru the [Scihub API](https://shapps.dataspace.copernicus.eu/dashboard/#/).
  - Thru the [openEO platform](https://openeo.dataspace.copernicus.eu/)
 
 Both methods require [registering](https://dataspace.copernicus.eu/) on the Copernicus DataSpace
 
 
-
-```r
+```{r setup, results='hide'}
 remotes::install_gitlab("rsl-bidr/roptram")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
-#>  [1] "acquire_openeo"                 "acquire_scihub"                
-#>  [3] "aoi_to_name"                    "calculate_str"                 
-#>  [5] "calculate_vi"                   "check_aoi"                     
-#>  [7] "check_date_string"              "check_openeo"                  
-#>  [9] "check_scihub"                   "crop_landsat_list"             
-#> [11] "exponential_coefficients"       "exponential_soil_moisture"     
-#> [13] "linear_coefficients"            "linear_soil_moisture"          
-#> [15] "optram"                         "optram_acquire_s2"             
-#> [17] "optram_calculate_soil_moisture" "optram_calculate_str"          
-#> [19] "optram_landsat"                 "optram_ndvi_str"               
-#> [21] "optram_prepare_other_vi_str"    "optram_safe"                   
-#> [23] "optram_wetdry_coefficients"     "plot_cloud_exponential"        
-#> [25] "plot_cloud_linear"              "plot_cloud_polynomial"         
-#> [27] "plot_vi_str_cloud"              "polynomial_coefficients"       
-#> [29] "polynomial_soil_moisture"       "retrieve_cdse_credentials"     
-#> [31] "store_cdse_credentials"
 # The {CDSE} and {jsonlite} packages are required for downloading Sentinel imagery from Copernicus DataSpace.
 if (!require("CDSE")) install.packages("sen2r", dependencies = TRUE)
 if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
@@ -78,11 +69,10 @@ Registration on Copernicus DataSpace was done in advance, and the OAuth credenti
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 
-
-```r
+```{r wrapper, warning=FALSE, message=FALSE}
 from_date <- "2021-11-01"
 to_date <- "2023-03-31"
-output_dir <- file.path(tempdir(), "seasonal")
+output_dir <- file.path(tempdir())
 aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
@@ -90,43 +80,18 @@ coeffs <- optram(aoi_file,
                  S2_output_dir = output_dir,
                  timeperiod = "seasonal",
                  data_output_dir = output_dir)
-#> Reading layer `migda' from data source 
-#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/migda.gpkg' using driver `GPKG'
-#> Simple feature collection with 1 feature and 3 fields
-#> Geometry type: POLYGON
-#> Dimension:     XYZ
-#> Bounding box:  xmin: 34.58366 ymin: 31.35897 xmax: 34.58903 ymax: 31.3615
-#> z_range:       zmin: 0 zmax: 0
-#> Geodetic CRS:  WGS 84
-#> Warning in dir.create(result_folder_boa): cannot create dir '/tmp/Rtmp6QNz08/seasonal/BOA', reason
-#> 'No such file or directory'
-#> Warning in dir.create(result_folder_vi): cannot create dir '/tmp/Rtmp6QNz08/seasonal/SAVI', reason
-#> 'No such file or directory'
-#> Warning in dir.create(result_folder_str): cannot create dir '/tmp/Rtmp6QNz08/seasonal/STR', reason
-#> 'No such file or directory'
-#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
-#> /tmp/Rtmp6QNz08/file2c27f6b1c9fbf: TIFFReadDirectory:Sum of Photometric type-related color channels
-#> and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
-#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
-#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match
-#> SamplesPerPixel. Defining non-color channels as ExtraSamples.
-#> Warning in x@cpp$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL Message 1:
-#> /tmp/Rtmp6QNz08/file2c27f6b1c9fbf: TIFFReadDirectory:Sum of Photometric type-related color channels
-#> and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
-#> Warning in x@cpp$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL Message 1:
-#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match
-#> SamplesPerPixel. Defining non-color channels as ExtraSamples.
-#> Error: [writeRaster] path does not exist
-knitr::kable(coeffs)
+knitr::kable(coeffs, caption = "Trapezoid coefficients")
 ```
+#### Show trapezoid plot
 
-
-
-| intercept_dry| slope_dry| intercept_wet| slope_wet|
-|-------------:|---------:|-------------:|---------:|
-|     0.1207837|  2.534126|     0.9486303|  4.714888|
-
-
+```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%', warning=FALSE}
+ttl <- "Migda"
+coeffs <- read.csv(file.path(output_dir, "coefficients.csv"))
+df_file <- file.path(output_dir, "VI_STR_data.rds")
+full_df <- readRDS(df_file)
+plot_vi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
+knitr::include_graphics("trapezoid_Migda.png")
+```
 
 ## Step by step
 
@@ -140,44 +105,16 @@ knitr::kable(coeffs)
 This example sets `timeperiod` to "full",
 so all images between from_date and to_date will be used.
 
-
-```r
+```{r stepbystep, warning=FALSE, message=FALSE}
 from_date <- "2022-10-01"
 to_date <- "2023-04-30"
 aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
-output_dir <- file.path(tempdir(), "full")
+output_dir <- file.path(tempdir())
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
                             timeperiod = "full",
                             veg_index ="SAVI")
-#> Reading layer `migda' from data source 
-#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/migda.gpkg' using driver `GPKG'
-#> Simple feature collection with 1 feature and 3 fields
-#> Geometry type: POLYGON
-#> Dimension:     XYZ
-#> Bounding box:  xmin: 34.58366 ymin: 31.35897 xmax: 34.58903 ymax: 31.3615
-#> z_range:       zmin: 0 zmax: 0
-#> Geodetic CRS:  WGS 84
-#> Warning in dir.create(result_folder_boa): cannot create dir '/tmp/Rtmp6QNz08/full/BOA', reason 'No
-#> such file or directory'
-#> Warning in dir.create(result_folder_vi): cannot create dir '/tmp/Rtmp6QNz08/full/SAVI', reason 'No
-#> such file or directory'
-#> Warning in dir.create(result_folder_str): cannot create dir '/tmp/Rtmp6QNz08/full/STR', reason 'No
-#> such file or directory'
-#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
-#> /tmp/Rtmp6QNz08/file2c27fe6aa182: TIFFReadDirectory:Sum of Photometric type-related color channels
-#> and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
-#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
-#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match
-#> SamplesPerPixel. Defining non-color channels as ExtraSamples.
-#> Warning in x@cpp$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL Message 1:
-#> /tmp/Rtmp6QNz08/file2c27fe6aa182: TIFFReadDirectory:Sum of Photometric type-related color channels
-#> and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
-#> Warning in x@cpp$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL Message 1:
-#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match
-#> SamplesPerPixel. Defining non-color channels as ExtraSamples.
-#> Error: [writeRaster] path does not exist
 BOA_dir <- file.path(output_dir, "BOA")
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
@@ -188,40 +125,17 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 coeffs <- optram_wetdry_coefficients(full_df,
                                      aoi_file,
                                      output_dir = output_dir)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], step): 'from' must be a finite number
+knitr::kable(coeffs, caption = "Trapezoid coefficients, full time period")
 ```
 
-#### Show trapezoid plot
 
 
-```r
-ttl <- "Migda"
-coeffs <- read.csv(file.path(output_dir, "coefficients.csv"))
-#> Warning in file(file, "rt"): cannot open file '/tmp/Rtmp6QNz08/full/coefficients.csv': No such file
-#> or directory
-#> Error in file(file, "rt"): cannot open the connection
-df_file <- file.path(output_dir, "VI_STR_data.rds")
-full_df <- readRDS(df_file)
-#> Warning in gzfile(file, "rb"): cannot open compressed file '/tmp/Rtmp6QNz08/full/VI_STR_data.rds',
-#> probable reason 'No such file or directory'
-#> Error in gzfile(file, "rb"): cannot open the connection
-plot_vi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
-#> NULL
-knitr::include_graphics("trapezoid_Migda.png")
-```
+## Soil Moisture Estimate
 
-<div class="figure">
-<img src="trapezoid_Migda.png" alt="Trapezoid scatterplot" width="90%" />
-<p class="caption">Trapezoid scatterplot</p>
-</div>
+#### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid
 
-## Soil Moisture
-
-#### Use trapezoid coefficients, VI, and STR rasters to prepare soil moisture grid
-
-
-```r
-img_date <- "2023-01-25"   # After a rain
+```{r soil-moisture}
+img_date <- "2023-01-10"   # After a rain
 VI_dir <- file.path(output_dir, "SAVI")
 STR_dir <- file.path(output_dir, "STR")
 coeffs_file <- file.path(output_dir, "coefficients.csv")
@@ -230,32 +144,16 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 
 #### Soil moisture plot
 
-
-```r
+```{r sm-plot}
 library(leaflet)
 names(SM) <- "Migda soil moisture"
-#> Error in names(SM) <- "Migda soil moisture": attempt to set an attribute on NULL
 SM[terra::values(SM) < 0] <- 0
-#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'values' for signature '"NULL"'
 
 sm_map <- leaflet("OpenStreetMap") |>
   addTiles() |>
   addRasterImage(SM,
     colors = colorNumeric("RdYlGn",
-      domain = c(-0.1, 1.0), na.color = NA),
+      domain = c(-0.1, 2.0), na.color = NA),
     opacity = 0.9)
-#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : Don't know how to get path data from object of class NULL
-```
-
-
-```
-#> Error in base::saveRDS(sm_map, file.path(output_dir, "sm_map.rds")): object 'sm_map' not found
-```
-
-```{r, eval=TRUE, echo=FALSE} 
-sm_map <- base::readRDS('sm_map.rds') 
-```
-
-```{r, eval=TRUE, echo=FALSE} 
-sm_map 
+sm_map
 ```

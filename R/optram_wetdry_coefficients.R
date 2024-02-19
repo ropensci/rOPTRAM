@@ -126,7 +126,14 @@ optram_wetdry_coefficients <- function(
             file.path(output_dir, "trapezoid_edges.csv"),
             row.names = FALSE)
 
-  trapezoid_method <- match.arg(trapezoid_method)
+  tryCatch(
+    expr = {trapezoid_method <- match.arg(trapezoid_method)},
+    error = function(e) {
+      message("Unrecognized trapezoid_method:",
+              trapezoid_method)
+      return(NULL)
+    })
+
   coeffs <- switch(trapezoid_method,
         linear = linear_coefficients(edges_df, output_dir),
         exponential = exponential_coefficients(edges_df, output_dir),
@@ -233,12 +240,14 @@ plot_vi_str_cloud <- function(
   # Separate plot items for each trapezoid_method
   trapezoid_method <- match.arg(trapezoid_method)
   pl <- switch(trapezoid_method,
-          linear = plot_cloud_linear(pl_base, coeffs, aoi_name),
+          linear = plot_cloud_linear(pl_base,
+                                     coeffs, aoi_name),
           exponential = plot_cloud_exponential(pl_base, plot_df,
                                                coeffs, aoi_name),
           # trapezoid edges are required for polynomial plot
           # plot)cloud_polynomial() will read edges df from output_dir
-          polynomial = plot_cloud_polynomial(pl_base, output_dir, aoi_name))
+          polynomial = plot_cloud_polynomial(pl_base,
+                                             output_dir, aoi_name))
 
   if (edges_points) {
     edges_pts <- utils::read.csv(file.path(output_dir, "trapezoid_edges.csv"))
