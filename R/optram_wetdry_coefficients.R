@@ -260,7 +260,10 @@ plot_vi_str_cloud <- function(
     pl <- pl + pl_edges
   }
   pl
-  plot_path <- file.path(output_dir, paste0("trapezoid_", aoi_name, ".png"))
+  plot_path <- file.path(output_dir,
+                         paste0("trapezoid_",
+                                aoi_name, "_",
+                                trapezoid_method, ".png"))
   ggsave(plot_path, width = 10, height = 7)
   message("Scatterplot of: ", num_rows_plotted,
           " pixels \n Saved to: ", plot_path)

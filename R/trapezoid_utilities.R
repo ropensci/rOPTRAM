@@ -315,8 +315,8 @@ plot_cloud_linear <- function(pl_base, coeffs, aoi_name) {
     ggtitle(paste("Trapezoid Plot - ", aoi_name),
             subtitle = "Linear fit") +
     # Add coeffs as text
-    annotate("text", x=0.1, y=0.8*max(pl_base$data$STR, na.rm = TRUE),
-             label = coeffs_text, size = 5)
+    annotate("text", x=0.8 * max(pl_base$data$VI), y=0.3, na.rm = TRUE,
+             label = coeffs_text, size = 4)
 
   return(pl)
 }
@@ -354,12 +354,14 @@ plot_cloud_exponential <- function(pl_base, plot_df, coeffs, aoi_name) {
   # Add exponential function lines to dry graph
   str_dry  <- function(VI = plot_df$VI) {
     d0 <- 0.4
-    if (VI < d0) {
-      res_lo <- i_dry + s_dry * VI
-    } else {
-      res_hi <- i_dry * exp(s_dry * VI)
-    }
-    return <- rbind(res_lo, res_hi)
+    res_list <- lapply(VI, function(x) {
+      if (x < d0) {
+        return(i_dry + s_dry * x)
+      } else {
+        return(i_dry * exp(s_dry * x))
+      }
+      })
+    return <- do.call(rbind, res_list)
   }
   pl <- pl_base +
     geom_function(color = "#10607e", linewidth = 1.5, linetype = "dotted",
