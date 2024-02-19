@@ -315,7 +315,7 @@ plot_cloud_linear <- function(pl_base, coeffs, aoi_name) {
     ggtitle(paste("Trapezoid Plot - ", aoi_name),
             subtitle = "Linear fit") +
     # Add coeffs as text
-    annotate("text", x=0.1, y=mean(pl_base$data$STR, na.rm = TRUE),
+    annotate("text", x=0.1, y=0.8*max(pl_base$data$STR, na.rm = TRUE),
              label = coeffs_text, size = 5)
 
   return(pl)

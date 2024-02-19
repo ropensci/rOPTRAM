@@ -225,7 +225,7 @@ plot_vi_str_cloud <- function(
   # STR (y) axis limits
   y_min <- 0.1
   # Set max using median and (2 * IQR) as in outlier detection
-  str_q3 <- stats::quantile(plot_df$STR, 0.75, na.rm = TRUE)
+  str_q3 <- stats::quantile(plot_df$STR, 0.9, na.rm = TRUE)
   y_max <- str_q3 + stats::IQR(plot_df$STR, na.rm = TRUE) * 3
   pl_base <- ggplot2::ggplot(plot_df) +
     geom_point(aes(x=VI, y=STR), color = "#0070000b", alpha = 0.3, size = 0.2) +
