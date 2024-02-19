@@ -61,8 +61,7 @@ optram_calculate_soil_moisture <- function(
   #   W: rast, the moisture raster
 
   # Avoid "no visible binding for global variable" NOTE
-  img_str <- VI_file <-  VI <- NULL
-  STR_file <- STR <- coeffs <- NULL
+  VI_file <-  VI <- STR_file <- STR <- coeffs <- NULL
   i_dry <- i_wet <- s_dry <- s_wet <- W <- outfile <-  NULL
 
   # Pre-flight checks...
@@ -71,7 +70,6 @@ optram_calculate_soil_moisture <- function(
       "\nPlease format as YYYY-MM-DD")
     return(NULL)
   }
-  img_str <- gsub("-", "", img_date)
 
   if (!dir.exists(VI_dir) || !dir.exists(STR_dir)) {
     message("Input directories missing, Exiting...")
@@ -79,15 +77,14 @@ optram_calculate_soil_moisture <- function(
   }
 
   VI_file <- list.files(VI_dir,
-                        pattern = img_str, full.names = TRUE)
+                        pattern = img_date, full.names = TRUE)
   if (length(VI_file) == 0) {
     message("No VI file, Exiting...")
     return(NULL)
   }
 
   STR_file <- list.files(STR_dir,
-                        pattern = paste0(img_str, ".*STR"),
-                        full.names = TRUE)
+                        pattern = img_date, full.names = TRUE)
   if (length(STR_file) == 0) {
     message("No STR file, Exiting...")
     return(NULL)
