@@ -73,13 +73,14 @@ optram_ndvi_str <- function(STR_list, VI_list,
 
   df_list <- lapply(STR_list, function(f){
     # Get date from file name, and load STR raster
-    date_str <- unlist(strsplit(basename(f), split = "_", fixed = TRUE))[2]
+    bn <- gsub(".tif", "", basename(f))
+    date_str <- unlist(strsplit(bn, split = "_", fixed = TRUE))[2]
     STR <- terra::rast(f)
     # Convert to data.frame,
     # keep NA's so that number of rows in STR and VI stay synchronized
     STR_1_df <- terra::as.data.frame(STR, xy=TRUE, na.rm = FALSE)
     names(STR_1_df) <- c("x", "y", "STR")
-    STR_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
+    STR_1_df['Date'] <- as.Date(date_str, format="%Y-%m-%d")
 
     # Also get the vegetation index raster for this date
     VI_f <- VI_list[grep(date_str, basename(VI_list))]
