@@ -7,8 +7,6 @@
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
 #' @param max_cloud, integer, maximum percent of cloud cover. Default 15.
-#' @param timeperiod, string, either "full" for the whole date range,
-#' or "seasonal" for only months specified, but over the full date range.
 #' @param output_dir, string, path to save processed imagery.
 #' @param veg_index, string, which index to prepare. Default "NDVI".
 #'  Can be "NDVI", "SAVI", "MSAVI", etc
@@ -106,7 +104,6 @@
 #' aoi <- system.file("extdata", "migda.gpkg", package = 'rOPTRAM')
 #' s2_file_list <- optram_acquire_s2(aoi,
 #'                                  from_date, to_date,
-#'                                  timeperiod = "full",
 #'                                  remote = "scihub"
 #'                                  veg_index = "SAVI")
 #' }
@@ -115,7 +112,6 @@ optram_acquire_s2 <- function(
       aoi_file,
       from_date, to_date,
       max_cloud = 10,
-      timeperiod = "full",
       output_dir = tempdir(),
       veg_index = "NDVI",
       scale_factor = 10000,
@@ -136,7 +132,6 @@ optram_acquire_s2 <- function(
          scihub = acquire_scihub(aoi_file = aoi_file,
                                  from_date = from_date, to_date = to_date,
                                  max_cloud = max_cloud,
-                                 timeperiod = timeperiod,
                                  output_dir = output_dir,
                                  veg_index = veg_index,
                                  save_creds = save_creds,
@@ -145,7 +140,6 @@ optram_acquire_s2 <- function(
          openeo = acquire_openeo(aoi_file = aoi_file,
                                  from_date = from_date, to_date = to_date,
                                  max_cloud = max_cloud,
-                                 timeperiod = timeperiod,
                                  output_dir = output_dir,
                                  veg_index = veg_index,
                                  scale_factor = scale_factor)

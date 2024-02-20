@@ -53,7 +53,7 @@ remotes::install_gitlab("rsl-bidr/roptram")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
 # The {CDSE} and {jsonlite} packages are required for downloading Sentinel imagery from Copernicus DataSpace.
-if (!require("CDSE")) install.packages("sen2r", dependencies = TRUE)
+if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
 if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 ```
 
@@ -61,16 +61,12 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 
 #### Run the full OPTRAM model procedure with a single function call
 
-This example uses sets `timeperiod` to "seasonal", so only images between
-the month of from_date and the month of to_date will be used,
-but from all years in the date range.
-
 Registration on Copernicus DataSpace was done in advance, and the OAuth credentials (*clientid*, and *secret*) have been saved to the user's home directory.
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 
 ```{r wrapper, warning=FALSE, message=FALSE}
-from_date <- "2020-12-01"
+from_date <- "2021-10-01"
 to_date <- "2023-03-31"
 output_dir <- file.path(tempdir())
 aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
@@ -79,7 +75,6 @@ coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = veg_index,
                  S2_output_dir = output_dir,
-                 timeperiod = "seasonal",
                  data_output_dir = output_dir,
                  remote = "scihub")
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
@@ -102,20 +97,15 @@ knitr::include_graphics("trapezoid_migda.png")
   - Acquire Sentinel 2 images within a date range, and crop to AOI;
   - Prepare the SWIR Transformed Reflectance;
   - Prepare a data.frame of Vegetation Index and STR values;
+  - Activate the options to remove VI values below zero
+  - and the option to remove outlier STR values
   - Get trapezoid coefficients from the scatterplot of VI-STR pixels
 
-This example sets `timeperiod` to "full",
-so all images between from_date and to_date will be used.
-
 ```{r stepbystep, warning=FALSE, message=FALSE}
-from_date <- "2021-10-01"
-to_date <- "2023-04-30"
-aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
-output_dir <- file.path(tempdir())
+# Using the same dates, and aoi as previous example
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
-                            timeperiod = "full",
                             veg_index =veg_index,
                             remote = "scihub")
 STR_list <- list.files(file.path(output_dir, "STR"),
@@ -123,7 +113,8 @@ STR_list <- list.files(file.path(output_dir, "STR"),
 VI_list <- list.files(file.path(output_dir, "SAVI"),
                       pattern = ".tif$", full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list,
-                           output_dir = output_dir)
+                           output_dir = output_dir,
+                           rm.lo.vi = TRUE, rm.hi.str = TRUE)
 coeffs <- optram_wetdry_coefficients(full_df,
                                      aoi_file,
                                      output_dir = output_dir)
