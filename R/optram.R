@@ -21,8 +21,6 @@
 #'  and the derived products, defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file
 #'  and STR-VI data.frame, default is tempdir()
-#' @param timeperiod, string, either "full" for the whole date range,
-#' or "seasonal" for only months specified, but over the full date range.
 #' @param step, float, width of intervals along VI axis
 #'  default 0.01
 #' @param remote, string, which Copernicus API to use,
@@ -45,14 +43,6 @@
 #' Sentinel downloads and products are saved to S2_output_dir.
 #' Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
 #'
-#' The `timeperiod` parameter allows to download either a "full" date range,
-#' i.e. all images between the `from_date` and `to_date`, or alternatively,
-#' "seasonal", where images are acquired for all years but only for the months
-#' specified. So, for example:
-#'
-#'      if `from_date` = "2018-06-01` and `to_date` = '2020-09-20', then
-#'      images for june through sept will be acquired for 2018, 2019, and 2020.
-#'
 #' @export
 #' @examples
 #' \dontrun{
@@ -62,7 +52,6 @@
 #' coeffs <- optram(aoi_file,
 #'                  from_date, to_date,
 #'                  veg_index = c("SAVI"),
-#'                  timeperiod = "seasonal",
 #'                  trapezoid_method = "linear")
 #' }
 
@@ -72,7 +61,6 @@ optram <- function(aoi_file,
                    from_date, to_date,
                    max_cloud = 15,
                    remove_safe = "yes",
-                   timeperiod = "full",
                    S2_output_dir = tempdir(),
                    data_output_dir = tempdir(),
                    remote = "scihub",
@@ -90,7 +78,6 @@ optram <- function(aoi_file,
                     from_date, to_date,
                     max_cloud = max_cloud,
                     veg_index = veg_index,
-                    timeperiod = timeperiod,
                     output_dir = S2_output_dir,
                     remote = remote)
 

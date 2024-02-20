@@ -144,7 +144,7 @@ acquire_scihub <- function(
                                      token = tok)
 
       raster_file <- file.path(s_dir,
-                               paste0(basename(s_dir),
+                               paste0(basename(s_dir), "_",
                                       as.character(time_range),
                                       ".tif"))
       terra::writeRaster(result_rast, raster_file, overwrite = TRUE)
