@@ -355,11 +355,11 @@ plot_cloud_exponential <- function(pl_base, output_dir, aoi_name) {
     geom_smooth(data = edges,
                 mapping = aes(x = VI, y = STR_exp_dry),
                 method = "loess",
-                color = "orange", se = FALSE) +
+                color = "orange2", se = FALSE) +
     geom_smooth(data = edges,
                 aes(x = VI, y = STR_exp_wet),
                 method = "loess",
-                color="turquoise", se = FALSE) +
+                color="turquoise4", se = FALSE) +
     ggtitle(paste("Trapezoid Plot - ", aoi_name),
             subtitle = "Exponential fit")
 
