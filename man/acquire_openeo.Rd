@@ -9,7 +9,6 @@ acquire_openeo(
   from_date,
   to_date,
   max_cloud = 10,
-  timeperiod = "full",
   output_dir = tempdir(),
   veg_index = "NDVI",
   scale_factor = 10000
@@ -25,12 +24,6 @@ formatted as "YYYY-MM-DD"}
 \item{to_date, }{string, end of date range, formatted as "YYYY-MM-DD"}
 
 \item{max_cloud, }{integer, maximum percent of cloud cover. Default 10.}
-
-\item{timeperiod, }{string, either "full" for the whole date range,
-or "seasonal" for only months specified, but over the full date range
-\itemize{
-\item currently not in use
-}}
 
 \item{output_dir, }{string, path to save downloaded, and processed imagery}
 
@@ -77,7 +70,6 @@ from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
 acquire_openeo(aoi, from_date, to_date,
-               timeperiod = "full",
                veg_index = "SAVI")
 }
 }

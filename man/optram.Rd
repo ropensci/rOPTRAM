@@ -11,7 +11,6 @@ optram(
   to_date,
   max_cloud = 15,
   remove_safe = "yes",
-  timeperiod = "full",
   S2_output_dir = tempdir(),
   data_output_dir = tempdir(),
   remote = "scihub",
@@ -31,9 +30,6 @@ Formatted as "YYYY-MM-DD"}
 \item{to_date, }{the end of the date range.}
 
 \item{max_cloud, }{integer, maximum percent cloud cover, Default 15.}
-
-\item{timeperiod, }{string, either "full" for the whole date range,
-or "seasonal" for only months specified, but over the full date range.}
 
 \item{S2_output_dir, }{string, directory to save downloaded S2
 and the derived products, defaults to tempdir()}
@@ -78,15 +74,6 @@ And be sure to initialize with you google username and password.
 Output can be separated:
 Sentinel downloads and products are saved to S2_output_dir.
 Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
-
-The \code{timeperiod} parameter allows to download either a "full" date range,
-i.e. all images between the \code{from_date} and \code{to_date}, or alternatively,
-"seasonal", where images are acquired for all years but only for the months
-specified. So, for example:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{ if `from_date` = "2018-06-01` and `to_date` = '2020-09-20', then
- images for june through sept will be acquired for 2018, 2019, and 2020.
-}\if{html}{\out{</div>}}
 }
 \examples{
 \dontrun{
@@ -96,7 +83,6 @@ aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = c("SAVI"),
-                 timeperiod = "seasonal",
                  trapezoid_method = "linear")
 }
 }

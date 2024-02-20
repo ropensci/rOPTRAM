@@ -9,7 +9,8 @@ optram_ndvi_str(
   VI_list,
   output_dir = tempdir(),
   max_tbl_size = 5e+06,
-  rm.low.vi = FALSE
+  rm.low.vi = FALSE,
+  rm.hi.str = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ default set to 5e+6}
 
 \item{rm.low.vi, }{boolean, Should VI values <= 0 be removed
 default FALSE. If set to TRUE then all VI <= 0 will be set to NA.}
+
+\item{rm.hi.str, }{boolean, Should STR values > 1.5*IQR (outliers) be removed
+default FALSE. If set to TRUE then outlier STR values will be set to NA.}
 }
 \value{
 full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
