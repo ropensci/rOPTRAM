@@ -9,8 +9,6 @@
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
 #' @param max_cloud, integer, maximum percent of cloud cover. Default 10.
-#' @param timeperiod, string, either "full" for the whole date range,
-#' or "seasonal" for only months specified, but over the full date range
 #' @param output_dir, string, path to save downloaded, and processed imagery
 #' @param veg_index, string, which index to prepare. Default "NDVI".
 #'  Can be "NDVI", "SAVI", "MSAVI", etc
@@ -73,7 +71,6 @@
 #' to_date <- "2019-04-30"
 #' aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
 #' acquire_scihub(aoi, from_date, to_date,
-#'                timeperiod = "full",
 #'                veg_index = "SAVI")
 #' }
 
@@ -81,7 +78,6 @@ acquire_scihub <- function(
     aoi_file,
     from_date, to_date,
     max_cloud = 10,
-    timeperiod = "full",
     output_dir = tempdir(),
     veg_index = "NDVI",
     save_creds = TRUE,
@@ -135,21 +131,22 @@ acquire_scihub <- function(
   img_list <- img_list[img_list$tileCloudCover < max_cloud,]
 
   # Retrieve the images in BOA,STR and VI formats
-  get_result_list <- function(script_vi, s_dir){
+  get_result_list <- function(scrpt, s_dir){
     result_list <- lapply(img_list$acquisitionDate, function(d){
       time_range <- as.character(d)
       result_rast <- CDSE::GetArchiveImage(aoi = aoi,
                                      time_range = time_range,
-                                     script = script_vi,
+                                     script = scrpt,
                                      collection = "sentinel-2-l2a",
                                      format = "image/tiff",
                                      mask = TRUE,
                                      resolution = c(10,10),
                                      token = tok)
 
-      raster_file <- file.path(s_dir, paste0("CDSE_",
-                                             as.character(time_range),
-                                             ".tif"))
+      raster_file <- file.path(s_dir,
+                               paste0(basename(s_dir),
+                                      as.character(time_range),
+                                      ".tif"))
       terra::writeRaster(result_rast, raster_file, overwrite = TRUE)
       return(raster_file)
     })
@@ -236,9 +233,6 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
 #' @param max_cloud, integer, maximum percent of cloud cover. Default 10.
-#' @param timeperiod, string, either "full" for the whole date range,
-#' or "seasonal" for only months specified, but over the full date range
-#' - currently not in use
 #' @param output_dir, string, path to save downloaded, and processed imagery
 #' @param veg_index, string, which index to prepare. Default "NDVI".
 #'  Can be "NDVI", "SAVI", "MSAVI", etc
@@ -274,7 +268,6 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #' to_date <- "2019-04-30"
 #' aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
 #' acquire_openeo(aoi, from_date, to_date,
-#'                timeperiod = "full",
 #'                veg_index = "SAVI")
 #' }
 
@@ -282,7 +275,6 @@ acquire_openeo <- function(
     aoi_file,
     from_date, to_date,
     max_cloud = 10,
-    timeperiod = "full",
     output_dir = tempdir(),
     veg_index = "NDVI",
     scale_factor = 10000) {

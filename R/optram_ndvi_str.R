@@ -10,6 +10,8 @@
 #'      default set to 5e+6
 #' @param rm.low.vi, boolean, Should VI values <= 0 be removed
 #'      default FALSE. If set to TRUE then all VI <= 0 will be set to NA.
+#' @param rm.hi.str, boolean, Should STR values > 1.5*IQR (outliers) be removed
+#'      default FALSE. If set to TRUE then outlier STR values will be set to NA.
 #' @return full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
 #' @export
 #' @note
@@ -38,7 +40,8 @@
 optram_ndvi_str <- function(STR_list, VI_list,
                             output_dir = tempdir(),
                             max_tbl_size = 5e+6,
-                            rm.low.vi = FALSE){
+                            rm.low.vi = FALSE,
+                            rm.hi.str = FALSE){
 
   # Avoid "no visible binding for global variable" NOTE
   date_str <- STR <- STR_1_df <- STR_df <- STR_df_file <- NULL
@@ -80,6 +83,13 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # keep NA's so that number of rows in STR and VI stay synchronized
     STR_1_df <- terra::as.data.frame(STR, xy=TRUE, na.rm = FALSE)
     names(STR_1_df) <- c("x", "y", "STR")
+    if (rm.hi.str) {
+      # Calculate inter quartile range, and set all STR values
+      # above (1.5 * IQR) to NA
+      STR_q <- stats::quantile(STR_1_df, probs = c(0.25, 0.75), na.rm = TRUE)
+      STR_IQR <- STR_q[2] - STR_q[1]
+      STR_1_df[STR_1_df$STR >= STR_IQR*1.5,]$STR <- NA
+    }
     STR_1_df['Date'] <- as.Date(date_str, format="%Y-%m-%d")
 
     # Also get the vegetation index raster for this date
@@ -106,27 +116,6 @@ optram_ndvi_str <- function(STR_list, VI_list,
     return(df_1)
   })
   full_df <- do.call(rbind, df_list)
-
-  # VI_df_list <- lapply(VI_list, function(f){
-  #   # Get image date
-  #   date_str <- unlist(strsplit(basename(f), split="_", fixed=TRUE))[2]
-  #   VI <- terra::rast(f)
-  #   # Revert to original scale
-  #   VI <- VI/10000.0
-  #
-  #   VI_1_df <- terra::as.data.frame(VI, xy=TRUE, na.rm = FALSE)
-  #   names(VI_1_df) <- c("x", "y", "VI")
-  #
-  #   # Apply rm.low.vi parameter
-  #   if (rm.low.vi) {
-  #     VI_1_df$VI[VI_1_df$VI <= 0.005]  <- NA
-  #   }
-  #   VI_1_df['Date'] <- as.Date(date_str, format="%Y%m%d")
-  #   # Keep only sampled rows
-  #   VI_1_df <- VI_1_df[idx, ]
-  #   return(VI_1_df)
-  # })
-  # VI_df <- do.call(rbind, VI_df_list)
 
   df_file <- file.path(output_dir, "VI_STR_data.rds")
   saveRDS(full_df, df_file)
