@@ -242,10 +242,8 @@ plot_vi_str_cloud <- function(
   pl <- switch(trapezoid_method,
           linear = plot_cloud_linear(pl_base,
                                      coeffs, aoi_name),
-          exponential = plot_cloud_exponential(pl_base, plot_df,
-                                               coeffs, aoi_name),
-          # trapezoid edges are required for polynomial plot
-          # plot)cloud_polynomial() will read edges df from output_dir
+          exponential = plot_cloud_exponential(pl_base,
+                                               output_dir, aoi_name),
           polynomial = plot_cloud_polynomial(pl_base,
                                              output_dir, aoi_name))
 

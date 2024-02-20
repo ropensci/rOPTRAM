@@ -343,34 +343,23 @@ plot_cloud_linear <- function(pl_base, coeffs, aoi_name) {
 #' coeffs <- read.csv(coeffs_file)
 #' pl <- plot_cloud_exponential(plot_df, coeffs)
 #' }
-plot_cloud_exponential <- function(pl_base, plot_df, coeffs, aoi_name) {
+plot_cloud_exponential <- function(pl_base, output_dir, aoi_name) {
 
-  i_dry <- round(coeffs$intercept_dry, 3)
-  s_dry <- round(coeffs$slope_dry, 3)
-  i_wet <- round(coeffs$intercept_wet, 3)
-  s_wet <- round(coeffs$slope_wet, 3)
+  # Add polynomial edges points as smoothed lines to the graph
+  edges <- utils::read.csv(file.path(output_dir,
+                                     "trapezoid_edges_exp.csv"))
+  STR_exp_wet  <- edges$STR_exp_wet
+  STR_exp_dry  <- edges$STR_exp_dry
 
-  # Wet edge is still linear
-  str_wet  <- function(VI = plot_df$VI) {
-    return(i_wet + s_wet * VI)
-  }
-  # Add exponential function lines to dry graph
-  str_dry  <- function(VI = plot_df$VI) {
-    d0 <- 0.2
-    res_list <- lapply(VI, function(x) {
-      if (x < d0) {
-        return(i_dry + s_dry * x)
-      } else {
-        return(i_dry * exp(s_dry * x))
-      }
-      })
-    return <- do.call(rbind, res_list)
-  }
   pl <- pl_base +
-    geom_function(color = "#10607e", linewidth = 1.5,
-                  fun = str_wet) +
-    geom_function(color = "#8b412a62", linewidth = 1.5,
-                  fun = str_dry) +
+    geom_smooth(data = edges,
+                mapping = aes(x = VI, y = STR_exp_dry),
+                method = "loess",
+                color = "orange", se = FALSE) +
+    geom_smooth(data = edges,
+                aes(x = VI, y = STR_exp_wet),
+                method = "loess",
+                color="turquoise", se = FALSE) +
     ggtitle(paste("Trapezoid Plot - ", aoi_name),
             subtitle = "Exponential fit")
 
@@ -396,7 +385,7 @@ plot_cloud_polynomial <- function(pl_base, output_dir, aoi_name) {
   # Avoid "no visible binding for global variable" NOTE
   VI <- NULL
 
-  # Add exponential edges points as smoothed lines to the graph
+  # Add polynomial edges points as smoothed lines to the graph
   edges <- utils::read.csv(file.path(output_dir,
                                     "trapezoid_edges_poly.csv"))
   STR_poly_wet  <- edges$STR_poly_wet
