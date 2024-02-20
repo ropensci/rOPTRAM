@@ -88,7 +88,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
       # above (1.5 * IQR) to NA
       STR_q <- stats::quantile(STR_1_df, probs = c(0.25, 0.75), na.rm = TRUE)
       STR_IQR <- STR_q[2] - STR_q[1]
-      STR_1_df[STR_1_df$STR >= STR_IQR*1.5,]$STR <- NA
+      STR_1_df$STR[STR_1_df$STR >= STR_IQR*1.5] <- NA
     }
     STR_1_df['Date'] <- as.Date(date_str, format="%Y-%m-%d")
 
@@ -104,8 +104,9 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # VI <- VI/10000.0  **NOT necessary in CDSE!**
     VI_1_df <- terra::as.data.frame(VI, xy=TRUE, na.rm = FALSE)
     names(VI_1_df) <- c("x", "y", "VI")
-    # Apply rm.low.vi parameter
+
     if (rm.low.vi) {
+      # Apply rm.low.vi parameter, set VI to NA when values <= 0.005
        VI_1_df$VI[VI_1_df$VI <= 0.005]  <- NA
     }
     # Join two DF's
