@@ -46,13 +46,15 @@
 #' aoi_file <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'   package = "rOPTRAM"))
-#' coeffs <- optram_wetdry_coefficients(full_df, aoi_file)
+#' coeffs <- optram_wetdry_coefficients(full_df, aoi_file,
+#'                  trapezoid_method = "linear",
+#'                  rm.low.vi = TRUE, rm.hi.str = TRUE)
 #' print(coeffs)
-#' \dontrun{
 #' coeffs_poly <- optram_wetdry_coefficients(full_df, aoi_file,
-#'                   trapezoid_method = "polynomial")
+#'                   trapezoid_method = "polynomial",
+#'                   rm.low.vi = TRUE, rm.hi.str = TRUE)
 #' print(coeffs_poly)
-#' }
+#'
 
 optram_wetdry_coefficients <- function(
     full_df, aoi_file,

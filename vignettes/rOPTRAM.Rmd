@@ -114,7 +114,7 @@ VI_list <- list.files(file.path(output_dir, "SAVI"),
                       pattern = ".tif$", full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir,
-                           rm.lo.vi = TRUE, rm.hi.str = TRUE)
+                           rm.low.vi = TRUE, rm.hi.str = TRUE)
 coeffs <- optram_wetdry_coefficients(full_df,
                                      aoi_file,
                                      output_dir = output_dir)

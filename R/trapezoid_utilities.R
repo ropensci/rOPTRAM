@@ -139,7 +139,7 @@ polynomial_coefficients <- function(df, output_dir) {
 #' @return character vector, two values of RMSE for wet and dry edges
 #' @note Not exported,
 #' RMSE values are printed from each of the coefficients functions
-#' @example
+#' @examples
 #' edges_file <- system.file("extdata", "trapezoid_edges.csv",
 #'                            package = "rOPTRAM")
 #' df <- utils::read.csv(edges_file)
