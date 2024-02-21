@@ -19,3 +19,11 @@ Calculate and print out RMSE for fitted trapezoid edges
 Not exported,
 RMSE values are printed from each of the coefficients functions
 }
+\examples{
+edges_file <- system.file("extdata", "trapezoid_edges.csv",
+                           package = "rOPTRAM")
+df <- utils::read.csv(edges_file)
+output_dir <- tempdir()
+coeffs <- linear_coefficients(df, output_dir)
+
+}

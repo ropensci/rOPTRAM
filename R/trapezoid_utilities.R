@@ -383,16 +383,14 @@ plot_cloud_exponential <- function(pl_base, output_dir, aoi_name) {
   # Add polynomial edges points as smoothed lines to the graph
   edges <- utils::read.csv(file.path(output_dir,
                                      "trapezoid_edges_exp.csv"))
-  STR_exp_wet  <- edges$STR_exp_wet
-  STR_exp_dry  <- edges$STR_exp_dry
 
   pl <- pl_base +
     geom_smooth(data = edges,
-                mapping = aes(x = VI, y = STR_exp_dry),
+                mapping = aes(x = VI, y = STR_dry_fit),
                 method = "loess",
                 color = "orange2", se = FALSE) +
     geom_smooth(data = edges,
-                aes(x = VI, y = STR_exp_wet),
+                aes(x = VI, y = STR_wet_fit),
                 method = "loess",
                 color="turquoise4", se = FALSE) +
     ggtitle(paste("Trapezoid Plot - ", aoi_name),
@@ -423,16 +421,14 @@ plot_cloud_polynomial <- function(pl_base, output_dir, aoi_name) {
   # Add polynomial edges points as smoothed lines to the graph
   edges <- utils::read.csv(file.path(output_dir,
                                     "trapezoid_edges_poly.csv"))
-  STR_poly_wet  <- edges$STR_poly_wet
-  STR_poly_dry  <- edges$STR_poly_dry
 
   pl <- pl_base +
     geom_smooth(data = edges,
-                mapping = aes(x = VI, y = STR_poly_dry),
+                mapping = aes(x = VI, y = STR_dry_fit),
                 method = "loess",
                 color = "brown", se = FALSE) +
     geom_smooth(data = edges,
-                aes(x = VI, y = STR_poly_wet),
+                aes(x = VI, y = STR_wet_fit),
                 method = "loess",
                 color="purple", se = FALSE) +
     ggtitle(paste("Trapezoid Plot - ", aoi_name),
