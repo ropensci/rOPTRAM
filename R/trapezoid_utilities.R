@@ -25,9 +25,16 @@ linear_coefficients <- function(df, output_dir) {
   s_dry <- dry_fit$coefficients[[2]]
   coeffs <- data.frame("intercept_dry"=i_dry, "slope_dry"=s_dry,
                        "intercept_wet"=i_wet, "slope_wet"=s_wet)
+  # Update data.frame with fitted values
+  df$STR_wet_fit <- wet_fit$fitted.values
+  df$STR_dry_fit <- dry_fit$fitted.values
+  utils::write.csv(df,
+                   file.path(output_dir, "trapezoid_edges_lin.csv"),
+                   row.names = FALSE)
   utils::write.csv(coeffs,
                    file.path(output_dir, "coefficients.csv"),
                    row.names=FALSE)
+  print_edges_rmse(file.path(output_dir, "trapezoid_edges_lin.csv"))
   return(coeffs)
 }
 
@@ -64,14 +71,14 @@ exponential_coefficients <- function(df, output_dir) {
                        "intercept_wet"=i_wet, "slope_wet"=s_wet)
 
   # Update the data.frame of trapezoid edges and save
-  df$STR_exp_wet <- i_wet * exp(s_wet * df$VI)
+  df$STR_wet_fit <- i_wet * exp(s_wet * df$VI)
 
   # The dry edge is exponential only above d0 = 0.2
   STR_lin <- i_dry + s_dry * df$VI[df$VI < d0]
   #i_d0 <- i_dry + s_dry * d0
   STR_d0 <- i_dry + s_dry *d0
   STR_exp <- STR_d0 * exp(s_dry * df$VI[df$VI >= d0])
-  df$STR_exp_dry <- c(STR_lin, STR_exp)
+  df$STR_dry_fit <- c(STR_lin, STR_exp)
 
   utils::write.csv(df,
                    file.path(output_dir, "trapezoid_edges_exp.csv"),
@@ -79,6 +86,7 @@ exponential_coefficients <- function(df, output_dir) {
   utils::write.csv(coeffs,
                    file.path(output_dir, "coefficients_exp.csv"),
                    row.names=FALSE)
+  print_edges_rmse(file.path(output_dir, "trapezoid_edges_exp.csv"))
   return(coeffs)
 }
 
@@ -112,18 +120,45 @@ polynomial_coefficients <- function(df, output_dir) {
                        "beta1_wet" = wet_fit$coefficients[2],
                        "beta2_wet" = wet_fit$coefficients[3])
 
-  # Update data.frame of edges and save to trapezoid_edges.csv file
-  wet_dist <- wet_fit$fitted.values
-  df$STR_poly_wet <- wet_dist
-  dry_dist <- dry_fit$fitted.values
-  df$STR_poly_dry <- dry_dist
+  # Update data.frame of edges and save to new edges file
+  df$STR_wet_fit <- wet_fit$fitted.values
+  df$STR_dry_fit <- dry_fit$fitted.values
   utils::write.csv(df,
                    file.path(output_dir, "trapezoid_edges_poly.csv"),
                    row.names = FALSE)
   utils::write.csv(coeffs,
                    file.path(output_dir, "coefficients_poly.csv"),
                    row.names=FALSE)
+  print_edges_rmse(file.path(output_dir, "trapezoid_edges_poly.csv"))
   return(coeffs)
+}
+
+#' @title Print RMSE of Trapezoid Fitted Curve
+#' @description Calculate and print out RMSE for fitted trapezoid edges
+#' @param trapezoid_edges, string, full path to  trapezoid_egdes file
+#' @return character vector, two values of RMSE for wet and dry edges
+#' @note Not exported,
+#' RMSE values are printed from each of the coefficients functions
+#' @example
+#' edges_file <- system.file("extdata", "trapezoid_edges.csv",
+#'                            package = "rOPTRAM")
+#' df <- utils::read.csv(edges_file)
+#' output_dir <- tempdir()
+#' coeffs <- linear_coefficients(df, output_dir)
+#'
+print_edges_rmse <- function(edges_file) {
+  if (is.null(edges_file)) {return(NULL)}
+  if (!file.exists(edges_file)) {return(NULL)}
+  edges_df <- utils::read.csv(edges_file)
+  O_wet <- edges_df$STR_wet
+  P_wet <- edges_df$STR_wet_fit
+  RMSE_wet <- sqrt(sum((P_wet - O_wet)^2)/nrow(edges_df))
+  O_dry <- edges_df$STR_dry
+  P_dry <- edges_df$STR_dry_fit
+  RMSE_dry <- sqrt(sum((P_dry - O_dry)^2)/nrow(edges_df))
+  message("RMSE wet edge = ", format(RMSE_wet, digits=3), "\n",
+          "RMSE_dry edge = ", format(RMSE_dry, digits=3))
+  return(c("RMSE_wet" = RMSE_wet, "RMSE_dry" = RMSE_dry))
 }
 
 
