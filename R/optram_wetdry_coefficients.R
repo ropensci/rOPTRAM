@@ -237,7 +237,8 @@ plot_vi_str_cloud <- function(
     theme_bw() +
     theme(axis.title = element_text(size = 14),
           axis.text = element_text(size = 12),
-          plot.title = element_text(size = 18))
+          plot.title = element_text(size = 18, face = "bold"),
+          plot.subtitle = element_text(size=18))
 
   # Separate plot items for each trapezoid_method
   trapezoid_method <- match.arg(trapezoid_method)
@@ -264,6 +265,11 @@ plot_vi_str_cloud <- function(
                                 aoi_name, "_",
                                 trapezoid_method, ".png"))
   ggsave(plot_path, width = 10, height = 7)
-  message("Scatterplot of: ", num_rows_plotted,
-          " pixels \n Saved to: ", plot_path)
+  rmse_results <- switch(trapezoid_method,
+          linear = print_edges_rmse(
+            file.path(output_dir, "trapezoid_edges_lin.csv")),
+          exponential = print_edges_rmse(
+            file.path(output_dir, "trapezoid_edges_exp.csv")),
+          polynomial = print_edges_rmse(
+            file.path(output_dir, "trapezoid_edges_poly.csv")))
 }

@@ -19,8 +19,21 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-@ma_combining_2022
+The algorithm for finding trapezoid wet and dry edges works as follows:
 
+After acquiring a time series of Sentinel-2 images over the study area, both vegetation index (i.e. NDVI or SAVI), and SWIR Transformed Reflectance (STR) rasters are prepared. Pixel values of both indices for all images are collected into a two column table (and plotted as a scatterplot). The vegetation axis (x-axis) is split into a large number of intervals (usually between 50 - 100). The width of each interval is configurable by the user through the `step` parameter in `optram_wetdry_coefficients()`. Then for each interval the top and bottom 1% quantiles of STR values are determined. These point values - VI and STR - are considered to create the fitted wet and dry trapezoid edges.
+
+Three fitting methods are available in {rOPTRAM} to prepare the trapezoid wet and dry edges. For detailed background, see:  @ma_combining_2022. Users can choose between a 
+
+ - linear OLS fitted line
+ - exponential fit
+ - second order polynomial
+ 
+Both the linear and the polynomial fit are derived using the `lm` function in the `R` {stats} package. The exponential fit uses the equation: 
+$$STR = i \cdot e^{(s \cdot VI)}$$
+where STR is the fitted STR value, $i$, and $s$ are the linear regression intercept, and slope, and $VI$ is the vegetation index value.
+
+The fitting method is chosen by setting the `trapezoid_method` parameter in the `optram_wetdry_coefficients()` function.
 
 ## Examples
 
@@ -32,10 +45,10 @@ if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
 if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 ```
 
-#### Prepare data.frame of pixel values for full time range
+#### Prepare data.frame of pixel values
 
-```{r prepare, warning=FALSE, message=FALSE}
-from_date <- "2022-10-01"
+```{r prepare, warning=FALSE, message=FALSE, results='hide'}
+from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- file.path(tempdir())
 aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")

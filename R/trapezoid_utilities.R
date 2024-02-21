@@ -34,7 +34,6 @@ linear_coefficients <- function(df, output_dir) {
   utils::write.csv(coeffs,
                    file.path(output_dir, "coefficients.csv"),
                    row.names=FALSE)
-  print_edges_rmse(file.path(output_dir, "trapezoid_edges_lin.csv"))
   return(coeffs)
 }
 
@@ -86,7 +85,6 @@ exponential_coefficients <- function(df, output_dir) {
   utils::write.csv(coeffs,
                    file.path(output_dir, "coefficients_exp.csv"),
                    row.names=FALSE)
-  print_edges_rmse(file.path(output_dir, "trapezoid_edges_exp.csv"))
   return(coeffs)
 }
 
@@ -129,7 +127,6 @@ polynomial_coefficients <- function(df, output_dir) {
   utils::write.csv(coeffs,
                    file.path(output_dir, "coefficients_poly.csv"),
                    row.names=FALSE)
-  print_edges_rmse(file.path(output_dir, "trapezoid_edges_poly.csv"))
   return(coeffs)
 }
 
