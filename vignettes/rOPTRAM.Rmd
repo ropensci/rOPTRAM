@@ -69,7 +69,7 @@ Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, out
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- file.path(tempdir())
-aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+aoi_file <- system.file("extdata", "migda9.gpkg", package = "rOPTRAM")
 veg_index <- "SAVI"
 coeffs <- optram(aoi_file,
                  from_date, to_date,

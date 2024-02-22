@@ -24,7 +24,7 @@ test_that("aoi_file does not exist", {
 
 test_that("Output coefficients is a data.frame of length 4", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
-  aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+  aoi_file <- system.file("extdata", "migda9.gpkg", package = "rOPTRAM")
   coeffs <- optram_wetdry_coefficients(full_df,
                                        aoi_file,
                                        trapezoid_method = "linear")
@@ -42,7 +42,7 @@ test_that("Output coefficients is a data.frame of length 4", {
 test_that("Polynomial trapezoid method returns data.frame of length 6", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
                                  package = "rOPTRAM"))
-  aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+  aoi_file <- system.file("extdata", "migda9.gpkg", package = "rOPTRAM")
   coeffs <- optram_wetdry_coefficients(full_df, aoi_file,
                                        trapezoid_method = "polynomial")
   expect_true(inherits(coeffs, "data.frame"))

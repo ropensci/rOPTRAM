@@ -51,7 +51,7 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- file.path(tempdir())
-aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+aoi_file <- system.file("extdata", "migda4.gpkg", package = "rOPTRAM")
 veg_index <- "SAVI"
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
