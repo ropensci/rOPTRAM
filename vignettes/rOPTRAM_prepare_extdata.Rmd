@@ -34,10 +34,12 @@ to_date <- "2023-04-30"
 output_dir <- "/home/micha/work/BIDR/Soil_Moisture/Israel/Migda/Migda9"
 aoi_file <- system.file("extdata", "migda9.gpkg", package = "rOPTRAM")
 veg_index <- "SAVI"
+max_cloud <- 5
 coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = veg_index,
                  S2_output_dir = output_dir,
+                 max_cloud = max_cloud,
                  data_output_dir = output_dir,
                  remote = "scihub")
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
@@ -50,6 +52,7 @@ knitr::kable(coeffs, caption = "Trapezoid coefficients")
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
+                            max_cloud = max_cloud,
                             veg_index =veg_index,
                             remote = "scihub")
 STR_list <- list.files(file.path(output_dir, "STR"),
