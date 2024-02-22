@@ -1,0 +1,132 @@
+---
+title: "Acquiring Sentinel-2 Imagery"
+author: "Ron Beiden"
+output: rmarkdown::html_document
+vignette: >
+  %\VignetteIndexEntry{rOPTRAM-2}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{tmap}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  message = FALSE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+This vignette provides a detailed guide on acquiring Sentinel-2 imagery using both the CDSE (Copernicus Data and Exploitation Platform - SciHub) and the openEO platform.
+
+## Acquiring Sentinel-2 Imagery using CDSE
+
+To utilize the CDSE package for accessing Copernicus data, follow these steps:
+
+#### Step 1: Install Required Packages
+
+Ensure you have the `CDSE` and `jsonlite` packages installed:
+
+```{r setup, results='hide'}
+remotes::install_gitlab("rsl-bidr/roptram")
+library(rOPTRAM)
+if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
+if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
+```
+
+#### Step 2: Create CDSE Account and OAuth Client
+
+1.  Navigate to the [Copernicus portal](https://dataspace.copernicus.eu/).
+2.  Click the "Register" button to access the account creation page.
+3.  If already registered, log in to your account.
+
+#### Step 3: Creating OAuth Client:
+
+1.  After logging in, go to the User Settings page.
+2.  Click the green "Create New" button to create a new OAuth client.
+3.  Enter a suitable "Client Name" and click "Create Client".
+
+![](images/create_OAuth.jpg){width="630"}
+
+4.  A Client secret will be generated. Make sure to copy your new personal OAuth secret immediately after it is created. You will not be able to see it again later.
+
+5.  Copy the new client id.
+
+![](images/client_id.jpg)
+
+#### Step 4: Saving Credentials:
+
+ -   Save your client ID and secret in a secure location.
+ -   At the first run, set `save_creds = TRUE` in the `acquire_scihub()` function to automatically save credentials. This will save you from entering your client ID and secret manually every time you run `acquire_scihub()`.
+
+### Step 4: Acquire Sentinel-2 Imagery
+
+```{r prepare, warning=FALSE, message=FALSE, results='hide'}
+# For this example, outputs are saved to `tempdir()`
+from_date <- "2018-12-01"
+to_date <- "2019-04-30"
+# aoi <- "path/to/your/aoi_file.gpkg"
+# rOPTRAM_aoi_example
+aoi <- system.file("extdata", "migda9.gpkg", package = 'rOPTRAM')
+
+boa_files <- acquire_scihub(aoi, from_date, to_date,
+               veg_index = "SAVI",
+               output_dir = tempdir())
+               # save_creds = TRUE,
+               # clientid = "your_client_id",
+               # secret = "your_secret"
+```
+
+
+## Acquiring Sentinel-2 Imagery using openEO
+
+To use openEO for accessing Copernicus data, follow these steps:
+
+### Step 1: Install Required Packages
+
+Ensure you have the `openeo` package installed:
+
+```{r}
+# install.packages("openeo")
+if (!require("openeo")) install.packages("openeo", dependencies = TRUE)
+```
+
+## Step 2: Connect to openEO Platform
+
+#### Registration Process:
+
+For detailed instructions on how to register for the Copernicus Data Space, please visit: [Registration Manual](https://documentation.dataspace.copernicus.eu/Registration.html)
+
+#### Login Process:
+
+A. When you run the `acquire_openeo()` function, it internally calls the `check_openeo()` function. If the `openeo` package is not installed, it will be installed automatically.
+
+B. When prompted, press enter to proceed.
+
+![](images/login_enter_to_proceed.jpg)
+
+C. You will be redirected to the Copernicus authentication page. Log in and grant access.
+
+![](images/login_login.jpg){width="476"}
+
+![](images/login_grant_access.png){width="476"}
+
+#### Acquire Sentinel-2 Imagery
+
+```{r, eval=FALSE}
+# For this example, outputs are saved to `tempdir()`
+from_date <- "2018-12-01"
+to_date <- "2019-03-30"
+
+acquire_openeo(aoi, from_date, to_date,
+               veg_index = "SAVI",
+               output_dir = tempdir())
+
+# You can specify your `output_dir` parameter to indicate the path where downloaded and processed imagery will be saved
+```
+
+## Conclusion
+
+This vignette provides comprehensive instructions for acquiring Sentinel-2 imagery using both CDSE and openEO platforms. Ensure you have the necessary credentials and packages installed to access Copernicus data efficiently.

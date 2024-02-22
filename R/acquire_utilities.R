@@ -16,6 +16,7 @@
 #' @param clientid, string, user's OAuth client id. Required if `save_creds`
 #'      is TRUE.
 #' @param secret, string, user's OAuth secret. Required if `save_creds` is TRUE.
+#' @export
 #' @return list of BOA files
 #' @note
 #' This function utilizes the `CDSE` package.
@@ -239,6 +240,7 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #' @param scale_factor, integer, scaling factor for EO data source default 10000
 #' , to scale Sentinel-2 15 bit DN to range (0, 1)
 #' @return list of BOA files
+#' @export
 #' @note
 #' This function utilizes the `openeo` package.
 #' Instructions for the login process:
