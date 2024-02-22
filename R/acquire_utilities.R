@@ -378,9 +378,12 @@ acquire_openeo <- function(
   cube_S2_boa <- p$resample_spatial(data = cube_s2, resolution = 10,
                                    method = "near")
 
-  result_vi <- p$save_result(data = cube_s2_vi, format = formats$output$GTiff)
-  result_str <- p$save_result(data = cube_s2_str, format = formats$output$GTiff)
-  result_boa <- p$save_result(data = cube_S2_boa, format = formats$output$GTiff)
+  result_vi <- p$save_result(data = cube_s2_vi, format = formats$output$GTiff,
+                             options = list(filename_prefix=veg_index))
+  result_str <- p$save_result(data = cube_s2_str, format = formats$output$GTiff,
+                              options = list(filename_prefix="STR"))
+  result_boa <- p$save_result(data = cube_S2_boa, format = formats$output$GTiff,
+                              options = list(filename_prefix="BOA"))
 
   job_vi <- openeo::create_job(graph = result_vi, title = "vi files")
   job_str <- openeo::create_job(graph = result_str, title = "str files")
