@@ -19,7 +19,17 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-This vignette provides a detailed guide on acquiring Sentinel-2 imagery using both the CDSE (Copernicus Data and Exploitation Platform - SciHub) and the openEO platform.
+The CSDE (Copernicus Data Space Ecosystem) provides interface to an API, mainly for searching the catalog of available data from Copernicus Sentinel missions and obtaining the images for just the area of interest based on selected spectral bands. The package uses the 'Sentinel Hub' REST API interface [Sentinel Hub](https://dataspace.copernicus.eu/analyse/apis/sentinel-hub) that provides access to various satellite imagery archives. It allows you to access raw satellite data, rendered images, statistical analysis, and other features.
+
+[CDSE CRAN page](https://cran.r-project.org/web/packages/CDSE/index.html)
+
+OpenEO is an open-source project aimed at standardizing and simplifying access to Earth observation data and processing services. It provides a common API that abstracts away the complexities of accessing and processing Earth observation data, allowing users to interact with multiple back-end processing engines through a unified interface.
+
+This vignette provides a detailed guide on acquiring Sentinel-2 imagery using both the CDSE and the openEO platform.
+
+[openEO CRAN page](https://cran.r-project.org/web/packages/openeo/index.html)
+
+Both methods require [registering](https://dataspace.copernicus.eu/) on the Copernicus DataSpace.
 
 ## Acquiring Sentinel-2 Imagery using CDSE
 
