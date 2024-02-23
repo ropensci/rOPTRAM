@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-The CSDE (Copernicus Data Space Ecosystem) provides interface to an API, mainly for searching the catalog of available data from Copernicus Sentinel missions and obtaining the images for just the area of interest based on selected spectral bands. The package uses the 'Sentinel Hub' REST API interface [Sentinel Hub](https://dataspace.copernicus.eu/analyse/apis/sentinel-hub) that provides access to various satellite imagery archives. It allows you to access raw satellite data, rendered images, statistical analysis, and other features.
+The CSDE package provides an interface to the 'Copernicus Data Space Ecosystem' API, mainly for searching the catalog of available data from Copernicus Sentinel missions and obtaining the images for just the area of interest based on selected spectral bands. The package uses the 'Sentinel Hub' REST API interface [Sentinel Hub](https://dataspace.copernicus.eu/analyse/apis/sentinel-hub) that provides access to various satellite imagery archives. It allows you to access raw satellite data, rendered images, statistical analysis, and other features.
 
 [CDSE CRAN page](https://cran.r-project.org/web/packages/CDSE/index.html)
 
