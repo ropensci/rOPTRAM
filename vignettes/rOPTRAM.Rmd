@@ -26,7 +26,7 @@ A scatterplot of NDVI vs. STR is used to produce wet and dry linear regression l
   See:  @sadeghi_optical_2017, @burdun_satellite_2020, @ambrosone_retrieving_2020
 
 
-#### Prerequisites
+### Prerequisites
 
 Only a small number of commonly used R packages are required to use {rOPTRAM}. This includes:
 
@@ -59,7 +59,7 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 
 ## Main wrapper function
 
-#### Run the full OPTRAM model procedure with a single function call
+### Run the full OPTRAM model procedure with a single function call
 
 Registration on Copernicus DataSpace was done in advance, and the OAuth credentials (*clientid*, and *secret*) have been saved to the user's home directory.
 
@@ -79,7 +79,7 @@ coeffs <- optram(aoi_file,
                  remote = "scihub")
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
 ```
-#### Show trapezoid plot
+### Show trapezoid plot
 
 ```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%', warning=FALSE}
 ttl <- "Migda"
@@ -92,7 +92,7 @@ knitr::include_graphics("images/trapezoid_Migda_linear.png")
 
 ## Step by step
 
-#### The same procedure as the wrapper function, but in explicit steps
+### The same procedure as the wrapper function, but in explicit steps
 
   - Acquire Sentinel 2 images within a date range, and crop to AOI;
   - Prepare the SWIR Transformed Reflectance;
@@ -125,7 +125,7 @@ knitr::kable(coeffs, caption = "Trapezoid coefficients")
 
 ## Soil Moisture Estimate
 
-#### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid
+### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid
 
 ```{r soil-moisture}
 img_date <- "2023-01-10"   # After a rain
@@ -135,7 +135,7 @@ coeffs_file <- file.path(output_dir, "coefficients.csv")
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
 ```
 
-#### Soil moisture plot
+### Soil moisture plot
 
 ```{r sm-plot}
 library(leaflet)

@@ -6,7 +6,7 @@
 #' @param full_df, data.frame of STR and NDVI values
 #' @param output_dir, string, directory to save coefficients CSV file
 #' @param step, float, width of intervals along VI axis
-#'  default 0.01
+#'  default 0.005
 #' @param aoi_file, string, added to title of plot
 #'  (Can be path to AOI file, then the file name is used in plot title)
 #' @param trapezoid_method, string, how to prepare wet and dry trapezoid edges
@@ -59,7 +59,7 @@
 optram_wetdry_coefficients <- function(
     full_df, aoi_file,
     output_dir = tempdir(),
-    step = 0.01,
+    step = 0.005,
     trapezoid_method = c("linear", "exponential", "polynomial"),
     save_plot = TRUE) {
   # Derive slope and intercept to two sides of trapezoid
@@ -87,7 +87,7 @@ optram_wetdry_coefficients <- function(
 
   # Make sure no Inf or NA in full_df
   full_df <- full_df[is.finite(full_df$VI), ]
-  VI_min_max <- round(stats::quantile(full_df$VI, c(0.1, 0.98)), 2)
+  VI_min_max <- round(stats::quantile(full_df$VI, c(0.02, 0.99)), 2)
   VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], step)
   message("VI series length:", length(VI_series))
   edges_list <- lapply(VI_series, function(i){
@@ -102,7 +102,7 @@ optram_wetdry_coefficients <- function(
     }
     # Remove lower than 1% and more than 99% quantile of STR values
     # Use upper 99% quantile and lower 1% quantile as min/max values
-    Qs <- stats::quantile(interval_df$STR, c(0.01, 0.99), na.rm=TRUE)
+    Qs <- stats::quantile(interval_df$STR, c(0.02, 0.98), na.rm=TRUE)
     #interval_df <- interval_df[interval_df$STR<=Qs[[2]] &
     #                             interval_df$STR>=Qs[[1]],]
     # Now, with outliers removed, find min (dry) and max (wet)
