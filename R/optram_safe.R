@@ -29,7 +29,7 @@
 #'      and STR-VI data.frame, default is tempdir()
 #' @param max_tbl_size, numeric, maximum size of VI/STR dta.frame.
 #'      default is 5,000,000 rows
-#' @return coeffs, list, the derived trapezoid coefficients
+#' @return rmse_list, list, RMSE values of fitted trapezoid lines
 #' @export
 #' @note
 #' Use the `max_tbl_size` parameter to limit the total number of rows
@@ -266,12 +266,12 @@ optram_safe <- function(safe_dir,
     saveRDS(full_VI_STR, full_df_path)
     message("VI-STR data saved to: ", full_df_path)
     # Now continue with regular process
-    coeffs <- rOPTRAM::optram_wetdry_coefficients(
+    rmse_list <- rOPTRAM::optram_wetdry_coefficients(
       full_VI_STR,
       aoi_file,
       trapezoid_method = trapezoid_method,
       step = step,
       output_dir = data_output_dir)
-
-    return(coeffs)
+    message("RMSE for fitted trapezoid: \n", rmse_list)
+    return(rmse_list)
 }

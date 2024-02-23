@@ -2,7 +2,7 @@
 % Please edit documentation in R/trapezoid_utilities.R
 \name{exponential_coefficients}
 \alias{exponential_coefficients}
-\title{Utility Function to prepare exponential fitted edges of trapezoid}
+\title{Utility Function to Prepare Exponential FittedEedges of Trapezoid}
 \usage{
 exponential_coefficients(df, output_dir)
 }
@@ -12,7 +12,7 @@ exponential_coefficients(df, output_dir)
 \item{output_dir, }{string, path to save coefficients CSV file}
 }
 \value{
-coeffs, data.frame of 2 linear regression coefficients
+rmse_list, list of RMSE values of trapezoid fitted lines
 for both wet and dry edges
 }
 \description{

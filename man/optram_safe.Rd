@@ -49,7 +49,7 @@ default "linear"}
 to prepare edge values, default 0.01}
 }
 \value{
-coeffs, list, the derived trapezoid coefficients
+rmse_list, list, RMSE values of fitted trapezoid lines
 }
 \description{
 Use this function to prepares vegetation index and

@@ -31,7 +31,7 @@
 #'  How to fit a curve to the values along trapezoid edges
 #'  See notes in optram_wetdry_coefficients()
 #'
-#' @return coeffs_file, string, full path to saved CSV of wet-dry coefficients
+#' @return rmse_list, list, RMSE values of fitted trapezoid lines
 #' the coefficients are also saved to a csv file in `data_output_dir`.
 #' @note
 #' to download imagery. Please first install `gcloud` following instructions:
@@ -92,12 +92,12 @@ optram <- function(aoi_file,
     STR_list <- list.files(path = STR_dir, full.names = TRUE)
     VI_list <- list.files(path = VI_dir, full.names = TRUE)
     VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)
-    coeffs <- rOPTRAM::optram_wetdry_coefficients(
+    rmse_list <- rOPTRAM::optram_wetdry_coefficients(
       VI_STR_df,
       aoi_file = aoi_file,
       output_dir = data_output_dir,
       step = step,
       trapezoid_method = trapezoid_method)
-
-    return(coeffs)
+    message("RMSE for fitted trapezoid: \n", rmse_list)
+    return(rmse_list)
 }

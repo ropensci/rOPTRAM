@@ -13,7 +13,7 @@
 #' Possible values: "linear", "exponential", "polynomial". See notes.
 #' Default "linear"
 #' @param save_plot, boolean, If TRUE (default) save scatterplot to output_dir
-#' @return coeffs, list of float, coefficients of wet-dry trapezoid
+#' @return rmse_list, list of float, RMSE values of fitted trapezoid edges
 #' @export
 #' @note
 #' The vegetation index column is named "VI" though it can represent
@@ -47,14 +47,14 @@
 #' aoi_file <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'   package = "rOPTRAM"))
-#' coeffs <- optram_wetdry_coefficients(full_df, aoi_file,
+#' rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
 #'                  trapezoid_method = "linear",
 #'                  rm.low.vi = TRUE, rm.hi.str = TRUE)
-#' print(coeffs)
-#' coeffs_poly <- optram_wetdry_coefficients(full_df, aoi_file,
+#' print(rmse_list)
+#' rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
 #'                   trapezoid_method = "polynomial",
 #'                   rm.low.vi = TRUE, rm.hi.str = TRUE)
-#' print(coeffs_poly)
+#' print(rmse_list)
 #'
 
 optram_wetdry_coefficients <- function(
@@ -131,19 +131,18 @@ optram_wetdry_coefficients <- function(
       return(NULL)
     })
 
-  coeffs <- switch(trapezoid_method,
+  rmse_list <- switch(trapezoid_method,
         linear = linear_coefficients(edges_df, output_dir),
         exponential = exponential_coefficients(edges_df, output_dir),
         polynomial = polynomial_coefficients(edges_df, output_dir))
 
   if (save_plot) {
     plot_vi_str_cloud(full_df,
-                     coeffs,
                      aoi_name,
                      trapezoid_method = trapezoid_method,
                      output_dir = output_dir)
   }
-  return(coeffs)
+  return(rmse_list)
 }
 
 
@@ -152,8 +151,6 @@ optram_wetdry_coefficients <- function(
 #' Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
 #' over scatterplot of multi-temporal STR and NDVI pixel values
 #' @param full_df, data.frame of NDVI and STR pixel values
-#' @param coeffs, list of floats, the slope and intercept
-#'   of wet and dry regression lines
 #' @param aoi_name, string, used in plot title
 #' @param output_dir, string, directory to save plot png file.
 #' @param trapezoid_method, string, how to plot trapezoid line.
@@ -168,18 +165,12 @@ optram_wetdry_coefficients <- function(
 #' aoi_name <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'         package = "rOPTRAM"))
-#' coeffs <- read.csv(system.file("extdata", "coefficients_lin.csv",
-#'         package = "rOPTRAM"))
-#' plot_vi_str_cloud(full_df, coeffs, aoi_name)
-#' coeffs <- read.csv(system.file("extdata", "coefficients_pol.csv",
-#'         package = "rOPTRAM"))
-#' plot_vi_str_cloud(full_df, coeffs, aoi_name,
+#' plot_vi_str_cloud(full_df, aoi_name)
+#' plot_vi_str_cloud(full_df, aoi_name,
 #'                     trapezoid_method = "polynomial")
 #'
-
 plot_vi_str_cloud <- function(
     full_df,
-    coeffs,
     aoi_name,
     output_dir = tempdir(),
     trapezoid_method = c("linear", "exponential", "polynomial"),
@@ -190,11 +181,6 @@ plot_vi_str_cloud <- function(
   STR_dry <- STR_wet <- edges_pts <- NULL
 
   # Pre-flight test
-  if (ncol(coeffs) < 4) {
-    message("Coefficients not correctly formed. \n
-    Be sure the CSV file has 4 columns. Exiting...")
-    return(NULL)
-  }
   if (! "STR" %in% names(full_df)) {
     message("STR column missing from data.frame. Exiting...")
     return(NULL)
@@ -240,7 +226,7 @@ plot_vi_str_cloud <- function(
   trapezoid_method <- match.arg(trapezoid_method)
   pl <- switch(trapezoid_method,
           linear = plot_cloud_linear(pl_base,
-                                     coeffs, aoi_name),
+                                     output_dir, aoi_name),
           exponential = plot_cloud_exponential(pl_base,
                                                output_dir, aoi_name),
           polynomial = plot_cloud_polynomial(pl_base,

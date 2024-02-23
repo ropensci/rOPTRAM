@@ -2,7 +2,7 @@
 % Please edit documentation in R/trapezoid_utilities.R
 \name{linear_coefficients}
 \alias{linear_coefficients}
-\title{Utility Function to prepare linear regression edges of trapezoid}
+\title{Utility Function to Prepare Linear Regression Edges of Trapezoid}
 \usage{
 linear_coefficients(df, output_dir)
 }
@@ -12,7 +12,7 @@ linear_coefficients(df, output_dir)
 \item{output_dir, }{string, path to save coefficients CSV file}
 }
 \value{
-coeffs, data.frame of 2 linear regression coefficients
+rmse_list, list of RMSE values of trapezoid fitted lines
 for both wet and dry edges
 }
 \description{

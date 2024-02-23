@@ -6,7 +6,6 @@
 \usage{
 plot_vi_str_cloud(
   full_df,
-  coeffs,
   aoi_name,
   output_dir = tempdir(),
   trapezoid_method = c("linear", "exponential", "polynomial"),
@@ -15,9 +14,6 @@ plot_vi_str_cloud(
 }
 \arguments{
 \item{full_df, }{data.frame of NDVI and STR pixel values}
-
-\item{coeffs, }{list of floats, the slope and intercept
-of wet and dry regression lines}
 
 \item{aoi_name, }{string, used in plot title}
 
@@ -41,12 +37,8 @@ over scatterplot of multi-temporal STR and NDVI pixel values
 aoi_name <- "Test"
 full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
         package = "rOPTRAM"))
-coeffs <- read.csv(system.file("extdata", "coefficients_lin.csv",
-        package = "rOPTRAM"))
-plot_vi_str_cloud(full_df, coeffs, aoi_name)
-coeffs <- read.csv(system.file("extdata", "coefficients_pol.csv",
-        package = "rOPTRAM"))
-plot_vi_str_cloud(full_df, coeffs, aoi_name,
+plot_vi_str_cloud(full_df, aoi_name)
+plot_vi_str_cloud(full_df, aoi_name,
                     trapezoid_method = "polynomial")
 
 }

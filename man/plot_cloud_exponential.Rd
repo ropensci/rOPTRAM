@@ -9,11 +9,9 @@ plot_cloud_exponential(pl_base, output_dir, aoi_name)
 \arguments{
 \item{pl_base, }{ggplot object, additional lines are added to base plot}
 
+\item{output_dir, }{string, path to directory where trapezoid edges were saved}
+
 \item{aoi_name, }{string, added to plot title}
-
-\item{plot_df, }{data.frame, original plot data, needed for Exponential fitting}
-
-\item{coeffs, }{data.frame, 4 trapezoid coefficients}
 }
 \value{
 ggplot object

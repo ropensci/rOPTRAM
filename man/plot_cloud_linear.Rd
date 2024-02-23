@@ -4,14 +4,14 @@
 \alias{plot_cloud_linear}
 \title{Scatterplot, Linear Fitted Curve}
 \usage{
-plot_cloud_linear(pl_base, coeffs, aoi_name)
+plot_cloud_linear(pl_base, aoi_name)
 }
 \arguments{
 \item{pl_base, }{ggplot object, additional lines are added to base plot}
 
-\item{coeffs, }{data.frame, 4 trapezoid coefficients}
-
 \item{aoi_name, }{string, added to plot title}
+
+\item{output_dir, }{string, path to directory where trapezoid edges were saved}
 }
 \value{
 ggplot object
