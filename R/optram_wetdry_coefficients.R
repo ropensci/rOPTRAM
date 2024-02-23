@@ -5,7 +5,7 @@
 #' (as input to `optram_calculate_soil_moisture()` function)
 #' @param full_df, data.frame of STR and NDVI values
 #' @param output_dir, string, directory to save coefficients CSV file
-#' @param step, float, width of intervals along VI axis
+#' @param vi_step, float, width of intervals along VI axis
 #'  default 0.005
 #' @param aoi_file, string, added to title of plot
 #'  (Can be path to AOI file, then the file name is used in plot title)
@@ -24,6 +24,7 @@
 #'  - "linear" prepares a simple OLS regression line
 #'  along the wet and dry edges of the trapezoid.
 #'  Four coefficients are returned: intercept and slope for both edges.
+#'
 #'  - "exponential" creates an exponential curve fitted
 #'  to the intercept and slope, following:
 #'  Ambrosone, Mariapaola, Alessandro Matese, et al. 2020.
@@ -31,7 +32,7 @@
 #'  Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 #'  International Journal of Applied Earth Observation and Geoinformation
 #'  https://doi.org/10.1016/j.jag.2020.102113.
-#'  The same four coefficients as the linear model are returned.
+#'
 #'  - "polynomial" fits a second order polynomial curve to the
 #'  wet and dry edges of the trapezoid, following:
 #'  Ma, Chunfeng, Kasper Johansen, and Matthew F. McCabe. 2022.
@@ -59,7 +60,7 @@
 optram_wetdry_coefficients <- function(
     full_df, aoi_file,
     output_dir = tempdir(),
-    step = 0.005,
+    vi_step = 0.005,
     trapezoid_method = c("linear", "exponential", "polynomial"),
     save_plot = TRUE) {
   # Derive slope and intercept to two sides of trapezoid
@@ -88,14 +89,14 @@ optram_wetdry_coefficients <- function(
   # Make sure no Inf or NA in full_df
   full_df <- full_df[is.finite(full_df$VI), ]
   VI_min_max <- round(stats::quantile(full_df$VI, c(0.02, 0.99)), 2)
-  VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], step)
+  VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], vi_step)
   message("VI series length:", length(VI_series))
   edges_list <- lapply(VI_series, function(i){
     # Set NDVI value at midpoint of each interval
-    vi_val <- i + step/2.0
+    vi_val <- i + vi_step/2.0
 
-    # Subset the data.frame to include only NDVI values between i and i+step
-    interval_df <-  full_df[full_df$VI>=i & full_df$VI < (i+step),]
+    # Subset the data.frame to include only NDVI values between i and i+vi_step
+    interval_df <-  full_df[full_df$VI>=i & full_df$VI < (i+vi_step),]
     # if too few rows in this interval, skip it, just return NULL
     if (nrow(interval_df) < 4) {
       return(NA)

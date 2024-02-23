@@ -29,9 +29,17 @@ Three fitting methods are available in {rOPTRAM} to prepare the trapezoid wet an
  - exponential fit
  - second order polynomial
  
-Both the linear and the polynomial fit are derived using the `lm` function in the `R` {stats} package. The exponential fit uses the equation: 
+All fitting methods are derived using the `lm` function in the `R` {stats} package. 
+
+The linear OLS fit follows:
+$$STR = i + s \cdot VI$$ 
+The exponential fit uses the equation: 
 $$STR = i \cdot e^{(s \cdot VI)}$$
-where STR is the fitted STR value, $i$, and $s$ are the linear regression intercept, and slope, and $VI$ is the vegetation index value.
+where STR is the fitted STR value, $i$, and $s$ are the exponential regression intercept, and coefficient and $VI$ is the vegetation index value.
+
+The polynomial fit uses:
+
+$$ STR = \alpha + \beta1 \cdot VI + \beta2 \cdot VI^2$$
 
 The fitting method is chosen by setting the `trapezoid_method` parameter in the `optram_wetdry_coefficients()` function.
 

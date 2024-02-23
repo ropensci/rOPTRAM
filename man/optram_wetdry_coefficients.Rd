@@ -8,7 +8,7 @@ optram_wetdry_coefficients(
   full_df,
   aoi_file,
   output_dir = tempdir(),
-  step = 0.005,
+  vi_step = 0.005,
   trapezoid_method = c("linear", "exponential", "polynomial"),
   save_plot = TRUE
 )
@@ -21,7 +21,7 @@ optram_wetdry_coefficients(
 
 \item{output_dir, }{string, directory to save coefficients CSV file}
 
-\item{step, }{float, width of intervals along VI axis
+\item{vi_step, }{float, width of intervals along VI axis
 default 0.005}
 
 \item{trapezoid_method, }{string, how to prepare wet and dry trapezoid edges
@@ -56,7 +56,6 @@ Ambrosone, Mariapaola, Alessandro Matese, et al. 2020.
 Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 International Journal of Applied Earth Observation and Geoinformation
 https://doi.org/10.1016/j.jag.2020.102113.
-The same four coefficients as the linear model are returned.
 \item "polynomial" fits a second order polynomial curve to the
 wet and dry edges of the trapezoid, following:
 Ma, Chunfeng, Kasper Johansen, and Matthew F. McCabe. 2022.

@@ -56,12 +56,12 @@ linear_coefficients <- function(df, output_dir) {
 #'   coeffs
 #' }
 exponential_coefficients <- function(df, output_dir) {
-  # Uses the same linear regression line,
-  # but adds exponential curve to dry edge
-  # above the VI value d0 (default 0.2)
-  d0 <- 0.2
-  wet_fit <- stats::lm(STR_wet ~ VI, data = df)
-  dry_fit <- stats::lm(STR_dry ~ VI, data = df)
+  wet_fit <- stats::lm(log(df$STR_wet) ~ df$VI)
+  dry_fit <- stats::lm(log(df$STR_dry) ~ df$VI)
+
+  # d0 <- 0.2
+  # wet_fit <- stats::lm(STR_wet ~ VI, data = df)
+  # dry_fit <- stats::lm(STR_dry ~ VI, data = df)
   i_wet <- wet_fit$coefficients[[1]]
   s_wet <- wet_fit$coefficients[[2]]
   i_dry <- dry_fit$coefficients[[1]]
@@ -70,14 +70,15 @@ exponential_coefficients <- function(df, output_dir) {
                        "intercept_wet"=i_wet, "slope_wet"=s_wet)
 
   # Update the data.frame of trapezoid edges and save
-  df$STR_wet_fit <- i_wet * exp(s_wet * df$VI)
+  df$STR_wet_fit <- wet_fit$fitted.values
+  df$STR_dry_fit <- dry_fit$fitted.values
 
-  # The dry edge is exponential only above d0 = 0.2
-  STR_lin <- i_dry + s_dry * df$VI[df$VI < d0]
-  #i_d0 <- i_dry + s_dry * d0
-  STR_d0 <- i_dry + s_dry *d0
-  STR_exp <- STR_d0 * exp(s_dry * df$VI[df$VI >= d0])
-  df$STR_dry_fit <- c(STR_lin, STR_exp)
+  # # The dry edge is exponential only above d0 = 0.2
+  # STR_lin <- i_dry + s_dry * df$VI[df$VI < d0]
+  # #i_d0 <- i_dry + s_dry * d0
+  # STR_d0 <- i_dry + s_dry *d0
+  # STR_exp <- STR_d0 * exp(s_dry * df$VI[df$VI >= d0])
+  # df$STR_dry_fit <- c(STR_lin, STR_exp)
 
   utils::write.csv(df,
                    file.path(output_dir, "trapezoid_edges_exp.csv"),
