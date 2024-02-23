@@ -100,15 +100,9 @@ optram_wetdry_coefficients <- function(
     if (nrow(interval_df) < 4) {
       return(NA)
     }
-    # Remove lower than 1% and more than 99% quantile of STR values
-    # Use upper 99% quantile and lower 1% quantile as min/max values
-    Qs <- stats::quantile(interval_df$STR, c(0.02, 0.98), na.rm=TRUE)
-    #interval_df <- interval_df[interval_df$STR<=Qs[[2]] &
-    #                             interval_df$STR>=Qs[[1]],]
-    # Now, with outliers removed, find min (dry) and max (wet)
-    # Within each interval
-    #str_max <- max(interval_df$STR, na.rm = TRUE)
-    #str_min <- min(interval_df$STR, na.rm = TRUE)
+    # Find the lower 10% and upper 90% quantile of STR values
+    # Use these values as min/max values for dry/wet edge points
+    Qs <- stats::quantile(interval_df$STR, c(0.1, 0.9), na.rm=TRUE)
     str_max <- Qs[[2]]
     str_min <- Qs[[1]]
     edges_df1 <- data.frame("VI" = vi_val,
@@ -173,13 +167,14 @@ optram_wetdry_coefficients <- function(
 #' aoi_name <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'         package = "rOPTRAM"))
-#' coeffs <- read.csv(system.file("extdata", "coefficients.csv",
+#' coeffs <- read.csv(system.file("extdata", "coefficients_lin.csv",
 #'         package = "rOPTRAM"))
 #' plot_vi_str_cloud(full_df, coeffs, aoi_name)
-#' \dontrun{
+#' coeffs <- read.csv(system.file("extdata", "coefficients_pol.csv",
+#'         package = "rOPTRAM"))
 #' plot_vi_str_cloud(full_df, coeffs, aoi_name,
-#'                     trapezoid_method = "exponential")
-#' }
+#'                     trapezoid_method = "polynomial")
+#'
 
 plot_vi_str_cloud <- function(
     full_df,

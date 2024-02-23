@@ -4,7 +4,7 @@
 #' Calculates the intercept and slope of both wet and dry edges
 #' Not exported
 #' @param df, data.frame, values of VI and STR along edges of trapezoid
-#' @param output_dir, string, path to save coefficients csv file
+#' @param output_dir, string, path to save coefficients CSV file
 #' @return coeffs, data.frame of 2 linear regression coefficients
 #'  for both wet and dry edges
 #' @examples
@@ -32,7 +32,7 @@ linear_coefficients <- function(df, output_dir) {
                    file.path(output_dir, "trapezoid_edges_lin.csv"),
                    row.names = FALSE)
   utils::write.csv(coeffs,
-                   file.path(output_dir, "coefficients.csv"),
+                   file.path(output_dir, "coefficients_lin.csv"),
                    row.names=FALSE)
   return(coeffs)
 }
@@ -44,7 +44,7 @@ linear_coefficients <- function(df, output_dir) {
 #' and updates the edges data.frame with these exp fitted values
 #' Not exported
 #' @param df, data.frame, values of VI and STR along edges of trapezoid
-#' @param output_dir, string, path to save coefficients csv file
+#' @param output_dir, string, path to save coefficients CSV file
 #' @return coeffs, data.frame of 2 linear regression coefficients
 #'  for both wet and dry edges
 #' @examples
@@ -96,7 +96,7 @@ exponential_coefficients <- function(df, output_dir) {
 #' $STR = alpha + beta_1 * VI + beta_2 * VI^2$
 #' and updates the edges data.frame with these polynomila values fitted values
 #' @param df, data.frame, values of VI and STR along edges of trapezoid
-#' @param output_dir, string, path to save coefficients csv file
+#' @param output_dir, string, path to save coefficients CSV file
 #' @return coeffs, data.frame of 3 coefficients
 #'  for both wet and dry edges
 #' @examples
@@ -167,6 +167,14 @@ print_edges_rmse <- function(edges_file) {
 #' @param STR, terra rast, the STR raster
 #' @param coeffs, list, 4 trapezoid coefficients
 #' @return rast, soil moisture grid
+#' @examples
+#' img_date <- "2023-03-11"
+#' VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
+#' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
+#' SM <- optram_calculate_soil_moisture(img_date,
+#'             VI_dir, STR_dir,
+#'             data_dir = system.file("extdata"),
+#'             trapezoid_method = "linear")
 #' @note
 #' This function is used after preparing the OPTRAM model coefficients with:
 #'  `optram_wetdry_coefficients()`. Typically a new image date,
@@ -211,10 +219,10 @@ linear_soil_moisture <- function(coeffs, VI, STR) {
 #' img_date <- "2023-03-11"
 #' VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
 #' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
-#' coeffs_file <- system.file("extdata", "coefficients.csv",
-#'         package = "rOPTRAM")
-#' SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file,
-#'                                      trapezoid_method = "exponential")
+#' SM <- optram_calculate_soil_moisture(img_date,
+#'             VI_dir, STR_dir,
+#'             data_dir = system.file("extdata"),
+#'             trapezoid_method = "exponential")
 exponential_soil_moisture <- function(coeffs, VI, STR) {
   # based on STR and two STR_dry and STR_wet bands
   # Using the exponential trapezoid edges
@@ -277,10 +285,10 @@ exponential_soil_moisture <- function(coeffs, VI, STR) {
 #' img_date <- "2023-03-11"
 #' VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
 #' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
-#' coeffs_file <- system.file("extdata", "coefficients.csv",
-#'         package = "rOPTRAM")
-#' SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file,
-#'                                      trapezoid_method = "polynomial")
+#' SM <- optram_calculate_soil_moisture(img_date,
+#'                           VI_dir, STR_dir,
+#'                           data_dir = system.file("extdata"),
+#'                           trapezoid_method = "polynomial")
 #'
 polynomial_soil_moisture <- function(coeffs, VI, STR) {
   # based on STR and two STR_dry and STR_wet bands
@@ -327,7 +335,7 @@ polynomial_soil_moisture <- function(coeffs, VI, STR) {
 #' \dontrun{
 #' plot_df <- readRDS(system.file("extdata",
 #'                                "VI_STR_data.RDS",package = "rOPTRAM")
-#' coeffs_file <- system.file("extdata", "coefficients.csv",
+#' coeffs_file <- system.file("extdata", "coefficients_lin.csv",
 #'         package = "rOPTRAM")
 #' coeffs <- read.csv(coeffs_file)
 #' pl <- plot_cloud_linear(plot_df, coeffs)
@@ -370,7 +378,7 @@ plot_cloud_linear <- function(pl_base, coeffs, aoi_name) {
 #' \dontrun{
 #' plot_df <- readRDS(system.file("extdata",
 #'                                "VI_STR_data.RDS",package = "rOPTRAM")
-#' coeffs_file <- system.file("extdata", "coefficients.csv",
+#' coeffs_file <- system.file("extdata", "coefficients_exp.csv",
 #'         package = "rOPTRAM")
 #' coeffs <- read.csv(coeffs_file)
 #' pl <- plot_cloud_exponential(plot_df, coeffs)

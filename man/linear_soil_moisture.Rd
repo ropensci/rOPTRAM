@@ -28,3 +28,12 @@ This function is used after preparing the OPTRAM model coefficients with:
 will be referenced in the \code{img_date} parameter.
 The resulting soil moisture raster is saved to \code{output_dir}.
 }
+\examples{
+img_date <- "2023-03-11"
+VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
+STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
+SM <- optram_calculate_soil_moisture(img_date,
+            VI_dir, STR_dir,
+            data_dir = system.file("extdata"),
+            trapezoid_method = "linear")
+}

@@ -9,7 +9,7 @@ exponential_coefficients(df, output_dir)
 \arguments{
 \item{df, }{data.frame, values of VI and STR along edges of trapezoid}
 
-\item{output_dir, }{string, path to save coefficients csv file}
+\item{output_dir, }{string, path to save coefficients CSV file}
 }
 \value{
 coeffs, data.frame of 2 linear regression coefficients

@@ -41,11 +41,12 @@ over scatterplot of multi-temporal STR and NDVI pixel values
 aoi_name <- "Test"
 full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
         package = "rOPTRAM"))
-coeffs <- read.csv(system.file("extdata", "coefficients.csv",
+coeffs <- read.csv(system.file("extdata", "coefficients_lin.csv",
         package = "rOPTRAM"))
 plot_vi_str_cloud(full_df, coeffs, aoi_name)
-\dontrun{
+coeffs <- read.csv(system.file("extdata", "coefficients_pol.csv",
+        package = "rOPTRAM"))
 plot_vi_str_cloud(full_df, coeffs, aoi_name,
-                    trapezoid_method = "exponential")
-}
+                    trapezoid_method = "polynomial")
+
 }

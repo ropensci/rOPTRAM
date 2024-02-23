@@ -8,7 +8,7 @@ optram_wetdry_coefficients(
   full_df,
   aoi_file,
   output_dir = tempdir(),
-  step = 0.01,
+  step = 0.005,
   trapezoid_method = c("linear", "exponential", "polynomial"),
   save_plot = TRUE
 )
@@ -22,7 +22,7 @@ optram_wetdry_coefficients(
 \item{output_dir, }{string, directory to save coefficients CSV file}
 
 \item{step, }{float, width of intervals along VI axis
-default 0.01}
+default 0.005}
 
 \item{trapezoid_method, }{string, how to prepare wet and dry trapezoid edges
 Possible values: "linear", "exponential", "polynomial". See notes.

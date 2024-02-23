@@ -28,7 +28,7 @@ This function is called from \code{plot_vi_str_cloud()}
 \dontrun{
 plot_df <- readRDS(system.file("extdata",
                                "VI_STR_data.RDS",package = "rOPTRAM")
-coeffs_file <- system.file("extdata", "coefficients.csv",
+coeffs_file <- system.file("extdata", "coefficients_exp.csv",
         package = "rOPTRAM")
 coeffs <- read.csv(coeffs_file)
 pl <- plot_cloud_exponential(plot_df, coeffs)
