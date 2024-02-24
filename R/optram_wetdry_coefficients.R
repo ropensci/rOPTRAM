@@ -13,6 +13,10 @@
 #'    Possible values: "linear", "exponential", "polynomial". See notes.
 #'    Default "linear"
 #' @param save_plot, boolean, If TRUE (default) save scatterplot to output_dir
+#' @param edge_points, boolean, whether to add edge points to the plot.
+#'    If `save_plot` is TRUE, and `edge_points` is TRUE
+#'    add the original regression points that were used to derive coefficients.
+#'    default FALSE
 #' @return rmse_list, named list of floats,
 #'    RMSE values of fitted trapezoid edges
 #' @export
@@ -63,7 +67,8 @@ optram_wetdry_coefficients <- function(
     output_dir = tempdir(),
     vi_step = 0.005,
     trapezoid_method = c("linear", "exponential", "polynomial"),
-    save_plot = TRUE) {
+    save_plot = TRUE,
+    edge_points = FALSE) {
   # Derive slope and intercept to two sides of trapezoid
   # Based on:
   # https://github.com/teerathrai/OPTRAM
@@ -143,7 +148,8 @@ optram_wetdry_coefficients <- function(
                      aoi_name,
                      fitted_df,
                      trapezoid_method = trapezoid_method,
-                     output_dir = output_dir)
+                     output_dir = output_dir,
+                     edge_points = edge_points )
   }
   rmse_wet <- sqrt(mean((fitted_df$STR_wet_fit - fitted_df$STR_wet)^2))
   rmse_dry <- sqrt(mean((fitted_df$STR_dry_fit - fitted_df$STR_dry)^2))
@@ -161,7 +167,7 @@ optram_wetdry_coefficients <- function(
 #' @param output_dir, string, directory to save plot png file.
 #' @param trapezoid_method, string, how to plot trapezoid line.
 #'    either "linear" or "exponential", default is "linear"
-#' @param edges_points, boolean, whether to add to the plot the
+#' @param edge_points, boolean, whether to add to the plot the
 #'    linear regression points that were used to derive coefficients.
 #'    default FALSE
 #' @return None
@@ -178,9 +184,10 @@ optram_wetdry_coefficients <- function(
 plot_vi_str_cloud <- function(
     full_df,
     aoi_name,
+    edges_df,
     output_dir = tempdir(),
     trapezoid_method = c("linear", "exponential", "polynomial"),
-    edges_points = FALSE) {
+    edge_points = FALSE) {
   # Avoid "no visible binding for global variable" NOTE
 
   # Pre-flight test
@@ -219,15 +226,15 @@ plot_vi_str_cloud <- function(
     lims(y=c(y_min, y_max), x=c(x_min, x_max)) +
     labs(x="Vegetation Index", y="SWIR Transformed") +
     # Dry edge
-    geom_smooth(data = edges,
+    geom_smooth(data = edges_df,
                 mapping = aes(x = VI, y = STR_dry_fit),
                 method = "loess",
                 color = "orange2", se = FALSE) +
     # Wet edge
-    geom_smooth(data = edges,
+    geom_smooth(data = edges_df,
                 aes(x = VI, y = STR_wet_fit),
                 method = "loess",
-                color="skyblue", se = FALSE) +
+                color="blue", se = FALSE) +
 
     ggtitle(paste("Trapezoid Plot - ", aoi_name),
             subtitle = paste(trapezoid_method, "fit"))
@@ -238,7 +245,7 @@ plot_vi_str_cloud <- function(
           plot.title = element_text(size = 18, face = "bold"),
           plot.subtitle = element_text(size=18))
 
-  if (edges_points) {
+  if (edge_points) {
     pl <- pl + geom_point(aes(x=VI, y=STR_wet),
                       color = "black", size=1.5, shape=2,
                       data = edges_df) +

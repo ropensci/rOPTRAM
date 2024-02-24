@@ -10,7 +10,8 @@ optram_wetdry_coefficients(
   output_dir = tempdir(),
   vi_step = 0.005,
   trapezoid_method = c("linear", "exponential", "polynomial"),
-  save_plot = TRUE
+  save_plot = TRUE,
+  edge_points = FALSE
 )
 }
 \arguments{
@@ -29,6 +30,11 @@ Possible values: "linear", "exponential", "polynomial". See notes.
 Default "linear"}
 
 \item{save_plot, }{boolean, If TRUE (default) save scatterplot to output_dir}
+
+\item{edge_points, }{boolean, whether to add edge points to the plot.
+If \code{save_plot} is TRUE, and \code{edge_points} is TRUE
+add the original regression points that were used to derive coefficients.
+default FALSE}
 }
 \value{
 rmse_list, named list of floats,

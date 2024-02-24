@@ -7,9 +7,10 @@
 plot_vi_str_cloud(
   full_df,
   aoi_name,
+  edges_df,
   output_dir = tempdir(),
   trapezoid_method = c("linear", "exponential", "polynomial"),
-  edges_points = FALSE
+  edge_points = FALSE
 )
 }
 \arguments{
@@ -17,16 +18,16 @@ plot_vi_str_cloud(
 
 \item{aoi_name, }{string, used in plot title}
 
+\item{edges_df, }{data.frame, points along the wet/dry edges for trapezoid}
+
 \item{output_dir, }{string, directory to save plot png file.}
 
 \item{trapezoid_method, }{string, how to plot trapezoid line.
 either "linear" or "exponential", default is "linear"}
 
-\item{edges_points, }{boolean, whether to add to the plot the
+\item{edge_points, }{boolean, whether to add to the plot the
 linear regression points that were used to derive coefficients.
 default FALSE}
-
-\item{edges_df, }{data.frame, points along the wet/dry edges for trapezoid}
 }
 \value{
 None
