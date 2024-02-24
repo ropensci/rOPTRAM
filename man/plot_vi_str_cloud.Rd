@@ -25,6 +25,8 @@ either "linear" or "exponential", default is "linear"}
 \item{edges_points, }{boolean, whether to add to the plot the
 linear regression points that were used to derive coefficients.
 default FALSE}
+
+\item{edges_df, }{data.frame, points along the wet/dry edges for trapezoid}
 }
 \value{
 None

@@ -12,8 +12,8 @@ exponential_coefficients(df, output_dir)
 \item{output_dir, }{string, path to save coefficients CSV file}
 }
 \value{
-rmse_list, list of RMSE values of trapezoid fitted lines
-for both wet and dry edges
+df, data.frame, the trapezoid line edge points
+with fitted wet/dry values added
 }
 \description{
 Called by \code{optram_wetdry_coefficients()}
@@ -21,6 +21,14 @@ to prepare exponential curve along trapezoid edges
 Calculates the intercept and slope of both wet and dry edges
 and updates the edges data.frame with these exp fitted values
 Not exported
+}
+\note{
+Three CSV files are saved:
+\itemize{
+\item the regressions coefficients,
+\item the trapezoid edge points
+\item RMSE of the fitted curve
+}
 }
 \examples{
 \dontrun{

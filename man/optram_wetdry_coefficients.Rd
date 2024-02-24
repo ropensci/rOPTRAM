@@ -31,7 +31,8 @@ Default "linear"}
 \item{save_plot, }{boolean, If TRUE (default) save scatterplot to output_dir}
 }
 \value{
-rmse_list, list of float, RMSE values of fitted trapezoid edges
+rmse_list, named list of floats,
+RMSE values of fitted trapezoid edges
 }
 \description{
 Derive slope and intercept coefficients

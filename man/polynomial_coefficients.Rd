@@ -12,7 +12,7 @@ polynomial_coefficients(df, output_dir)
 \item{output_dir, }{string, path to save coefficients CSV file}
 }
 \value{
-rmse_list, list of RMSE values of trapezoid fitted lines
+df, data.frame, the trapezoid line edge points with fitted values added
 for both wet and dry edges
 }
 \description{
@@ -23,12 +23,19 @@ and first and second order coefficients (beta), as in
 $STR = alpha + beta_1 * VI + beta_2 * VI^2$
 and updates the edges data.frame with these polynomila values fitted values
 }
+\note{
+Three CSV files are saved:
+\itemize{
+\item the regressions coefficients,
+\item the trapezoid edge points
+\item RMSE of the fitted curve
+}
+}
 \examples{
 \dontrun{
   df <- read.csv(system.file("extdata", "trapezoid_edges.csv",
                   package = "rOPTRAM"))
   output_dir <- tempdir()
-  coeffs <- rOPTRAM::polynomial_coefficients(df, output_dir)
-  coeffs
+
  }
 }
