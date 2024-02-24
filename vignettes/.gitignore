@@ -1,4 +1,4 @@
 *.html
 my_*
 precompile_vignette.R
-rOPTRAM_prepare_extdata.R
+prepare_extdata.*

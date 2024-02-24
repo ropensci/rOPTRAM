@@ -5,8 +5,13 @@
 #' Not exported
 #' @param df, data.frame, values of VI and STR along edges of trapezoid
 #' @param output_dir, string, path to save coefficients CSV file
-#' @return rmse_list, list of RMSE values of trapezoid fitted lines
-#'  for both wet and dry edges
+#' @return df, data.frame, the trapezoid line edge points
+#'  with fitted wet/dry values added
+#' @note
+#'  Three CSV files are saved:
+#'   - the regressions coefficients,
+#'   - the trapezoid edge points
+#'   - RMSE of the fitted curve
 #' @examples
 #' \dontrun{
 #' edges_file <- system.file("extdata/trapezoid_edges.csv",
@@ -40,7 +45,7 @@ linear_coefficients <- function(df, output_dir) {
   utils::write.csv(coeffs,
                    file.path(output_dir, "coefficients_lin.csv"),
                    row.names=FALSE)
-  return(rmse_list)
+  return(df)
 }
 
 #' @title Utility Function to Prepare Exponential FittedEedges of Trapezoid
@@ -51,8 +56,13 @@ linear_coefficients <- function(df, output_dir) {
 #' Not exported
 #' @param df, data.frame, values of VI and STR along edges of trapezoid
 #' @param output_dir, string, path to save coefficients CSV file
-#' @return rmse_list, list of RMSE values of trapezoid fitted lines
-#'  for both wet and dry edges
+#' @return df, data.frame, the trapezoid line edge points
+#'  with fitted wet/dry values added
+#' @note
+#'  Three CSV files are saved:
+#'   - the regressions coefficients,
+#'   - the trapezoid edge points
+#'   - RMSE of the fitted curve
 #' @examples
 #' \dontrun{
 #'   df <- read.csv(system.file("extdata", "trapezoid_edges.csv",
@@ -98,7 +108,7 @@ exponential_coefficients <- function(df, output_dir) {
   utils::write.csv(coeffs,
                    file.path(output_dir, "coefficients_exp.csv"),
                    row.names=FALSE)
-  return(rmse_list)
+  return(df)
 }
 
 #' @title Utility Function to Prepare Polynomial Fitted Edges of Trapezoid
@@ -110,15 +120,19 @@ exponential_coefficients <- function(df, output_dir) {
 #' and updates the edges data.frame with these polynomila values fitted values
 #' @param df, data.frame, values of VI and STR along edges of trapezoid
 #' @param output_dir, string, path to save coefficients CSV file
-#' @return rmse_list, list of RMSE values of trapezoid fitted lines
+#' @return df, data.frame, the trapezoid line edge points with fitted values added
 #'  for both wet and dry edges
+#' @note
+#'  Three CSV files are saved:
+#'   - the regressions coefficients,
+#'   - the trapezoid edge points
+#'   - RMSE of the fitted curve
 #' @examples
 #' \dontrun{
 #'   df <- read.csv(system.file("extdata", "trapezoid_edges.csv",
 #'                   package = "rOPTRAM"))
 #'   output_dir <- tempdir()
-#'   coeffs <- rOPTRAM::polynomial_coefficients(df, output_dir)
-#'   coeffs
+#'
 #'  }
 polynomial_coefficients <- function(df, output_dir) {
   wet_fit <- stats::lm(df$STR_wet ~ poly(df$VI, 2))
@@ -146,7 +160,7 @@ polynomial_coefficients <- function(df, output_dir) {
   utils::write.csv(coeffs,
                    file.path(output_dir, "coefficients_poly.csv"),
                    row.names=FALSE)
-  return(rmse_list)
+  return(df)
 }
 
 
@@ -310,117 +324,4 @@ polynomial_soil_moisture <- function(coeffs, VI, STR) {
        ((a_wet - a_dry) + (b1_wet - b1_dry)*VI + (b2_wet - b2_dry)*VI^2)
 
   return(W)
-}
-
-#' @title Scatterplot, Linear Fitted Curve
-#' @description Plot of VI/STR points, with linear fitted curve
-#' @param pl_base, ggplot object, additional lines are added to base plot
-#' @param output_dir, string, path to directory where trapezoid edges were saved
-#' @param aoi_name, string, added to plot title
-#' @return ggplot object
-#' @note
-#' This function is called from `plot_vi_str_cloud()`
-#' @examples
-#' \dontrun{
-#' plot_df <- readRDS(system.file("extdata",
-#'                                "VI_STR_data.RDS",package = "rOPTRAM")
-#' coeffs_file <- system.file("extdata", "coefficients_lin.csv",
-#'         package = "rOPTRAM")
-#' coeffs <- read.csv(coeffs_file)
-#' pl <- plot_cloud_linear(plot_df, coeffs)
-#' }
-plot_cloud_linear <- function(pl_base, aoi_name) {
-  edges <- utils::read.csv(file.path(output_dir,
-                                     "trapezoid_edges_exp.csv"))
-  pl <- pl_base +
-    # Wet edge
-    geom_line(data = edges, aes(x = VI, y = STR_wet_fit),
-                color = "#2E94B9", linewidth = 1.0) +
-    # Dry edge
-    geom_line(data = edges, aes(x = VI, y = STR_dry_fit),
-                color = "#FD5959", linewidth = 1.0) +
-    ggtitle(paste("Trapezoid Plot - ", aoi_name),
-            subtitle = "Linear fit") +
-    # Add coeffs as text
-    #annotate("text", x=0.8 * max(pl_base$data$VI), y=0.3, na.rm = TRUE,
-    #         label = coeffs_text, size = 4)
-
-  return(pl)
-}
-
-
-#' @title Scatterplot, Exponential Fitted Curve
-#' @description Plot of VI/STR points, with exponential fitted curve
-#' @param pl_base, ggplot object, additional lines are added to base plot
-#' @param output_dir, string, path to directory where trapezoid edges were saved
-#' @param aoi_name, string, added to plot title
-#' @return ggplot object
-#' @note
-#' This function is called from `plot_vi_str_cloud()`
-#' @examples
-#' \dontrun{
-#' plot_df <- readRDS(system.file("extdata",
-#'                                "VI_STR_data.RDS",package = "rOPTRAM")
-#' coeffs_file <- system.file("extdata", "coefficients_exp.csv",
-#'         package = "rOPTRAM")
-#' coeffs <- read.csv(coeffs_file)
-#' pl <- plot_cloud_exponential(plot_df, coeffs)
-#' }
-plot_cloud_exponential <- function(pl_base, output_dir, aoi_name) {
-
-  # Add polynomial edges points as smoothed lines to the graph
-  edges <- utils::read.csv(file.path(output_dir,
-                                     "trapezoid_edges_exp.csv"))
-
-  pl <- pl_base +
-    geom_smooth(data = edges,
-                mapping = aes(x = VI, y = STR_dry_fit),
-                method = "loess",
-                color = "orange2", se = FALSE) +
-    geom_smooth(data = edges,
-                aes(x = VI, y = STR_wet_fit),
-                method = "loess",
-                color="turquoise4", se = FALSE) +
-    ggtitle(paste("Trapezoid Plot - ", aoi_name),
-            subtitle = "Exponential fit")
-
-  return(pl)
-}
-
-
-#' @title Scatterplot, Polynomial Fitted Curve
-#' @description Plot of VI/STR points, with polynomial fitted curve
-#' @param pl_base, ggplot object, additional lines are added to base plot
-#' @param output_dir, string, path to directory where trapezoid edges were saved
-#' @param aoi_name, string, added to plot title
-#' @return ggplot object
-#' @note
-#' This function is called from `plot_vi_str_cloud()`
-#' @examples
-#' \dontrun{
-#' output_dir <- system.file("extdata")
-#' pl <- plot_cloud_polynomial(pl_base, output_dir)
-#'}
-plot_cloud_polynomial <- function(pl_base, output_dir, aoi_name) {
-
-  # Avoid "no visible binding for global variable" NOTE
-  VI <- NULL
-
-  # Add polynomial edges points as smoothed lines to the graph
-  edges <- utils::read.csv(file.path(output_dir,
-                                    "trapezoid_edges_poly.csv"))
-
-  pl <- pl_base +
-    geom_smooth(data = edges,
-                mapping = aes(x = VI, y = STR_dry_fit),
-                method = "loess",
-                color = "brown", se = FALSE) +
-    geom_smooth(data = edges,
-                aes(x = VI, y = STR_wet_fit),
-                method = "loess",
-                color="purple", se = FALSE) +
-    ggtitle(paste("Trapezoid Plot - ", aoi_name),
-            subtitle = "Polynomial fit")
-
-  return(pl)
 }
