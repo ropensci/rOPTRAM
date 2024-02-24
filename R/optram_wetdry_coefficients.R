@@ -107,9 +107,9 @@ optram_wetdry_coefficients <- function(
     if (nrow(interval_df) < 4) {
       return(NA)
     }
-    # Find the lower 10% and upper 90% quantile of STR values
+    # Find the lower 5% and upper 95% quantile of STR values
     # Use these values as min/max values for dry/wet edge points
-    Qs <- stats::quantile(interval_df$STR, c(0.1, 0.9), na.rm=TRUE)
+    Qs <- stats::quantile(interval_df$STR, c(0.05, 0.95), na.rm=TRUE)
     str_max <- Qs[[2]]
     str_min <- Qs[[1]]
     edges_df1 <- data.frame("VI" = vi_val,
