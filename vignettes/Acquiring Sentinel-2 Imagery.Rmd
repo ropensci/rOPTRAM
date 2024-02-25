@@ -25,9 +25,9 @@ The CSDE package provides an interface to the 'Copernicus Data Space Ecosystem' 
 
 OpenEO is an open-source project aimed at standardizing and simplifying access to Earth observation data and processing services. It provides a common API that abstracts away the complexities of accessing and processing Earth observation data, allowing users to interact with multiple back-end processing engines through a unified interface.
 
-This vignette provides a detailed guide on acquiring Sentinel-2 imagery using both the CDSE and the openEO platform.
-
 [openEO CRAN page](https://cran.r-project.org/web/packages/openeo/index.html)
+
+This vignette provides a detailed guide on acquiring Sentinel-2 imagery using both the CDSE and the openEO platform.
 
 Both methods require [registering](https://dataspace.copernicus.eu/) on the Copernicus DataSpace.
 
@@ -116,7 +116,7 @@ For detailed instructions on how to register for the Copernicus Data Space, plea
 
 #### Login Process:
 
-A. When you run the `acquire_openeo()` function, it internally calls the `check_openeo()` function. If the `openeo` package is not installed, it will be installed automatically.
+A. When you run the `acquire_openeo()` function, it internally calls the `check_openeo()` function.
 
 B. When prompted, press enter to proceed.
 
