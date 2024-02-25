@@ -84,6 +84,11 @@ optram_calculate_soil_moisture <- function(
     return(NULL)
   }
 
+  if (!dir.exists(data_dir)) {
+    message("No data directory:", data_dir)
+    return(NULL)
+  }
+
   coeffs_file <-  switch(trapezoid_method,
           linear = file.path(data_dir, "coefficients_lin.csv"),
           exponential = file.path(data_dir, "coefficients_exp.csv"),
