@@ -79,12 +79,10 @@ aoi_file <- "Test"
 full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
   package = "rOPTRAM"))
 rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
-                 trapezoid_method = "linear",
-                 rm.low.vi = TRUE, rm.hi.str = TRUE)
+                 trapezoid_method = "linear")
 print(rmse_list)
 rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
-                  trapezoid_method = "polynomial",
-                  rm.low.vi = TRUE, rm.hi.str = TRUE)
+                  trapezoid_method = "polynomial")
 print(rmse_list)
 
 }

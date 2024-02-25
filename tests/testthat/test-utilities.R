@@ -1,6 +1,6 @@
 test_that("calculate_vi returns SpatRaster", {
     img_stk <- terra::rast(system.file("extdata",
-              "BOA", "BOA_xxxx-xx-xx.tif", package = "rOPTRAM"))
+              "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
     # Test all VIs
     expect_s4_class(calculate_vi(img_stk, viname = "NDVI"), "SpatRaster")
     expect_s4_class(calculate_vi(img_stk, viname = "SAVI"), "SpatRaster")
@@ -11,13 +11,13 @@ test_that("calculate_vi returns SpatRaster", {
 
 test_that("calculate_vi returns NULL for non-existant VI", {
     img_stk <- terra::rast(system.file("extdata",
-              "BOA", "BOA_xxxx-xx-xx.tif", package = "rOPTRAM"))
+              "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
     expect_null(calculate_vi(img_stk, viname = "XXX"))
 })
 
 test_that("calculate_str returns SpatRaster", {
     img_stk <- terra::rast(system.file("extdata",
-              "BOA", "BOA_xxxx-xx-xx.tif", package = "rOPTRAM"))
+              "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
     expect_s4_class(calculate_str(img_stk), "SpatRaster")
 })
 

@@ -28,9 +28,7 @@ since Landsat metadata contains gain and offset
 for scaling image bands.
 }
 \examples{
-img_stk <- terra::rast(system.file("extdata",
-         "BOA",
-         "S2A2A_20230301_121_migda_BOA_10.tif",
-         package = "rOPTRAM"))
+img_stk <- terra::rast(system.file("extdata", "BOA",
+         "BOA_2022-12-11.tif", package = "rOPTRAM"))
 str <- calculate_str(img_stk)
 }

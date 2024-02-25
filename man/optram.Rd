@@ -10,7 +10,6 @@ optram(
   from_date,
   to_date,
   max_cloud = 15,
-  remove_safe = "yes",
   S2_output_dir = tempdir(),
   data_output_dir = tempdir(),
   remote = "scihub",

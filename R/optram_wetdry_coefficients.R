@@ -53,12 +53,10 @@
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'   package = "rOPTRAM"))
 #' rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
-#'                  trapezoid_method = "linear",
-#'                  rm.low.vi = TRUE, rm.hi.str = TRUE)
+#'                  trapezoid_method = "linear")
 #' print(rmse_list)
 #' rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
-#'                   trapezoid_method = "polynomial",
-#'                   rm.low.vi = TRUE, rm.hi.str = TRUE)
+#'                   trapezoid_method = "polynomial")
 #' print(rmse_list)
 #'
 
@@ -177,8 +175,12 @@ optram_wetdry_coefficients <- function(
 #' aoi_name <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'         package = "rOPTRAM"))
-#' plot_vi_str_cloud(full_df, aoi_name)
-#' plot_vi_str_cloud(full_df, aoi_name,
+#' edges_df <- read.csv(system.file("extdata", "trapezoid_edges_lin.csv",
+#'                         package = "rOPTRAM"))
+#' plot_vi_str_cloud(full_df, aoi_name, edges_df)
+#' edges_df <- read.csv(system.file("extdata", "trapezoid_edges_poly.csv",
+#'                         package = "rOPTRAM"))
+#' plot_vi_str_cloud(full_df, aoi_name, edges_df,
 #'                     trapezoid_method = "polynomial")
 #'
 plot_vi_str_cloud <- function(
@@ -189,7 +191,7 @@ plot_vi_str_cloud <- function(
     trapezoid_method = c("linear", "exponential", "polynomial"),
     edge_points = FALSE) {
   # Avoid "no visible binding for global variable" NOTE
-
+  VI <- STR <- STR_dry_fit <- STR_wet_fit <- STR_wet <- STR_dry <- NULL
   # Pre-flight test
   if (! "STR" %in% names(full_df)) {
     message("STR column missing from data.frame. Exiting...")
