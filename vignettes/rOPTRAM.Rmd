@@ -85,11 +85,11 @@ knitr::kable(coeffs, caption = "Trapezoid coefficients")
 
 ```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%', warning=FALSE}
 ttl <- "Migda"
-coeffs <- read.csv(file.path(output_dir, "coefficients.csv"))
+edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
-plot_vi_str_cloud(full_df, coeffs, ttl, output_dir = output_dir)
-knitr::include_graphics("images/trapezoid_Migda_linear.png")
+plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
+knitr::include_graphics("images/trapezoid_Migda_9_linear.png")
 ```
 
 ## Step by step
@@ -117,10 +117,10 @@ VI_list <- list.files(file.path(output_dir, "SAVI"),
 full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir,
                            rm.low.vi = TRUE, rm.hi.str = TRUE)
-coeffs <- optram_wetdry_coefficients(full_df,
+rmse <- optram_wetdry_coefficients(full_df,
                                      aoi_file,
                                      output_dir = output_dir)
-knitr::kable(coeffs, caption = "Trapezoid coefficients")
+knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
 ```
 
 
@@ -133,8 +133,10 @@ knitr::kable(coeffs, caption = "Trapezoid coefficients")
 img_date <- "2023-01-10"   # After a rain
 VI_dir <- file.path(output_dir, "SAVI")
 STR_dir <- file.path(output_dir, "STR")
-coeffs_file <- file.path(output_dir, "coefficients.csv")
-SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file)
+data_dir <- output_dir
+SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
+                                     data_dir = data_dir,
+                                     trapezoid_method = "linear")
 ```
 
 ### Soil moisture plot
