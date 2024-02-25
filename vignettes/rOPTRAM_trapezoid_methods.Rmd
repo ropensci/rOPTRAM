@@ -109,8 +109,8 @@ plot_vi_str_cloud(full_df, ttl,
                   output_dir = output_dir,
                   edges_df = edges_df,
                   trapezoid_method = meth,
-                  edges_points = TRUE)
-knitr::include_graphics("images/trapezoid_Migda_exponential.png")
+                  edge_points = TRUE)
+knitr::include_graphics("images/trapezoid_Migda_9_exponential.png")
 ```
 
 #### Show Polynomial fitted trapezoid plot
@@ -128,6 +128,6 @@ plot_vi_str_cloud(full_df, ttl,
                   output_dir = output_dir,
                   edges_df = edges_df,
                   trapezoid_method = meth,
-                  edges_points = TRUE)
-knitr::include_graphics("images/trapezoid_Migda_polynomial.png")
+                  edge_points = TRUE)
+knitr::include_graphics("images/trapezoid_Migda_9_polynomial.png")
 ```
