@@ -8,9 +8,10 @@ optram_wetdry_coefficients(
   full_df,
   aoi_file,
   output_dir = tempdir(),
-  step = 0.01,
+  vi_step = 0.005,
   trapezoid_method = c("linear", "exponential", "polynomial"),
-  save_plot = TRUE
+  save_plot = TRUE,
+  edge_points = FALSE
 )
 }
 \arguments{
@@ -21,17 +22,23 @@ optram_wetdry_coefficients(
 
 \item{output_dir, }{string, directory to save coefficients CSV file}
 
-\item{step, }{float, width of intervals along VI axis
-default 0.01}
+\item{vi_step, }{float, width of intervals along VI axis
+default 0.005}
 
 \item{trapezoid_method, }{string, how to prepare wet and dry trapezoid edges
 Possible values: "linear", "exponential", "polynomial". See notes.
 Default "linear"}
 
 \item{save_plot, }{boolean, If TRUE (default) save scatterplot to output_dir}
+
+\item{edge_points, }{boolean, whether to add edge points to the plot.
+If \code{save_plot} is TRUE, and \code{edge_points} is TRUE
+add the original regression points that were used to derive coefficients.
+default FALSE}
 }
 \value{
-coeffs, list of float, coefficients of wet-dry trapezoid
+rmse_list, named list of floats,
+RMSE values of fitted trapezoid edges
 }
 \description{
 Derive slope and intercept coefficients
@@ -56,7 +63,6 @@ Ambrosone, Mariapaola, Alessandro Matese, et al. 2020.
 Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 International Journal of Applied Earth Observation and Geoinformation
 https://doi.org/10.1016/j.jag.2020.102113.
-The same four coefficients as the linear model are returned.
 \item "polynomial" fits a second order polynomial curve to the
 wet and dry edges of the trapezoid, following:
 Ma, Chunfeng, Kasper Johansen, and Matthew F. McCabe. 2022.
@@ -72,13 +78,13 @@ alpha, beta_1, and beta_2 for both wet and dry edges
 aoi_file <- "Test"
 full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
   package = "rOPTRAM"))
-coeffs <- optram_wetdry_coefficients(full_df, aoi_file,
+rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
                  trapezoid_method = "linear",
                  rm.low.vi = TRUE, rm.hi.str = TRUE)
-print(coeffs)
-coeffs_poly <- optram_wetdry_coefficients(full_df, aoi_file,
+print(rmse_list)
+rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
                   trapezoid_method = "polynomial",
                   rm.low.vi = TRUE, rm.hi.str = TRUE)
-print(coeffs_poly)
+print(rmse_list)
 
 }

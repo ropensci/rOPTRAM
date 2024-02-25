@@ -2,17 +2,17 @@
 % Please edit documentation in R/trapezoid_utilities.R
 \name{polynomial_coefficients}
 \alias{polynomial_coefficients}
-\title{Utility Function to prepare polynomial fitted edges of trapezoid}
+\title{Utility Function to Prepare Polynomial Fitted Edges of Trapezoid}
 \usage{
 polynomial_coefficients(df, output_dir)
 }
 \arguments{
 \item{df, }{data.frame, values of VI and STR along edges of trapezoid}
 
-\item{output_dir, }{string, path to save coefficients csv file}
+\item{output_dir, }{string, path to save coefficients CSV file}
 }
 \value{
-coeffs, data.frame of 3 coefficients
+df, data.frame, the trapezoid line edge points with fitted values added
 for both wet and dry edges
 }
 \description{
@@ -23,12 +23,19 @@ and first and second order coefficients (beta), as in
 $STR = alpha + beta_1 * VI + beta_2 * VI^2$
 and updates the edges data.frame with these polynomila values fitted values
 }
+\note{
+Three CSV files are saved:
+\itemize{
+\item the regressions coefficients,
+\item the trapezoid edge points
+\item RMSE of the fitted curve
+}
+}
 \examples{
 \dontrun{
   df <- read.csv(system.file("extdata", "trapezoid_edges.csv",
                   package = "rOPTRAM"))
   output_dir <- tempdir()
-  coeffs <- rOPTRAM::polynomial_coefficients(df, output_dir)
-  coeffs
+
  }
 }

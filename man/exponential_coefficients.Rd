@@ -2,18 +2,18 @@
 % Please edit documentation in R/trapezoid_utilities.R
 \name{exponential_coefficients}
 \alias{exponential_coefficients}
-\title{Utility Function to prepare exponential fitted edges of trapezoid}
+\title{Utility Function to Prepare Exponential FittedEedges of Trapezoid}
 \usage{
 exponential_coefficients(df, output_dir)
 }
 \arguments{
 \item{df, }{data.frame, values of VI and STR along edges of trapezoid}
 
-\item{output_dir, }{string, path to save coefficients csv file}
+\item{output_dir, }{string, path to save coefficients CSV file}
 }
 \value{
-coeffs, data.frame of 2 linear regression coefficients
-for both wet and dry edges
+df, data.frame, the trapezoid line edge points
+with fitted wet/dry values added
 }
 \description{
 Called by \code{optram_wetdry_coefficients()}
@@ -21,6 +21,14 @@ to prepare exponential curve along trapezoid edges
 Calculates the intercept and slope of both wet and dry edges
 and updates the edges data.frame with these exp fitted values
 Not exported
+}
+\note{
+Three CSV files are saved:
+\itemize{
+\item the regressions coefficients,
+\item the trapezoid edge points
+\item RMSE of the fitted curve
+}
 }
 \examples{
 \dontrun{

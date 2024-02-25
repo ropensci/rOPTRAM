@@ -30,7 +30,7 @@ defaults to tempdir()}
 and STR-VI data.frame, default is tempdir()}
 }
 \value{
-coeffs, list, the derived trapezoid coefficients
+rmse_list, list, RMSE values of fitted trapezoid edges
 }
 \description{
 Use this function to prepares vegetation index and

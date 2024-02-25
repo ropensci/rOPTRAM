@@ -6,27 +6,26 @@
 \usage{
 plot_vi_str_cloud(
   full_df,
-  coeffs,
   aoi_name,
+  edges_df,
   output_dir = tempdir(),
   trapezoid_method = c("linear", "exponential", "polynomial"),
-  edges_points = FALSE
+  edge_points = FALSE
 )
 }
 \arguments{
 \item{full_df, }{data.frame of NDVI and STR pixel values}
 
-\item{coeffs, }{list of floats, the slope and intercept
-of wet and dry regression lines}
-
 \item{aoi_name, }{string, used in plot title}
+
+\item{edges_df, }{data.frame, points along the wet/dry edges for trapezoid}
 
 \item{output_dir, }{string, directory to save plot png file.}
 
 \item{trapezoid_method, }{string, how to plot trapezoid line.
 either "linear" or "exponential", default is "linear"}
 
-\item{edges_points, }{boolean, whether to add to the plot the
+\item{edge_points, }{boolean, whether to add to the plot the
 linear regression points that were used to derive coefficients.
 default FALSE}
 }
@@ -41,11 +40,8 @@ over scatterplot of multi-temporal STR and NDVI pixel values
 aoi_name <- "Test"
 full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
         package = "rOPTRAM"))
-coeffs <- read.csv(system.file("extdata", "coefficients.csv",
-        package = "rOPTRAM"))
-plot_vi_str_cloud(full_df, coeffs, aoi_name)
-\dontrun{
-plot_vi_str_cloud(full_df, coeffs, aoi_name,
-                    trapezoid_method = "exponential")
-}
+plot_vi_str_cloud(full_df, aoi_name)
+plot_vi_str_cloud(full_df, aoi_name,
+                    trapezoid_method = "polynomial")
+
 }
