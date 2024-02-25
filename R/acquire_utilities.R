@@ -85,7 +85,7 @@ acquire_scihub <- function(
     clientid = NULL,
     secret = NULL) {
 
-  aoi <- sf::read_sf(aoi_file, as_tibble = FALSE)
+  aoi <- sf::st_read(aoi_file, as_tibble = FALSE, quiet = TRUE)
 
   # Retrieve OAuth token using credentials from file directory
   tok <- check_scihub(clientid = clientid, secret = secret,

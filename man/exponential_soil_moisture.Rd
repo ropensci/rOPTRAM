@@ -39,8 +39,8 @@ International Journal of Applied Earth Observation and Geoinformation 89 (July):
 img_date <- "2023-03-11"
 VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
 STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
-coeffs_file <- system.file("extdata", "coefficients.csv",
-        package = "rOPTRAM")
-SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir, coeffs_file,
-                                     trapezoid_method = "exponential")
+SM <- optram_calculate_soil_moisture(img_date,
+            VI_dir, STR_dir,
+            data_dir = system.file("extdata"),
+            trapezoid_method = "exponential")
 }

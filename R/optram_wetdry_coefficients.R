@@ -5,15 +5,20 @@
 #' (as input to `optram_calculate_soil_moisture()` function)
 #' @param full_df, data.frame of STR and NDVI values
 #' @param output_dir, string, directory to save coefficients CSV file
-#' @param step, float, width of intervals along VI axis
-#'  default 0.005
+#' @param vi_step, float, width of intervals along VI axis
+#'    default 0.005
 #' @param aoi_file, string, added to title of plot
 #'  (Can be path to AOI file, then the file name is used in plot title)
 #' @param trapezoid_method, string, how to prepare wet and dry trapezoid edges
-#' Possible values: "linear", "exponential", "polynomial". See notes.
-#' Default "linear"
+#'    Possible values: "linear", "exponential", "polynomial". See notes.
+#'    Default "linear"
 #' @param save_plot, boolean, If TRUE (default) save scatterplot to output_dir
-#' @return coeffs, list of float, coefficients of wet-dry trapezoid
+#' @param edge_points, boolean, whether to add edge points to the plot.
+#'    If `save_plot` is TRUE, and `edge_points` is TRUE
+#'    add the original regression points that were used to derive coefficients.
+#'    default FALSE
+#' @return rmse_list, named list of floats,
+#'    RMSE values of fitted trapezoid edges
 #' @export
 #' @note
 #' The vegetation index column is named "VI" though it can represent
@@ -24,6 +29,7 @@
 #'  - "linear" prepares a simple OLS regression line
 #'  along the wet and dry edges of the trapezoid.
 #'  Four coefficients are returned: intercept and slope for both edges.
+#'
 #'  - "exponential" creates an exponential curve fitted
 #'  to the intercept and slope, following:
 #'  Ambrosone, Mariapaola, Alessandro Matese, et al. 2020.
@@ -31,7 +37,7 @@
 #'  Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 #'  International Journal of Applied Earth Observation and Geoinformation
 #'  https://doi.org/10.1016/j.jag.2020.102113.
-#'  The same four coefficients as the linear model are returned.
+#'
 #'  - "polynomial" fits a second order polynomial curve to the
 #'  wet and dry edges of the trapezoid, following:
 #'  Ma, Chunfeng, Kasper Johansen, and Matthew F. McCabe. 2022.
@@ -46,22 +52,23 @@
 #' aoi_file <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'   package = "rOPTRAM"))
-#' coeffs <- optram_wetdry_coefficients(full_df, aoi_file,
+#' rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
 #'                  trapezoid_method = "linear",
 #'                  rm.low.vi = TRUE, rm.hi.str = TRUE)
-#' print(coeffs)
-#' coeffs_poly <- optram_wetdry_coefficients(full_df, aoi_file,
+#' print(rmse_list)
+#' rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
 #'                   trapezoid_method = "polynomial",
 #'                   rm.low.vi = TRUE, rm.hi.str = TRUE)
-#' print(coeffs_poly)
+#' print(rmse_list)
 #'
 
 optram_wetdry_coefficients <- function(
     full_df, aoi_file,
     output_dir = tempdir(),
-    step = 0.005,
+    vi_step = 0.005,
     trapezoid_method = c("linear", "exponential", "polynomial"),
-    save_plot = TRUE) {
+    save_plot = TRUE,
+    edge_points = FALSE) {
   # Derive slope and intercept to two sides of trapezoid
   # Based on:
   # https://github.com/teerathrai/OPTRAM
@@ -88,27 +95,21 @@ optram_wetdry_coefficients <- function(
   # Make sure no Inf or NA in full_df
   full_df <- full_df[is.finite(full_df$VI), ]
   VI_min_max <- round(stats::quantile(full_df$VI, c(0.02, 0.99)), 2)
-  VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], step)
+  VI_series <- seq(VI_min_max[[1]], VI_min_max[[2]], vi_step)
   message("VI series length:", length(VI_series))
   edges_list <- lapply(VI_series, function(i){
     # Set NDVI value at midpoint of each interval
-    vi_val <- i + step/2.0
+    vi_val <- i + vi_step/2.0
 
-    # Subset the data.frame to include only NDVI values between i and i+step
-    interval_df <-  full_df[full_df$VI>=i & full_df$VI < (i+step),]
+    # Subset the data.frame to include only NDVI values between i and i+vi_step
+    interval_df <-  full_df[full_df$VI>=i & full_df$VI < (i+vi_step),]
     # if too few rows in this interval, skip it, just return NULL
     if (nrow(interval_df) < 4) {
       return(NA)
     }
-    # Remove lower than 1% and more than 99% quantile of STR values
-    # Use upper 99% quantile and lower 1% quantile as min/max values
-    Qs <- stats::quantile(interval_df$STR, c(0.02, 0.98), na.rm=TRUE)
-    #interval_df <- interval_df[interval_df$STR<=Qs[[2]] &
-    #                             interval_df$STR>=Qs[[1]],]
-    # Now, with outliers removed, find min (dry) and max (wet)
-    # Within each interval
-    #str_max <- max(interval_df$STR, na.rm = TRUE)
-    #str_min <- min(interval_df$STR, na.rm = TRUE)
+    # Find the lower 5% and upper 95% quantile of STR values
+    # Use these values as min/max values for dry/wet edge points
+    Qs <- stats::quantile(interval_df$STR, c(0.05, 0.95), na.rm=TRUE)
     str_max <- Qs[[2]]
     str_min <- Qs[[1]]
     edges_df1 <- data.frame("VI" = vi_val,
@@ -116,7 +117,7 @@ optram_wetdry_coefficients <- function(
                               "STR_dry" = str_min)
     return(edges_df1)
   })
-  # Bind all interval results into one long DF
+  # Bind all interval results into one DF
   edges_list <- edges_list[ !is.na(edges_list) ]
   edges_df <- do.call(rbind, edges_list)
 
@@ -136,19 +137,23 @@ optram_wetdry_coefficients <- function(
       return(NULL)
     })
 
-  coeffs <- switch(trapezoid_method,
+  # Get fitted trapezoid curves
+  fitted_df <- switch(trapezoid_method,
         linear = linear_coefficients(edges_df, output_dir),
         exponential = exponential_coefficients(edges_df, output_dir),
         polynomial = polynomial_coefficients(edges_df, output_dir))
 
   if (save_plot) {
     plot_vi_str_cloud(full_df,
-                     coeffs,
                      aoi_name,
+                     fitted_df,
                      trapezoid_method = trapezoid_method,
-                     output_dir = output_dir)
+                     output_dir = output_dir,
+                     edge_points = edge_points )
   }
-  return(coeffs)
+  rmse_wet <- sqrt(mean((fitted_df$STR_wet_fit - fitted_df$STR_wet)^2))
+  rmse_dry <- sqrt(mean((fitted_df$STR_dry_fit - fitted_df$STR_dry)^2))
+  return(c("RMSE wet" = rmse_wet, "RMSE dry" = rmse_dry))
 }
 
 
@@ -157,13 +162,12 @@ optram_wetdry_coefficients <- function(
 #' Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
 #' over scatterplot of multi-temporal STR and NDVI pixel values
 #' @param full_df, data.frame of NDVI and STR pixel values
-#' @param coeffs, list of floats, the slope and intercept
-#'   of wet and dry regression lines
 #' @param aoi_name, string, used in plot title
+#' @param edges_df, data.frame, points along the wet/dry edges for trapezoid
 #' @param output_dir, string, directory to save plot png file.
 #' @param trapezoid_method, string, how to plot trapezoid line.
 #'    either "linear" or "exponential", default is "linear"
-#' @param edges_points, boolean, whether to add to the plot the
+#' @param edge_points, boolean, whether to add to the plot the
 #'    linear regression points that were used to derive coefficients.
 #'    default FALSE
 #' @return None
@@ -173,32 +177,20 @@ optram_wetdry_coefficients <- function(
 #' aoi_name <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'         package = "rOPTRAM"))
-#' coeffs <- read.csv(system.file("extdata", "coefficients.csv",
-#'         package = "rOPTRAM"))
-#' plot_vi_str_cloud(full_df, coeffs, aoi_name)
-#' \dontrun{
-#' plot_vi_str_cloud(full_df, coeffs, aoi_name,
-#'                     trapezoid_method = "exponential")
-#' }
-
+#' plot_vi_str_cloud(full_df, aoi_name)
+#' plot_vi_str_cloud(full_df, aoi_name,
+#'                     trapezoid_method = "polynomial")
+#'
 plot_vi_str_cloud <- function(
     full_df,
-    coeffs,
     aoi_name,
+    edges_df,
     output_dir = tempdir(),
     trapezoid_method = c("linear", "exponential", "polynomial"),
-    edges_points = FALSE) {
+    edge_points = FALSE) {
   # Avoid "no visible binding for global variable" NOTE
-  i_dry <- i_wet <- s_dry <- s_wet <- plot_df <- plot_path <- NULL
-  x_min <- x_max <- y_min <- y_max <- VI_STR_df1 <- VI <- STR <- NULL
-  STR_dry <- STR_wet <- edges_pts <- NULL
 
   # Pre-flight test
-  if (ncol(coeffs) < 4) {
-    message("Coefficients not correctly formed. \n
-    Be sure the CSV file has 4 columns. Exiting...")
-    return(NULL)
-  }
   if (! "STR" %in% names(full_df)) {
     message("STR column missing from data.frame. Exiting...")
     return(NULL)
@@ -229,10 +221,23 @@ plot_vi_str_cloud <- function(
   # Set max using median and (2 * IQR) as in outlier detection
   str_q3 <- stats::quantile(plot_df$STR, 0.9, na.rm = TRUE)
   y_max <- str_q3 + stats::IQR(plot_df$STR, na.rm = TRUE) * 3
-  pl_base <- ggplot2::ggplot(plot_df) +
+  pl <- ggplot2::ggplot(plot_df) +
     geom_point(aes(x=VI, y=STR), color = "#0070000b", alpha = 0.3, size = 0.2) +
     lims(y=c(y_min, y_max), x=c(x_min, x_max)) +
     labs(x="Vegetation Index", y="SWIR Transformed") +
+    # Dry edge
+    geom_smooth(data = edges_df,
+                mapping = aes(x = VI, y = STR_dry_fit),
+                method = "loess",
+                color = "orange2", se = FALSE) +
+    # Wet edge
+    geom_smooth(data = edges_df,
+                aes(x = VI, y = STR_wet_fit),
+                method = "loess",
+                color="blue", se = FALSE) +
+
+    ggtitle(paste("Trapezoid Plot - ", aoi_name),
+            subtitle = paste(trapezoid_method, "fit"))
     # Set theme
     theme_bw() +
     theme(axis.title = element_text(size = 14),
@@ -240,24 +245,13 @@ plot_vi_str_cloud <- function(
           plot.title = element_text(size = 18, face = "bold"),
           plot.subtitle = element_text(size=18))
 
-  # Separate plot items for each trapezoid_method
-  trapezoid_method <- match.arg(trapezoid_method)
-  pl <- switch(trapezoid_method,
-          linear = plot_cloud_linear(pl_base,
-                                     coeffs, aoi_name),
-          exponential = plot_cloud_exponential(pl_base,
-                                               output_dir, aoi_name),
-          polynomial = plot_cloud_polynomial(pl_base,
-                                             output_dir, aoi_name))
-
-  if (edges_points) {
-    edges_pts <- utils::read.csv(file.path(output_dir, "trapezoid_edges.csv"))
+  if (edge_points) {
     pl <- pl + geom_point(aes(x=VI, y=STR_wet),
                       color = "black", size=1.5, shape=2,
-                      data = edges_pts) +
+                      data = edges_df) +
                geom_point(aes(x=VI, y=STR_dry),
                       color = "black", size=1.5, shape=6,
-                      data = edges_pts)
+                      data = edges_df)
   }
   pl
   plot_path <- file.path(output_dir,
@@ -265,11 +259,4 @@ plot_vi_str_cloud <- function(
                                 aoi_name, "_",
                                 trapezoid_method, ".png"))
   ggsave(plot_path, width = 10, height = 7)
-  rmse_results <- switch(trapezoid_method,
-          linear = print_edges_rmse(
-            file.path(output_dir, "trapezoid_edges_lin.csv")),
-          exponential = print_edges_rmse(
-            file.path(output_dir, "trapezoid_edges_exp.csv")),
-          polynomial = print_edges_rmse(
-            file.path(output_dir, "trapezoid_edges_poly.csv")))
 }

@@ -18,6 +18,15 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
+The {CSDE} package provides an interface to the 'Copernicus DataSpace Ecosystem' API, mainly for searching the catalog of available data from Copernicus Sentinel missions and obtaining the images for just the area of interest based on selected spectral bands. The package uses the 'Sentinel Hub' REST API interface [Sentinel Hub](https://dataspace.copernicus.eu/analyse/apis/sentinel-hub) that provides access to various satellite imagery archives. It allows you to access raw satellite data, rendered images, statistical analysis, and other features.
+
+[CDSE CRAN page](https://cran.r-project.org/web/packages/CDSE/index.html)
+
+OpenEO is an open-source project aimed at standardizing and simplifying access to Earth observation data and processing services. It provides a common API that abstracts away the complexities of accessing and processing Earth observation data, allowing users to interact with multiple back-end processing engines through a unified interface.
+
+[openEO CRAN page](https://cran.r-project.org/web/packages/openeo/index.html)
+
+Both methods require [registering](https://dataspace.copernicus.eu/) on the Copernicus DataSpace.
 This vignette provides a detailed guide on acquiring Sentinel-2 imagery using both the CDSE (Copernicus Data and Exploitation Platform - SciHub) and the openEO platform.
 
 ## Acquiring Sentinel-2 Imagery using CDSE
@@ -49,7 +58,7 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 
 ![](images/create_OAuth.jpg){width="630"}
 
-4.  A Client secret will be generated. Make sure to copy your new personal OAuth secret immediately after it is created. You will not be able to see it again later.
+4.  A Client secret will be generated. Make sure to **copy your new personal OAuth secret** immediately after it is created. You will not be able to see it again later.
 
 5.  Copy the new client id.
 
@@ -58,7 +67,7 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 ### Step 4: Saving Credentials:
 
  -   Save your client ID and secret in a secure location.
- -   At the first run, set `save_creds = TRUE` in the `acquire_scihub()` function to automatically save credentials. This will save you from entering your client ID and secret manually every time you run `acquire_scihub()`.
+ -   At the first run, set `save_creds = TRUE` in the `acquire_scihub()` function to automatically save credentials. In future runs, credentials will automatically be read from the saved (json) file. Thus the user will not have to enter client ID and secret manually every time.
 
 ```{r prepare-save, warning=FALSE, message=FALSE, results='hide'}
 # For this example, outputs are saved to `tempdir()`
@@ -126,16 +135,15 @@ C. You will be redirected to the Copernicus authentication page. Log in and gran
 
 ### Step 3: Acquire Sentinel-2 Imagery
 
+You can specify your `output_dir` parameter to indicate the path where downloaded and processed imagery will be saved. For this example, outputs are saved to `tempdir()`
+
 ```{r, eval=FALSE}
-# For this example, outputs are saved to `tempdir()`
 from_date <- "2018-12-01"
 to_date <- "2019-03-30"
 
 acquire_openeo(aoi, from_date, to_date,
                veg_index = "SAVI",
                output_dir = tempdir())
-
-# You can specify your `output_dir` parameter to indicate the path where downloaded and processed imagery will be saved
 ```
 
 ## Conclusion
