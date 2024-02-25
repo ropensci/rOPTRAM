@@ -13,7 +13,7 @@ optram_safe(
   data_output_dir = tempdir(),
   max_tbl_size = 5e+06,
   trapezoid_method = c("linear", "exponential", "polynomial"),
-  step = 0.01
+  vi_step = 0.01
 )
 }
 \arguments{
@@ -45,7 +45,7 @@ one of "linear", "exponential", "polynomial"
 how to prepare fitted model to trapezoid edge values
 default "linear"}
 
-\item{step, }{numeric, width of slice along VI axis
+\item{vi_step, }{numeric, width of slice along VI axis
 to prepare edge values, default 0.01}
 }
 \value{

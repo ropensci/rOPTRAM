@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 The algorithm for finding trapezoid wet and dry edges works as follows:
 
-After acquiring a time series of Sentinel-2 images over the study area, both vegetation index (i.e. NDVI or SAVI), and SWIR Transformed Reflectance (STR) rasters are prepared. Pixel values of both indices for all images are collected into a two column table (and plotted as a scatterplot). The vegetation axis (x-axis) is split into a large number of intervals (usually between 50 - 100). The width of each interval is configurable by the user through the `step` parameter in `optram_wetdry_coefficients()`. Then for each interval the top and bottom 1% quantiles of STR values are determined. These point values - VI and STR - are considered to create the fitted wet and dry trapezoid edges.
+After acquiring a time series of Sentinel-2 images over the study area, both vegetation index (i.e. NDVI or SAVI), and SWIR Transformed Reflectance (STR) rasters are prepared. Pixel values of both indices for all images are collected into a two column table (and plotted as a scatterplot). The vegetation axis (x-axis) is split into a large number of intervals (usually between 50 - 100). The width of each interval is configurable by the user through the `vi_step` parameter in `optram_wetdry_coefficients()`. Then for each interval the top and bottom 5% quantiles of STR values are determined. These point values - VI and STR - are considered to create the fitted wet and dry trapezoid edges.
 
 Three fitting methods are available in {rOPTRAM} to prepare the trapezoid wet and dry edges. For detailed background, see:  @ma_combining_2022. Users can choose between a 
 
@@ -58,8 +58,8 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 ```{r prepare, warning=FALSE, message=FALSE, results='hide'}
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
-output_dir <- file.path(tempdir())
-aoi_file <- system.file("extdata", "migda4.gpkg", package = "rOPTRAM")
+output_dir <- tempdir()
+aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
 veg_index <- "SAVI"
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
@@ -80,16 +80,18 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 ```{r plot-linear, fig.cap="Trapezoid scatterplot", out.width = '90%', warning=FALSE}
 ttl <- "Migda"
 meth <- "linear"
-coeffs <- optram_wetdry_coefficients(full_df,
-                                     aoi_file = aoi_file,
-                                     output_dir = output_dir,
-                                     trapezoid_method = meth,
-                                     save_plot = FALSE)
-plot_vi_str_cloud(full_df, coeffs, ttl,
-                  output_dir = output_dir,
+rmse <- optram_wetdry_coefficients(full_df,
+                                   aoi_file = aoi_file,
+                                   output_dir = output_dir,
+                                   trapezoid_method = meth,
+                                   save_plot = FALSE)
+edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
+plot_vi_str_cloud(full_df, ttl,
+                  edges_df = edges_df,
                   trapezoid_method = meth,
-                  edges_points = TRUE)
-knitr::include_graphics("images/trapezoid_Migda_linear.png")
+                  output_dir = output_dir,
+                  edge_points = TRUE)
+knitr::include_graphics("images/trapezoid_Migda_9_linear.png")
 ```
 
 #### Show Exponential fitted trapezoid plot
@@ -102,8 +104,10 @@ coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir,
                                      trapezoid_method = meth,
                                      save_plot = FALSE)
-plot_vi_str_cloud(full_df, coeffs, ttl,
+edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
+plot_vi_str_cloud(full_df, ttl,
                   output_dir = output_dir,
+                  edges_df = edges_df,
                   trapezoid_method = meth,
                   edges_points = TRUE)
 knitr::include_graphics("images/trapezoid_Migda_exponential.png")
@@ -119,8 +123,10 @@ coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir,
                                      trapezoid_method = meth,
                                      save_plot = FALSE)
-plot_vi_str_cloud(full_df, coeffs, ttl,
+edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
+plot_vi_str_cloud(full_df, ttl,
                   output_dir = output_dir,
+                  edges_df = edges_df,
                   trapezoid_method = meth,
                   edges_points = TRUE)
 knitr::include_graphics("images/trapezoid_Migda_polynomial.png")

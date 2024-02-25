@@ -36,7 +36,7 @@ test_that("from_date correctly formatted", {
 test_that("Check for invalid clientid and secret to scihub API", {
   from_date <- "2019-04-24"
   to_date <- "2019-04-30"
-  aoi_file <- system.file("extdata", "migda9.gpkg", package = "rOPTRAM")
+  aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
 
   expect_null(optram_acquire_s2(aoi_file, from_date, to_date,
                                 remote="scihub",

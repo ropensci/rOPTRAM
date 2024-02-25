@@ -21,10 +21,10 @@
 #'  and the derived products, defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file
 #'  and STR-VI data.frame, default is tempdir()
-#' @param step, float, width of intervals along VI axis
-#'  default 0.01
 #' @param remote, string, which Copernicus API to use,
 #'  one of "scihub", or "openeo". Default is "scihub"
+#' @param vi_step, float, width of intervals along VI axis
+#'  default 0.005
 #' @param trapezoid_method, string,
 #'  one of "linear", "exponential", "polynomial"
 #'  default "linear"
@@ -64,7 +64,7 @@ optram <- function(aoi_file,
                    S2_output_dir = tempdir(),
                    data_output_dir = tempdir(),
                    remote = "scihub",
-                   step = 0.01,
+                   vi_step = 0.005,
                    trapezoid_method = c("linear", "exponential", "polynomial")) {
 
   # Avoid "no visible binding for global variable" NOTE
@@ -96,7 +96,7 @@ optram <- function(aoi_file,
       VI_STR_df,
       aoi_file = aoi_file,
       output_dir = data_output_dir,
-      step = step,
+      vi_step = vi_step,
       trapezoid_method = trapezoid_method)
     message("RMSE for fitted trapezoid: \n", rmse_list)
     return(rmse_list)
