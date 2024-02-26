@@ -135,8 +135,8 @@ rmse <- optram_wetdry_coefficients(
 knitr::kable(rmse, caption = "RMSE values for wet/dry fitted lines")
 ```
 
-<img src="../GIS/trapezoid_lachish_linear.png"
-style="width:12cm" alt="Hi density trapezoid plot" />
+<img src="trapezoid_Lachish_linear.png"
+style="width:12cm" alt="Linear trapezoid plot" />
 
 #### Second run: polynomial fitted curves
 
@@ -152,8 +152,8 @@ knitr::kable(rmse, caption = "RMSE values for wet/dry fitted lines")
 ```
 
 
-<img src="../GIS/trapezoid_lachish_polynomial.png"
-style="width:12cm" alt="Hi density trapezoid plot" />
+<img src="trapezoid_Lachish_polynomial.png"
+style="width:12cm" alt="Polynomial trapezoid plot" />
 
 ## Acknowledgements
 
