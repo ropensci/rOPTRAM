@@ -1,5 +1,5 @@
 ---
-title: "rOPTRAM: Deriving Soil Moisture from Sentinel-2 Imagery"
+title: rOPTRAM: Deriving Soil Moisture from Sentinel-2 Imagery
 output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{rOPTRAM-1}
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Introduction
+## Introduction  <img align="right" width="100" height="100" src="images/rOPTRAM_logo.jpg">
 
 `rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) to derive soil moisture based on the linear relation between a vegetation index, i.e. NDVI, and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band is used as a proxy for LST. The SWIR band is transformed to Swir Transformed Reflectance (STR).
 

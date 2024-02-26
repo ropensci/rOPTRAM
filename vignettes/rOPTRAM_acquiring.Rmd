@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Introduction
+## Introduction  <img align="right" width="100" height="100" src="images/rOPTRAM_logo.jpg">
 
 The {CSDE} package provides an interface to the 'Copernicus DataSpace Ecosystem' API, mainly for searching the catalog of available data from Copernicus Sentinel missions and obtaining the images for just the area of interest based on selected spectral bands. The package uses the 'Sentinel Hub' REST API interface [Sentinel Hub](https://dataspace.copernicus.eu/analyse/apis/sentinel-hub) that provides access to various satellite imagery archives. It allows you to access raw satellite data, rendered images, statistical analysis, and other features.
 
