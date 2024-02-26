@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rOPTRAM
+# rOPTRAM <img align="right" width="100" height="100" src="inst/paper/rOPTRAM_logo.jpg">
 
 <!-- badges: start -->
 
@@ -81,8 +81,8 @@ performs the following steps:
 - Prepare a dataframe of NDVI and STR values for all pixels from all
   images;
 - Calculate the trapezoid wet and dry regression lines, and save
-  coefficients to a CSV file. Returns: the set of four coefficients: wet
-  slope, wet intercept, dry slope, and dry intercept.
+  coefficients to a CSV file. Returns: RMSE values of the fitted
+  regression lines of the trapezoid.
 
 #### optram_acquire_s2()
 
@@ -152,17 +152,19 @@ This is a basic example which shows how to:
 - preprocess the imagery to obtain a vegetation index and STR band
 - use these to derive coefficients of slope and intercept for the OPTRAM
   trapezoid
+- using the “linear” fitting method
 
 ``` r
 library(rOPTRAM)
 # basic example
-geojson_file <- system.file("extdata", "migda.geojson", package="rOPTRAM")
-coeffs <- rOPTRAM::optram(
-    aoi = geojson_file,
+aoi_file <- system.file("extdata", "migda_9.gpkg", package="rOPTRAM")
+rmse <- rOPTRAM::optram(
+    aoi = aoi_file,
     from_date = "2021-01-01", to_date = "2021-03-30",
     max_cloud = 10,
-    vi = "NDVI")
-coeffs
+    veg_index = "NDVI",
+    trapezoid_method = "linear")
+print(rmse)
 ```
 
 ## Note
@@ -219,7 +221,7 @@ Index.” *Remote Sensing* 12 (18): 2936.
 
 <div id="ref-karaman_cdse_2023" class="csl-entry">
 
-Karaman, Zivan. 2023. *CDSE: ’Copernicus Data Space Ecosystem’ API
+Karaman, Zivan. 2023. *CDSE: Copernicus Data Space Ecosystem API
 Wrapper*. <https://CRAN.R-project.org/package=CDSE>.
 
 </div>

@@ -1,5 +1,5 @@
 ---
-title: rOPTRAM: Deriving Soil Moisture from Sentinel-2 Imagery
+title: "rOPTRAM: Deriving Soil Moisture from Sentinel-2 Imagery"
 output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{rOPTRAM-1}
