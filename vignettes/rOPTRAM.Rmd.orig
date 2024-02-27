@@ -68,7 +68,7 @@ Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, out
 ```{r wrapper, warning=FALSE, message=FALSE}
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
-output_dir <- file.path(tempdir())
+output_dir <- tempdir()
 aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
 veg_index <- "SAVI"
 coeffs <- optram(aoi_file,
@@ -84,12 +84,11 @@ knitr::kable(coeffs, caption = "Trapezoid coefficients")
 ### Show trapezoid plot
 
 ```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%', warning=FALSE}
-ttl <- "Migda"
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-knitr::include_graphics("images/trapezoid_Migda_9_linear.png")
+knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png")
 ```
 
 ## Step by step
@@ -118,8 +117,8 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir,
                            rm.low.vi = TRUE, rm.hi.str = TRUE)
 rmse <- optram_wetdry_coefficients(full_df,
-                                     aoi_file,
-                                     output_dir = output_dir)
+                                   aoi_file,
+                                   output_dir = output_dir)
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
 ```
 

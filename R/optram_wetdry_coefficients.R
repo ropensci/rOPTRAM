@@ -255,10 +255,10 @@ plot_vi_str_cloud <- function(
                       color = "black", size=1.5, shape=6,
                       data = edges_df)
   }
-  pl
   plot_path <- file.path(output_dir,
                          paste0("trapezoid_",
                                 aoi_name, "_",
                                 trapezoid_method, ".png"))
-  ggsave(plot_path, width = 10, height = 7)
+  ggsave(plot_path,
+         plot = pl, width = 10, height = 7, units = "in", dpi = 192)
 }

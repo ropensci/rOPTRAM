@@ -17,17 +17,17 @@ The algorithm for finding trapezoid wet and dry edges works as follows:
 
 After acquiring a time series of Sentinel-2 images over the study area, both vegetation index (i.e. NDVI or SAVI), and SWIR Transformed Reflectance (STR) rasters are prepared. Pixel values of both indices for all images are collected into a two column table (and plotted as a scatterplot). The vegetation axis (x-axis) is split into a large number of intervals (usually between 50 - 100). The width of each interval is configurable by the user through the `vi_step` parameter in `optram_wetdry_coefficients()`. Then for each interval the top and bottom 5% quantiles of STR values are determined. These point values - VI and STR - are considered to create the fitted wet and dry trapezoid edges.
 
-Three fitting methods are available in {rOPTRAM} to prepare the trapezoid wet and dry edges. For detailed background, see:  @ma_combining_2022. Users can choose between a 
+Three fitting methods are available in {rOPTRAM} to prepare the trapezoid wet and dry edges. For detailed background, see:  @ma_combining_2022. Users can choose between a
 
  - linear OLS fitted line
  - exponential fit
  - second order polynomial
- 
-All fitting methods are derived using the `lm` function in the `R` {stats} package. 
+
+All fitting methods are derived using the `lm` function in the `R` {stats} package.
 
 The linear OLS fit follows:
-$$STR = i + s \cdot VI$$ 
-The exponential fit uses the equation: 
+$$STR = i + s \cdot VI$$
+The exponential fit uses the equation:
 $$STR = i \cdot e^{(s \cdot VI)}$$
 where STR is the fitted STR value, $i$, and $s$ are the exponential regression intercept, and coefficient and $VI$ is the vegetation index value.
 
@@ -75,73 +75,58 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 
 
 ```r
-ttl <- "Migda"
 meth <- "linear"
 rmse <- optram_wetdry_coefficients(full_df,
                                    aoi_file = aoi_file,
                                    output_dir = output_dir,
                                    trapezoid_method = meth,
-                                   save_plot = FALSE)
+                                   save_plot = TRUE)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
 plot_vi_str_cloud(full_df, ttl,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   output_dir = output_dir,
                   edge_points = TRUE)
-knitr::include_graphics("images/trapezoid_Migda_9_linear.png")
+knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png")
+#> Error in knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_migda9_linear.png"
 ```
-
-<div class="figure">
-<img src="images/trapezoid_Migda_9_linear.png" alt="Trapezoid scatterplot" width="90%" />
-<p class="caption">Trapezoid scatterplot</p>
-</div>
 
 #### Show Exponential fitted trapezoid plot
 
 
 ```r
-ttl <- "Migda"
 meth <- "exponential"
 coeffs <- optram_wetdry_coefficients(full_df,
                                      aoi_file = aoi_file,
                                      output_dir = output_dir,
                                      trapezoid_method = meth,
-                                     save_plot = FALSE)
+                                     save_plot = TRUE)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
 plot_vi_str_cloud(full_df, ttl,
                   output_dir = output_dir,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   edge_points = TRUE)
-knitr::include_graphics("images/trapezoid_Migda_9_exponential.png")
+knitr::include_graphics("vignettes/images/trapezoid_migda9_exponential.png")
+#> Error in knitr::include_graphics("vignettes/images/trapezoid_migda9_exponential.png"): Cannot find the file(s): "vignettes/images/trapezoid_migda9_exponential.png"
 ```
-
-<div class="figure">
-<img src="images/trapezoid_Migda_9_exponential.png" alt="Exponential fit trapezoid scatterplot" width="90%" />
-<p class="caption">Exponential fit trapezoid scatterplot</p>
-</div>
 
 #### Show Polynomial fitted trapezoid plot
 
 
 ```r
-ttl <- "Migda"
 meth <- "polynomial"
 coeffs <- optram_wetdry_coefficients(full_df,
                                      aoi_file = aoi_file,
                                      output_dir = output_dir,
                                      trapezoid_method = meth,
-                                     save_plot = FALSE)
+                                     save_plot = TRUE)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
 plot_vi_str_cloud(full_df, ttl,
                   output_dir = output_dir,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   edge_points = TRUE)
-knitr::include_graphics("images/trapezoid_Migda_9_polynomial.png")
+knitr::include_graphics("vignettes/images/trapezoid_migda9_polynomial.png")
+#> Error in knitr::include_graphics("vignettes/images/trapezoid_migda9_polynomial.png"): Cannot find the file(s): "vignettes/images/trapezoid_migda9_polynomial.png"
 ```
-
-<div class="figure">
-<img src="images/trapezoid_Migda_9_polynomial.png" alt="Polynomial fit trapezoid scatterplot" width="90%" />
-<p class="caption">Polynomial fit trapezoid scatterplot</p>
-</div>
