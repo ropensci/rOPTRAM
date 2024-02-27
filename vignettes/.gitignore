@@ -1,5 +1,3 @@
 *.html
-my_*
 precompile_vignette.R
-prepare_extdata.*
 images/trapezoid*.png
