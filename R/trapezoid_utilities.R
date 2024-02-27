@@ -188,7 +188,7 @@ polynomial_coefficients <- function(df, output_dir) {
 #'   The resulting soil moisture raster is saved to `output_dir`.
 linear_soil_moisture <- function(coeffs, VI, STR) {
   if (ncol(coeffs) < 4) {
-    message("Incorrect coefficients file. Exiting...")
+    message("Incorrect number of coefficients. Exiting...")
     return(NULL)
   }
   i_dry <- coeffs$intercept_dry
