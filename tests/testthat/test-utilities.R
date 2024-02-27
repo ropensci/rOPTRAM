@@ -61,6 +61,6 @@ test_that("Check format of from_date, to_date",{
 test_that("CDSE credentials are retrieved", {
   creds <- retrieve_cdse_credentials()
   expect_true(inherits(creds, "list"))
-  expect_equal(length(resp[[1]]), 2)
+  expect_equal(length(creds[[1]]), 2)
 })
 
