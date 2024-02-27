@@ -23,14 +23,14 @@ test_that("aoi_file does not exist", {
   expect_equal(length(res), 2)
 })
 
-test_that("Output RMSE is list of length 2", {
+test_that("Output RMSE is data.frame of 2 columns", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
   aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
   res <- optram_wetdry_coefficients(full_df,
                                        aoi_file,
                                        trapezoid_method = "linear")
-  expect_true(inherits(res, "numeric"))
-  expect_equal(length(res), 2)
+  expect_true(inherits(res, "data.frame"))
+  expect_equal(ncol(res), 2)
 })
 
 test_that("Polynomial trapezoid method returns data.frame of length 6", {

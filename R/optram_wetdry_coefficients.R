@@ -17,8 +17,7 @@
 #'    If `save_plot` is TRUE, and `edge_points` is TRUE
 #'    add the original regression points that were used to derive coefficients.
 #'    default FALSE
-#' @return rmse_list, named list of floats,
-#'    RMSE values of fitted trapezoid edges
+#' @return rmse_df, data.frame,  RMSE values of fitted trapezoid edges
 #' @export
 #' @note
 #' The vegetation index column is named "VI" though it can represent
@@ -52,12 +51,12 @@
 #' aoi_file <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'   package = "rOPTRAM"))
-#' rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
+#' rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
 #'                  trapezoid_method = "linear")
-#' print(rmse_list)
-#' rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
+#' print(rmse_df)
+#' rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
 #'                   trapezoid_method = "polynomial")
-#' print(rmse_list)
+#' print(rmse_df)
 #'
 
 optram_wetdry_coefficients <- function(
@@ -151,7 +150,7 @@ optram_wetdry_coefficients <- function(
   }
   rmse_wet <- sqrt(mean((fitted_df$STR_wet_fit - fitted_df$STR_wet)^2))
   rmse_dry <- sqrt(mean((fitted_df$STR_dry_fit - fitted_df$STR_dry)^2))
-  return(c("RMSE wet" = rmse_wet, "RMSE dry" = rmse_dry))
+  return(data.frame("RMSE wet" = rmse_wet, "RMSE dry" = rmse_dry))
 }
 
 

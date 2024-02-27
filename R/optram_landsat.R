@@ -15,7 +15,7 @@
 #'      defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file
 #'      and STR-VI data.frame, default is tempdir()
-#' @return rmse_list, list, RMSE values of fitted trapezoid edges
+#' @return rmse_df, data.frame, RMSE values of fitted trapezoid edges
 #' @export
 #' @note Unlike the `optram_acquire_s2` function, there is no implementation
 #'  for automatic download of Landsat images.
@@ -171,11 +171,11 @@
     saveRDS(full_VI_STR, full_df_path)
     message("VI-STR data saved to: ", full_df_path)
     # Now continue with regular wet-dry coefficients process
-    rmse_list <- rOPTRAM::optram_wetdry_coefficients(full_VI_STR,
+    rmse_df <- rOPTRAM::optram_wetdry_coefficients(full_VI_STR,
                                                   aoi_file,
                                                   data_output_dir)
 
-    return(rmse_list)
+    return(rmse_df)
     }
 
 
