@@ -27,11 +27,14 @@ test_that("Check if aoi_file is NULL", {
 
 test_that("Check if aoi_file is spatial", {
     # Non spatial file
-    aoi_file <- system.file("extdata", "Migda9_VWC.csv",
+    aoi_file <- system.file("extdata", "Migda_9_VWC.csv",
                     package = "rOPTRAM")
     expect_false(check_aoi(aoi_file))
     # Non existing file
     expect_false(check_aoi("blabla.txt"))
+    aoi_file <- system.file("extdata", "some_area.gpkg",
+                            package = "rOPTRAM")
+    expect_false(check_aoi(aoi_file))
 })
 
 test_that("Check for aoi_name NULL", {
@@ -55,4 +58,9 @@ test_that("Check format of from_date, to_date",{
   expect_true(check_date_string("2023-10-31", "2023-11-30"))
 })
 
+test_that("CDSE credentials are retrieved", {
+  creds <- retrieve_cdse_credentials()
+  expect_true(inherits(creds, "list"))
+  expect_equal(length(resp[[1]]), 2)
+})
 
