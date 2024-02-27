@@ -49,7 +49,7 @@ How to fit a curve to the values along trapezoid edges
 See notes in optram_wetdry_coefficients()}
 }
 \value{
-rmse_list, list, RMSE values of fitted trapezoid lines
+rmse_df, data.frame, RMSE values of fitted trapezoid lines
 the coefficients are also saved to a csv file in \code{data_output_dir}.
 }
 \description{

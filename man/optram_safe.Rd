@@ -49,7 +49,7 @@ default "linear"}
 to prepare edge values, default 0.01}
 }
 \value{
-rmse_list, list, RMSE values of fitted trapezoid lines
+rmse_df, data.frame, RMSE values of fitted trapezoid lines
 }
 \description{
 Use this function to prepares vegetation index and
