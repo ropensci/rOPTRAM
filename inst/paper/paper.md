@@ -130,7 +130,7 @@ VI_STR_df <- optram_ndvi_str(STR_list, VI_list,
                              output_dir = Output_dir,
                              rm.low.vi = TRUE,
                              rm.hi.str = TRUE)
-# Set output_dir to GIS_dir to save the plot
+
 rmse <- optram_wetdry_coefficients(
   VI_STR_df,
   aoi_file = aoi_file,
@@ -138,8 +138,13 @@ rmse <- optram_wetdry_coefficients(
   vi_step = 0.005,
   trapezoid_method = "linear",
   edge_points = TRUE)
-knitr::kable(rmse, caption = "RMSE values for wet/dry fitted lines")
 ```
+
+||RMSE wet edge| RMSE dry edge
+|:----------|----------:|----------:|
+|Linear fit: |0.2460|0.0955|
+
+
 
 <img src="GIS/trapezoid_lachish_linear.png"
 style="width:18cm" alt="Linear trapezoid plot" />
@@ -156,9 +161,11 @@ rmse <- optram_wetdry_coefficients(
   vi_step = 0.005,
   trapezoid_method = "polynomial",
   edge_points = TRUE)
-knitr::kable(rmse, caption = "RMSE values for wet/dry fitted lines")
 ```
 
+||RMSE wet edge|RMSE dry edge|
+|:--------------|---------:|---------:|
+|Polynomial fit:| 0.1490| 0.0931|
 
 
 <img src="GIS/trapezoid_lachish_polynomial.png"

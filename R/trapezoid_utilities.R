@@ -34,7 +34,7 @@ linear_coefficients <- function(df, output_dir) {
   df$STR_wet_fit <- wet_fit$fitted.values
   df$STR_dry_fit <- dry_fit$fitted.values
   rmse_wet <- sqrt(mean(wet_fit$residuals^2))
-  rmse_dry <- sqrt(mean(wet_fit$residuals^2))
+  rmse_dry <- sqrt(mean(dry_fit$residuals^2))
   rmse_df <- data.frame("RMSE dry" = rmse_dry, "RMSE wet" = rmse_wet)
   utils::write.csv(rmse_df,
                    file.path(output_dir, "trapezoid_rmse_lin.csv"),
@@ -89,7 +89,7 @@ exponential_coefficients <- function(df, output_dir) {
   df$STR_wet_fit <- wet_fit$fitted.values
   df$STR_dry_fit <- dry_fit$fitted.values
   rmse_wet <- sqrt(mean(wet_fit$residuals^2))
-  rmse_dry <- sqrt(mean(wet_fit$residuals^2))
+  rmse_dry <- sqrt(mean(dry_fit$residuals^2))
   rmse_df <- data.frame("RMSE dry" = rmse_dry, "RMSE wet" = rmse_wet)
   utils::write.csv(rmse_df,
                    file.path(output_dir, "trapezoid_rmse_exp.csv"),
@@ -149,7 +149,7 @@ polynomial_coefficients <- function(df, output_dir) {
   df$STR_wet_fit <- wet_fit$fitted.values
   df$STR_dry_fit <- dry_fit$fitted.values
   rmse_wet <- sqrt(mean(wet_fit$residuals^2))
-  rmse_dry <- sqrt(mean(wet_fit$residuals^2))
+  rmse_dry <- sqrt(mean(dry_fit$residuals^2))
   rmse_df <- data.frame("RMSE dry" = rmse_dry, "RMSE wet" = rmse_wet)
   utils::write.csv(rmse_df,
                    file.path(output_dir, "trapezoid_rmse_poly.csv"),
