@@ -27,8 +27,8 @@ test_that("Output RMSE is data.frame of 2 columns", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
   aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
   res <- optram_wetdry_coefficients(full_df,
-                                       aoi_file,
-                                       trapezoid_method = "linear")
+                                    aoi_file,
+                                    trapezoid_method = "linear")
   expect_true(inherits(res, "data.frame"))
   expect_equal(ncol(res), 2)
 })
@@ -44,4 +44,15 @@ test_that("Polynomial trapezoid method returns data.frame of length 6", {
   coeffs <- read.csv(file.path(output_dir, "coefficients_poly.csv"))
   expect_true(inherits(coeffs, "data.frame"))
   expect_equal(length(coeffs), 6)
+})
+
+test_that("Plot with edge points", {
+  full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
+  aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
+  res <- optram_wetdry_coefficients(full_df,
+                                    aoi_file,
+                                    trapezoid_method = "linear",
+                                    edge_points = TRUE)
+  expect_true(inherits(res, "data.frame"))
+  expect_equal(ncol(res), 2)
 })

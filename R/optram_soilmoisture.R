@@ -106,11 +106,7 @@ optram_calculate_soil_moisture <- function(
 
   tryCatch(
     expr = {trapezoid_method <- match.arg(trapezoid_method)},
-    error = function(e) {
-             message("Unrecognized trapezoid_method:",
-                     trapezoid_method)
-             return(NULL)
-           })
+    error = function(e) { return(NULL) })
   W <-  switch(trapezoid_method,
             linear = linear_soil_moisture(coeffs, VI, STR),
             exponential = exponential_soil_moisture(coeffs, VI, STR),
@@ -119,8 +115,7 @@ optram_calculate_soil_moisture <- function(
     message("No soil moisture raster created. Exiting...")
     return(NULL)
   }
-  outfile <- paste0("soil_moisture_", img_date, ".tif")
-  terra::writeRaster(W, file.path(output_dir, outfile),
-              NAflag=-9999.0, overwrite=TRUE)
+  outfile <- file.path(output_dir, paste0("soil_moisture_", img_date, ".tif"))
+  terra::writeRaster(W, outfile, NAflag=-9999.0, overwrite=TRUE)
   return(W)
 }

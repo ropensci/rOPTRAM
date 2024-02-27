@@ -128,11 +128,7 @@ optram_wetdry_coefficients <- function(
 
   tryCatch(
     expr = {trapezoid_method <- match.arg(trapezoid_method)},
-    error = function(e) {
-      message("Unrecognized trapezoid_method:",
-              trapezoid_method)
-      return(NULL)
-    })
+    error = function(e) { return(NULL) })
 
   # Get fitted trapezoid curves
   fitted_df <- switch(trapezoid_method,

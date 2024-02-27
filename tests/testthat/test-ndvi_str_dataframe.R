@@ -26,7 +26,7 @@ test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
                        "data.frame"))
 })
 
-test_that("Check that rm.low.vi works", {
+test_that("Check that rm.low.vi and rm.hi.str works", {
   VI_list <- list.files(system.file("extdata", "SAVI", package = "rOPTRAM"),
                         full.names = TRUE)
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
@@ -35,4 +35,7 @@ test_that("Check that rm.low.vi works", {
   full_df <- optram_ndvi_str(STR_list, VI_list, rm.low.vi = TRUE)
   min_ndvi <- min(full_df$VI, na.rm = TRUE)
   expect_gte(min_ndvi, 0)
+  full_df <- optram_ndvi_str(STR_list, VI_list, rm.hi.str = TRUE)
+  max_str <- max(full_df$STR, na.rm = TRUE)
+  expect_lte(max_str, 5)
 })
