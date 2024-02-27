@@ -10,8 +10,8 @@ test_that("Missing AOI file input", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
   res <- optram_wetdry_coefficients(full_df, aoi_file,
                                        trapezoid_method = "linear")
-  expect_true(inherits(res, "numeric"))
-  expect_equal(length(res), 2)
+  expect_true(inherits(res, "data.frame"))
+  expect_equal(ncol(res), 2)
 })
 
 test_that("aoi_file does not exist", {
@@ -19,8 +19,8 @@ test_that("aoi_file does not exist", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
   res <- optram_wetdry_coefficients(full_df, aoi_file,
                                        trapezoid_method = "linear")
-  expect_true(inherits(res, "numeric"))
-  expect_equal(length(res), 2)
+  expect_true(inherits(res, "data.frame"))
+  expect_equal(ncol(res), 2)
 })
 
 test_that("Output RMSE is data.frame of 2 columns", {
