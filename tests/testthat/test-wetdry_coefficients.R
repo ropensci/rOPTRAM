@@ -56,3 +56,13 @@ test_that("Plot with edge points", {
   expect_true(inherits(res, "data.frame"))
   expect_equal(ncol(res), 2)
 })
+
+test_that("Very small vi_step causes no data points in intervals", {
+  full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
+  aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
+  vi_step <- 5e-5
+  expect_null(optram_wetdry_coefficients(full_df,
+                                    aoi_file,
+                                    trapezoid_method = "linear",
+                                    vi_step = vi_step))
+})

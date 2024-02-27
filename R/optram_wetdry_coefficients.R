@@ -117,6 +117,11 @@ optram_wetdry_coefficients <- function(
   # Bind all interval results into one DF
   edges_list <- edges_list[ !is.na(edges_list) ]
   edges_df <- do.call(rbind, edges_list)
+  if (nrow(edges_df) < 0.5 * length(VI_series)) {
+    message("Too many edge points were dropped!\n",
+            "Consider choosing a larger vi_step parameter.")
+    return(NULL)
+  }
 
   # Save STR and VI values to CSV
   if (!dir.exists(output_dir)) {

@@ -39,3 +39,13 @@ test_that("Check that rm.low.vi and rm.hi.str works", {
   max_str <- max(full_df$STR, na.rm = TRUE)
   expect_lte(max_str, 5)
 })
+
+test_that("Check that max_tbl_size works", {
+  VI_list <- list.files(system.file("extdata", "SAVI", package = "rOPTRAM"),
+                        full.names = TRUE)
+  STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
+                         pattern = ".*STR.*tif$",
+                         full.names = TRUE)
+  full_df <- optram_ndvi_str(STR_list, VI_list, max_tbl_size = 1e3)
+  expect_lte(nrow(full_df), 1e3)
+})
