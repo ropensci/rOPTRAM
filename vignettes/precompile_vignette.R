@@ -12,7 +12,10 @@ figures <- c("trapezoid_Migda_9_linear.png",
 invisible(lapply(figures, function(f) {
   fig_path <- file.path(output_dir, f)
   vig_path <- file.path("vignettes", "images", f)
-  file.copy(from = fig_path, to = vig_path)
+  #file.copy(from = fig_path, to = vig_path)
+  im_obj <- magick::image_read(fig_path)
+  res_obj <- magick::image_resize(im_obj, "50%")
+  magick::image_write(res_obj, vig_path)
   }))
 
 devtools::build_vignettes()
