@@ -4,7 +4,10 @@ test_that("Coefficients file exists", {
   data_dir <- system.file("extdata", "STR2", package = "rOPTRAM")
   img_date <- "2023-02-19"
   expect_null(optram_calculate_soil_moisture(img_date = img_date,
-        VI_dir = VI_dir, STR_dir = STR_dir, data_dir = data_dir))
+        VI_dir = VI_dir,
+        STR_dir = STR_dir,
+        data_dir = data_dir,
+        trapezoid_method = "linear"))
 })
 
 test_that("Correct image date format", {
@@ -13,7 +16,10 @@ test_that("Correct image date format", {
   data_dir <- system.file("extdata", package = "rOPTRAM")
   img_date <- "2023-13-16"  # illegal date
   expect_null(optram_calculate_soil_moisture(img_date = img_date,
-        VI_dir = VI_dir, STR_dir = STR_dir, data_dir = data_dir))
+        VI_dir = VI_dir,
+        STR_dir = STR_dir,
+        data_dir = data_dir,
+        trapezoid_method = "linear"))
 })
 
 
@@ -23,7 +29,10 @@ test_that("Input NDVI directory exists", {
   data_dir <- system.file("extdata", package = "rOPTRAM")
   img_date <- "2023-02-19"
   expect_null(optram_calculate_soil_moisture(img_date = img_date,
-        VI_dir = VI_dir, STR_dir = STR_dir, data_dir = data_dir))
+        VI_dir = VI_dir,
+        STR_dir = STR_dir,
+        data_dir = data_dir,
+        trapezoid_method = "linear"))
 })
 
 
