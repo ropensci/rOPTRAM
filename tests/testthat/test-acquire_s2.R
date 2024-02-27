@@ -23,7 +23,7 @@ test_that("from_date correctly formatted", {
   # Illegal date
   from_date <- "2023-13-01"
   to_date <- "2023-04-30"
-  aoi_file <- system.file("extdata", "Migda9_VWC.csv", package = "rOPTRAM")
+  aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
   expect_null(optram_acquire_s2(aoi_file, from_date, to_date,
                                 remote = "scihub"))
   # from_date after to_date
