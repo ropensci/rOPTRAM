@@ -3,12 +3,7 @@
 .Rdata
 .httr-oauth
 .DS_Store
-R/call_optram_landsat.R
-inst/doc
-R/create_icon.R
-R/optram_acquire_cdse.R
-SAFE$
 paper.md
 /doc/
+/Meta/  
 /Meta/
-/inst/extdata/S2A

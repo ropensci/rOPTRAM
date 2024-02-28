@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Introduction
+## Introduction  <img align="right" width="100" height="100" src="images/rOPTRAM_logo.jpg">
 
 The {CSDE} package provides an interface to the 'Copernicus DataSpace Ecosystem' API, mainly for searching the catalog of available data from Copernicus Sentinel missions and obtaining the images for just the area of interest based on selected spectral bands. The package uses the 'Sentinel Hub' REST API interface [Sentinel Hub](https://dataspace.copernicus.eu/analyse/apis/sentinel-hub) that provides access to various satellite imagery archives. It allows you to access raw satellite data, rendered images, statistical analysis, and other features.
 
@@ -75,7 +75,7 @@ from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 # aoi <- "path/to/your/aoi_file.gpkg"
 # rOPTRAM_aoi_example
-aoi <- system.file("extdata", "migda9.gpkg", package = 'rOPTRAM')
+aoi <- system.file("extdata", "migda_9.gpkg", package = 'rOPTRAM')
 
 boa_files <- acquire_scihub(aoi, from_date, to_date,
                veg_index = "SAVI",

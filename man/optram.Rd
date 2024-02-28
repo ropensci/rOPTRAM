@@ -10,11 +10,10 @@ optram(
   from_date,
   to_date,
   max_cloud = 15,
-  remove_safe = "yes",
   S2_output_dir = tempdir(),
   data_output_dir = tempdir(),
   remote = "scihub",
-  step = 0.01,
+  vi_step = 0.005,
   trapezoid_method = c("linear", "exponential", "polynomial")
 )
 }
@@ -40,8 +39,8 @@ and STR-VI data.frame, default is tempdir()}
 \item{remote, }{string, which Copernicus API to use,
 one of "scihub", or "openeo". Default is "scihub"}
 
-\item{step, }{float, width of intervals along VI axis
-default 0.01}
+\item{vi_step, }{float, width of intervals along VI axis
+default 0.005}
 
 \item{trapezoid_method, }{string,
 one of "linear", "exponential", "polynomial"
@@ -50,7 +49,7 @@ How to fit a curve to the values along trapezoid edges
 See notes in optram_wetdry_coefficients()}
 }
 \value{
-rmse_list, list, RMSE values of fitted trapezoid lines
+rmse_df, data.frame, RMSE values of fitted trapezoid lines
 the coefficients are also saved to a csv file in \code{data_output_dir}.
 }
 \description{

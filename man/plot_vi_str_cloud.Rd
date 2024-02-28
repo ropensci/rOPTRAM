@@ -40,8 +40,12 @@ over scatterplot of multi-temporal STR and NDVI pixel values
 aoi_name <- "Test"
 full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
         package = "rOPTRAM"))
-plot_vi_str_cloud(full_df, aoi_name)
-plot_vi_str_cloud(full_df, aoi_name,
+edges_df <- read.csv(system.file("extdata", "trapezoid_edges_lin.csv",
+                        package = "rOPTRAM"))
+plot_vi_str_cloud(full_df, aoi_name, edges_df)
+edges_df <- read.csv(system.file("extdata", "trapezoid_edges_poly.csv",
+                        package = "rOPTRAM"))
+plot_vi_str_cloud(full_df, aoi_name, edges_df,
                     trapezoid_method = "polynomial")
 
 }

@@ -9,7 +9,13 @@ vignette: >
 bibliography: "references.bib"
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  message = FALSE,
+  comment = "#>"
+)
+```
 
 ## Introduction  <img align="right" width="100" height="100" src="images/rOPTRAM_logo.jpg">
 
@@ -42,8 +48,7 @@ That recommended R package {CDSE} interfaces with the Copernicus DataSpace Ecosy
 Both methods require [registering](https://dataspace.copernicus.eu/) on the Copernicus DataSpace
 
 
-
-```r
+```{r setup, results='hide'}
 remotes::install_gitlab("rsl-bidr/roptram")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
@@ -60,8 +65,7 @@ Registration on Copernicus DataSpace was done in advance, and the OAuth credenti
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 
-
-```r
+```{r wrapper, warning=FALSE, message=FALSE}
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
@@ -75,39 +79,16 @@ coeffs <- optram(aoi_file,
                  remote = "scihub",
                  vi_step = 0.005,
                  trapezoid_method = "linear")
-#> Reading layer `migda_9' from data source 
-#>   `/home/micha/work/dev/roptram/inst/extdata/migda_9.gpkg' using driver `GPKG'
-#> Simple feature collection with 1 feature and 3 fields
-#> Geometry type: POLYGON
-#> Dimension:     XYZ
-#> Bounding box:  xmin: 34.58383 ymin: 31.35897 xmax: 34.58903 ymax: 31.36149
-#> z_range:       zmin: 0 zmax: 0
-#> Geodetic CRS:  WGS 84
-#> [1] "RMSE for fitted trapezoid:"
-#>    RMSE.wet   RMSE.dry
-#> 1 0.2882963 0.05075593
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
 ```
-
-
-
-Table: Trapezoid coefficients
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2882963| 0.0507559|
-
-
 ### Show trapezoid plot
 
-
-```r
+```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%', warning=FALSE}
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
 knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_migda9_linear.png"
 ```
 
 ## Step by step
@@ -121,22 +102,13 @@ knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png")
   - and the option to remove outlier STR values
   - Get trapezoid coefficients from the scatterplot of VI-STR pixels
 
-
-```r
+```{r stepbystep, warning=FALSE, message=FALSE}
 # Using the same dates, and aoi as previous example
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
                             veg_index =veg_index,
                             remote = "scihub")
-#> Reading layer `migda_9' from data source 
-#>   `/home/micha/work/dev/roptram/inst/extdata/migda_9.gpkg' using driver `GPKG'
-#> Simple feature collection with 1 feature and 3 fields
-#> Geometry type: POLYGON
-#> Dimension:     XYZ
-#> Bounding box:  xmin: 34.58383 ymin: 31.35897 xmax: 34.58903 ymax: 31.36149
-#> z_range:       zmin: 0 zmax: 0
-#> Geodetic CRS:  WGS 84
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "SAVI"),
@@ -152,22 +124,11 @@ knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
 
 
 
-Table: RMSE of fitted trapezoid edges
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2882963| 0.0507559|
-
-
-
-
-
 ## Soil Moisture Estimate
 
 ### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid
 
-
-```r
+```{r soil-moisture}
 img_date <- "2023-01-10"   # After a rain
 VI_dir <- file.path(output_dir, "SAVI")
 STR_dir <- file.path(output_dir, "STR")
@@ -179,8 +140,7 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 
 ### Soil moisture plot
 
-
-```r
+```{r sm-plot}
 library(leaflet)
 names(SM) <- "Migda soil moisture"
 SM[terra::values(SM) < 0] <- 0
@@ -192,5 +152,4 @@ sm_map <- leaflet("OpenStreetMap") |>
       domain = c(-0.1, 2.0), na.color = NA),
     opacity = 0.9)
 sm_map
-#> Error in path.expand(path): invalid 'path' argument
 ```

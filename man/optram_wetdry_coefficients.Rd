@@ -37,8 +37,7 @@ add the original regression points that were used to derive coefficients.
 default FALSE}
 }
 \value{
-rmse_list, named list of floats,
-RMSE values of fitted trapezoid edges
+rmse_df, data.frame,  RMSE values of fitted trapezoid edges
 }
 \description{
 Derive slope and intercept coefficients
@@ -78,13 +77,11 @@ alpha, beta_1, and beta_2 for both wet and dry edges
 aoi_file <- "Test"
 full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
   package = "rOPTRAM"))
-rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
-                 trapezoid_method = "linear",
-                 rm.low.vi = TRUE, rm.hi.str = TRUE)
-print(rmse_list)
-rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
-                  trapezoid_method = "polynomial",
-                  rm.low.vi = TRUE, rm.hi.str = TRUE)
-print(rmse_list)
+rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
+                 trapezoid_method = "linear")
+print(rmse_df)
+rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
+                  trapezoid_method = "polynomial")
+print(rmse_df)
 
 }

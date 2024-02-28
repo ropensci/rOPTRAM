@@ -16,7 +16,7 @@
 #'    or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
-#' @param step, numeric, width of slice along VI axis
+#' @param vi_step, numeric, width of slice along VI axis
 #'    to prepare edge values, default 0.01
 #' @param trapezoid_method, string,
 #'    one of "linear", "exponential", "polynomial"
@@ -29,7 +29,7 @@
 #'      and STR-VI data.frame, default is tempdir()
 #' @param max_tbl_size, numeric, maximum size of VI/STR dta.frame.
 #'      default is 5,000,000 rows
-#' @return rmse_list, list, RMSE values of fitted trapezoid lines
+#' @return rmse_df, data.frame, RMSE values of fitted trapezoid lines
 #' @export
 #' @note
 #' Use the `max_tbl_size` parameter to limit the total number of rows
@@ -56,7 +56,7 @@ optram_safe <- function(safe_dir,
                         data_output_dir = tempdir(),
                         max_tbl_size = 5e+6,
                         trapezoid_method = c("linear", "exponential", "polynomial"),
-                        step = 0.01) {
+                        vi_step = 0.01) {
 
     # Avoid "no visible binding for global variable" NOTE
     safe_list <- band_ids <- aoi <- cropped_rast_list <- xml_file <- NULL
@@ -266,12 +266,13 @@ optram_safe <- function(safe_dir,
     saveRDS(full_VI_STR, full_df_path)
     message("VI-STR data saved to: ", full_df_path)
     # Now continue with regular process
-    rmse_list <- rOPTRAM::optram_wetdry_coefficients(
+    rmse_df <- rOPTRAM::optram_wetdry_coefficients(
       full_VI_STR,
       aoi_file,
       trapezoid_method = trapezoid_method,
-      step = step,
+      vi_step = vi_step,
       output_dir = data_output_dir)
-    message("RMSE for fitted trapezoid: \n", rmse_list)
-    return(rmse_list)
+    message("RMSE for fitted trapezoid:")
+    print(rmse_df)
+    return(rmse_df)
 }

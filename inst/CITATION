@@ -1,7 +1,7 @@
 bibentry(
   bibtype  = "misc",
   title    = "rOPTRAM: an R package for preparing soil moisture grids based on the OPTRAM model",
-  author   = "Micha Silver, Arnon Karnieli",
+  author   = "Micha Silver, Ron Beiden, Arnon Karnieli",
   year     = "2023",
   doi      = "",
   school   = "Ben Gurion University"

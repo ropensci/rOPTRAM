@@ -94,11 +94,9 @@ optram_ndvi_str <- function(STR_list, VI_list,
 
     # Also get the vegetation index raster for this date
     VI_f <- VI_list[grep(date_str, basename(VI_list))]
-    if (length(VI_f) == 0) {
-      return(NULL)
-    } else if (!file.exists(VI_f)) {
-      return(NULL)
-    }
+    if (length(VI_f) == 0) { return(NULL) }
+    else if (!file.exists(VI_f)) { return(NULL) }
+
     VI <- terra::rast(VI_f)
     # Revert to original scale
     # VI <- VI/10000.0  **NOT necessary in CDSE!**

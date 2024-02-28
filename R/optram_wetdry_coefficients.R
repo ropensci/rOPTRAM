@@ -17,8 +17,7 @@
 #'    If `save_plot` is TRUE, and `edge_points` is TRUE
 #'    add the original regression points that were used to derive coefficients.
 #'    default FALSE
-#' @return rmse_list, named list of floats,
-#'    RMSE values of fitted trapezoid edges
+#' @return rmse_df, data.frame,  RMSE values of fitted trapezoid edges
 #' @export
 #' @note
 #' The vegetation index column is named "VI" though it can represent
@@ -52,14 +51,12 @@
 #' aoi_file <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'   package = "rOPTRAM"))
-#' rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
-#'                  trapezoid_method = "linear",
-#'                  rm.low.vi = TRUE, rm.hi.str = TRUE)
-#' print(rmse_list)
-#' rmse_list <- optram_wetdry_coefficients(full_df, aoi_file,
-#'                   trapezoid_method = "polynomial",
-#'                   rm.low.vi = TRUE, rm.hi.str = TRUE)
-#' print(rmse_list)
+#' rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
+#'                  trapezoid_method = "linear")
+#' print(rmse_df)
+#' rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
+#'                   trapezoid_method = "polynomial")
+#' print(rmse_df)
 #'
 
 optram_wetdry_coefficients <- function(
@@ -120,6 +117,11 @@ optram_wetdry_coefficients <- function(
   # Bind all interval results into one DF
   edges_list <- edges_list[ !is.na(edges_list) ]
   edges_df <- do.call(rbind, edges_list)
+  if (nrow(edges_df) < 0.5 * length(VI_series)) {
+    message("Too many edge points were dropped!\n",
+            "Consider choosing a larger vi_step parameter.")
+    return(NULL)
+  }
 
   # Save STR and VI values to CSV
   if (!dir.exists(output_dir)) {
@@ -131,11 +133,7 @@ optram_wetdry_coefficients <- function(
 
   tryCatch(
     expr = {trapezoid_method <- match.arg(trapezoid_method)},
-    error = function(e) {
-      message("Unrecognized trapezoid_method:",
-              trapezoid_method)
-      return(NULL)
-    })
+    error = function(e) { return(NULL) })
 
   # Get fitted trapezoid curves
   fitted_df <- switch(trapezoid_method,
@@ -153,7 +151,7 @@ optram_wetdry_coefficients <- function(
   }
   rmse_wet <- sqrt(mean((fitted_df$STR_wet_fit - fitted_df$STR_wet)^2))
   rmse_dry <- sqrt(mean((fitted_df$STR_dry_fit - fitted_df$STR_dry)^2))
-  return(c("RMSE wet" = rmse_wet, "RMSE dry" = rmse_dry))
+  return(data.frame("RMSE wet" = rmse_wet, "RMSE dry" = rmse_dry))
 }
 
 
@@ -177,8 +175,12 @@ optram_wetdry_coefficients <- function(
 #' aoi_name <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'         package = "rOPTRAM"))
-#' plot_vi_str_cloud(full_df, aoi_name)
-#' plot_vi_str_cloud(full_df, aoi_name,
+#' edges_df <- read.csv(system.file("extdata", "trapezoid_edges_lin.csv",
+#'                         package = "rOPTRAM"))
+#' plot_vi_str_cloud(full_df, aoi_name, edges_df)
+#' edges_df <- read.csv(system.file("extdata", "trapezoid_edges_poly.csv",
+#'                         package = "rOPTRAM"))
+#' plot_vi_str_cloud(full_df, aoi_name, edges_df,
 #'                     trapezoid_method = "polynomial")
 #'
 plot_vi_str_cloud <- function(
@@ -189,7 +191,7 @@ plot_vi_str_cloud <- function(
     trapezoid_method = c("linear", "exponential", "polynomial"),
     edge_points = FALSE) {
   # Avoid "no visible binding for global variable" NOTE
-
+  VI <- STR <- STR_dry_fit <- STR_wet_fit <- STR_wet <- STR_dry <- NULL
   # Pre-flight test
   if (! "STR" %in% names(full_df)) {
     message("STR column missing from data.frame. Exiting...")
@@ -229,12 +231,14 @@ plot_vi_str_cloud <- function(
     geom_smooth(data = edges_df,
                 mapping = aes(x = VI, y = STR_dry_fit),
                 method = "loess",
-                color = "orange2", se = FALSE) +
+                color = "orange2", se = FALSE,
+                linewidth = 2) +
     # Wet edge
     geom_smooth(data = edges_df,
                 aes(x = VI, y = STR_wet_fit),
                 method = "loess",
-                color="blue", se = FALSE) +
+                color="blue", se = FALSE,
+                linewidth = 2) +
 
     ggtitle(paste("Trapezoid Plot - ", aoi_name),
             subtitle = paste(trapezoid_method, "fit"))
@@ -243,7 +247,7 @@ plot_vi_str_cloud <- function(
     theme(axis.title = element_text(size = 14),
           axis.text = element_text(size = 12),
           plot.title = element_text(size = 18, face = "bold"),
-          plot.subtitle = element_text(size=18))
+          plot.subtitle = element_text(size = 18))
 
   if (edge_points) {
     pl <- pl + geom_point(aes(x=VI, y=STR_wet),
@@ -253,10 +257,10 @@ plot_vi_str_cloud <- function(
                       color = "black", size=1.5, shape=6,
                       data = edges_df)
   }
-  pl
   plot_path <- file.path(output_dir,
                          paste0("trapezoid_",
                                 aoi_name, "_",
                                 trapezoid_method, ".png"))
-  ggsave(plot_path, width = 10, height = 7)
+  ggsave(plot_path,
+         plot = pl, width = 10, height = 7, units = "in", dpi = 192)
 }

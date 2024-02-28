@@ -40,7 +40,8 @@ Suggests:
     xml2,
     openeo,
     CDSE,
-    jsonlite
+    jsonlite,
+    qpdf
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Spelling: en-US
