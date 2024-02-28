@@ -16,6 +16,7 @@
 #' @param clientid, string, user's OAuth client id. Required if `save_creds`
 #'      is TRUE.
 #' @param secret, string, user's OAuth secret. Required if `save_creds` is TRUE.
+#' @param SWIR_band, integer, either 11 or 12, determines which SWIR band to use
 #' @export
 #' @return list of BOA files
 #' @note
@@ -83,7 +84,8 @@ acquire_scihub <- function(
     veg_index = "NDVI",
     save_creds = TRUE,
     clientid = NULL,
-    secret = NULL) {
+    secret = NULL,
+    SWIR_band = c(11, 12)) {
 
   aoi <- sf::st_read(aoi_file, as_tibble = FALSE, quiet = TRUE)
 
@@ -118,11 +120,17 @@ acquire_scihub <- function(
     dir.create(result_folder_str)
   }
 
+  # Make sure SWIR_band is one of 11 or 12
+  tryCatch(
+    expr = {trapezoid_method <- match.arg(trapezoid_method)},
+    error = function(e) { return(NULL) })
+
+  str_script <- paste0("STR", SWIR_band, ".js")
+  vi_script <- paste0(veg_index, ".js")
   # Retrieve the necessary scripts
   script_file_boa <- system.file("scripts", "BOA.js", package = "rOPTRAM")
-  script_file_str <- system.file("scripts", "STR.js", package = "rOPTRAM")
-  script_file_vi <- system.file("scripts", paste0(veg_index, ".js"),
-                                package = "rOPTRAM")
+  script_file_str <- system.file("scripts", script_file, package = "rOPTRAM")
+  script_file_vi <- system.file("scripts", vi_script, package = "rOPTRAM")
 
   img_list <- CDSE::SearchCatalog(aoi = aoi,
                                   from = from_date, to = to_date,

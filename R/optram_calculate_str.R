@@ -1,5 +1,6 @@
 #' @title Create SWIR Transformed Reflectance
 #' @param BOA_dir, string, the path to the Bottom of Atmosphere bands
+#' @param SWIR_band, integer, band number, either 11 (default) or 12
 #' @return list of string, the path to transformed raster
 #' @note
 #' This function follows:
@@ -12,13 +13,13 @@
 #'
 #' SWIR Transformed Reflectance is calculated as
 #'  STR = (1-SWIR)^2 / 2*SWIR
-#'  SWIR is band 11 (2200 nm) since band B09 is not processed
+#'  SWIR is band 12 (2200 nm) or 11 (1600 nm)
 #' @export
 #' @examples
 #' BOA_dir <- system.file("extdata", "BOA")
 #' STR <- optram_calculate_str(BOA_dir)
 
-optram_calculate_str <- function(BOA_dir){
+optram_calculate_str <- function(BOA_dir, SWIR_band = c(11, 12)){
   # Returns: STR_list, list of paths to STR (SWIR Transformed) Raster files
   # Avoid "no visible binding for global variable" NOTE
   BOA_list <- STR_list <- SWIR_DN <- SWIR <- STR <- outfile <- outpath <- NULL
@@ -32,7 +33,7 @@ optram_calculate_str <- function(BOA_dir){
   STR_list <- lapply(BOA_list, function(t) {
     stk <- terra::rast(t)
     # Use band no. 11 = 2200 nm
-    SWIR_DN <-  stk[[11]]
+    SWIR_DN <-  stk[[SWIR_band]]
     # back to native scale
     SWIR <-  SWIR_DN / 10000
     # Convert from Solar irradiance
