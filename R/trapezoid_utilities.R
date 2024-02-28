@@ -86,8 +86,8 @@ exponential_coefficients <- function(df, output_dir) {
                        "intercept_wet"=i_wet, "slope_wet"=s_wet)
 
   # Update the data.frame of trapezoid edges and save
-  df$STR_wet_fit <- wet_fit$fitted.values
-  df$STR_dry_fit <- dry_fit$fitted.values
+  df$STR_wet_fit <- exp(wet_fit$fitted.values)
+  df$STR_dry_fit <- exp(dry_fit$fitted.values)
   rmse_wet <- sqrt(mean(wet_fit$residuals^2))
   rmse_dry <- sqrt(mean(dry_fit$residuals^2))
   rmse_df <- data.frame("RMSE dry" = rmse_dry, "RMSE wet" = rmse_wet)
@@ -110,6 +110,7 @@ exponential_coefficients <- function(df, output_dir) {
                    row.names=FALSE)
   return(df)
 }
+
 
 #' @title Utility Function to Prepare Polynomial Fitted Edges of Trapezoid
 #' @description Called by `optram_wetdry_coefficients()`
@@ -198,6 +199,7 @@ linear_soil_moisture <- function(coeffs, VI, STR) {
   W <- (i_dry + s_dry*VI - STR) / (i_dry - i_wet +  (s_dry-s_wet)*VI)
   return(W)
 }
+
 
 #' @title Calculate Soil Moisture Grid, Exponential Trapezoid
 #' @description Prepare soil moisture grid from STR and VI images
