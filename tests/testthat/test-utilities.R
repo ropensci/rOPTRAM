@@ -1,4 +1,4 @@
-test_that("calculate_vi returns SpatRaster", {
+test_that("Check that calculate_vi returns SpatRaster", {
     img_stk <- terra::rast(system.file("extdata",
               "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
     # Test all VIs
@@ -9,13 +9,20 @@ test_that("calculate_vi returns SpatRaster", {
     expect_s4_class(calculate_vi(img_stk, viname = "BSCI"), "SpatRaster")
 })
 
-test_that("calculate_vi returns NULL for non-existant VI", {
+test_that("Check that calculate_vi returns NULL for non-existant VI", {
     img_stk <- terra::rast(system.file("extdata",
               "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
     expect_null(calculate_vi(img_stk, viname = "XXX"))
 })
 
-test_that("calculate_str returns SpatRaster", {
+test_that("In calculate_vi, img_stk has all 12 bands", {
+  img_stk <- terra::rast(system.file("extdata",
+                                     "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
+  short_stk <- img_stk[[1:10]]
+  expect_null(calculate_vi(short_stk, viname = "NDVI"))
+})
+
+test_that("Check that calculate_str returns SpatRaster", {
     img_stk <- terra::rast(system.file("extdata",
               "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
     expect_s4_class(calculate_str(img_stk, SWIR_band = 11), "SpatRaster")
@@ -25,7 +32,9 @@ test_that("Check for invalid SWIR_band value", {
   img_stk <- terra::rast(system.file("extdata",
                                      "BOA", "BOA_2022-12-11.tif",
                                      package = "rOPTRAM"))
-  expect_null(calculate_str(img_stk, SWIR_band = 10), "SpatRaster")
+  expect_null(calculate_str(img_stk, SWIR_band = 10))
+  short_stk <- img_stk[[1:10]]
+  expect_null(calculate_str(short_stk, SWIR_band=11))
 })
 
 test_that("Check if aoi_file is NULL", {

@@ -86,7 +86,10 @@ calculate_vi <- function(img_stk, viname = "NDVI",
                          scale_factor = 2^15) {
     # Avoid "no visible binding for global variable" NOTE
     nir <- red <- blue <- green <- vi_rast <- NULL
-
+    if (terra::nlyr(img_stk) < 12) {
+      message("BOA image stack does not contain all bands")
+      return(NULL)
+    }
     nir <- img_stk[[nirband]]
     red <- img_stk[[redband]]
     blue <- img_stk[[blueband]]
@@ -150,15 +153,24 @@ calculate_str <- function(img_stk,
   #
   # STR = (1-SWIR)^2 / 2*SWIR
   #
-    SWIR_DN <-  img_stk[[SWIR_band]]
-    # back to native scale
-    SWIR <-  SWIR_DN / scale_factor
-    # Convert from Solar irradiance
-    # solar_irradiance_12 <- 87.25
-    # SWIR <- (SWIR_irr/10) * solar_irradiance_12
-    STR <- (1 - SWIR)^2 / (2*SWIR)
-    names(STR) <- "STR"
-    return(STR)
+  # Make sure SWIR_band is one of 11 or 12
+  tryCatch(
+    expr = {SWIR_band <- match.arg(SWIR_band)},
+    error = function(e) { return(NULL) })
+  if (terra::nlyr(img_stk) < 12) {
+    message("BOA image stack does not contain all bands")
+    return(NULL)
+  }
+
+  SWIR_DN <-  img_stk[[SWIR_band]]
+  # back to native scale
+  SWIR <-  SWIR_DN / scale_factor
+  # Convert from Solar irradiance
+  # solar_irradiance_12 <- 87.25
+  # SWIR <- (SWIR_irr/10) * solar_irradiance_12
+  STR <- (1 - SWIR)^2 / (2*SWIR)
+  names(STR) <- "STR"
+  return(STR)
 }
 
 
