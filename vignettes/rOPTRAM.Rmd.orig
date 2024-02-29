@@ -78,7 +78,8 @@ coeffs <- optram(aoi_file,
                  data_output_dir = output_dir,
                  remote = "scihub",
                  vi_step = 0.005,
-                 trapezoid_method = "linear")
+                 trapezoid_method = "linear",
+                 SWIR_band = 11)
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
 ```
 ### Show trapezoid plot
@@ -108,7 +109,8 @@ s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
                             veg_index =veg_index,
-                            remote = "scihub")
+                            remote = "scihub",
+                            SWIR_band = 11)
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "SAVI"),

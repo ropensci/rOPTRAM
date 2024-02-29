@@ -84,6 +84,7 @@ boa_files <- acquire_scihub(aoi, from_date, to_date,
                # save_creds = TRUE,
                # clientid = "your_client_id",
                # secret = "your_secret"
+               SWIR_band = 11
                )
 ```
 
@@ -96,7 +97,8 @@ from_date <- "2019-12-01"
 to_date <- "2020-04-30"
 boa_files <- acquire_scihub(aoi, from_date, to_date,
                veg_index = "SAVI",
-               output_dir = tempdir())
+               output_dir = tempdir(),
+               SWIR_band = 11)
 ```
 
 

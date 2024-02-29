@@ -125,7 +125,7 @@ acquire_scihub <- function(
     expr = {SWIR_band <- match.arg(SWIR_band)},
     error = function(e) { return(NULL) })
 
-  str_script <- paste0("STR", SWIR_band, ".js")
+  str_script <- paste0("STR", as.character(SWIR_band), ".js")
   vi_script <- paste0(veg_index, ".js")
   # Retrieve the necessary scripts
   script_file_boa <- system.file("scripts", "BOA.js", package = "rOPTRAM")

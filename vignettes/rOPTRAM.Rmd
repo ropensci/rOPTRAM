@@ -74,7 +74,8 @@ coeffs <- optram(aoi_file,
                  data_output_dir = output_dir,
                  remote = "scihub",
                  vi_step = 0.005,
-                 trapezoid_method = "linear")
+                 trapezoid_method = "linear",
+                 SWIR_band = 11)
 #> Reading layer `migda_9' from data source 
 #>   `/home/micha/work/dev/roptram/inst/extdata/migda_9.gpkg' using driver `GPKG'
 #> Simple feature collection with 1 feature and 3 fields
@@ -83,29 +84,23 @@ coeffs <- optram(aoi_file,
 #> Bounding box:  xmin: 34.58383 ymin: 31.35897 xmax: 34.58903 ymax: 31.36149
 #> z_range:       zmin: 0 zmax: 0
 #> Geodetic CRS:  WGS 84
-#> [1] "RMSE for fitted trapezoid:"
-#>    RMSE.wet   RMSE.dry
-#> 1 0.2882963 0.05075593
+#> Error in CDSE::GetArchiveImage(aoi = aoi, time_range = time_range, script = scrpt, :  
+#>   status      reason                             message               code
+#> 1    400 Bad Request Script contains no code to execute. RENDERER_EXCEPTION
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
+#> Error in knitr::kable(coeffs, caption = "Trapezoid coefficients"): object 'coeffs' not found
 ```
-
-
-
-Table: Trapezoid coefficients
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2882963| 0.0507559|
-
-
 ### Show trapezoid plot
 
 
 ```r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
+#> Error in file(file, "rt"): cannot open the connection
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
+#> Error in gzfile(file, "rb"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
+#> Error in "STR" %in% names(full_df): object 'full_df' not found
 knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png")
 #> Error in knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_migda9_linear.png"
 ```
@@ -128,7 +123,8 @@ s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
                             veg_index =veg_index,
-                            remote = "scihub")
+                            remote = "scihub",
+                            SWIR_band = 11)
 #> Reading layer `migda_9' from data source 
 #>   `/home/micha/work/dev/roptram/inst/extdata/migda_9.gpkg' using driver `GPKG'
 #> Simple feature collection with 1 feature and 3 fields
@@ -137,6 +133,9 @@ s2_file_list <- optram_acquire_s2(aoi_file,
 #> Bounding box:  xmin: 34.58383 ymin: 31.35897 xmax: 34.58903 ymax: 31.36149
 #> z_range:       zmin: 0 zmax: 0
 #> Geodetic CRS:  WGS 84
+#> Error in CDSE::GetArchiveImage(aoi = aoi, time_range = time_range, script = scrpt, :  
+#>   status      reason                             message               code
+#> 1    400 Bad Request Script contains no code to execute. RENDERER_EXCEPTION
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "SAVI"),
@@ -147,18 +146,10 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 rmse <- optram_wetdry_coefficients(full_df,
                                    aoi_file,
                                    output_dir = output_dir)
+#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
+#> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```
-
-
-
-Table: RMSE of fitted trapezoid edges
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2882963| 0.0507559|
-
-
 
 
 
@@ -183,7 +174,9 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ```r
 library(leaflet)
 names(SM) <- "Migda soil moisture"
+#> Error in names(SM) <- "Migda soil moisture": attempt to set an attribute on NULL
 SM[terra::values(SM) < 0] <- 0
+#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'values' for signature '"NULL"'
 
 sm_map <- leaflet("OpenStreetMap") |>
   addTiles() |>
@@ -191,6 +184,7 @@ sm_map <- leaflet("OpenStreetMap") |>
     colors = colorNumeric("RdYlGn",
       domain = c(-0.1, 2.0), na.color = NA),
     opacity = 0.9)
+#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : Don't know how to get path data from object of class NULL
 sm_map
-#> Error in path.expand(path): invalid 'path' argument
+#> Error in eval(expr, envir, enclos): object 'sm_map' not found
 ```
