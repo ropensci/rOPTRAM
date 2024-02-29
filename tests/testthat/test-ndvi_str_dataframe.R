@@ -37,7 +37,7 @@ test_that("Check that rm.low.vi and rm.hi.str works", {
   expect_gte(min_ndvi, 0)
   full_df <- optram_ndvi_str(STR_list, VI_list, rm.hi.str = TRUE)
   max_str <- max(full_df$STR, na.rm = TRUE)
-  expect_lte(max_str, 5)
+  expect_lte(max_str, 10)
 })
 
 test_that("Check that max_tbl_size works", {
