@@ -5,7 +5,7 @@
 #' @return boolean, TRUE when file exists, and is spatial
 #' @noRd
 #' @examples
-#' aoi_file <- system.file("extdata", "migda.gpkg")
+#' aoi_file <- system.file("extdata", "lachish.gpkg")
 #' check_aoi(aoi_file)
 
 check_aoi <- function(aoi_file) {
@@ -183,7 +183,7 @@ calculate_str <- function(img_stk,
 #' @keywords Internal
 #' @return aoi_name, string
 #' @examples
-#' aoi_file <- system.file("extdata", "migda.gpkg")
+#' aoi_file <- system.file("extdata", "lachish.gpkg")
 #' aoi_name <- aoi_to_name(aoi_file)
 #' aoi_name
 

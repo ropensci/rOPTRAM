@@ -49,7 +49,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+#' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 #' safe_dir  <- tempdir()
 #' coeffs <- optram_safe(safe_dir, aoi_file, veg_index = "SAVI")
 #' }

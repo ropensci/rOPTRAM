@@ -55,7 +55,7 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
-aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
+aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 veg_index <- "SAVI"
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
@@ -63,9 +63,9 @@ s2_file_list <- optram_acquire_s2(aoi_file,
                             veg_index =veg_index,
                             remote = "scihub",
                             SWIR_band = 11)
-#> Error in CDSE::GetArchiveImage(aoi = aoi, time_range = time_range, script = scrpt, :  
-#>   status      reason                             message               code
-#> 1    400 Bad Request Script contains no code to execute. RENDERER_EXCEPTION
+#> Error in CDSE::SearchCatalog(aoi = aoi, from = from_date, to = to_date, :  
+#>   httr2::resp_body_json(resp)[[1]]
+#> 1                              403
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "SAVI"),
@@ -85,18 +85,20 @@ rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir,
                                    trapezoid_method = meth,
                                    save_plot = TRUE)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-#> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   output_dir = output_dir,
                   edge_points = TRUE)
-#> NULL
-knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_migda9_linear.png"
+#> Error in paste("Trapezoid Plot - ", aoi_name): object 'ttl' not found
+knitr::include_graphics("images/trapezoid_lachish_linear.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_linear.png" alt="Trapezoid scatterplot" width="90%" />
+<p class="caption">Trapezoid scatterplot</p>
+</div>
 
 #### Show Exponential fitted trapezoid plot
 
@@ -108,18 +110,20 @@ coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir,
                                      trapezoid_method = meth,
                                      save_plot = TRUE)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
-#> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl,
                   output_dir = output_dir,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   edge_points = TRUE)
-#> NULL
-knitr::include_graphics("vignettes/images/trapezoid_migda9_exponential.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_migda9_exponential.png"): Cannot find the file(s): "vignettes/images/trapezoid_migda9_exponential.png"
+#> Error in paste("Trapezoid Plot - ", aoi_name): object 'ttl' not found
+knitr::include_graphics("images/trapezoid_lachish_exponential.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_exponential.png" alt="Exponential fit trapezoid scatterplot" width="90%" />
+<p class="caption">Exponential fit trapezoid scatterplot</p>
+</div>
 
 #### Show Polynomial fitted trapezoid plot
 
@@ -131,15 +135,17 @@ coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir,
                                      trapezoid_method = meth,
                                      save_plot = TRUE)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
-#> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl,
                   output_dir = output_dir,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   edge_points = TRUE)
-#> NULL
-knitr::include_graphics("vignettes/images/trapezoid_migda9_polynomial.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_migda9_polynomial.png"): Cannot find the file(s): "vignettes/images/trapezoid_migda9_polynomial.png"
+#> Error in paste("Trapezoid Plot - ", aoi_name): object 'ttl' not found
+knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_polynomial.png" alt="Polynomial fit trapezoid scatterplot" width="90%" />
+<p class="caption">Polynomial fit trapezoid scatterplot</p>
+</div>

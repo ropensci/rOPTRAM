@@ -59,7 +59,7 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
-aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
+aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 veg_index <- "SAVI"
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
@@ -91,7 +91,7 @@ plot_vi_str_cloud(full_df, ttl,
                   trapezoid_method = meth,
                   output_dir = output_dir,
                   edge_points = TRUE)
-knitr::include_graphics("vignettes/images/trapezoid_migda9_linear.png")
+knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 ```
 
 #### Show Exponential fitted trapezoid plot
@@ -109,7 +109,7 @@ plot_vi_str_cloud(full_df, ttl,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   edge_points = TRUE)
-knitr::include_graphics("vignettes/images/trapezoid_migda9_exponential.png")
+knitr::include_graphics("vignettes/images/trapezoid_lachish_exponential.png")
 ```
 
 #### Show Polynomial fitted trapezoid plot
@@ -127,5 +127,5 @@ plot_vi_str_cloud(full_df, ttl,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   edge_points = TRUE)
-knitr::include_graphics("vignettes/images/trapezoid_migda9_polynomial.png")
+knitr::include_graphics("vignettes/images/trapezoid_lachish_polynomial.png")
 ```

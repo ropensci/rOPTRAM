@@ -52,7 +52,7 @@
 #' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2020-04-30"
-#' aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+#' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 #' coeffs <- optram(aoi_file,
 #'                  from_date, to_date,
 #'                  veg_index = c("SAVI"),

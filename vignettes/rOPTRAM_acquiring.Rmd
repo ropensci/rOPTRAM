@@ -75,17 +75,17 @@ from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 # aoi <- "path/to/your/aoi_file.gpkg"
 # rOPTRAM_aoi_example
-aoi <- system.file("extdata", "migda_9.gpkg", package = 'rOPTRAM')
+aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 
-boa_files <- acquire_scihub(aoi, from_date, to_date,
-               veg_index = "SAVI",
-               output_dir = tempdir(),
+boa_files <- acquire_scihub(aoi,
+              from_date, to_date,
+              veg_index = "SAVI",
+              output_dir = tempdir(),
                # For the first run, uncomment below, and supply credentials...
                # save_creds = TRUE,
                # clientid = "your_client_id",
                # secret = "your_secret"
-               SWIR_band = 11
-               )
+              SWIR_band = 11)
 ```
 
 ### Step 5: Acquire Sentinel-2 Imagery
