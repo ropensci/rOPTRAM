@@ -45,6 +45,9 @@ test_that("Check that max_tbl_size works", {
                         full.names = TRUE)
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
                          full.names = TRUE)
-  full_df <- optram_ndvi_str(STR_list, VI_list, max_tbl_size = 1e3)
-  expect_lte(nrow(full_df), 1e3)
+  output_dir <- tempdir()
+  max_tbl_size <- 1e3
+  full_df <- optram_ndvi_str(STR_list, VI_list, output_dir = tempdir(),
+                             max_tbl_size = max_tbl_size)
+  expect_lte(nrow(full_df), max_tbl_size)
 })
