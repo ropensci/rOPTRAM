@@ -44,7 +44,6 @@ test_that("Check that max_tbl_size works", {
   VI_list <- list.files(system.file("extdata", "SAVI", package = "rOPTRAM"),
                         full.names = TRUE)
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
-                         pattern = ".*STR.*tif$",
                          full.names = TRUE)
   full_df <- optram_ndvi_str(STR_list, VI_list, max_tbl_size = 1e3)
   expect_lte(nrow(full_df), 1e3)

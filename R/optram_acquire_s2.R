@@ -99,7 +99,7 @@
 #' Ensure you have an account and are logged in. You will be required to
 #' grant access - press "yes".
 #'
-#' Two SWIR bands are available in Sentinel-2: 1610 nm and 2190 nm.
+#' Two SWIR bands are available in Sentinel-2: 1610 μm and 2190 μm.
 #' The parameter `SWIR_bands ` allows to choose which band is used in this model.
 #'
 #' @examples
