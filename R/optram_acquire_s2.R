@@ -18,6 +18,8 @@
 #' @param secret, string, user's OAuth secret. Required if `save_creds` is TRUE.
 #' @param remote, string, from which archive to download imagery
 #'    possible values: 'scihub', 'openeo'
+#' @param SWIR_band, integer, either 11 or 12, determines which SWIR band to use
+#'
 #' @return output_path, string, path to downloaded files
 #' @export
 #' @note
@@ -97,6 +99,9 @@
 #' Ensure you have an account and are logged in. You will be required to
 #' grant access - press "yes".
 #'
+#' Two SWIR bands are available in Sentinel-2: 1610 nm and 2190 nm.
+#' The parameter `SWIR_bands ` allows to choose which band is used in this model.
+#'
 #' @examples
 #' \dontrun{
 #' from_date <- "2018-12-01"
@@ -118,7 +123,8 @@ optram_acquire_s2 <- function(
       save_creds = TRUE,
       clientid = NULL,
       secret = NULL,
-      remote = c("scihub", "openeo")) {
+      remote = c("scihub", "openeo"),
+      SWIR_band = c(11, 12)) {
   # Avoid "no visible binding for global variable" NOTE
   scihub <- openeo <- NULL
 
@@ -136,7 +142,8 @@ optram_acquire_s2 <- function(
                                  veg_index = veg_index,
                                  save_creds = save_creds,
                                  clientid = clientid,
-                                 secret = secret),
+                                 secret = secret,
+                                 SWIR_band = SWIR_band),
          openeo = acquire_openeo(aoi_file = aoi_file,
                                  from_date = from_date, to_date = to_date,
                                  max_cloud = max_cloud,

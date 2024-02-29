@@ -29,6 +29,8 @@
 #'      and STR-VI data.frame, default is tempdir()
 #' @param max_tbl_size, numeric, maximum size of VI/STR dta.frame.
 #'      default is 5,000,000 rows
+#' @param SWIR_band, integer, either 11 or 12, determines which SWIR band to use
+#'
 #' @return rmse_df, data.frame, RMSE values of fitted trapezoid lines
 #' @export
 #' @note
@@ -41,6 +43,10 @@
 #' by sampling a number of data points from each time slot.
 #' The sample size is determined based on `max_tbl_size`
 #' and the total number of time slots in the full time range.
+#'
+#' Two SWIR bands are available in Sentinel-2: 1610 nm and 2190 nm.
+#' The parameter `SWIR_bands ` allows to choose which band is used in this model.
+#'
 #' @examples
 #' \dontrun{
 #' aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
@@ -56,7 +62,8 @@ optram_safe <- function(safe_dir,
                         data_output_dir = tempdir(),
                         max_tbl_size = 5e+6,
                         trapezoid_method = c("linear", "exponential", "polynomial"),
-                        vi_step = 0.01) {
+                        vi_step = 0.01,
+                        SWIR_band = c(11, 12)) {
 
     # Avoid "no visible binding for global variable" NOTE
     safe_list <- band_ids <- aoi <- cropped_rast_list <- xml_file <- NULL
@@ -154,10 +161,8 @@ optram_safe <- function(safe_dir,
         # Only if BOA file does not exist, or overwrite requested
         if (!file.exists(BOA_path) || overwrite == TRUE) {
             # Read in jp2 files
-            img_list <- lapply(band_ids, function(b){
-                img_path <- img_paths[grepl(pattern = b,
-                                            img_paths, fixed = TRUE)]
-                img_file <- paste0(img_path, ".jp2")
+            img_list <- lapply(img_paths, function(i){
+                img_file <- paste0(i, ".jp2")
                 img_path <- file.path(s, img_file)
                 rst <- terra::rast(img_path)
                 rst <- terra::mask(terra::crop(rst, aoi), aoi)
@@ -234,7 +239,7 @@ optram_safe <- function(safe_dir,
         # Get the subset sample using the idx values from above
         VI_df <- VI_df[idx, ]
 
-        STR <- rOPTRAM::calculate_str(stk, swirband = 5)
+        STR <- rOPTRAM::calculate_str(stk, SWIR_band = SWIR_band)
         STR_df <- terra::as.data.frame(STR, xy = TRUE,  na.rm = FALSE)
         # Get the subset sample using the idx values from above
         STR_df <- STR_df[idx, ]

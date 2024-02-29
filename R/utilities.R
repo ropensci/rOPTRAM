@@ -136,10 +136,11 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata", "BOA",
 #'          "BOA_2022-12-11.tif", package = "rOPTRAM"))
-#' str <- calculate_str(img_stk)
+#' str <- calculate_str(img_stk, SWIR_band = 11)
 
 
-calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
+calculate_str <- function(img_stk,
+                          SWIR_band = c(11,12), scale_factor = 10000) {
   # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
   # The optical trapezoid model:
   # A novel approach to remote sensing of soil moisture
@@ -149,7 +150,7 @@ calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
   #
   # STR = (1-SWIR)^2 / 2*SWIR
   #
-    SWIR_DN <-  img_stk[[swirband]]
+    SWIR_DN <-  img_stk[[SWIR_band]]
     # back to native scale
     SWIR <-  SWIR_DN / scale_factor
     # Convert from Solar irradiance

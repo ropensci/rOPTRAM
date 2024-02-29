@@ -122,14 +122,14 @@ acquire_scihub <- function(
 
   # Make sure SWIR_band is one of 11 or 12
   tryCatch(
-    expr = {trapezoid_method <- match.arg(trapezoid_method)},
+    expr = {SWIR_band <- match.arg(SWIR_band)},
     error = function(e) { return(NULL) })
 
   str_script <- paste0("STR", SWIR_band, ".js")
   vi_script <- paste0(veg_index, ".js")
   # Retrieve the necessary scripts
   script_file_boa <- system.file("scripts", "BOA.js", package = "rOPTRAM")
-  script_file_str <- system.file("scripts", script_file, package = "rOPTRAM")
+  script_file_str <- system.file("scripts", str_script, package = "rOPTRAM")
   script_file_vi <- system.file("scripts", vi_script, package = "rOPTRAM")
 
   img_list <- CDSE::SearchCatalog(aoi = aoi,
