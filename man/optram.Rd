@@ -77,14 +77,14 @@ Output can be separated:
 Sentinel downloads and products are saved to S2_output_dir.
 Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
 
-Two SWIR bands are available in Sentinel-2: 1610 nm and 2190 nm.
+Two SWIR bands are available in Sentinel-2: 1610 μm and 2190 μm.
 The parameter \code{SWIR_bands } allows to choose which band is used in this model.
 }
 \examples{
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2020-04-30"
-aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
                  veg_index = c("SAVI"),

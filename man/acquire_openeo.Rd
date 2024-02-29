@@ -68,7 +68,7 @@ grant access - press "yes".
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
+aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 acquire_openeo(aoi, from_date, to_date,
                veg_index = "SAVI")
 }

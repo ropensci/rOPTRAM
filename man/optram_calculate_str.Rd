@@ -28,7 +28,7 @@ https://doi.org/10.1016/j.rse.2017.05.041
 
 SWIR Transformed Reflectance is calculated as
 STR = (1-SWIR)^2 / 2*SWIR
-SWIR is band 12 (2200 nm) or 11 (1600 nm)
+SWIR is band 12 (2190 μm) or 11 (1610 μm)
 }
 \examples{
 BOA_dir <- system.file("extdata", "BOA")

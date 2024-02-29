@@ -74,12 +74,12 @@ by sampling a number of data points from each time slot.
 The sample size is determined based on \code{max_tbl_size}
 and the total number of time slots in the full time range.
 
-Two SWIR bands are available in Sentinel-2: 1610 nm and 2190 nm.
+Two SWIR bands are available in Sentinel-2: 1610 μm and 2190 μm.
 The parameter \code{SWIR_bands } allows to choose which band is used in this model.
 }
 \examples{
 \dontrun{
-aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 safe_dir  <- tempdir()
 coeffs <- optram_safe(safe_dir, aoi_file, veg_index = "SAVI")
 }

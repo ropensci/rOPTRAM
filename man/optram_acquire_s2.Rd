@@ -139,14 +139,14 @@ B. You will be redirected to "https://identity.dataspace.copernicus.eu/".
 Ensure you have an account and are logged in. You will be required to
 grant access - press "yes".
 
-Two SWIR bands are available in Sentinel-2: 1610 nm and 2190 nm.
+Two SWIR bands are available in Sentinel-2: 1610 μm and 2190 μm.
 The parameter \code{SWIR_bands } allows to choose which band is used in this model.
 }
 \examples{
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-aoi <- system.file("extdata", "migda.gpkg", package = 'rOPTRAM')
+aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 s2_file_list <- optram_acquire_s2(aoi,
                                  from_date, to_date,
                                  remote = "scihub"

@@ -86,26 +86,19 @@ coeffs <- optram(aoi_file,
 #>   httr2::resp_body_json(resp)[[1]]
 #> 1                              403
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
+#> Error in knitr::kable(coeffs, caption = "Trapezoid coefficients"): object 'coeffs' not found
 ```
-
-
-
-Table: Trapezoid coefficients
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2377242| 0.0611381|
-
-
 ### Show trapezoid plot
 
 
 ```r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
+#> Error in file(file, "rt"): cannot open the connection
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
+#> Error in gzfile(file, "rb"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-#> Error in paste("Trapezoid Plot - ", aoi_name): object 'ttl' not found
+#> NULL
 knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 #> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_linear.png"
 ```
@@ -149,18 +142,10 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 rmse <- optram_wetdry_coefficients(full_df,
                                    aoi_file,
                                    output_dir = output_dir)
+#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
+#> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```
-
-
-
-Table: RMSE of fitted trapezoid edges
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.4021138| 0.0617541|
-
-
 
 
 
@@ -185,7 +170,9 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ```r
 library(leaflet)
 names(SM) <- "Migda soil moisture"
+#> Error in names(SM) <- "Migda soil moisture": attempt to set an attribute on NULL
 SM[terra::values(SM) < 0] <- 0
+#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'values' for signature '"NULL"'
 
 sm_map <- leaflet("OpenStreetMap") |>
   addTiles() |>
@@ -193,7 +180,7 @@ sm_map <- leaflet("OpenStreetMap") |>
     colors = colorNumeric("RdYlGn",
       domain = c(-0.1, 2.0), na.color = NA),
     opacity = 0.9)
-#> Warning in colors(.): Some values were outside the color scale and will be treated as NA
+#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : Don't know how to get path data from object of class NULL
 sm_map
-#> Error in path.expand(path): invalid 'path' argument
+#> Error in eval(expr, envir, enclos): object 'sm_map' not found
 ```
