@@ -154,9 +154,10 @@ calculate_str <- function(img_stk,
   # STR = (1-SWIR)^2 / 2*SWIR
   #
   # Make sure SWIR_band is one of 11 or 12
-  tryCatch(
-    expr = {SWIR_band <- match.arg(SWIR_band)},
-    error = function(e) { return(NULL) })
+  if (SWIR_band > 12 | SWIR_band < 11) {
+    message("SWIR band must be 11 or 12")
+    return(NULL)
+  }
   if (terra::nlyr(img_stk) < 12) {
     message("BOA image stack does not contain all bands")
     return(NULL)

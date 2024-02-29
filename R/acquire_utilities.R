@@ -121,10 +121,10 @@ acquire_scihub <- function(
   }
 
   # Make sure SWIR_band is one of 11 or 12
-  tryCatch(
-    expr = {SWIR_band <- match.arg(SWIR_band)},
-    error = function(e) { return(NULL) })
-
+  if (SWIR_band < 11 | SWIR_band > 12) {
+    message("SWIR band must be either 11 or 12")
+    return(NULL)
+  }
   str_script <- paste0("STR", as.character(SWIR_band), ".js")
   vi_script <- paste0(veg_index, ".js")
   # Retrieve the necessary scripts
