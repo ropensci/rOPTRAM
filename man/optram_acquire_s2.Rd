@@ -15,7 +15,8 @@ optram_acquire_s2(
   save_creds = TRUE,
   clientid = NULL,
   secret = NULL,
-  remote = c("scihub", "openeo")
+  remote = c("scihub", "openeo"),
+  SWIR_band = c(11, 12)
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ is TRUE.}
 
 \item{remote, }{string, from which archive to download imagery
 possible values: 'scihub', 'openeo'}
+
+\item{SWIR_band, }{integer, either 11 or 12, determines which SWIR band to use}
 }
 \value{
 output_path, string, path to downloaded files
@@ -135,6 +138,9 @@ user account.
 B. You will be redirected to "https://identity.dataspace.copernicus.eu/".
 Ensure you have an account and are logged in. You will be required to
 grant access - press "yes".
+
+Two SWIR bands are available in Sentinel-2: 1610 nm and 2190 nm.
+The parameter \code{SWIR_bands } allows to choose which band is used in this model.
 }
 \examples{
 \dontrun{

@@ -4,16 +4,16 @@
 \alias{calculate_str}
 \title{Calculate STR from SWIR Bottom of Atmosphere Band}
 \usage{
-calculate_str(img_stk, swirband = 11, scale_factor = 10000)
+calculate_str(img_stk, SWIR_band = c(11, 12), scale_factor = 10000)
 }
 \arguments{
 \item{img_stk, }{terra SpatRaster, multiband stack of images,
 already clipped to aoi}
 
-\item{swirband, }{integer, number of red band}
-
 \item{scale_factor, }{integer, scaling factor for EO data source
 default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)}
+
+\item{swirband, }{integer, number of red band}
 }
 \value{
 STR, SpatRaster of STR band
@@ -30,5 +30,5 @@ for scaling image bands.
 \examples{
 img_stk <- terra::rast(system.file("extdata", "BOA",
          "BOA_2022-12-11.tif", package = "rOPTRAM"))
-str <- calculate_str(img_stk)
+str <- calculate_str(img_stk, SWIR_band = 11)
 }

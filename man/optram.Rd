@@ -14,7 +14,8 @@ optram(
   data_output_dir = tempdir(),
   remote = "scihub",
   vi_step = 0.005,
-  trapezoid_method = c("linear", "exponential", "polynomial")
+  trapezoid_method = c("linear", "exponential", "polynomial"),
+  SWIR_band = c(11, 12)
 )
 }
 \arguments{
@@ -47,6 +48,8 @@ one of "linear", "exponential", "polynomial"
 default "linear"
 How to fit a curve to the values along trapezoid edges
 See notes in optram_wetdry_coefficients()}
+
+\item{SWIR_band, }{integer, either 11 or 12, determines which SWIR band to use}
 }
 \value{
 rmse_df, data.frame, RMSE values of fitted trapezoid lines
@@ -73,6 +76,9 @@ And be sure to initialize with you google username and password.
 Output can be separated:
 Sentinel downloads and products are saved to S2_output_dir.
 Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
+
+Two SWIR bands are available in Sentinel-2: 1610 nm and 2190 nm.
+The parameter \code{SWIR_bands } allows to choose which band is used in this model.
 }
 \examples{
 \dontrun{
