@@ -125,7 +125,7 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 #' when you have already downloaded Sentinel 2 image files in advance
 #' @param img_stk, terra SpatRaster, multiband stack of images,
 #'          already clipped to aoi
-#' @param swirband, integer, number of red band
+#' @param SWIR_band, integer, number of SWIR band, one of (11 or 12)
 #' @param scale_factor, integer, scaling factor for EO data source
 #'      default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)
 #' @export
