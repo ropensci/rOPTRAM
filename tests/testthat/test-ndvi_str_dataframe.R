@@ -47,7 +47,7 @@ test_that("Check that max_tbl_size works", {
                          full.names = TRUE)
   output_dir <- tempdir()
   max_tbl_size <- 1e3
-  full_df <- optram_ndvi_str(STR_list, VI_list, output_dir = tempdir(),
+  full_df <- optram_ndvi_str(STR_list, VI_list, output_dir= output_dir,
                              max_tbl_size = max_tbl_size)
   expect_lte(nrow(full_df), max_tbl_size)
 })
