@@ -30,7 +30,7 @@ The resulting soil moisture raster is saved to \code{output_dir}.
 }
 \examples{
 img_date <- "2023-03-11"
-VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
+VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
 STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 SM <- optram_calculate_soil_moisture(img_date,
             VI_dir, STR_dir,

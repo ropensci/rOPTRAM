@@ -1,12 +1,12 @@
 test_that("Check that both STR and VI directories contain files", {
   STR_list <- list()
-  VI_list <- list.files(system.file("extdata", "SAVI", package = "rOPTRAM"),
+  VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
                         full.names = TRUE)
   expect_null(optram_ndvi_str(STR_list, VI_list))
   })
 
 test_that("optram_ndvi_str() function returns data.frame", {
-  VI_list <- list.files(system.file("extdata", "SAVI", package = "rOPTRAM"),
+  VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
                         full.names = TRUE)
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
                         full.names = TRUE)
@@ -14,7 +14,7 @@ test_that("optram_ndvi_str() function returns data.frame", {
 })
 
 test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
-  VI_list <- list.files(system.file("extdata", "SAVI", package = "rOPTRAM"),
+  VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
                         full.names = TRUE)
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
                          full.names = TRUE)
@@ -25,7 +25,7 @@ test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
 })
 
 test_that("Check that rm.low.vi and rm.hi.str works", {
-  VI_list <- list.files(system.file("extdata", "SAVI", package = "rOPTRAM"),
+  VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
                         full.names = TRUE)
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
                         full.names = TRUE)
@@ -38,7 +38,7 @@ test_that("Check that rm.low.vi and rm.hi.str works", {
 })
 
 test_that("Check that max_tbl_size works", {
-  VI_list <- list.files(system.file("extdata", "SAVI", package = "rOPTRAM"),
+  VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
                         full.names = TRUE)
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
                          full.names = TRUE)

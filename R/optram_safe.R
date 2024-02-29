@@ -51,7 +51,7 @@
 #' \dontrun{
 #' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 #' safe_dir  <- tempdir()
-#' coeffs <- optram_safe(safe_dir, aoi_file, veg_index = "SAVI")
+#' coeffs <- optram_safe(safe_dir, aoi_file, veg_index = "NDVI")
 #' }
 
 optram_safe <- function(safe_dir,

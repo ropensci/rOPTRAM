@@ -60,7 +60,7 @@ from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
 aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-veg_index <- "SAVI"
+veg_index <- "NDVI"
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir,
@@ -69,7 +69,7 @@ s2_file_list <- optram_acquire_s2(aoi_file,
                             SWIR_band = 11)
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
-VI_list <- list.files(file.path(output_dir, "SAVI"),
+VI_list <- list.files(file.path(output_dir, "NDVI"),
                       pattern = ".tif$", full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir,

@@ -15,8 +15,8 @@ test_that("Trapezoid methods return data.frame", {
 
 test_that("Check for correct number of coefficients", {
   img_date <- "2023-01-25"
-  VI_file <- system.file("extdata", "SAVI",
-                         paste0("SAVI_", img_date, ".tif"),
+  VI_file <- system.file("extdata", "NDVI",
+                         paste0("NDVI_", img_date, ".tif"),
                          package = "rOPTRAM")
   VI <- terra::rast(VI_file)
   STR_file <- system.file("extdata", "STR",
@@ -41,8 +41,8 @@ test_that("Check for correct number of coefficients", {
 
 test_that("Soil moisture raster is returned", {
   img_date <- "2023-01-25"
-  VI_file <- system.file("extdata", "SAVI",
-                         paste0("SAVI_", img_date, ".tif"),
+  VI_file <- system.file("extdata", "NDVI",
+                         paste0("NDVI_", img_date, ".tif"),
                          package = "rOPTRAM")
   VI <- terra::rast(VI_file)
   STR_file <- system.file("extdata", "STR",
