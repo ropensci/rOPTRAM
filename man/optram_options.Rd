@@ -36,7 +36,11 @@ a list of currently defined options is printed.
 }
 }
 \examples{
-optram_options()  # prints out list of current options
+opts <- options()
+optram_options()      # prints out list of current options
 optram_options("SWIR_band", 12)
 optram_options("veg_index", "SAVI")
+optram_options("trapezoid_list", "exp")  # fails
+options(opts)
+
 }
