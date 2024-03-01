@@ -9,10 +9,15 @@
 #' Default NULL
 #' @return NULL
 #' @export
+#'
 #' @examples
-#' optram_options()  # prints out list of current options
+#' opts <- options()
+#' optram_options()      # prints out list of current options
 #' optram_options("SWIR_band", 12)
 #' optram_options("veg_index", "SAVI")
+#' optram_options("trapezoid_list", "exp")  # fails
+#' options(opts)
+#'
 #' @note
 #' When no new option name or value is specified,
 #' a list of currently defined options is printed.
