@@ -164,7 +164,8 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata", "BOA",
 #'          "BOA_2022-12-11.tif", package = "rOPTRAM"))
-#' str <- calculate_str(img_stk, STR_dir = tempdir(), SWIR_band = 11)
+#' STR_dir = tempdir()
+#' str <- calculate_str(img_stk, SWIR_band = 11)
 calculate_str <- function(img_stk,
                           SWIR_band = c(11,12), scale_factor = 10000) {
   # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.

@@ -19,8 +19,8 @@
 #' @export
 #' @examples
 #' BOA_dir <- system.file("extdata", "BOA")
-#' STR <- optram_calculate_str(BOA_dir, STR_dir = tempdir(),
-#'                            SWIR_band=11)
+#' STR_dir = tempdir()
+#' STR <- optram_calculate_str(BOA_dir, STR_dir, SWIR_band=11)
 
 optram_calculate_str <- function(BOA_dir,
                                  STR_dir = NULL, SWIR_band = c(11, 12)){
