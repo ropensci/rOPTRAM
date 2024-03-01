@@ -1,6 +1,6 @@
 #' @title Display or Set Package Options
-#' @description {rOPTRAM} uses several package options. 
-#' This function displays the current defined options, 
+#' @description {rOPTRAM} uses several package options.
+#' This function displays the current defined options,
 #' (showing the default options when the package is first loaded),
 #' and allows users to set new values for each option.
 #' @param opt_name, string, one of the package options.
@@ -18,17 +18,20 @@
 #' a list of currently defined options is printed.
 #'
 #' {rOPTRAM} defines the following options at startup
-#'  opt_name          | opt_value     | other possible values
-#'  ------------------|---------------|----------------
-#'  veg_index         | "NDVI"        | "SAVI", "MSAVI"
-#'  remote            | "scihub"      | "openeo"
-#'  vi_step           | 0.005         | usually between 0.01 and 0.001
-#'  trapezoid_method  | "linear"      | "polynomial" or "exponential"
-#'  SWIR_band         | 11            | 12
-#'  max_tbl_size      | 1e+6          | depends on computer resources
-#'  rm.low.vi         | FALSE         | TRUE
-#'  rm.hi.str         | FALSE         | TRUE
+#'
+#'  |opt_name           | opt_value      | other possible values
+#'  |:------------------|:---------------|:----------------
+#'  |veg_index          | "NDVI"         | "SAVI", "MSAVI"
+#'  |remote             | "scihub"       | "openeo"
+#'  |vi_step            | 0.005          | usually between 0.01 and 0.001
+#'  |trapezoid_method   | "linear"       | "polynomial" or "exponential"
+#'  |SWIR_band          | 11             | 12
+#'  |max_tbl_size       | 1e+6           | depends on computer resources
+#'  |rm.low.vi          | FALSE          | TRUE
+#'  |rm.hi.str          | FALSE          | TRUE
+#'
 optram_options <- function(opt_name = NULL, opt_value=NULL) {
+  # Internal functions
   display_optram_options <- function() {
     opts <- options()
     optram_opts <- opts[grep(pattern = "optram", x=names(opts),
@@ -45,49 +48,56 @@ optram_options <- function(opt_name = NULL, opt_value=NULL) {
           new_opt <- list(opt_val)
           names(new_opt) <- paste0("optram.", opt_name)
           options(new_opt)
+          return(paste("New option for", opt_name, "applied."))
   }
 
   if (any(is.null(opt_name) | is.null(opt_value))) {
-  # No new option, so just display current options
+    # No new option, so just display current options
     display_optram_options()
-    return(NULL)  
+    return(NULL)
   }
+
   # Reset option
   opt_names <- c("veg_index","remote","vi_step", "trapezoid_method",
-                   "SWIR_band", "max_tbl_size", "rm.low.vi", "rm.hi.str")
+                 "SWIR_band", "max_tbl_size", "rm.low.vi", "rm.hi.str")
   if (opt_name %in% opt_names) {
-    ifelse ( (opt_name %in% c("rm.low.vi", "rm.hi.str") & 
-              is.logical(opt_value)),
-            add_new_option(opt_name, opt_value),
-            {message("\nValue for: ", opt_name,
-                     " must be logical (TRUE/FALSE)\n")
-             display_optram_options()})
-    ifelse ( (opt_name %in% c("vi_step", "max_tbl_size") &
-              is.numeric(opt_value)),
-           add_new_option(opt_name, opt_value),
-            {message("\nValue for: ", opt_name, " must be numeric\n")
-             display_optram_options()})
-    ifelse ( (opt_name == "trapezoid_method" & 
-              opt_value %in% c("linear", "exponential", "polynomial")),
-           add_new_option(opt_name, opt_value),
-            {message("\nValue for: ", opt_name, " must be one of: \n",
-                  "linear, exponential, polynomial\n")
-             display_optram_options()})
-    ifelse ( (opt_name == "remote" & opt_value %in% c("scihub", "openeo")),
-           add_new_option(opt_name, opt_value),
-            {message("\nValue for: ", opt_name,
-                     " must be one of: scihub, openeo\n")
-             display_optram_options() })
-    ifelse ( (opt_name == "SWIR_band" & is.numeric(opt_value) &
-              opt_value <=12 & opt_value >= 11),
-            add_new_option(opt_name, opt_value),
-            {message("\nValue for: ", opt_name, " must be one of 11, 12\n")
-            display_optram_options() })
-  } else {
-    message("Option name: ", opt_name, " not recognized\n")
+    # Setup conditions for each option name
+    cond_func <- switch(opt_name,
+              "veg_index" = function(opt_value) {
+                return(opt_value %in% c("NDVI", "SAVI", "MSAVI"))},
+              "remote" = function(opt_value) {
+                return(opt_value %in% c("scihub", "openeo"))
+              },
+              "vi_step" = function(opt_value) {
+                return(is.numeric(opt_value) & opt_value <= 0.02)
+              },
+              "trapezoid_method" = function(opt_value) {
+                return(opt_value %in% c("linear", "exponential", "polynomial"))
+              },
+              "SWIR_band" = function(opt_value) {
+                return(is.numeric(opt_value) &
+                         opt_value >= 11 & opt_value <= 12)
+              },
+              "max_tbl_size" = function(opt_value) {
+                return(is.numeric(opt_value) & opt_value > 1e+4)
+              },
+              "rm.low.vi" = function(opt_value) {
+                return(is.logical(opt_value))
+              },
+              "rm.hi.str" = function(opt_value) {
+                return(is.logical(opt_value))
+              }
+      )
+    msg <- ifelse(cond_func(opt_value),
+                  add_new_option(opt_name, opt_value),
+                  paste("Incorrect value:", opt_value, "for", opt_name))
+    message("\n", msg, "\n")
     display_optram_options()
+  } else {
+    message("\nUnknown option name: ", opt_name)
   }
 }
+
 
 #' @title Check Area of Interest File
 #' @description
