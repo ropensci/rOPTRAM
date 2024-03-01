@@ -131,7 +131,7 @@ optram_acquire_s2 <- function(
   # Pre flight checks...
   if (!check_aoi(aoi_file)) return(NULL)
   if (!check_date_string(from_date, to_date)) return(NULL)
-
+  if (!check_swir_band(SWIR_band)) return(NULL)
   remote <- match.arg(remote)
 
   switch(remote,

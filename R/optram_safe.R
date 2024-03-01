@@ -81,6 +81,7 @@ optram_safe <- function(safe_dir,
               is a required parameter.")
       return(NULL)
     }
+    if (!check_swir_band(SWIR_Band))  return(NULL)
 
     # Loop over the downloaded S2 folders (dates),
     # create NDVI and STR indices for each and crop to aoi
