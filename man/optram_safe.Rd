@@ -81,6 +81,7 @@ The parameter \code{SWIR_bands } allows to choose which band is used in this mod
 \dontrun{
 aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 safe_dir  <- tempdir()
-coeffs <- optram_safe(safe_dir, aoi_file, veg_index = "NDVI")
+coeffs <- optram_safe(safe_dir,
+                      aoi_file, veg_index = "NDVI", SWIR_band = 11)
 }
 }

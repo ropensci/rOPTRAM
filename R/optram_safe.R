@@ -51,7 +51,8 @@
 #' \dontrun{
 #' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 #' safe_dir  <- tempdir()
-#' coeffs <- optram_safe(safe_dir, aoi_file, veg_index = "NDVI")
+#' coeffs <- optram_safe(safe_dir,
+#'                       aoi_file, veg_index = "NDVI", SWIR_band = 11)
 #' }
 
 optram_safe <- function(safe_dir,
@@ -81,7 +82,7 @@ optram_safe <- function(safe_dir,
               is a required parameter.")
       return(NULL)
     }
-    if (!check_swir_band(SWIR_Band))  return(NULL)
+    if (!check_swir_band(SWIR_band))  return(NULL)
 
     # Loop over the downloaded S2 folders (dates),
     # create NDVI and STR indices for each and crop to aoi

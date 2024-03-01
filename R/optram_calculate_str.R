@@ -22,7 +22,8 @@
 #' STR <- optram_calculate_str(BOA_dir, STR_dir = tempdir(),
 #'                            SWIR_band=11)
 
-optram_calculate_str <- function(BOA_dir, SWIR_band = c(11, 12)){
+optram_calculate_str <- function(BOA_dir,
+                                 STR_dir = NULL, SWIR_band = c(11, 12)){
   # Returns: STR_list, list of paths to STR (SWIR Transformed) Raster files
   # Avoid "no visible binding for global variable" NOTE
   BOA_list <- STR_list <- SWIR_DN <- SWIR <- STR <- outfile <- outpath <- NULL
