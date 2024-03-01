@@ -30,5 +30,6 @@ for scaling image bands.
 \examples{
 img_stk <- terra::rast(system.file("extdata", "BOA",
          "BOA_2022-12-11.tif", package = "rOPTRAM"))
-str <- calculate_str(img_stk, STR_dir = tempdir(), SWIR_band = 11)
+STR_dir = tempdir()
+str <- calculate_str(img_stk, SWIR_band = 11)
 }

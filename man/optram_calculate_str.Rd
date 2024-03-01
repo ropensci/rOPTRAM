@@ -35,6 +35,6 @@ SWIR is band 12 (2190 μm) or 11 (1610 μm)
 }
 \examples{
 BOA_dir <- system.file("extdata", "BOA")
-STR <- optram_calculate_str(BOA_dir, STR_dir = tempdir(),
-                           SWIR_band=11)
+STR_dir = tempdir()
+STR <- optram_calculate_str(BOA_dir, STR_dir, SWIR_band=11)
 }
