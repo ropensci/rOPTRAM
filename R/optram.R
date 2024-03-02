@@ -30,6 +30,7 @@
 #'  default "linear"
 #'  How to fit a curve to the values along trapezoid edges
 #'  See notes in optram_wetdry_coefficients()
+#' @param SWIR_band, integer, either 11 or 12, determines which SWIR band to use
 #'
 #' @return rmse_df, data.frame, RMSE values of fitted trapezoid lines
 #' the coefficients are also saved to a csv file in `data_output_dir`.
@@ -43,12 +44,15 @@
 #' Sentinel downloads and products are saved to S2_output_dir.
 #' Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
 #'
+#' Two SWIR bands are available in Sentinel-2: 1610 μm and 2190 μm.
+#' The parameter `SWIR_bands ` allows to choose which band is used in this model.
+
 #' @export
 #' @examples
 #' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2020-04-30"
-#' aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+#' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 #' coeffs <- optram(aoi_file,
 #'                  from_date, to_date,
 #'                  veg_index = c("SAVI"),
@@ -64,7 +68,8 @@ optram <- function(aoi_file,
                    data_output_dir = tempdir(),
                    remote = "scihub",
                    vi_step = 0.005,
-                   trapezoid_method = c("linear", "exponential", "polynomial")) {
+                   trapezoid_method = c("linear", "exponential", "polynomial"),
+                   SWIR_band = c(11, 12)) {
 
   # Avoid "no visible binding for global variable" NOTE
   access_ok <- s2_list <- s2_dirs <- BOA_dir <- NULL
@@ -78,7 +83,8 @@ optram <- function(aoi_file,
                     max_cloud = max_cloud,
                     veg_index = veg_index,
                     output_dir = S2_output_dir,
-                    remote = remote)
+                    remote = remote,
+                    SWIR_band = SWIR_band)
 
     # Get full output directories for BOA, STR and NDVI
     s2_dirs <- list.dirs(S2_output_dir,  full.names = TRUE)

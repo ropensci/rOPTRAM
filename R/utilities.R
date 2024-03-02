@@ -5,7 +5,7 @@
 #' @return boolean, TRUE when file exists, and is spatial
 #' @noRd
 #' @examples
-#' aoi_file <- system.file("extdata", "migda.gpkg")
+#' aoi_file <- system.file("extdata", "lachish.gpkg")
 #' check_aoi(aoi_file)
 
 check_aoi <- function(aoi_file) {
@@ -50,6 +50,31 @@ check_date_string <- function(from_string, to_string) {
 }
 
 
+#' @title Check SWIR band values
+#' @description
+#' Check that SWIR_band is specified as one of (11, 12)
+#' @param SWIR_band, numeric
+#' @return boolean, TRUE when value is OK
+#' @noRd
+#' @examples
+#' check_swir_band(11)         # TRUE
+#' check_swir_band(10)         # FALSE
+#' check_swir_band(c(11, 12))  # FALSE
+check_swir_band <- function(SWIR_band) {
+  if (! is.numeric(SWIR_band)) {
+    message("SWIR band: ", SWIR_band, "
+            not correct. Please specify an integer")
+    return(FALSE)
+  } else if (any(length(SWIR_band) > 1 | SWIR_band < 11 | SWIR_band > 12)) {
+    message("SWIR band: ", SWIR_band, "
+            not correct. Please specify either 11, or 12")
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+
+
 #' @title Calculate Vegetation Index from Bottom of Atmosphere Image Bands
 #' @description
 #' Use this function to prepare vegetation index from SAFE imagery
@@ -86,7 +111,10 @@ calculate_vi <- function(img_stk, viname = "NDVI",
                          scale_factor = 2^15) {
     # Avoid "no visible binding for global variable" NOTE
     nir <- red <- blue <- green <- vi_rast <- NULL
-
+    if (terra::nlyr(img_stk) < 12) {
+      message("BOA image stack does not contain all bands")
+      return(NULL)
+    }
     nir <- img_stk[[nirband]]
     red <- img_stk[[redband]]
     blue <- img_stk[[blueband]]
@@ -125,7 +153,7 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 #' when you have already downloaded Sentinel 2 image files in advance
 #' @param img_stk, terra SpatRaster, multiband stack of images,
 #'          already clipped to aoi
-#' @param swirband, integer, number of red band
+#' @param SWIR_band, integer, number of SWIR band, one of (11 or 12)
 #' @param scale_factor, integer, scaling factor for EO data source
 #'      default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)
 #' @export
@@ -136,10 +164,10 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata", "BOA",
 #'          "BOA_2022-12-11.tif", package = "rOPTRAM"))
-#' str <- calculate_str(img_stk)
-
-
-calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
+#' STR_dir = tempdir()
+#' str <- calculate_str(img_stk, SWIR_band = 11)
+calculate_str <- function(img_stk,
+                          SWIR_band = c(11,12), scale_factor = 10000) {
   # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
   # The optical trapezoid model:
   # A novel approach to remote sensing of soil moisture
@@ -149,15 +177,21 @@ calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
   #
   # STR = (1-SWIR)^2 / 2*SWIR
   #
-    SWIR_DN <-  img_stk[[swirband]]
-    # back to native scale
-    SWIR <-  SWIR_DN / scale_factor
-    # Convert from Solar irradiance
-    # solar_irradiance_12 <- 87.25
-    # SWIR <- (SWIR_irr/10) * solar_irradiance_12
-    STR <- (1 - SWIR)^2 / (2*SWIR)
-    names(STR) <- "STR"
-    return(STR)
+  # Make sure SWIR_band is one of 11 or 12
+  if (!check_swir_band(SWIR_band)) return(NULL)
+  if (terra::nlyr(img_stk) < 12) {
+    message("BOA image stack does not contain all bands")
+    return(NULL)
+  }
+  SWIR_DN <-  img_stk[[SWIR_band]]
+  # back to native scale
+  SWIR <-  SWIR_DN / scale_factor
+  # Convert from Solar irradiance
+  # solar_irradiance_12 <- 87.25
+  # SWIR <- (SWIR_irr/10) * solar_irradiance_12
+  STR <- (1 - SWIR)^2 / (2*SWIR)
+  names(STR) <- "STR"
+  return(STR)
 }
 
 
@@ -169,7 +203,7 @@ calculate_str <- function(img_stk, swirband = 11, scale_factor = 10000) {
 #' @keywords Internal
 #' @return aoi_name, string
 #' @examples
-#' aoi_file <- system.file("extdata", "migda.gpkg")
+#' aoi_file <- system.file("extdata", "lachish.gpkg")
 #' aoi_name <- aoi_to_name(aoi_file)
 #' aoi_name
 

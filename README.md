@@ -157,7 +157,7 @@ This is a basic example which shows how to:
 ``` r
 library(rOPTRAM)
 # basic example
-aoi_file <- system.file("extdata", "migda_9.gpkg", package="rOPTRAM")
+aoi_file <- system.file("extdata", "lachish.gpkg", package="rOPTRAM")
 rmse <- rOPTRAM::optram(
     aoi = aoi_file,
     from_date = "2021-01-01", to_date = "2021-03-30",

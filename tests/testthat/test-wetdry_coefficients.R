@@ -25,7 +25,7 @@ test_that("aoi_file does not exist", {
 
 test_that("Output RMSE is data.frame of 2 columns", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
-  aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
+  aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
   res <- optram_wetdry_coefficients(full_df,
                                     aoi_file,
                                     trapezoid_method = "linear")
@@ -36,7 +36,7 @@ test_that("Output RMSE is data.frame of 2 columns", {
 test_that("Polynomial trapezoid method returns data.frame of length 6", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
                                  package = "rOPTRAM"))
-  aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
+  aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
   output_dir <- tempdir()
   res <- optram_wetdry_coefficients(full_df, aoi_file,
                                     trapezoid_method = "polynomial",
@@ -48,7 +48,7 @@ test_that("Polynomial trapezoid method returns data.frame of length 6", {
 
 test_that("Plot with edge points", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
-  aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
+  aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
   res <- optram_wetdry_coefficients(full_df,
                                     aoi_file,
                                     trapezoid_method = "linear",
@@ -59,8 +59,8 @@ test_that("Plot with edge points", {
 
 test_that("Very small vi_step causes no data points in intervals", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
-  aoi_file <- system.file("extdata", "migda_9.gpkg", package = "rOPTRAM")
-  vi_step <- 5e-5
+  aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
+  vi_step <- 1e-5
   expect_null(optram_wetdry_coefficients(full_df,
                                     aoi_file,
                                     trapezoid_method = "linear",

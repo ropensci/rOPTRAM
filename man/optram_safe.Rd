@@ -13,7 +13,8 @@ optram_safe(
   data_output_dir = tempdir(),
   max_tbl_size = 5e+06,
   trapezoid_method = c("linear", "exponential", "polynomial"),
-  vi_step = 0.01
+  vi_step = 0.01,
+  SWIR_band = c(11, 12)
 )
 }
 \arguments{
@@ -47,6 +48,8 @@ default "linear"}
 
 \item{vi_step, }{numeric, width of slice along VI axis
 to prepare edge values, default 0.01}
+
+\item{SWIR_band, }{integer, either 11 or 12, determines which SWIR band to use}
 }
 \value{
 rmse_df, data.frame, RMSE values of fitted trapezoid lines
@@ -70,11 +73,15 @@ This parameter limits the size of the table
 by sampling a number of data points from each time slot.
 The sample size is determined based on \code{max_tbl_size}
 and the total number of time slots in the full time range.
+
+Two SWIR bands are available in Sentinel-2: 1610 μm and 2190 μm.
+The parameter \code{SWIR_bands } allows to choose which band is used in this model.
 }
 \examples{
 \dontrun{
-aoi_file <- system.file("extdata", "migda.gpkg", package = "rOPTRAM")
+aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 safe_dir  <- tempdir()
-coeffs <- optram_safe(safe_dir, aoi_file, veg_index = "SAVI")
+coeffs <- optram_safe(safe_dir,
+                      aoi_file, veg_index = "NDVI", SWIR_band = 11)
 }
 }

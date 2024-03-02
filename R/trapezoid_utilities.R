@@ -175,7 +175,7 @@ polynomial_coefficients <- function(df, output_dir) {
 #' @return rast, soil moisture grid
 #' @examples
 #' img_date <- "2023-03-11"
-#' VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
+#' VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
 #' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 #' SM <- optram_calculate_soil_moisture(img_date,
 #'             VI_dir, STR_dir,
@@ -224,7 +224,7 @@ linear_soil_moisture <- function(coeffs, VI, STR) {
 #'   102113. https://doi.org/10.1016/j.jag.2020.102113.
 #' @examples
 #' img_date <- "2023-03-11"
-#' VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
+#' VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
 #' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 #' SM <- optram_calculate_soil_moisture(img_date,
 #'             VI_dir, STR_dir,
@@ -290,7 +290,7 @@ exponential_soil_moisture <- function(coeffs, VI, STR) {
 #'  https://doi.org/10.1016/j.agwat.2022.107942.
 #' @examples
 #' img_date <- "2023-03-11"
-#' VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
+#' VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
 #' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 #' SM <- optram_calculate_soil_moisture(img_date,
 #'                           VI_dir, STR_dir,

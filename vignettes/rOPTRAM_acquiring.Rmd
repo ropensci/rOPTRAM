@@ -69,34 +69,36 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
  -   Save your client ID and secret in a secure location.
  -   At the first run, set `save_creds = TRUE` in the `acquire_scihub()` function to automatically save credentials. In future runs, credentials will automatically be read from the saved (json) file. Thus the user will not have to enter client ID and secret manually every time.
 
-```{r prepare-save, warning=FALSE, message=FALSE, results='hide'}
+```{r prepare-save, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
 # For this example, outputs are saved to `tempdir()`
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 # aoi <- "path/to/your/aoi_file.gpkg"
 # rOPTRAM_aoi_example
-aoi <- system.file("extdata", "migda_9.gpkg", package = 'rOPTRAM')
+aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 
-boa_files <- acquire_scihub(aoi, from_date, to_date,
-               veg_index = "SAVI",
-               output_dir = tempdir(),
+boa_files <- acquire_scihub(aoi,
+              from_date, to_date,
+              veg_index = "SAVI",
+              output_dir = tempdir(),
                # For the first run, uncomment below, and supply credentials...
                # save_creds = TRUE,
                # clientid = "your_client_id",
                # secret = "your_secret"
-               )
+              SWIR_band = 11)
 ```
 
 ### Step 5: Acquire Sentinel-2 Imagery
 
 For further downloads the credentials are not needed. (They have been saved to the user's home directory)
 
-```{r acquire, warning=FALSE, message=FALSE, results='hide'}
+```{r acquire, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
 from_date <- "2019-12-01"
 to_date <- "2020-04-30"
 boa_files <- acquire_scihub(aoi, from_date, to_date,
                veg_index = "SAVI",
-               output_dir = tempdir())
+               output_dir = tempdir(),
+               SWIR_band = 11)
 ```
 
 

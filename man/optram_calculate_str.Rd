@@ -4,10 +4,15 @@
 \alias{optram_calculate_str}
 \title{Create SWIR Transformed Reflectance}
 \usage{
-optram_calculate_str(BOA_dir)
+optram_calculate_str(BOA_dir, STR_dir = NULL, SWIR_band = c(11, 12))
 }
 \arguments{
 \item{BOA_dir, }{string, the path to the Bottom of Atmosphere bands}
+
+\item{STR_dir, }{string, output directory for STR rasters,}
+
+\item{SWIR_band, }{integer, band number, either 11 (default) or 12
+Default is NULL, in which case, the STR_dir will be created alongside BOA_dir}
 }
 \value{
 list of string, the path to transformed raster
@@ -26,9 +31,10 @@ https://doi.org/10.1016/j.rse.2017.05.041
 
 SWIR Transformed Reflectance is calculated as
 STR = (1-SWIR)^2 / 2*SWIR
-SWIR is band 11 (2200 nm) since band B09 is not processed
+SWIR is band 12 (2190 μm) or 11 (1610 μm)
 }
 \examples{
 BOA_dir <- system.file("extdata", "BOA")
-STR <- optram_calculate_str(BOA_dir)
+STR_dir = tempdir()
+STR <- optram_calculate_str(BOA_dir, STR_dir, SWIR_band=11)
 }

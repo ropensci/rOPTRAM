@@ -14,7 +14,8 @@ acquire_scihub(
   veg_index = "NDVI",
   save_creds = TRUE,
   clientid = NULL,
-  secret = NULL
+  secret = NULL,
+  SWIR_band = c(11, 12)
 )
 }
 \arguments{
@@ -39,6 +40,8 @@ Can be "NDVI", "SAVI", "MSAVI", etc}
 is TRUE.}
 
 \item{secret, }{string, user's OAuth secret. Required if \code{save_creds} is TRUE.}
+
+\item{SWIR_band, }{integer, either 11 or 12, determines which SWIR band to use}
 }
 \value{
 list of BOA files
@@ -105,7 +108,7 @@ non-contiguous areas, but only one feature is permissible.
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
+aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 acquire_scihub(aoi, from_date, to_date,
                veg_index = "SAVI")
 }

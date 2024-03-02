@@ -44,8 +44,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
                             rm.hi.str = FALSE){
 
   # Avoid "no visible binding for global variable" NOTE
-  date_str <- STR <- STR_1_df <- STR_df <- STR_df_file <- NULL
-  VI_df_list <- VI_df <- VI_df_1 <- size <- max_tbl <- NULL
+  date_str <- STR <- STR_1_df <- STR_df_file <- VI_df_list <- VI_df_1 <- NULL
 
   if (length(STR_list) == 0 || length(VI_list) == 0) {
     message("No raster files in directories")
@@ -75,11 +74,8 @@ optram_ndvi_str <- function(STR_list, VI_list,
   }
 
   df_list <- lapply(STR_list, function(f){
-    # Get date from file name, and load STR raster
-    bn <- gsub(".tif", "", basename(f))
-    date_str <- unlist(strsplit(bn, split = "_", fixed = TRUE))[2]
+    # Read STR raster and convert to data.frame,
     STR <- terra::rast(f)
-    # Convert to data.frame,
     # keep NA's so that number of rows in STR and VI stay synchronized
     STR_1_df <- terra::as.data.frame(STR, xy=TRUE, na.rm = FALSE)
     names(STR_1_df) <- c("x", "y", "STR")
@@ -90,9 +86,10 @@ optram_ndvi_str <- function(STR_list, VI_list,
       STR_IQR <- STR_q[2] - STR_q[1]
       STR_1_df$STR[STR_1_df$STR >= STR_IQR*1.5] <- NA
     }
-    STR_1_df['Date'] <- as.Date(date_str, format="%Y-%m-%d")
 
     # Also get the vegetation index raster for this date
+    bn <- gsub(".tif", "", basename(f))
+    date_str <- unlist(strsplit(bn, split = "_", fixed = TRUE))[2]
     VI_f <- VI_list[grep(date_str, basename(VI_list))]
     if (length(VI_f) == 0) { return(NULL) }
     else if (!file.exists(VI_f)) { return(NULL) }
@@ -108,10 +105,15 @@ optram_ndvi_str <- function(STR_list, VI_list,
        VI_1_df$VI[VI_1_df$VI <= 0.005]  <- NA
     }
     # Join two DF's
-    df_1 <- dplyr::inner_join(VI_1_df, STR_1_df, by = c("x", "y"))
+    df_1 <- dplyr::inner_join(VI_1_df, STR_1_df,
+                              by = c("x", "y"), keep = FALSE)
     # Remove NA and keep only sampled number of rows
     df_1 <- df_1[stats::complete.cases(df_1),]
     df_1 <- df_1[idx, ]
+
+    # Use date from file name, and add Date column
+    df_1['Date'] <- as.Date(date_str, format="%Y-%m-%d")
+
     return(df_1)
   })
   full_df <- do.call(rbind, df_list)

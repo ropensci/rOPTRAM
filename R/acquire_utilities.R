@@ -71,7 +71,7 @@
 #' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2019-04-30"
-#' aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
+#' aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 #' acquire_scihub(aoi, from_date, to_date,
 #'                veg_index = "SAVI")
 #' }
@@ -121,15 +121,15 @@ acquire_scihub <- function(
   }
 
   # Make sure SWIR_band is one of 11 or 12
-  tryCatch(
-    expr = {trapezoid_method <- match.arg(trapezoid_method)},
-    error = function(e) { return(NULL) })
-
-  str_script <- paste0("STR", SWIR_band, ".js")
+  if (SWIR_band < 11 | SWIR_band > 12) {
+    message("SWIR band must be either 11 or 12")
+    return(NULL)
+  }
+  str_script <- paste0("STR", as.character(SWIR_band), ".js")
   vi_script <- paste0(veg_index, ".js")
   # Retrieve the necessary scripts
   script_file_boa <- system.file("scripts", "BOA.js", package = "rOPTRAM")
-  script_file_str <- system.file("scripts", script_file, package = "rOPTRAM")
+  script_file_str <- system.file("scripts", str_script, package = "rOPTRAM")
   script_file_vi <- system.file("scripts", vi_script, package = "rOPTRAM")
 
   img_list <- CDSE::SearchCatalog(aoi = aoi,
@@ -276,7 +276,7 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2019-04-30"
-#' aoi <- system.file("extdata", "migda_aoi.gpkg", package = 'rOPTRAM')
+#' aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 #' acquire_openeo(aoi, from_date, to_date,
 #'                veg_index = "SAVI")
 #' }
