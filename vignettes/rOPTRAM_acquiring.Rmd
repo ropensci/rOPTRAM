@@ -37,7 +37,7 @@ To utilize the CDSE package for accessing Copernicus data, follow these steps:
 
 Ensure you have the `CDSE` and `jsonlite` packages installed:
 
-```{r setup, results='hide'}
+```{r setup, results='hide', eval=FALSE}
 remotes::install_gitlab("rsl-bidr/roptram")
 library(rOPTRAM)
 if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
