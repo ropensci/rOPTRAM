@@ -92,7 +92,7 @@ boa_files <- acquire_scihub(aoi,
 
 For further downloads the credentials are not needed. (They have been saved to the user's home directory)
 
-```{r acquire, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+```{r acquire-1, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
 from_date <- "2019-12-01"
 to_date <- "2020-04-30"
 boa_files <- acquire_scihub(aoi, from_date, to_date,
@@ -110,7 +110,7 @@ To use openEO for accessing Copernicus data, follow these steps:
 
 Ensure you have the `openeo` package installed:
 
-```{r}
+```{r acquire-2, eval=FALSE}
 # install.packages("openeo")
 if (!require("openeo")) install.packages("openeo", dependencies = TRUE)
 ```
