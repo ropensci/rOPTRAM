@@ -17,6 +17,10 @@ echo "Built: ${tarball} and installed rOPTRAM "
 R -e "install.packages(c('rhub'), dependencies = TRUE)"
 # Get the RHUB_EMAIL and TOKEN from gitlab custom variables
 R -e "rhub::validate_email(email = '$RHUB_EMAIL', token = '$RHUB_TOKEN')"
+# Authentication for CDSE
+R -e "install.packages(c('CDSE'), dependencies = TRUE)"
+R -e "rOPTRAM::store_cdse_credentials(clientid = '$OAUTH_CLIENTID',
+                                      secret = '$OAUTH_SECRET')"
 
 # # Install Google cloud
 # curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
