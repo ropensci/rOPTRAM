@@ -92,7 +92,7 @@ boa_files <- acquire_scihub(aoi,
 
 For further downloads the credentials are not needed. (They have been saved to the user's home directory)
 
-```{r acquire, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+```{r acquire-1, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
 from_date <- "2019-12-01"
 to_date <- "2020-04-30"
 boa_files <- acquire_scihub(aoi, from_date, to_date,
@@ -110,7 +110,7 @@ To use openEO for accessing Copernicus data, follow these steps:
 
 Ensure you have the `openeo` package installed:
 
-```{r}
+```{r openeo, eval=FALSE}
 # install.packages("openeo")
 if (!require("openeo")) install.packages("openeo", dependencies = TRUE)
 ```
@@ -139,7 +139,7 @@ C. You will be redirected to the Copernicus authentication page. Log in and gran
 
 You can specify your `output_dir` parameter to indicate the path where downloaded and processed imagery will be saved. For this example, outputs are saved to `tempdir()`
 
-```{r, eval=FALSE}
+```{r acquire-2, eval=FALSE}
 from_date <- "2018-12-01"
 to_date <- "2019-03-30"
 
