@@ -21,7 +21,6 @@ check_platforms:
   stage: checkrhub
   script:
     - Rscript inst/rhubcheck.R
-    - R -e "covr::package_coverage()"
   rules:
     - if: $RUN_CI_JOB_AUTO == "false"
       when: manual
