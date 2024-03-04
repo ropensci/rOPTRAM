@@ -8,7 +8,7 @@ setwd("/home/docker")
 
 # Prepare for rhub to check on Ubuntu and Win
 tarball <- list.files(".", pattern="rOPTRAM.*tar.gz")
-platforms <- c("ubuntu-gcc-devel",
+platforms <- c("ubuntu-gcc-release",
                "windows-x86_64-release",
                "windows-x86_64-oldrel",
                "windows-x86_64-devel")
@@ -47,7 +47,7 @@ print(res, row.names = FALSE)
 t1 <- Sys.time()
 print(paste(t1, " - Check completed"))
 duration <- as.numeric(difftime(t1, t0), units = "mins")
-print(paste("Elapsed time for checking: ", 
+print(paste("Elapsed time for checking: ",
             sprintf("%.1f", duration),
             "minutes"))
 
