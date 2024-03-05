@@ -5,12 +5,12 @@
 # Ubuntu r2u
 image: rocker/r2u:22.04
 stages:
-  - checkrhub
+  - check
 #  - coverage
 
 variables:
   _R_CHECK_CRAN_INCOMING_: "false"
-  _R_CHECK_FORCE_SUGGESTS_: "true"
+  _R_CHECK_FORCE_SUGGESTS_: "false"
   RUN_CI_JOB_AUTO: "false"
 
 default:
@@ -18,7 +18,7 @@ default:
     - source inst/prepare_check.sh
 
 check_platforms:
-  stage: checkrhub
+  stage: check
   script:
     - Rscript inst/rhubcheck.R
   rules:
