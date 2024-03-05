@@ -287,7 +287,8 @@ acquire_openeo <- function(
     max_cloud = 10,
     output_dir = tempdir(),
     veg_index = "NDVI",
-    scale_factor = 10000) {
+    scale_factor = 10000,
+    SWIR_band = c(11, 12)) {
 
   if(!check_openeo()) return(NULL)
 
@@ -340,6 +341,12 @@ acquire_openeo <- function(
   if (!dir.exists(result_folder_str)) {
     dir.create(result_folder_str)
   }
+  
+  # Make sure SWIR_band is one of 11 or 12
+  if(length(SWIR_band) != 1 || !is.numeric(SWIR_band) || !SWIR_band %in% c(11, 12)) {
+    message("SWIR band must be either 11 or 12")
+    return(NULL)
+  }
 
   # Calculate Vegetation Index function
   calculate_vi_ <- function(x, context){
@@ -371,7 +378,8 @@ acquire_openeo <- function(
 
   # Calculate STR from SWIR Bottom of Atmosphere Band
   calculate_str_ <- function(x, context){
-    SWIR_DN <- x['B11']
+    SWIR_band <- paste0("B", SWIR_band)
+    SWIR_DN <- x[SWIR_band]
     SWIR <-  SWIR_DN / scale_factor
     # Convert from Solar irradiance
     # solar_irradiance_12 <- 87.25
@@ -422,9 +430,31 @@ acquire_openeo <- function(
   job_str_status <- check_job_status(job_str)
   job_boa_status <- check_job_status(job_boa)
 
-  if(job_boa_status != "finished" | job_vi_status != "finished"
-     | job_str_status != "finished") return(NULL)
-
+  # Define a function to check job status
+  check_all_statuses <- function(status_list) {
+    for (status in status_list) {
+      if (length(status) == 0) {
+        message("One or more statuses are empty.")
+        return(NULL)
+      }
+      if (status != "finished") {
+        message("One or more jobs are not finished.")
+        return(NULL)
+      }
+    }
+    return(TRUE)  # All statuses are valid and finished
+  }
+  
+  # Check all statuses
+  all_statuses <- list(job_vi_status, job_str_status, job_boa_status)
+  result <- check_all_statuses(all_statuses)
+  
+  if (is.null(result)) {
+    message("One or more jobs failed to execute. Please check the logs on the 
+            OpenEO Web Editor.")
+    return(NULL)
+  }
+  
   message("finished succesfully")
   Sys.sleep(5)
 
