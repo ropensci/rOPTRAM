@@ -18,3 +18,9 @@ Users who chose to save CDSE credentials can use this function
 (and then the \code{retrieve_cdse_credentials()} afterwards)
 The clientid and secret are obtained from:
 }
+\note{
+Both clientid and secret can alternatively be supplied as
+environment variables: OAUTH_CLIENTID and OAUTH_SECRET.
+If these env variables are available (and no values are entered
+as function arguments) they will be used to store credentials.
+}

@@ -18,7 +18,9 @@ echo "Built: ${tarball} and installed rOPTRAM "
 R -e "install.packages(c('CDSE'), dependencies = TRUE)"
 R -e "rOPTRAM::store_cdse_credentials(clientid = '$OAUTH_CLIENTID',
                                       secret = '$OAUTH_SECRET')"
-
+# Keep creds in env variables for rhub
+export OAUTH_CLIENTID='$OAUTH_CLIENTID'
+export OAUTH_SECRET='$OAUTH_SECRET'
 
 # Validate email for rhub:
 R -e "install.packages(c('rhub'), dependencies = TRUE)"

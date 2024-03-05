@@ -336,24 +336,43 @@ aoi_to_name <- function(aoi_file) {
 #' @param clientid, string, user's OAuth client id
 #' @param secret, string, user's OAuth secret
 #' @return NULL
+#' @note
+#' Both clientid and secret can alternatively be supplied as
+#' environment variables: OAUTH_CLIENTID and OAUTH_SECRET.
+#' If these env variables are available (and no values are entered
+#' as function arguments) they will be used to store credentials.
 #' @export
 
 store_cdse_credentials <- function (clientid = NULL,
                                     secret = NULL) {
+  store_creds <- function(clientid, secret, creds_file) {
+    creds <- data.frame("clientid" = clientid, "secret" = secret)
+    jsonlite::write_json(creds, creds_file)
+    message("Credentials are saved to:", creds_file)
+  }
   switch(Sys.info()['sysname'],
-         "Windows" = {creds_path =
-           file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
-         "Linux" = {creds_path =
-           file.path(Sys.getenv("HOME"), ".CDSE")},
-         "macOS" = {creds_path =
-           file.path(Sys.getenv("HOME"), "Library", "Preferences", "CDSE")},
+         "Windows" = {creds_path <- file.path(Sys.getenv("LOCALAPPDATA"),
+                                              "CDSE")},
+         "Linux" = {creds_path <- file.path(Sys.getenv("HOME"), ".CDSE")},
+         "macOS" = {creds_path <- file.path(Sys.getenv("HOME"),
+                              "Library", "Preferences", "CDSE")},
          {message("Platform is not identified. No credentials are saved")}
   )
   if (!dir.exists(creds_path)) dir.create(creds_path)
   creds_file <- file.path(creds_path, "cdse_credentials.json")
-  creds <- data.frame("clientid" = clientid, "secret" = secret)
-  jsonlite::write_json(creds, creds_file)
-  message("Credentials are saved to:", creds_file)
+  if (!is.null(clientid) & !is.null(secret)) {
+    store_creds(clientid, secret, creds_file)
+  } else {
+    # Allow for retrieving OAuth credentials from env variables:
+    clientid <- Sys.getenv("OAUTH_CLIENTID")
+    secret <- Sys.getenv("OAUTH_SECRET")
+    if (clientid != '' & secret != '') {
+      store_creds(clientid, secret, creds_file)
+    } else {
+      message("No clientid or secret supplied. No credentials are saved")
+      return(NULL)
+    }
+  }
 }
 
 #' @title Retrieve CDSE Client Credentials from File
@@ -365,13 +384,11 @@ store_cdse_credentials <- function (clientid = NULL,
 #' @export
 
 retrieve_cdse_credentials <- function() {
-  switch(Sys.info()['sysname'],
-         "Windows" = {creds_path =
-           file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
-         "Linux" = {creds_path =
-           file.path(Sys.getenv("HOME"), ".CDSE")},
-         "macOS" = {creds_path =
-           file.path(Sys.getenv("HOME"), "Library", "Preferences", ".CDSE")},
+  creds_path <- switch(Sys.info()['sysname'],
+         "Windows" = {file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
+         "Linux" = {file.path(Sys.getenv("HOME"), ".CDSE")},
+         "macOS" = {file.path(Sys.getenv("HOME"),
+                              "Library", "Preferences", ".CDSE")},
          {message("Platform is not identified. No credentials are saved")}
   )
   if (!dir.exists(creds_path)) {

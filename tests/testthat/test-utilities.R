@@ -43,7 +43,7 @@ test_that("Check if aoi_file is NULL", {
 
 test_that("Check if aoi_file is spatial", {
     # Non spatial file
-    aoi_file <- system.file("extdata", "Migda_9_VWC.csv",
+    aoi_file <- system.file("extdata", "coefficients_lin.csv",
                     package = "rOPTRAM")
     expect_false(check_aoi(aoi_file))
     # Non existing file
@@ -75,8 +75,31 @@ test_that("Check format of from_date, to_date",{
 })
 
 test_that("CDSE credentials are retrieved", {
+  creds_path <- switch(Sys.info()['sysname'],
+                  "Windows" = {file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
+                  "Linux" = {file.path(Sys.getenv("HOME"), ".CDSE")},
+                  "macOS" = {file.path(Sys.getenv("HOME"),
+                                      "Library", "Preferences", ".CDSE")},
+                  {message("Platform is not identified. No credentials are saved")}
+  )
+  testthat::skip_if_not(dir.exists(creds_path))
   creds <- retrieve_cdse_credentials()
   expect_true(inherits(creds, "list"))
   expect_equal(length(creds[[1]]), 2)
 })
 
+test_that("CDSE credentials can be stored from environment variables", {
+  # First get current creds, if they are already stored
+  creds <- retrieve_cdse_credentials()
+  # Set environment variables for this test from already stored creds
+  if (!is.null(creds)) {
+    # Get current creds into env variables
+    Sys.setenv(OAUTH_CLIENTID = creds[[1]]$clientid)
+    Sys.setenv(OAUTH_SECRET = creds[[1]]$secret)
+  }
+  # Are env variables available?
+  skip_if(nchar(Sys.getenv("OAUTH_CLIENTID")) < 39 |
+          nchar(Sys.getenv("OAUTH_SECRET")) < 32)
+  expect_message(store_cdse_credentials(NULL, NULL), "Credentials")
+  }
+)
