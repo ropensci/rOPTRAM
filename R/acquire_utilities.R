@@ -121,10 +121,12 @@ acquire_scihub <- function(
   }
 
   # Make sure SWIR_band is one of 11 or 12
-  if (SWIR_band < 11 | SWIR_band > 12) {
+  if(length(SWIR_band) != 1 || !is.numeric(SWIR_band) || 
+     !SWIR_band %in% c(11, 12)) {
     message("SWIR band must be either 11 or 12")
     return(NULL)
   }
+  
   str_script <- paste0("STR", as.character(SWIR_band), ".js")
   vi_script <- paste0(veg_index, ".js")
   # Retrieve the necessary scripts
@@ -343,7 +345,8 @@ acquire_openeo <- function(
   }
   
   # Make sure SWIR_band is one of 11 or 12
-  if(length(SWIR_band) != 1 || !is.numeric(SWIR_band) || !SWIR_band %in% c(11, 12)) {
+  if(length(SWIR_band) != 1 || !is.numeric(SWIR_band) || 
+     !SWIR_band %in% c(11, 12)) {
     message("SWIR band must be either 11 or 12")
     return(NULL)
   }
