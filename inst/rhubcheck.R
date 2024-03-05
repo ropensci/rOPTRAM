@@ -13,8 +13,11 @@ platforms <- c("windows-x86_64-release",
                "windows-x86_64-oldrel",
                "windows-x86_64-devel")
 
+# Environment variable set in prepare_check.sh
+env_vars <- c("OAUTH_CLIENTID" = Sys.getenv("OAUTH_CLIENTID"),
+              "OAUTH_SECRET" = Sys.getenv("OAUTH_SECRET"))
 rhub_chk <- rhub::check(path = tarball, platform = platforms,
-                        show_status = TRUE)
+                        show_status = TRUE, env_vars = env_vars)
 statuses <- rhub_chk[[".__enclos_env__"]][["private"]][["status_"]]
 
 res <- do.call(rbind, lapply(statuses, function(thisStatus) {
