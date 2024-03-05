@@ -6,9 +6,6 @@ cur_dir <- getwd()
 devtools::check()
 covr::package_coverage()
 
-# Prepare for rhub to check on Windows
-install.packages(c('rhub'), dependencies = TRUE)
-rhub::validate_email(email = '$RHUB_EMAIL', token = '$RHUB_TOKEN')
 on.exit(setwd(cur_dir))
 setwd("/home/docker")
 tarball <- list.files(".", pattern="rOPTRAM.*tar.gz")
