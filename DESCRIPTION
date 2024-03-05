@@ -36,7 +36,6 @@ Suggests:
     rmarkdown,
     stats,
     testthat (>= 3.0.0),
-    tmap, 
     xml2,
     openeo,
     CDSE,

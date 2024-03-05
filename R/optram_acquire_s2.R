@@ -1,5 +1,5 @@
 #' @title Acquire Sentinel 2 Images at a Given Location and Date Range
-#' @description Use the {CDSE} package to acquire, preprocess and crop
+#' @description Use the `CDSE` package to acquire, preprocess and crop
 #'  Sentinel 2 satellite imagery.
 #' @param aoi_file, string, full path to polygon spatial file of
 #'      boundary of area of interest

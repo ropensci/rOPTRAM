@@ -37,7 +37,7 @@ Can be "NDVI", "SAVI", "MSAVI", etc}
 list of BOA files
 }
 \description{
-This non-exported function uses the {openeo} package
+This non-exported function uses the \code{openeo} package
 to send a request to Copernicus DataSpace, and prepare the products.
 Called by optram_acquire_s2
 }

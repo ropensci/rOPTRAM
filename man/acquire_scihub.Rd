@@ -3,7 +3,7 @@
 \name{acquire_scihub}
 \alias{acquire_scihub}
 \title{Utility Function to Acquire Sentinel-2 Imagery Using
-the {CDSE} Package}
+the \code{CDSE} Package}
 \usage{
 acquire_scihub(
   aoi_file,
@@ -47,9 +47,9 @@ is TRUE.}
 list of BOA files
 }
 \description{
-This non-exported function uses the {CDSE} package
-to send a request to Copernicus Dataspace, and prepare the products.
-Called by optram_acquire_s2()
+This function uses the \code{CDSE} package to send a request
+to Copernicus Dataspace, and prepare the products.
+Called by \code{optram_acquire_s2()}.
 }
 \note{
 This function utilizes the \code{CDSE} package.

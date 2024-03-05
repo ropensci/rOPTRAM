@@ -1,8 +1,8 @@
 #' @title Utility Function to Acquire Sentinel-2 Imagery Using
-#' the {CDSE} Package
-#' @description This non-exported function uses the {CDSE} package
-#' to send a request to Copernicus Dataspace, and prepare the products.
-#' Called by optram_acquire_s2()
+#' the `CDSE` Package
+#' @description This function uses the `CDSE` package to send a request
+#' to Copernicus Dataspace, and prepare the products.
+#' Called by `optram_acquire_s2()`.
 #' @param aoi_file, string, full path to polygon spatial file of
 #'      boundary of area of interest
 #' @param from_date, string, represents start of date range,
@@ -233,7 +233,7 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 }
 
 #' @title Utility Function to Acquire Sentinel-2 Imagery using openEO
-#' @description This non-exported function uses the {openeo} package
+#' @description This non-exported function uses the `openeo` package
 #' to send a request to Copernicus DataSpace, and prepare the products.
 #' Called by optram_acquire_s2
 #' @param aoi_file, string, full path to polygon spatial file of

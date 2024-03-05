@@ -5,7 +5,6 @@ vignette: >
   %\VignetteIndexEntry{rOPTRAM-1}
   %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
-  %\VignetteDepends{tmap}
 bibliography: "references.bib"
 ---
 
