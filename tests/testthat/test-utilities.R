@@ -75,6 +75,14 @@ test_that("Check format of from_date, to_date",{
 })
 
 test_that("CDSE credentials are retrieved", {
+  creds_path <- switch(Sys.info()['sysname'],
+                  "Windows" = {file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
+                  "Linux" = {file.path(Sys.getenv("HOME"), ".CDSE")},
+                  "macOS" = {file.path(Sys.getenv("HOME"),
+                                      "Library", "Preferences", ".CDSE")},
+                  {message("Platform is not identified. No credentials are saved")}
+  )
+  testthat::skip_if_not(dir.exists(creds_path))
   creds <- retrieve_cdse_credentials()
   expect_true(inherits(creds, "list"))
   expect_equal(length(creds[[1]]), 2)
