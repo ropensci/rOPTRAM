@@ -15,17 +15,9 @@ echo "Built: ${tarball} and installed rOPTRAM "
 R -e "install.packages(c('CDSE'), dependencies = TRUE)"
 R -e "rOPTRAM::store_cdse_credentials(clientid = '$OAUTH_CLIENTID',
                                       secret = '$OAUTH_SECRET')"
-R CMD check $tarball
 
 # Change to package directory
 cd /home/docker/roptram
-R -e "covr::package_coverage()"
-
-# Install and then run validate_email()
-R -e "install.packages(c('rhub'), dependencies = TRUE)"
-# Get the RHUB_EMAIL and TOKEN from gitlab custom variables
-R -e "rhub::validate_email(email = '$RHUB_EMAIL', token = '$RHUB_TOKEN')"
-# Authentication for CDSE
 
 # Now run pipeline:
 # Rscript rhubcheck.R

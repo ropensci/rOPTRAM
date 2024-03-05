@@ -3,10 +3,13 @@
 t0 <- Sys.time()
 print(paste(t0, " - Starting Check"))
 cur_dir <- getwd()
+devtools::check()
+covr::package_coverage()
+
+# Prepare for rhub to check on Windows
+install.packages(c('rhub'), dependencies = TRUE)
 on.exit(setwd(cur_dir))
 setwd("/home/docker")
-
-# Prepare for rhub to check on Ubuntu and Win
 tarball <- list.files(".", pattern="rOPTRAM.*tar.gz")
 platforms <- c("windows-x86_64-release",
                "windows-x86_64-oldrel",
