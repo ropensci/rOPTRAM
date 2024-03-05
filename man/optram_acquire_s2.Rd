@@ -54,7 +54,7 @@ possible values: 'scihub', 'openeo'}
 output_path, string, path to downloaded files
 }
 \description{
-Use the {CDSE} package to acquire, preprocess and crop
+Use the \code{CDSE} package to acquire, preprocess and crop
 Sentinel 2 satellite imagery.
 }
 \note{
