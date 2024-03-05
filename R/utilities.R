@@ -262,7 +262,6 @@ store_cdse_credentials <- function (clientid = NULL,
     secret <- Sys.getenv("OAUTH_SECRET")
     if (clientid != '' & secret != '') {
       store_creds(clientid, secret, creds_file)
-    }
   } else {
     message("No clientid or secret supplied. No credentials are saved")
     return(NULL)
