@@ -78,9 +78,8 @@ test_that("CDSE credentials are retrieved", {
   creds_path <- switch(Sys.info()['sysname'],
                   "Windows" = {file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
                   "Linux" = {file.path(Sys.getenv("HOME"), ".CDSE")},
-                  "macOS" = {file.path(Sys.getenv("HOME"),
-                                      "Library", "Preferences", ".CDSE")},
-                  {message("Platform is not identified. No credentials are saved")}
+                  "Darwin" = {file.path(Sys.getenv("HOME"),
+                                      "Library", "Preferences", ".CDSE")}
   )
   testthat::skip_if_not(dir.exists(creds_path))
   creds <- retrieve_cdse_credentials()
