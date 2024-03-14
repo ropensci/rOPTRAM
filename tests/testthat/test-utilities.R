@@ -41,6 +41,10 @@ test_that("Check if aoi_file is NULL", {
     expect_false(check_aoi(aoi_file = ""))
 })
 
+test_that("Check for invalid SWIR band", {
+  expect_false(check_swir_band(13))
+  expect_false(check_swir_band("B12"))
+})
 test_that("Check if aoi_file is spatial", {
     # Non spatial file
     aoi_file <- system.file("extdata", "coefficients_lin.csv",
@@ -102,3 +106,7 @@ test_that("CDSE credentials can be stored from environment variables", {
   expect_message(store_cdse_credentials(NULL, NULL), "Credentials")
   }
 )
+
+test_that("Missing CDSE credentials cannot be stored", {
+  expect_null(store_cdse_credentials(clientid = 'xyz', secret = ''))
+})

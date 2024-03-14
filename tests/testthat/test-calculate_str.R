@@ -23,3 +23,10 @@ test_that("Calculate STR", {
   expect_type(optram_calculate_str(BOA_dir, STR_dir, SWIR_band = 11),
               "character")
 })
+
+test_that("Check for invalid SWIR band", {
+  BOA_dir <- system.file("extdata", "BOA", package = "rOPTRAM")
+  STR_dir <- tempdir()
+  expect_null(optram_calculate_str(BOA_dir, STR_dir, SWIR_band = 13))
+  expect_null(optram_calculate_str(BOA_dir, STR_dir, SWIR_band = "B12"))
+})

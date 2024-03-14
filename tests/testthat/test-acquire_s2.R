@@ -43,3 +43,15 @@ test_that("Check for invalid clientid and secret to scihub API", {
                                 clientid = "xxx", secret = "yyy",
                                 save_creds = FALSE, SWIR_band = 11))
 })
+
+test_that("Check for invalid SWIR band", {
+  from_date <- "2019-04-24"
+  to_date <- "2019-04-30"
+  aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
+  expect_null(optram_acquire_s2(aoi_file, from_date, to_date,
+                                remote="scihub",
+                                save_creds = FALSE, SWIR_band = 13))
+  expect_null(optram_acquire_s2(aoi_file, from_date, to_date,
+                                remote="scihub",
+                                save_creds = FALSE, SWIR_band = "B12"))
+})
