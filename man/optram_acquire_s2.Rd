@@ -139,7 +139,7 @@ B. You will be redirected to "https://identity.dataspace.copernicus.eu/".
 Ensure you have an account and are logged in. You will be required to
 grant access - press "yes".
 
-Two SWIR bands are available in Sentinel-2: 1610 μm and 2190 μm.
+Two SWIR bands are available in Sentinel-2: 1610 nanometer (nm) and 2190 nm.
 The parameter \code{SWIR_bands } allows to choose which band is used in this model.
 }
 \examples{
