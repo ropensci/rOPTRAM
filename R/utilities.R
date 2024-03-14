@@ -350,16 +350,20 @@ store_cdse_credentials <- function (clientid = NULL,
     jsonlite::write_json(creds, creds_file)
     message("Credentials are saved to:", creds_file)
   }
-  switch(Sys.info()['sysname'],
-         "Windows" = {creds_path <- file.path(Sys.getenv("LOCALAPPDATA"),
-                                              "CDSE")},
-         "Linux" = {creds_path <- file.path(Sys.getenv("HOME"), ".CDSE")},
-         "macOS" = {creds_path <- file.path(Sys.getenv("HOME"),
-                              "Library", "Preferences", "CDSE")},
-         {message("Platform is not identified. No credentials are saved")}
+  creds_path <- switch(Sys.info()['sysname'],
+         "Windows" = file.path(Sys.getenv("LOCALAPPDATA"), "CDSE"),
+         "Linux" = file.path(Sys.getenv("HOME"), ".CDSE"),
+         "Darwin" = file.path(Sys.getenv("HOME"),
+                              "Library", "Preferences", "CDSE")
+         # If nothing matches, switch returns NULL
   )
+  if (is.null(creds_path)) {
+    warning("Platform is not identified. No credentials are saved")
+    return(NULL)
+  }
   if (!dir.exists(creds_path)) dir.create(creds_path)
   creds_file <- file.path(creds_path, "cdse_credentials.json")
+
   if (!is.null(clientid) & !is.null(secret)) {
     store_creds(clientid, secret, creds_file)
   } else {
@@ -387,19 +391,17 @@ retrieve_cdse_credentials <- function() {
   creds_path <- switch(Sys.info()['sysname'],
          "Windows" = {file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
          "Linux" = {file.path(Sys.getenv("HOME"), ".CDSE")},
-         "macOS" = {file.path(Sys.getenv("HOME"),
-                              "Library", "Preferences", ".CDSE")},
-         {message("Platform is not identified. No credentials are saved")}
+         "Darwin" = {file.path(Sys.getenv("HOME"),
+                              "Library", "Preferences", ".CDSE")}
   )
-  if (!dir.exists(creds_path)) {
-    warning("No credentials directory:", creds_path,
-            " found. Credentials not available")
+  if (is.null(creds_path)) {
+    warning("Platform is not identified. No credentials are available")
     return(NULL)
   }
   creds_file <- file.path(creds_path, "cdse_credentials.json")
   if (!file.exists(creds_file)) {
     warning("No credentials file:", creds_file,
-            " found. Credentials not available.")
+            " found. Credentials are not available.")
     return(NULL)
   }
   creds <- jsonlite::read_json(creds_file)
