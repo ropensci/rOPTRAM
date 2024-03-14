@@ -121,12 +121,12 @@ acquire_scihub <- function(
   }
 
   # Make sure SWIR_band is one of 11 or 12
-  if(length(SWIR_band) != 1 || !is.numeric(SWIR_band) || 
+  if(length(SWIR_band) != 1 || !is.numeric(SWIR_band) ||
      !SWIR_band %in% c(11, 12)) {
     message("SWIR band must be either 11 or 12")
     return(NULL)
   }
-  
+
   str_script <- paste0("STR", as.character(SWIR_band), ".js")
   vi_script <- paste0(veg_index, ".js")
   # Retrieve the necessary scripts
@@ -249,6 +249,7 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #'  Can be "NDVI", "SAVI", "MSAVI", etc
 #' @param scale_factor, integer, scaling factor for EO data source default 10000
 #' , to scale Sentinel-2 15 bit DN to range (0, 1)
+#' @param SWIR_band, integer, either 11 or 12, determines which SWIR band to use
 #' @return list of BOA files
 #' @export
 #' @note
@@ -343,9 +344,9 @@ acquire_openeo <- function(
   if (!dir.exists(result_folder_str)) {
     dir.create(result_folder_str)
   }
-  
+
   # Make sure SWIR_band is one of 11 or 12
-  if(length(SWIR_band) != 1 || !is.numeric(SWIR_band) || 
+  if(length(SWIR_band) != 1 || !is.numeric(SWIR_band) ||
      !SWIR_band %in% c(11, 12)) {
     message("SWIR band must be either 11 or 12")
     return(NULL)
@@ -447,17 +448,17 @@ acquire_openeo <- function(
     }
     return(TRUE)  # All statuses are valid and finished
   }
-  
+
   # Check all statuses
   all_statuses <- list(job_vi_status, job_str_status, job_boa_status)
   result <- check_all_statuses(all_statuses)
-  
+
   if (is.null(result)) {
-    message("One or more jobs failed to execute. Please check the logs on the 
+    message("One or more jobs failed to execute. Please check the logs on the
             OpenEO Web Editor.")
     return(NULL)
   }
-  
+
   message("finished succesfully")
   Sys.sleep(5)
 
