@@ -149,6 +149,7 @@ optram_acquire_s2 <- function(
                                  max_cloud = max_cloud,
                                  output_dir = output_dir,
                                  veg_index = veg_index,
-                                 scale_factor = scale_factor)
+                                 scale_factor = scale_factor,
+                                 SWIR_band = SWIR_band)
          )
 }

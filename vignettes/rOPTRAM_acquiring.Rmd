@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Introduction  <img align="right" width="100" height="100" src="images/rOPTRAM_logo.jpg">
+## Introduction <img src="images/rOPTRAM_logo.jpg" align="right" width="100" height="100"/>
 
 The {CSDE} package provides an interface to the 'Copernicus DataSpace Ecosystem' API, mainly for searching the catalog of available data from Copernicus Sentinel missions and obtaining the images for just the area of interest based on selected spectral bands. The package uses the 'Sentinel Hub' REST API interface [Sentinel Hub](https://dataspace.copernicus.eu/analyse/apis/sentinel-hub) that provides access to various satellite imagery archives. It allows you to access raw satellite data, rendered images, statistical analysis, and other features.
 
@@ -26,8 +26,7 @@ OpenEO is an open-source project aimed at standardizing and simplifying access t
 
 [openEO CRAN page](https://cran.r-project.org/web/packages/openeo/index.html)
 
-Both methods require [registering](https://dataspace.copernicus.eu/) on the Copernicus DataSpace.
-This vignette provides a detailed guide on acquiring Sentinel-2 imagery using both the CDSE (Copernicus Data and Exploitation Platform - SciHub) and the openEO platform.
+Both methods require [registering](https://dataspace.copernicus.eu/) on the Copernicus DataSpace. This vignette provides a detailed guide on acquiring Sentinel-2 imagery using both the CDSE (Copernicus Data and Exploitation Platform - SciHub) and the openEO platform.
 
 ## Acquiring Sentinel-2 Imagery using CDSE
 
@@ -66,10 +65,11 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 
 ### Step 4: Saving Credentials:
 
- -   Save your client ID and secret in a secure location.
- -   At the first run, set `save_creds = TRUE` in the `acquire_scihub()` function to automatically save credentials. In future runs, credentials will automatically be read from the saved (json) file. Thus the user will not have to enter client ID and secret manually every time.
+-   Save your client ID and secret in a secure location.
+-   At the first run, set `save_creds = TRUE` in the `acquire_scihub()` function to automatically save credentials. In future runs, credentials will automatically be read from the saved (json) file. Thus the user will not have to enter client ID and secret manually every time.
+-   Alternatively, both the client ID and secret can be supplied as environment variables: `OAUTH_CLIENTID` and `OAUTH_SECRET`. If these environment variables are available (and no values are entered as function arguments), they will be used to store credentials. This approach allows for greater flexibility in managing credentials, particularly in environments where security or automation concerns may warrant the use of environment variables for configuration.
 
-```{r prepare-save, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+```{r prepare-save-1, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
 # For this example, outputs are saved to `tempdir()`
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
@@ -88,6 +88,32 @@ boa_files <- acquire_scihub(aoi,
               SWIR_band = 11)
 ```
 
+-   If you choose to use the env option, you can utilize either `optram_acquire_s2` or `acquire_scihub`. To enable the environment variable option, set `save_creds = TRUE` when calling either function. By doing so, you won't need to manually enter your Client ID and secret. Your code snippet might resemble the following:
+
+```{r prepare-save-2, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+from_date <- "2018-12-01"
+to_date <- "2019-04-30"
+# aoi <- "path/to/your/aoi_file.gpkg"
+# rOPTRAM_aoi_example
+aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+
+boa_files <- acquire_scihub(aoi,
+              from_date, to_date,
+              veg_index = "SAVI",
+              output_dir = tempdir(),
+               # For the first run, uncomment below
+               # save_creds = TRUE,
+              SWIR_band = 11)
+# It will trigger the store_cdse_credentials function from utilities.R, and your
+# credentials will be saved as a JSON file named cdse_credentials.json.
+# Manually storing credentials
+store_cdse_credentials(Sys.getenv("OAUTH_CLIENTID"), Sys.getenv("OAUTH_SECRET"))
+
+# This code retrieves environment variables and passes them to the 
+# store_cdse_credentials function, which then saves your credentials 
+# as a JSON file named cdse_credentials.json.
+```
+
 ### Step 5: Acquire Sentinel-2 Imagery
 
 For further downloads the credentials are not needed. (They have been saved to the user's home directory)
@@ -100,7 +126,6 @@ boa_files <- acquire_scihub(aoi, from_date, to_date,
                output_dir = tempdir(),
                SWIR_band = 11)
 ```
-
 
 ## Acquiring Sentinel-2 Imagery using openEO
 
