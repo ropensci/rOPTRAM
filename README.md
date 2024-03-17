@@ -35,13 +35,15 @@ if (! require("remotes")) {
   install.packages("remotes")
 }
 remotes::install_gitlab("rsl-bidr/roptram")
+library(rOPTRAM)
 ```
 
 #### Prerequisites
 
 Only a small number of commonly used R packages are required to use
 {rOPTRAM}. This includes: - base packages {tools} and {utils} - spatial
-packages {sf} and {terra} - data.frame and plotting {dplyr}, {ggplot2}
+packages {sf} and {terra} - data.frame and plotting {dplyr}, {ggplot2},
+{MASS}
 
 Users can download Sentinel-2 tiles from the Copernicus manually, and
 run thru the steps to produce the OPTRAM trapezoid, and predicted soil
@@ -54,8 +56,8 @@ only the final products are downloaded, **greatly** reducing the
 download file sizes.
 
 To run the all-inclusive approach, the first step of acquiring
-Sentinel-2 imagery is handled by the R package . (see Karaman (2023)).
-The {jsonlite} package is also necessary.
+Sentinel-2 imagery is handled by the R package {CDSE}. (see Karaman
+(2023)). The {jsonlite} package is also necessary.
 
 That R package interfaces with the Copernicus DataSpace Ecosystem in one
 of two ways: - Thru the [Scihub
@@ -68,6 +70,15 @@ the Copernicus DataSpace
 ## Available functions
 
 ### Key functions
+
+#### optram_options()
+
+Several package options are defined, with default values, when {rOPTRAM}
+first loads. Each of these can be set individually to user chosen
+values. For example, the package uses a vegetation index (compared to
+SWIR Transformed Reflectance) values to plot the trapezoid. The default
+index is “NDVI”. In a low vegetation, arid region, users can choose an
+alternative such as “SAVI” (see example below.)
 
 #### optram()
 
@@ -145,7 +156,25 @@ Sentinel 2 images in the original SAFE file format.
 
 ## Example
 
-This is a basic example which shows how to:
+First, a demonstration of choosing non-default package options.
+
+``` r
+rOPTRAM::optram_options("veg_index", "SAVI")
+#> 
+#> New option for veg_index applied.
+#> [1] "edge_points = TRUE"
+#> [1] "max_tbl_size = 1e+06"
+#> [1] "plot_density = no"
+#> [1] "remote = scihub"
+#> [1] "rm.hi.str = FALSE"
+#> [1] "rm.low.vi = FALSE"
+#> [1] "SWIR_band = 11"
+#> [1] "trapezoid_method = linear"
+#> [1] "veg_index = SAVI"
+#> [1] "vi_step = 0.005"
+```
+
+Next a basic example which shows how to:
 
 - retrieve Sentinel 2 imagery for a specific area of interest
 - covering a date range
@@ -161,9 +190,7 @@ aoi_file <- system.file("extdata", "lachish.gpkg", package="rOPTRAM")
 rmse <- rOPTRAM::optram(
     aoi = aoi_file,
     from_date = "2021-01-01", to_date = "2021-03-30",
-    max_cloud = 10,
-    veg_index = "NDVI",
-    trapezoid_method = "linear")
+    max_cloud = 10)
 print(rmse)
 ```
 

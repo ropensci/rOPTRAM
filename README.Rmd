@@ -43,6 +43,7 @@ if (! require("remotes")) {
   install.packages("remotes")
 }
 remotes::install_gitlab("rsl-bidr/roptram")
+library(rOPTRAM)
 ```
 
 #### Prerequisites
@@ -50,11 +51,11 @@ remotes::install_gitlab("rsl-bidr/roptram")
 Only a small number of commonly used R packages are required to use {rOPTRAM}. This includes:
  - base packages {tools} and {utils}
  - spatial packages {sf} and {terra}
- - data.frame and plotting {dplyr}, {ggplot2}
+ - data.frame and plotting {dplyr}, {ggplot2}, {MASS}
 
 Users can download Sentinel-2 tiles from the Copernicus manually, and run thru the steps to produce the OPTRAM trapezoid, and predicted soil moisture maps. However, this approach is not optimal. By installing a few additional packages, the workflow can be initiated by a single function call to download, clip to area of interest, and produce the trapezoid coefficients. The all-inclusive approach is highly recommended since processing of the Sentinel-2 data is performed "in the cloud" and only the final products are downloaded, **greatly** reducing the download file sizes. 
 
-To run the all-inclusive approach, the first step of acquiring Sentinel-2 imagery is handled by the R package \CRANpkg{CDSE}. (see @karaman_cdse_2023). The {jsonlite} package is also necessary.
+To run the all-inclusive approach, the first step of acquiring Sentinel-2 imagery is handled by the R package {CDSE}. (see @karaman_cdse_2023). The {jsonlite} package is also necessary.
 
 That R package interfaces with the Copernicus DataSpace Ecosystem in one of two ways:
  - Thru the [Scihub API](https://shapps.dataspace.copernicus.eu/dashboard/#/).
@@ -66,7 +67,12 @@ Both methods require [registering](https://dataspace.copernicus.eu/) on the Cope
 
 ### Key functions
 
+#### optram_options()
+
+Several package options are defined, with default values, when {rOPTRAM} first loads. Each of these can be set individually to user chosen values. For example, the package uses a vegetation index (compared to SWIR Transformed Reflectance) values to plot the trapezoid. The default index is "NDVI". In a low vegetation, arid region, users can choose an alternative such as "SAVI" (see example below.)
+
 #### optram()
+
 A main wrapper function to run the whole OPTRAM procedure. 
 This function performs the following steps:
 
@@ -119,7 +125,13 @@ In case Sentinel images have been downloaded in advance, this function prepares 
 
 ## Example
 
-This is a basic example which shows how to:
+First, a demonstration of choosing non-default package options.
+
+```{r options}
+rOPTRAM::optram_options("veg_index", "SAVI")
+```
+
+Next a basic example which shows how to:
 
   - retrieve Sentinel 2 imagery for a specific area of interest
   - covering a date range
@@ -134,9 +146,7 @@ aoi_file <- system.file("extdata", "lachish.gpkg", package="rOPTRAM")
 rmse <- rOPTRAM::optram(
     aoi = aoi_file,
     from_date = "2021-01-01", to_date = "2021-03-30",
-    max_cloud = 10,
-    veg_index = "NDVI",
-    trapezoid_method = "linear")
+    max_cloud = 10)
 print(rmse)
 ```
 
