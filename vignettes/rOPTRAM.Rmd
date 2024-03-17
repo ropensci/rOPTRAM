@@ -27,7 +27,7 @@ Only a small number of commonly used R packages are required to use {rOPTRAM}. T
  - spatial packages {sf} and {terra}
  - data.frame and plotting {dplyr}, {ggplot2}
 
-Also, to allow {rOPTRAM} to download Sentinel-2 images, clip to a study area, and prepare the necessary vegetation index and STR products, the R package \CRANpkg{CDSE} (see @karaman_cdse_2023) as well as {jsonlite} are required.
+Also, to allow {rOPTRAM} to download Sentinel-2 images, clip to a study area, and prepare the necessary vegetation index and STR products, the R package {CDSE} (see @karaman_cdse_2023) as well as {jsonlite} are required.
 
 ## Workflows
 
@@ -51,6 +51,59 @@ if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
 if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 ```
 
+## Package options
+
+The {rOPTRAM} package is controlled by several options, set automatically when the package first loads. These defaults can be viewed by running the function `optram_options()` without arguments:
+
+
+```r
+optram_options()
+#> [1] "edge_points = TRUE"
+#> [1] "max_tbl_size = 1e+06"
+#> [1] "plot_density = colors"
+#> [1] "remote = scihub"
+#> [1] "rm.hi.str = FALSE"
+#> [1] "rm.low.vi = FALSE"
+#> [1] "SWIR_band = 11"
+#> [1] "trapezoid_method = linear"
+#> [1] "veg_index = NDVI"
+#> [1] "vi_step = 0.005"
+#> NULL
+```
+Users can override any of the defaults by calling this function with alternative values for the options. For example, three trapezoid fitting functions are implemented in {rOPTRAM}. The default is "linear", which can be changed as follows:
+
+
+```r
+optram_options("trapezoid_method", "polynomial")
+#> [1] "edge_points = TRUE"
+#> [1] "max_tbl_size = 1e+06"
+#> [1] "plot_density = colors"
+#> [1] "remote = scihub"
+#> [1] "rm.hi.str = FALSE"
+#> [1] "rm.low.vi = FALSE"
+#> [1] "SWIR_band = 11"
+#> [1] "trapezoid_method = polynomial"
+#> [1] "veg_index = NDVI"
+#> [1] "vi_step = 0.005"
+```
+
+The default trapezoid plot shows a scatter plot cloud of vegetation index values vs SWIR Transformed Reflectance, where all points have a uniform color. This plot can be improved by coloring the points by their density within the scatterplot. This is accomplished by choosing to set the option "plot_density" to "colors":
+
+
+```r
+optram_options("plot_density", "colors")
+#> [1] "edge_points = TRUE"
+#> [1] "max_tbl_size = 1e+06"
+#> [1] "plot_density = colors"
+#> [1] "remote = scihub"
+#> [1] "rm.hi.str = FALSE"
+#> [1] "rm.low.vi = FALSE"
+#> [1] "SWIR_band = 11"
+#> [1] "trapezoid_method = polynomial"
+#> [1] "veg_index = NDVI"
+#> [1] "vi_step = 0.005"
+```
+
 ## Main wrapper function
 
 ### Run the full OPTRAM model procedure with a single function call
@@ -66,27 +119,11 @@ to_date <- "2023-04-30"
 output_dir <- tempdir()
 aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 optram_options("veg_index", "NDVI")
-#> [1] "edge_points = TRUE"
-#> [1] "max_tbl_size = 1e+06"
-#> [1] "plot_density = no"
-#> [1] "remote = scihub"
-#> [1] "rm.hi.str = FALSE"
-#> [1] "rm.low.vi = FALSE"
-#> [1] "SWIR_band = 11"
-#> [1] "trapezoid_method = polynomial"
-#> [1] "veg_index = NDVI"
-#> [1] "vi_step = 0.005"
 optram_options("trapezoid_method", "linear")
-#> [1] "edge_points = TRUE"
-#> [1] "max_tbl_size = 1e+06"
-#> [1] "plot_density = no"
-#> [1] "remote = scihub"
-#> [1] "rm.hi.str = FALSE"
-#> [1] "rm.low.vi = FALSE"
-#> [1] "SWIR_band = 11"
-#> [1] "trapezoid_method = linear"
-#> [1] "veg_index = NDVI"
-#> [1] "vi_step = 0.005"
+```
+
+
+```r
 coeffs <- optram(aoi_file,
                  from_date, to_date,
                  S2_output_dir = output_dir,
@@ -114,7 +151,7 @@ df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
 #> Error in gzfile(file, "rb"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-#> NULL
+#> Error in "STR" %in% names(full_df): object 'full_df' not found
 knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 #> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_linear.png"
 ```
@@ -157,7 +194,7 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 rmse <- optram_wetdry_coefficients(full_df,
                                    aoi_file,
                                    output_dir = output_dir)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
+#> Error in optram_wetdry_coefficients(full_df, aoi_file, output_dir = output_dir): object 'full_df' not found
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
 #> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```

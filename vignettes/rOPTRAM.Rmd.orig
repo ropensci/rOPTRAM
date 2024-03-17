@@ -33,7 +33,7 @@ Only a small number of commonly used R packages are required to use {rOPTRAM}. T
  - spatial packages {sf} and {terra}
  - data.frame and plotting {dplyr}, {ggplot2}
 
-Also, to allow {rOPTRAM} to download Sentinel-2 images, clip to a study area, and prepare the necessary vegetation index and STR products, the R package \CRANpkg{CDSE} (see @karaman_cdse_2023) as well as {jsonlite} are required.
+Also, to allow {rOPTRAM} to download Sentinel-2 images, clip to a study area, and prepare the necessary vegetation index and STR products, the R package {CDSE} (see @karaman_cdse_2023) as well as {jsonlite} are required.
 
 ## Workflows
 
@@ -56,6 +56,25 @@ if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
 if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 ```
 
+## Package options
+
+The {rOPTRAM} package is controlled by several options, set automatically when the package first loads. These defaults can be viewed by running the function `optram_options()` without arguments:
+
+```{r options-1}
+optram_options()
+```
+Users can override any of the defaults by calling this function with alternative values for the options. For example, three trapezoid fitting functions are implemented in {rOPTRAM}. The default is "linear", which can be changed as follows:
+
+```{r options-2}
+optram_options("trapezoid_method", "polynomial")
+```
+
+The default trapezoid plot shows a scatter plot cloud of vegetation index values vs SWIR Transformed Reflectance, where all points have a uniform color. This plot can be improved by coloring the points by their density within the scatterplot. This is accomplished by choosing to set the option "plot_density" to "colors":
+
+```{r options-3}
+optram_options("plot_density", "colors")
+```
+
 ## Main wrapper function
 
 ### Run the full OPTRAM model procedure with a single function call
@@ -64,13 +83,16 @@ Registration on Copernicus DataSpace was done in advance, and the OAuth credenti
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 
-```{r wrapper, warning=FALSE, message=FALSE}
+```{r wrapper, warning=FALSE, message=FALSE, results='hide'}
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
 aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 optram_options("veg_index", "NDVI")
 optram_options("trapezoid_method", "linear")
+```
+
+```{r wrapper-2}
 coeffs <- optram(aoi_file,
                  from_date, to_date,
                  S2_output_dir = output_dir,

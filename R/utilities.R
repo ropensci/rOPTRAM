@@ -67,7 +67,8 @@ optram_options <- function(opt_name = NULL, opt_value=NULL) {
 
   # Reset option
   opt_names <- c("veg_index","remote","vi_step", "trapezoid_method",
-                 "SWIR_band", "max_tbl_size", "rm.low.vi", "rm.hi.str")
+                 "SWIR_band", "max_tbl_size", "rm.low.vi", "rm.hi.str",
+                 "plot_density", "edge_points")
   if (opt_name %in% opt_names) {
     # Setup conditions for each option name
     cond_func <- switch(opt_name,
@@ -94,6 +95,12 @@ optram_options <- function(opt_name = NULL, opt_value=NULL) {
               },
               "rm.hi.str" = function(opt_value) {
                 return(is.logical(opt_value))
+              },
+              "edge_points" = function(opt_value) {
+                return(is.logical(opt_value))
+              },
+              "plot_density" = function(opt_value) {
+                return(opt_value %in% c("no", "none", "color", "colors"))
               }
       )
     msg <- ifelse(cond_func(opt_value),
