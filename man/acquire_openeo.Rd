@@ -10,9 +10,7 @@ acquire_openeo(
   to_date,
   max_cloud = 10,
   output_dir = tempdir(),
-  veg_index = "NDVI",
-  scale_factor = 10000,
-  SWIR_band = c(11, 12)
+  scale_factor = 10000
 )
 }
 \arguments{
@@ -28,13 +26,8 @@ formatted as "YYYY-MM-DD"}
 
 \item{output_dir, }{string, path to save downloaded, and processed imagery}
 
-\item{veg_index, }{string, which index to prepare. Default "NDVI".
-Can be "NDVI", "SAVI", "MSAVI", etc}
-
 \item{scale_factor, }{integer, scaling factor for EO data source default 10000
 , to scale Sentinel-2 15 bit DN to range (0, 1)}
-
-\item{SWIR_band, }{integer, either 11 or 12, determines which SWIR band to use}
 }
 \value{
 list of BOA files

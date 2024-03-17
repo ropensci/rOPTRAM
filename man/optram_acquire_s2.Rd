@@ -10,13 +10,10 @@ optram_acquire_s2(
   to_date,
   max_cloud = 10,
   output_dir = tempdir(),
-  veg_index = "NDVI",
   scale_factor = 10000,
   save_creds = TRUE,
   clientid = NULL,
-  secret = NULL,
-  remote = c("scihub", "openeo"),
-  SWIR_band = c(11, 12)
+  secret = NULL
 )
 }
 \arguments{
@@ -32,9 +29,6 @@ formatted as "YYYY-MM-DD"}
 
 \item{output_dir, }{string, path to save processed imagery.}
 
-\item{veg_index, }{string, which index to prepare. Default "NDVI".
-Can be "NDVI", "SAVI", "MSAVI", etc}
-
 \item{scale_factor, }{numeric, scale factor for reflectance values.
 Default 10000.}
 
@@ -44,11 +38,6 @@ Default 10000.}
 is TRUE.}
 
 \item{secret, }{string, user's OAuth secret. Required if \code{save_creds} is TRUE.}
-
-\item{remote, }{string, from which archive to download imagery
-possible values: 'scihub', 'openeo'}
-
-\item{SWIR_band, }{integer, either 11 or 12, determines which SWIR band to use}
 }
 \value{
 output_path, string, path to downloaded files
@@ -148,8 +137,6 @@ from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 s2_file_list <- optram_acquire_s2(aoi,
-                                 from_date, to_date,
-                                 remote = "scihub"
-                                 veg_index = "SAVI")
+                                 from_date, to_date)
 }
 }

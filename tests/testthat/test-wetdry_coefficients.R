@@ -8,8 +8,7 @@ test_that("Missing AOI file input", {
   # NA allowd for aoi_file name
   aoi_file <- NULL
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
-  res <- optram_wetdry_coefficients(full_df, aoi_file,
-                                       trapezoid_method = "linear")
+  res <- optram_wetdry_coefficients(full_df, aoi_file)
   expect_true(inherits(res, "data.frame"))
   expect_equal(ncol(res), 2)
 })
@@ -17,8 +16,7 @@ test_that("Missing AOI file input", {
 test_that("aoi_file does not exist", {
   aoi_file <- "xxx.gpkg"
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
-  res <- optram_wetdry_coefficients(full_df, aoi_file,
-                                       trapezoid_method = "linear")
+  res <- optram_wetdry_coefficients(full_df, aoi_file)
   expect_true(inherits(res, "data.frame"))
   expect_equal(ncol(res), 2)
 })
@@ -27,8 +25,7 @@ test_that("Output RMSE is data.frame of 2 columns", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
   aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
   res <- optram_wetdry_coefficients(full_df,
-                                    aoi_file,
-                                    trapezoid_method = "linear")
+                                    aoi_file)
   expect_true(inherits(res, "data.frame"))
   expect_equal(ncol(res), 2)
 })
@@ -38,8 +35,8 @@ test_that("Polynomial trapezoid method returns data.frame of length 6", {
                                  package = "rOPTRAM"))
   aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
   output_dir <- tempdir()
+  optram_options("trapezoid_method", "polynomial")
   res <- optram_wetdry_coefficients(full_df, aoi_file,
-                                    trapezoid_method = "polynomial",
                                     output_dir = output_dir)
   coeffs <- read.csv(file.path(output_dir, "coefficients_poly.csv"))
   expect_true(inherits(coeffs, "data.frame"))
@@ -49,10 +46,7 @@ test_that("Polynomial trapezoid method returns data.frame of length 6", {
 test_that("Plot with edge points", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
   aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-  res <- optram_wetdry_coefficients(full_df,
-                                    aoi_file,
-                                    trapezoid_method = "linear",
-                                    edge_points = TRUE)
+  res <- optram_wetdry_coefficients(full_df, aoi_file)
   expect_true(inherits(res, "data.frame"))
   expect_equal(ncol(res), 2)
 })
@@ -60,9 +54,6 @@ test_that("Plot with edge points", {
 test_that("Very small vi_step causes no data points in intervals", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
   aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-  vi_step <- 1e-5
-  expect_null(optram_wetdry_coefficients(full_df,
-                                    aoi_file,
-                                    trapezoid_method = "linear",
-                                    vi_step = vi_step))
+  optram_options("vi_step", 1e-5)
+  expect_null(optram_wetdry_coefficients(full_df, aoi_file))
 })

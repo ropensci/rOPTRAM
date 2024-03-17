@@ -76,7 +76,8 @@ to_date <- "2019-04-30"
 # aoi <- "path/to/your/aoi_file.gpkg"
 # rOPTRAM_aoi_example
 aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
-
+optram_options("SWIR_band", 11)
+optram_options("veg_index", "SAVI")
 boa_files <- acquire_scihub(aoi,
               from_date, to_date,
               veg_index = "SAVI",
@@ -85,7 +86,7 @@ boa_files <- acquire_scihub(aoi,
                # save_creds = TRUE,
                # clientid = "your_client_id",
                # secret = "your_secret"
-              SWIR_band = 11)
+               )
 ```
 
 -   If you choose to use the env option, you can utilize either `optram_acquire_s2` or `acquire_scihub`. To enable the environment variable option, set `save_creds = TRUE` when calling either function. By doing so, you won't need to manually enter your Client ID and secret. Your code snippet might resemble the following:
@@ -99,11 +100,10 @@ aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 
 boa_files <- acquire_scihub(aoi,
               from_date, to_date,
-              veg_index = "SAVI",
               output_dir = tempdir(),
                # For the first run, uncomment below
                # save_creds = TRUE,
-              SWIR_band = 11)
+             )
 # It will trigger the store_cdse_credentials function from utilities.R, and your
 # credentials will be saved as a JSON file named cdse_credentials.json.
 # Manually storing credentials
@@ -122,9 +122,7 @@ For further downloads the credentials are not needed. (They have been saved to t
 from_date <- "2019-12-01"
 to_date <- "2020-04-30"
 boa_files <- acquire_scihub(aoi, from_date, to_date,
-               veg_index = "SAVI",
-               output_dir = tempdir(),
-               SWIR_band = 11)
+               output_dir = tempdir())
 ```
 
 ## Acquiring Sentinel-2 Imagery using openEO
@@ -164,12 +162,11 @@ C. You will be redirected to the Copernicus authentication page. Log in and gran
 
 You can specify your `output_dir` parameter to indicate the path where downloaded and processed imagery will be saved. For this example, outputs are saved to `tempdir()`
 
-```{r acquire-2, eval=FALSE}
+```{r acquire-3, eval=FALSE}
 from_date <- "2018-12-01"
 to_date <- "2019-03-30"
 
 acquire_openeo(aoi, from_date, to_date,
-               veg_index = "SAVI",
                output_dir = tempdir())
 ```
 

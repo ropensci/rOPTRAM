@@ -24,16 +24,19 @@
 #'
 #' {rOPTRAM} defines the following options at startup
 #'
-#'  |opt_name           | opt_value      | other possible values
-#'  |:------------------|:---------------|:----------------
-#'  |veg_index          | "NDVI"         | "SAVI", "MSAVI"
-#'  |remote             | "scihub"       | "openeo"
-#'  |vi_step            | 0.005          | usually between 0.01 and 0.001
-#'  |trapezoid_method   | "linear"       | "polynomial" or "exponential"
-#'  |SWIR_band          | 11             | 12
-#'  |max_tbl_size       | 1e+6           | depends on computer resources
-#'  |rm.low.vi          | FALSE          | TRUE
-#'  |rm.hi.str          | FALSE          | TRUE
+#'  |opt_name           | opt_value    | other possible values
+#'  |:------------------|:-------------|:----------------
+#'  |veg_index          | "NDVI"       | "SAVI", "MSAVI"
+#'  |remote             | "scihub"     | "openeo"
+#'  |vi_step            | 0.005        | usually between 0.01 and 0.001
+#'  |trapezoid_method   | "linear"     | "polynomial" or "exponential"
+#'  |SWIR_band          | 11           | 12
+#'  |max_tbl_size       | 1e+6         | depends on computer resources
+#'  |rm.low.vi          | FALSE        | TRUE
+#'  |rm.hi.str          | FALSE        | TRUE
+#'  |plot_density       | FALSE        | "colors" plots point density coloring
+#'  |edge_points        | TRUE         | FALSE, whether to add
+#'                                     | the trapezoid edge points to the plot
 #'
 optram_options <- function(opt_name = NULL, opt_value=NULL) {
   # Internal functions
@@ -191,8 +194,6 @@ check_swir_band <- function(SWIR_band) {
 #' @param greenband, integer, number of green band
 #' @param blueband, integer, number of blue band
 #' @param nirband, integer, number of NIR band
-#' @param viname, string, which VI to prepare,
-#'            either 'NDVI' (default) or 'SAVI' or 'MSAVI'
 #' @param scale_factor, numeric, scales Sentinel-2 15 bit values
 #'            down to range (0,255) as expected for vegetation indices
 #'            default 32768 (2^15)
@@ -209,7 +210,7 @@ check_swir_band <- function(SWIR_band) {
 #'          "BOA_2022-12-11.tif", package = "rOPTRAM"))
 #' vi <- calculate_vi(img_stk)
 
-calculate_vi <- function(img_stk, viname = "NDVI",
+calculate_vi <- function(img_stk,
                          redband = 4,
                          greenband = 3,
                          blueband = 2,
@@ -221,6 +222,7 @@ calculate_vi <- function(img_stk, viname = "NDVI",
       message("BOA image stack does not contain all bands")
       return(NULL)
     }
+    viname = getOption("optram.veg_index")
     nir <- img_stk[[nirband]]
     red <- img_stk[[redband]]
     blue <- img_stk[[blueband]]
@@ -259,7 +261,6 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 #' when you have already downloaded Sentinel 2 image files in advance
 #' @param img_stk, terra SpatRaster, multiband stack of images,
 #'          already clipped to aoi
-#' @param SWIR_band, integer, number of SWIR band, one of (11 or 12)
 #' @param scale_factor, integer, scaling factor for EO data source
 #'      default 10000, to scale Sentinel-2 15 bit DN to range (0, 1)
 #' @export
@@ -271,9 +272,9 @@ calculate_vi <- function(img_stk, viname = "NDVI",
 #' img_stk <- terra::rast(system.file("extdata", "BOA",
 #'          "BOA_2022-12-11.tif", package = "rOPTRAM"))
 #' STR_dir = tempdir()
-#' str <- calculate_str(img_stk, SWIR_band = 11)
+#' str <- calculate_str(img_stk)
 calculate_str <- function(img_stk,
-                          SWIR_band = c(11,12), scale_factor = 10000) {
+                          scale_factor = 10000) {
   # Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017.
   # The optical trapezoid model:
   # A novel approach to remote sensing of soil moisture
@@ -284,6 +285,7 @@ calculate_str <- function(img_stk,
   # STR = (1-SWIR)^2 / 2*SWIR
   #
   # Make sure SWIR_band is one of 11 or 12
+  SWIR_band = getOption("optram.SWIR_band")
   if (!check_swir_band(SWIR_band)) return(NULL)
   if (terra::nlyr(img_stk) < 12) {
     message("BOA image stack does not contain all bands")

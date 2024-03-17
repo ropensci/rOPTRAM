@@ -9,8 +9,7 @@ optram_calculate_soil_moisture(
   VI_dir,
   STR_dir,
   data_dir,
-  output_dir = tempdir(),
-  trapezoid_method = c("linear", "exponential", "polynomial")
+  output_dir = tempdir()
 )
 }
 \arguments{
@@ -26,9 +25,6 @@ formatted as "YYYY-MM-DD"}
 
 \item{output_dir, }{string, full path to output directory
 for saving soil moisture raster}
-
-\item{trapezoid_method, }{string,
-either "linear", "exponential", or "polynomial", default is "linear"}
 }
 \value{
 rast, soil moisture grid
@@ -69,7 +65,5 @@ VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
 STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 data_dir <- system.file("extdata")
 SM <- optram_calculate_soil_moisture(img_date,
-      VI_dir, STR_dir,
-      data_dir,
-      trapezoid_method = "linear")
+      VI_dir, STR_dir, data_dir)
 }

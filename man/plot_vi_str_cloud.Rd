@@ -4,14 +4,7 @@
 \alias{plot_vi_str_cloud}
 \title{Create Scatter Plot of STR-NDVI Data Points,}
 \usage{
-plot_vi_str_cloud(
-  full_df,
-  aoi_name,
-  edges_df,
-  output_dir = tempdir(),
-  trapezoid_method = c("linear", "exponential", "polynomial"),
-  edge_points = FALSE
-)
+plot_vi_str_cloud(full_df, aoi_name, edges_df, output_dir = tempdir())
 }
 \arguments{
 \item{full_df, }{data.frame of NDVI and STR pixel values}
@@ -21,13 +14,6 @@ plot_vi_str_cloud(
 \item{edges_df, }{data.frame, points along the wet/dry edges for trapezoid}
 
 \item{output_dir, }{string, directory to save plot png file.}
-
-\item{trapezoid_method, }{string, how to plot trapezoid line.
-either "linear" or "exponential", default is "linear"}
-
-\item{edge_points, }{boolean, whether to add to the plot the
-linear regression points that were used to derive coefficients.
-default FALSE}
 }
 \value{
 None
@@ -45,7 +31,7 @@ edges_df <- read.csv(system.file("extdata", "trapezoid_edges_lin.csv",
 plot_vi_str_cloud(full_df, aoi_name, edges_df)
 edges_df <- read.csv(system.file("extdata", "trapezoid_edges_poly.csv",
                         package = "rOPTRAM"))
-plot_vi_str_cloud(full_df, aoi_name, edges_df,
-                    trapezoid_method = "polynomial")
+optram_options("trapezoid_method", "polynomial")
+plot_vi_str_cloud(full_df, aoi_name, edges_df)
 
 }

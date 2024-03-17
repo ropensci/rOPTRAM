@@ -1,7 +1,6 @@
 #' @title Create SWIR Transformed Reflectance
 #' @param BOA_dir, string, the path to the Bottom of Atmosphere bands
 #' @param STR_dir, string, output directory for STR rasters,
-#' @param SWIR_band, integer, band number, either 11 (default) or 12
 #' Default is NULL, in which case, the STR_dir will be created alongside BOA_dir
 #' @return list of string, the path to transformed raster
 #' @note
@@ -20,16 +19,18 @@
 #' @examples
 #' BOA_dir <- system.file("extdata", "BOA")
 #' STR_dir = tempdir()
-#' STR <- optram_calculate_str(BOA_dir, STR_dir, SWIR_band=11)
+#' STR <- optram_calculate_str(BOA_dir, STR_dir)
 
 optram_calculate_str <- function(BOA_dir,
-                                 STR_dir = NULL, SWIR_band = c(11, 12)){
+                                 STR_dir = NULL){
   # Returns: STR_list, list of paths to STR (SWIR Transformed) Raster files
   # Avoid "no visible binding for global variable" NOTE
   BOA_list <- STR_list <- SWIR_DN <- SWIR <- STR <- outfile <- outpath <- NULL
 
   if (!dir.exists(BOA_dir)) return(NULL)
+  SWIR_band <- getOption("optram.SWIR_band")
   if (!check_swir_band(SWIR_band))  return(NULL)
+
   BOA_list <- list.files(BOA_dir,
                         pattern = ".tif$", full.names = TRUE)
   # Get only the original BOA files, in case STR have already been calculated

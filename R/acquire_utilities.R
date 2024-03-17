@@ -10,13 +10,10 @@
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
 #' @param max_cloud, integer, maximum percent of cloud cover. Default 10.
 #' @param output_dir, string, path to save downloaded, and processed imagery
-#' @param veg_index, string, which index to prepare. Default "NDVI".
-#'  Can be "NDVI", "SAVI", "MSAVI", etc
 #' @param save_creds, logical, whether to save CDSE credentials. Default TRUE.
 #' @param clientid, string, user's OAuth client id. Required if `save_creds`
 #'      is TRUE.
 #' @param secret, string, user's OAuth secret. Required if `save_creds` is TRUE.
-#' @param SWIR_band, integer, either 11 or 12, determines which SWIR band to use
 #' @export
 #' @return list of BOA files
 #' @note
@@ -72,8 +69,8 @@
 #' from_date <- "2018-12-01"
 #' to_date <- "2019-04-30"
 #' aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
-#' acquire_scihub(aoi, from_date, to_date,
-#'                veg_index = "SAVI")
+#' optram_options("veg_index", "SAVI")
+#' acquire_scihub(aoi, from_date, to_date)
 #' }
 
 acquire_scihub <- function(
@@ -81,13 +78,15 @@ acquire_scihub <- function(
     from_date, to_date,
     max_cloud = 10,
     output_dir = tempdir(),
-    veg_index = "NDVI",
     save_creds = TRUE,
     clientid = NULL,
-    secret = NULL,
-    SWIR_band = c(11, 12)) {
+    secret = NULL) {
 
   aoi <- sf::st_read(aoi_file, as_tibble = FALSE, quiet = TRUE)
+
+  # Package options
+  SWIR_band <- getOption("optram.SWIR_band")
+  veg_index <- getOption("optram.veg_index")
 
   # Retrieve OAuth token using credentials from file directory
   tok <- check_scihub(clientid = clientid, secret = secret,
@@ -245,11 +244,8 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
 #' @param max_cloud, integer, maximum percent of cloud cover. Default 10.
 #' @param output_dir, string, path to save downloaded, and processed imagery
-#' @param veg_index, string, which index to prepare. Default "NDVI".
-#'  Can be "NDVI", "SAVI", "MSAVI", etc
 #' @param scale_factor, integer, scaling factor for EO data source default 10000
 #' , to scale Sentinel-2 15 bit DN to range (0, 1)
-#' @param SWIR_band, integer, either 11 or 12, determines which SWIR band to use
 #' @return list of BOA files
 #' @export
 #' @note
@@ -289,16 +285,16 @@ acquire_openeo <- function(
     from_date, to_date,
     max_cloud = 10,
     output_dir = tempdir(),
-    veg_index = "NDVI",
-    scale_factor = 10000,
-    SWIR_band = c(11, 12)) {
+    scale_factor = 10000) {
 
   if(!check_openeo()) return(NULL)
 
   # Extracting bbox from the aoi file
   catchment <- sf::st_read(aoi_file)
   bbox <- sf::st_bbox(obj = catchment)
-
+  # Package options
+  SWIR_band <- getOption("optram.SWIR_band")
+  veg_index <- getOption("optram.veg_index")
   # get the process collection to use the predefined processes of the back-end
   p <- openeo::processes()
 

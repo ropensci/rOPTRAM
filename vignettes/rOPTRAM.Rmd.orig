@@ -69,16 +69,12 @@ from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
 aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-veg_index <- "NDVI"
+optram_options("veg_index", "NDVI")
+optram_options("trapezoid_method", "linear")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
-                 veg_index = veg_index,
                  S2_output_dir = output_dir,
-                 data_output_dir = output_dir,
-                 remote = "scihub",
-                 vi_step = 0.005,
-                 trapezoid_method = "linear",
-                 SWIR_band = 11)
+                 data_output_dir = output_dir)
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
 ```
 ### Show trapezoid plot
@@ -106,10 +102,7 @@ knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 # Using the same dates, and aoi as previous example
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
-                            output_dir = output_dir,
-                            veg_index =veg_index,
-                            remote = "scihub",
-                            SWIR_band = 11)
+                            output_dir = output_dir)
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -124,7 +117,6 @@ knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
 ```
 
 
-
 ## Soil Moisture Estimate
 
 ### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid
@@ -135,8 +127,7 @@ VI_dir <- file.path(output_dir, "NDVI")
 STR_dir <- file.path(output_dir, "STR")
 data_dir <- output_dir
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
-                                     data_dir = data_dir,
-                                     trapezoid_method = "linear")
+                                     data_dir = data_dir)
 ```
 
 ### Soil moisture plot

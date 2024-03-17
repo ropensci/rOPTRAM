@@ -7,14 +7,9 @@
 optram_safe(
   safe_dir,
   aoi_file,
-  veg_index = "NDVI",
   S2_output_dir = tempdir(),
   overwrite = TRUE,
-  data_output_dir = tempdir(),
-  max_tbl_size = 5e+06,
-  trapezoid_method = c("linear", "exponential", "polynomial"),
-  vi_step = 0.01,
-  SWIR_band = c(11, 12)
+  data_output_dir = tempdir()
 )
 }
 \arguments{
@@ -25,9 +20,6 @@ after atmospheric correction (L2A)}
 \item{aoi_file, }{string, path to boundary polygon spatial file
 of area of interest}
 
-\item{veg_index, }{string, which VI to prepare, either 'NDVI' (default)
-or 'SAVI' or 'MSAVI'}
-
 \item{S2_output_dir, }{string, directory to save the derived products,
 defaults to tempdir()}
 
@@ -37,19 +29,6 @@ defaults to TRUE}
 
 \item{data_output_dir, }{string, path to save coeffs_file
 and STR-VI data.frame, default is tempdir()}
-
-\item{max_tbl_size, }{numeric, maximum size of VI/STR dta.frame.
-default is 5,000,000 rows}
-
-\item{trapezoid_method, }{string,
-one of "linear", "exponential", "polynomial"
-how to prepare fitted model to trapezoid edge values
-default "linear"}
-
-\item{vi_step, }{numeric, width of slice along VI axis
-to prepare edge values, default 0.01}
-
-\item{SWIR_band, }{integer, either 11 or 12, determines which SWIR band to use}
 }
 \value{
 rmse_df, data.frame, RMSE values of fitted trapezoid lines
@@ -81,7 +60,6 @@ The parameter \code{SWIR_bands } allows to choose which band is used in this mod
 \dontrun{
 aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 safe_dir  <- tempdir()
-coeffs <- optram_safe(safe_dir,
-                      aoi_file, veg_index = "NDVI", SWIR_band = 11)
+coeffs <- optram_safe(safe_dir, aoi_file)
 }
 }

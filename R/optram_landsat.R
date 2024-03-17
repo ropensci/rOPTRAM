@@ -9,8 +9,6 @@
 #'    after atmospheric correction (L2A)
 #' @param aoi_file, string, path to boundary polygon spatial file
 #'    of area of interest
-#' @param veg_index, string, which VI to prepare, either 'NDVI' (default)
-#'    or 'SAVI' or 'MSAVI'
 #' @param LC_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file
@@ -30,13 +28,11 @@
 #' \dontrun{
 #' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 #' optram_landsat(landsat_dir,  aoi_file,
-#'                veg_index = 'SAVI',
 #'                LC_output_dir = tempdir(), data_output_dir = tempdir())
 #' }
 
   optram_landsat <- function(landsat_dir,
                              aoi_file,
-                             veg_index = 'NDVI',
                              LC_output_dir = tempdir(),
                              data_output_dir = tempdir()) {
 
@@ -46,6 +42,8 @@
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
     STR <- STR_df <- full_df <- NULL
 
+  # Get vegetation index from package options
+  veg_index <- getOption("optram.veg_index")
   # Check for inputs
    if (is.null(landsat_dir) || !dir.exists(landsat_dir)) {
       message("The directory of downloaded Landsat images

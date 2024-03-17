@@ -6,7 +6,6 @@
 \usage{
 calculate_vi(
   img_stk,
-  viname = "NDVI",
   redband = 4,
   greenband = 3,
   blueband = 2,
@@ -17,9 +16,6 @@ calculate_vi(
 \arguments{
 \item{img_stk, }{terra SpatRaster, multiband stack of images,
 already clipped to aoi}
-
-\item{viname, }{string, which VI to prepare,
-either 'NDVI' (default) or 'SAVI' or 'MSAVI'}
 
 \item{redband, }{integer, number of red band}
 

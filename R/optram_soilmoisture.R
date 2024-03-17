@@ -10,8 +10,6 @@
 #'  (the `output_dir` parameter in `optram_wetdry_coefficients()` function)
 #' @param output_dir, string, full path to output directory
 #'  for saving soil moisture raster
-#' @param trapezoid_method, string,
-#'  either "linear", "exponential", or "polynomial", default is "linear"
 #' @return rast, soil moisture grid
 #' @note
 #' This function is used after preparing the OPTRAM model coefficients with:
@@ -44,15 +42,12 @@
 #' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 #' data_dir <- system.file("extdata")
 #' SM <- optram_calculate_soil_moisture(img_date,
-#'       VI_dir, STR_dir,
-#'       data_dir,
-#'       trapezoid_method = "linear")
+#'       VI_dir, STR_dir, data_dir)
 optram_calculate_soil_moisture <- function(
   img_date,
   VI_dir, STR_dir,
   data_dir,
-  output_dir = tempdir(),
-  trapezoid_method = c("linear", "exponential", "polynomial")) {
+  output_dir = tempdir()) {
 
   # Avoid "no visible binding for global variable" NOTE
   VI_file <-  VI <- STR_file <- STR <- coeffs <- NULL
@@ -89,6 +84,7 @@ optram_calculate_soil_moisture <- function(
     return(NULL)
   }
 
+  trapezoid_method = getOption("optram.trapezoid_method")
   coeffs_file <-  switch(trapezoid_method,
           linear = file.path(data_dir, "coefficients_lin.csv"),
           exponential = file.path(data_dir, "coefficients_exp.csv"),

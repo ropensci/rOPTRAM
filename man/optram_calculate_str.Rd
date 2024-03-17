@@ -4,14 +4,12 @@
 \alias{optram_calculate_str}
 \title{Create SWIR Transformed Reflectance}
 \usage{
-optram_calculate_str(BOA_dir, STR_dir = NULL, SWIR_band = c(11, 12))
+optram_calculate_str(BOA_dir, STR_dir = NULL)
 }
 \arguments{
 \item{BOA_dir, }{string, the path to the Bottom of Atmosphere bands}
 
-\item{STR_dir, }{string, output directory for STR rasters,}
-
-\item{SWIR_band, }{integer, band number, either 11 (default) or 12
+\item{STR_dir, }{string, output directory for STR rasters,
 Default is NULL, in which case, the STR_dir will be created alongside BOA_dir}
 }
 \value{
@@ -36,5 +34,5 @@ SWIR is band 12 (2190 nm) or 11 (1610 nm)
 \examples{
 BOA_dir <- system.file("extdata", "BOA")
 STR_dir = tempdir()
-STR <- optram_calculate_str(BOA_dir, STR_dir, SWIR_band=11)
+STR <- optram_calculate_str(BOA_dir, STR_dir)
 }

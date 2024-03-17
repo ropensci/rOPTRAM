@@ -16,8 +16,10 @@
     optram.trapezoid_method = "linear", # "exponential", or "polynomial"
     optram.SWIR_band = 11,      # or 12
     optram.max_tbl_size = 1e+6,  # depends on computer resources
-    optram.rm.low.vi    = FALSE, 
-    optram.rm.hi.str    = FALSE
+    optram.rm.low.vi    = FALSE,
+    optram.rm.hi.str    = FALSE,
+    optram.plot_density = "no",  # "colors"
+    optram.edge_points = TRUE    # whether to add edge points to the plot
   )
 
   op <- options()

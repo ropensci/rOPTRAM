@@ -7,7 +7,6 @@
 optram_landsat(
   landsat_dir,
   aoi_file,
-  veg_index = "NDVI",
   LC_output_dir = tempdir(),
   data_output_dir = tempdir()
 )
@@ -19,9 +18,6 @@ after atmospheric correction (L2A)}
 
 \item{aoi_file, }{string, path to boundary polygon spatial file
 of area of interest}
-
-\item{veg_index, }{string, which VI to prepare, either 'NDVI' (default)
-or 'SAVI' or 'MSAVI'}
 
 \item{LC_output_dir, }{string, directory to save the derived products,
 defaults to tempdir()}
@@ -53,7 +49,6 @@ i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 \dontrun{
 aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 optram_landsat(landsat_dir,  aoi_file,
-               veg_index = 'SAVI',
                LC_output_dir = tempdir(), data_output_dir = tempdir())
 }
 }

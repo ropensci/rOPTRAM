@@ -25,6 +25,7 @@ Depends:
 Imports:
     dplyr,
     ggplot2,
+    MASS,
     sf,
     terra,
     tools,

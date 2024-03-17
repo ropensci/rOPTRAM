@@ -4,14 +4,7 @@
 \alias{optram_ndvi_str}
 \title{Prepare Dataframe with Pairs of NDVI and STR Values}
 \usage{
-optram_ndvi_str(
-  STR_list,
-  VI_list,
-  output_dir = tempdir(),
-  max_tbl_size = 5e+06,
-  rm.low.vi = FALSE,
-  rm.hi.str = FALSE
-)
+optram_ndvi_str(STR_list, VI_list, output_dir = tempdir())
 }
 \arguments{
 \item{STR_list, }{list of paths to STR raster files}
@@ -19,15 +12,6 @@ optram_ndvi_str(
 \item{VI_list, }{list of paths to NDVI raster files}
 
 \item{output_dir, }{string, path to save data.frames (in RDS format)}
-
-\item{max_tbl_size, }{numeric, maximum size of NDVI-STR data.frame
-default set to 5e+6}
-
-\item{rm.low.vi, }{boolean, Should VI values <= 0 be removed
-default FALSE. If set to TRUE then all VI <= 0 will be set to NA.}
-
-\item{rm.hi.str, }{boolean, Should STR values > 1.5*IQR (outliers) be removed
-default FALSE. If set to TRUE then outlier STR values will be set to NA.}
 }
 \value{
 full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
@@ -39,7 +23,8 @@ Prepare data.frame of all pairs of values
 (as input for the \code{optram_wetdry_coefficients()} function)
 }
 \note{
-Use the \code{max_tbl_size} parameter to limit size of the NDVI-STR data.frame
+Use the option \code{max_tbl_size} (see \code{optram_options()})
+to limit size of the NDVI-STR data.frame.
 With a large area of interest, and long time frame,
 the number of data points can overrun the computation resources.
 This parameter sets a total size of data.frame from the \code{max_tbl_size}
@@ -47,7 +32,7 @@ parameter, together with the number of image time slots in the time range.
 
 In some cases (i.e. water surfaces) NDVI can have values
 below zero. These pixels can be removed from the trapezoid
-by setting \code{rm.low.vi} to TRUE.
+by setting \code{rm.low.vi} option to TRUE.
 
 The vegetation index column is named "NDVI" even though it can represent
 other vegetation indices, such as SAVI, or MSAVI.

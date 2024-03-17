@@ -8,10 +8,7 @@ optram_wetdry_coefficients(
   full_df,
   aoi_file,
   output_dir = tempdir(),
-  vi_step = 0.005,
-  trapezoid_method = c("linear", "exponential", "polynomial"),
-  save_plot = TRUE,
-  edge_points = FALSE
+  save_plot = TRUE
 )
 }
 \arguments{
@@ -22,16 +19,7 @@ optram_wetdry_coefficients(
 
 \item{output_dir, }{string, directory to save coefficients CSV file}
 
-\item{vi_step, }{float, width of intervals along VI axis
-default 0.005}
-
-\item{trapezoid_method, }{string, how to prepare wet and dry trapezoid edges
-Possible values: "linear", "exponential", "polynomial". See notes.
-Default "linear"}
-
-\item{save_plot, }{boolean, If TRUE (default) save scatterplot to output_dir}
-
-\item{edge_points, }{boolean, whether to add edge points to the plot.
+\item{save_plot, }{boolean, If TRUE (default) save scatterplot to output_dir
 If \code{save_plot} is TRUE, and \code{edge_points} is TRUE
 add the original regression points that were used to derive coefficients.
 default FALSE}
@@ -49,7 +37,7 @@ Write coefficients to a CSV file
 The vegetation index column is named "VI" though it can represent
 several vegetation indices, such as SAVI, or MSAVI.
 
-The \verb{trapezoid method} parameter allows to choose one of three models
+The \verb{trapezoid method} option (see \code{optram_options()}) allows to choose one of three models
 for creating the edge coefficients of the trapezoid.
 \itemize{
 \item "linear" prepares a simple OLS regression line
@@ -77,11 +65,10 @@ alpha, beta_1, and beta_2 for both wet and dry edges
 aoi_file <- "Test"
 full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
   package = "rOPTRAM"))
-rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
-                 trapezoid_method = "linear")
+rmse_df <- optram_wetdry_coefficients(full_df, aoi_file)
 print(rmse_df)
-rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
-                  trapezoid_method = "polynomial")
+optram_options("trapezoid_method", "polynomial")
+rmse_df <- optram_wetdry_coefficients(full_df, aoi_file)
 print(rmse_df)
 
 }

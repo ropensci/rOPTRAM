@@ -6,23 +6,16 @@
 \usage{
 optram(
   aoi_file,
-  veg_index = "NDVI",
   from_date,
   to_date,
   max_cloud = 15,
   S2_output_dir = tempdir(),
-  data_output_dir = tempdir(),
-  remote = "scihub",
-  vi_step = 0.005,
-  trapezoid_method = c("linear", "exponential", "polynomial"),
-  SWIR_band = c(11, 12)
+  data_output_dir = tempdir()
 )
 }
 \arguments{
 \item{aoi_file, }{string, full path to polygon spatial file
 of area of interest}
-
-\item{veg_index, }{string, which index to use. Default "NDVI"}
 
 \item{from_date, }{string, the start of the date range,
 Formatted as "YYYY-MM-DD"}
@@ -36,20 +29,6 @@ and the derived products, defaults to tempdir()}
 
 \item{data_output_dir, }{string, path to save coeffs_file
 and STR-VI data.frame, default is tempdir()}
-
-\item{remote, }{string, which Copernicus API to use,
-one of "scihub", or "openeo". Default is "scihub"}
-
-\item{vi_step, }{float, width of intervals along VI axis
-default 0.005}
-
-\item{trapezoid_method, }{string,
-one of "linear", "exponential", "polynomial"
-default "linear"
-How to fit a curve to the values along trapezoid edges
-See notes in optram_wetdry_coefficients()}
-
-\item{SWIR_band, }{integer, either 11 or 12, determines which SWIR band to use}
 }
 \value{
 rmse_df, data.frame, RMSE values of fitted trapezoid lines
@@ -68,18 +47,19 @@ Remote Sensing of Environment 198, 52–68,
 https://doi.org/10.1016/j.rse.2017.05.041 .
 }
 \note{
-to download imagery. Please first install \code{gcloud} following instructions:
-https://cloud.google.com/sdk/docs/install
-for your operating system.
-And be sure to initialize with you google username and password.
-
-Output can be separated:
-Sentinel downloads and products are saved to S2_output_dir.
+Sentinel downloaded products are saved to S2_output_dir.
 Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
+
+Three trapezoid fitting methods are implemented: "linear",
+"exponential" and "polynomial". See the \code{optram_options()} function for details
 
 Two SWIR wavelength bands are available in Sentinel-2:
 1610 nanometer (nm) and 2190 nm.
-The parameter \code{SWIR_bands } allows to choose which band is used in this model.
+The option \code{SWIR_bands } can be set in \code{optram_options()}
+to choose which band is used in this model.
+
+Several vegetation indices are implemented: "NDVI", "SAVI", etc.
+The \code{optram_options()} function also sets this option
 }
 \examples{
 \dontrun{
@@ -88,7 +68,6 @@ to_date <- "2020-04-30"
 aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 coeffs <- optram(aoi_file,
                  from_date, to_date,
-                 veg_index = c("SAVI"),
-                 trapezoid_method = "linear")
+                 veg_index = c("SAVI"))
 }
 }

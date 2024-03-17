@@ -12,7 +12,6 @@
 #'   https://doi.org/10.1016/j.rse.2017.05.041 .
 #' @param aoi_file, string, full path to polygon spatial file
 #'        of area of interest
-#' @param veg_index, string, which index to use. Default "NDVI"
 #' @param from_date, string, the start of the date range,
 #'        Formatted as "YYYY-MM-DD"
 #' @param to_date, the end of the date range.
@@ -21,32 +20,22 @@
 #'  and the derived products, defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file
 #'  and STR-VI data.frame, default is tempdir()
-#' @param remote, string, which Copernicus API to use,
-#'  one of "scihub", or "openeo". Default is "scihub"
-#' @param vi_step, float, width of intervals along VI axis
-#'  default 0.005
-#' @param trapezoid_method, string,
-#'  one of "linear", "exponential", "polynomial"
-#'  default "linear"
-#'  How to fit a curve to the values along trapezoid edges
-#'  See notes in optram_wetdry_coefficients()
-#' @param SWIR_band, integer, either 11 or 12, determines which SWIR band to use
-#'
 #' @return rmse_df, data.frame, RMSE values of fitted trapezoid lines
 #' the coefficients are also saved to a csv file in `data_output_dir`.
 #' @note
-#' to download imagery. Please first install `gcloud` following instructions:
-#' https://cloud.google.com/sdk/docs/install
-#' for your operating system.
-#' And be sure to initialize with you google username and password.
-#'
-#' Output can be separated:
-#' Sentinel downloads and products are saved to S2_output_dir.
+#' Sentinel downloaded products are saved to S2_output_dir.
 #' Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
+#'
+#' Three trapezoid fitting methods are implemented: "linear",
+#'  "exponential" and "polynomial". See the `optram_options()` function for details
 #'
 #' Two SWIR wavelength bands are available in Sentinel-2:
 #' 1610 nanometer (nm) and 2190 nm.
-#' The parameter `SWIR_bands ` allows to choose which band is used in this model.
+#' The option `SWIR_bands ` can be set in `optram_options()`
+#' to choose which band is used in this model.
+#'
+#' Several vegetation indices are implemented: "NDVI", "SAVI", etc.
+#' The `optram_options()` function also sets this option
 
 #' @export
 #' @examples
@@ -56,55 +45,45 @@
 #' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 #' coeffs <- optram(aoi_file,
 #'                  from_date, to_date,
-#'                  veg_index = c("SAVI"),
-#'                  trapezoid_method = "linear")
+#'                  veg_index = c("SAVI"))
 #' }
 
 
 optram <- function(aoi_file,
-                   veg_index = 'NDVI',
                    from_date, to_date,
                    max_cloud = 15,
                    S2_output_dir = tempdir(),
-                   data_output_dir = tempdir(),
-                   remote = "scihub",
-                   vi_step = 0.005,
-                   trapezoid_method = c("linear", "exponential", "polynomial"),
-                   SWIR_band = c(11, 12)) {
+                   data_output_dir = tempdir()) {
 
   # Avoid "no visible binding for global variable" NOTE
   access_ok <- s2_list <- s2_dirs <- BOA_dir <- NULL
   VI_dir <- VI_list <- VI_STR_df <- coeffs  <- NULL
 
-    # Loop over the downloaded S2 folders (dates),
-    # create NDVI and STR indices for each and crop to aoi
-    s2_list <- rOPTRAM::optram_acquire_s2(
-                    aoi_file,
-                    from_date, to_date,
-                    max_cloud = max_cloud,
-                    veg_index = veg_index,
-                    output_dir = S2_output_dir,
-                    remote = remote,
-                    SWIR_band = SWIR_band)
+  # Loop over the downloaded S2 folders (dates),
+  # create NDVI and STR indices for each and crop to aoi
+  s2_list <- rOPTRAM::optram_acquire_s2(
+                  aoi_file,
+                  from_date, to_date,
+                  max_cloud = max_cloud,
+                  output_dir = S2_output_dir)
 
-    # Get full output directories for BOA, STR and NDVI
-    s2_dirs <- list.dirs(S2_output_dir,  full.names = TRUE)
-    BOA_dir <- s2_dirs[basename(s2_dirs) == "BOA"]
-    STR_dir <- s2_dirs[basename(s2_dirs) == "STR"]
-    VI_dir <- s2_dirs[basename(s2_dirs) == veg_index]
+  veg_index <- getOption("optram.veg_index")
+  # Get full output directories for BOA, STR and NDVI
+  s2_dirs <- list.dirs(S2_output_dir,  full.names = TRUE)
+  BOA_dir <- s2_dirs[basename(s2_dirs) == "BOA"]
+  STR_dir <- s2_dirs[basename(s2_dirs) == "STR"]
+  VI_dir <- s2_dirs[basename(s2_dirs) == veg_index]
 
-    # Calculate SWIR Transformed Reflectance was done by optram_acquire_s2()
-    # STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
-    STR_list <- list.files(path = STR_dir, full.names = TRUE)
-    VI_list <- list.files(path = VI_dir, full.names = TRUE)
-    VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)
-    rmse_df <- rOPTRAM::optram_wetdry_coefficients(
-      VI_STR_df,
-      aoi_file = aoi_file,
-      output_dir = data_output_dir,
-      vi_step = vi_step,
-      trapezoid_method = trapezoid_method)
-    print("RMSE for fitted trapezoid:")
-    print(rmse_df)
-    return(rmse_df)
+  # Calculate SWIR Transformed Reflectance was done by optram_acquire_s2()
+  # STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
+  STR_list <- list.files(path = STR_dir, full.names = TRUE)
+  VI_list <- list.files(path = VI_dir, full.names = TRUE)
+  VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)
+  rmse_df <- rOPTRAM::optram_wetdry_coefficients(
+    VI_STR_df,
+    aoi_file = aoi_file,
+    output_dir = data_output_dir)
+  print("RMSE for fitted trapezoid:")
+  print(rmse_df)
+  return(rmse_df)
 }

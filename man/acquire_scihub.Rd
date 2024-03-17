@@ -11,11 +11,9 @@ acquire_scihub(
   to_date,
   max_cloud = 10,
   output_dir = tempdir(),
-  veg_index = "NDVI",
   save_creds = TRUE,
   clientid = NULL,
-  secret = NULL,
-  SWIR_band = c(11, 12)
+  secret = NULL
 )
 }
 \arguments{
@@ -31,25 +29,20 @@ formatted as "YYYY-MM-DD"}
 
 \item{output_dir, }{string, path to save downloaded, and processed imagery}
 
-\item{veg_index, }{string, which index to prepare. Default "NDVI".
-Can be "NDVI", "SAVI", "MSAVI", etc}
-
 \item{save_creds, }{logical, whether to save CDSE credentials. Default TRUE.}
 
 \item{clientid, }{string, user's OAuth client id. Required if \code{save_creds}
 is TRUE.}
 
 \item{secret, }{string, user's OAuth secret. Required if \code{save_creds} is TRUE.}
-
-\item{SWIR_band, }{integer, either 11 or 12, determines which SWIR band to use}
 }
 \value{
 list of BOA files
 }
 \description{
-This function uses the \code{CDSE} package to send a request
-to Copernicus Dataspace, and prepare the products.
-Called by \code{optram_acquire_s2()}.
+This function uses the \code{CDSE} package
+to send a request to Copernicus Dataspace, and prepare the products.
+Called by optram_acquire_s2()
 }
 \note{
 This function utilizes the \code{CDSE} package.
@@ -109,7 +102,7 @@ non-contiguous areas, but only one feature is permissible.
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
-acquire_scihub(aoi, from_date, to_date,
-               veg_index = "SAVI")
+optram_options("veg_index", "SAVI")
+acquire_scihub(aoi, from_date, to_date)
 }
 }

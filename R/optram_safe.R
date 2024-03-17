@@ -12,25 +12,13 @@
 #'    after atmospheric correction (L2A)
 #' @param aoi_file, string, path to boundary polygon spatial file
 #'    of area of interest
-#' @param veg_index, string, which VI to prepare, either 'NDVI' (default)
-#'    or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
-#' @param vi_step, numeric, width of slice along VI axis
-#'    to prepare edge values, default 0.01
-#' @param trapezoid_method, string,
-#'    one of "linear", "exponential", "polynomial"
-#'    how to prepare fitted model to trapezoid edge values
-#'    default "linear"
 #' @param overwrite, boolean, overwrite derived products
 #'      that already were created,
 #'      defaults to TRUE
 #' @param data_output_dir, string, path to save coeffs_file
 #'      and STR-VI data.frame, default is tempdir()
-#' @param max_tbl_size, numeric, maximum size of VI/STR dta.frame.
-#'      default is 5,000,000 rows
-#' @param SWIR_band, integer, either 11 or 12, determines which SWIR band to use
-#'
 #' @return rmse_df, data.frame, RMSE values of fitted trapezoid lines
 #' @export
 #' @note
@@ -51,26 +39,20 @@
 #' \dontrun{
 #' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 #' safe_dir  <- tempdir()
-#' coeffs <- optram_safe(safe_dir,
-#'                       aoi_file, veg_index = "NDVI", SWIR_band = 11)
+#' coeffs <- optram_safe(safe_dir, aoi_file)
 #' }
 
 optram_safe <- function(safe_dir,
                         aoi_file,
-                        veg_index = 'NDVI',
                         S2_output_dir = tempdir(),
                         overwrite = TRUE,
-                        data_output_dir = tempdir(),
-                        max_tbl_size = 5e+6,
-                        trapezoid_method = c("linear", "exponential", "polynomial"),
-                        vi_step = 0.01,
-                        SWIR_band = c(11, 12)) {
+                        data_output_dir = tempdir()) {
 
     # Avoid "no visible binding for global variable" NOTE
     safe_list <- band_ids <- aoi <- cropped_rast_list <- xml_file <- NULL
     img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- epsg_code <- NULL
     datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
-    STR <- STR_df <- full_df <- NULL
+    STR <- STR_df <- full_df <- max_tbl_size <- NULL
 
     # Pre flight checks...
     if (!check_aoi(aoi_file)) {
@@ -82,6 +64,7 @@ optram_safe <- function(safe_dir,
               is a required parameter.")
       return(NULL)
     }
+    SWIR_band <- getOption("optram.SWIR_band")
     if (!check_swir_band(SWIR_band))  return(NULL)
 
     # Loop over the downloaded S2 folders (dates),
@@ -113,6 +96,8 @@ optram_safe <- function(safe_dir,
     aoi <- suppressWarnings(terra::vect(aoi_file))
     aoi_name <- aoi_to_name(aoi_file)
 
+    SWIR_band <- getOption("optram.SWIR_band")
+    veg_index <- getOption("optram.veg_index")
     # Prepare output directories
     BOA_dir <- file.path(S2_output_dir, "BOA")
     if (!dir.exists(BOA_dir)) {
@@ -232,7 +217,7 @@ optram_safe <- function(safe_dir,
         datestr <- as.Date(xml2::xml_text(xml2::xml_find_first(mtd,
                             ".//SENSING_TIME")))
 
-        VI_idx <- rOPTRAM::calculate_vi(stk, veg_index,
+        VI_idx <- rOPTRAM::calculate_vi(stk,
                                         redband = 3, nirband = 4,
                                         blueband = 1, greenband = 2)
         VI_df <- terra::as.data.frame(VI_idx, xy = TRUE, na.rm = FALSE)
@@ -276,8 +261,6 @@ optram_safe <- function(safe_dir,
     rmse_df <- rOPTRAM::optram_wetdry_coefficients(
       full_VI_STR,
       aoi_file,
-      trapezoid_method = trapezoid_method,
-      vi_step = vi_step,
       output_dir = data_output_dir)
     message("RMSE for fitted trapezoid:")
     print(rmse_df)

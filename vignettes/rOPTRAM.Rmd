@@ -65,16 +65,32 @@ from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
 aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-veg_index <- "NDVI"
+optram_options("veg_index", "NDVI")
+#> [1] "edge_points = TRUE"
+#> [1] "max_tbl_size = 1e+06"
+#> [1] "plot_density = no"
+#> [1] "remote = scihub"
+#> [1] "rm.hi.str = FALSE"
+#> [1] "rm.low.vi = FALSE"
+#> [1] "SWIR_band = 11"
+#> [1] "trapezoid_method = polynomial"
+#> [1] "veg_index = NDVI"
+#> [1] "vi_step = 0.005"
+optram_options("trapezoid_method", "linear")
+#> [1] "edge_points = TRUE"
+#> [1] "max_tbl_size = 1e+06"
+#> [1] "plot_density = no"
+#> [1] "remote = scihub"
+#> [1] "rm.hi.str = FALSE"
+#> [1] "rm.low.vi = FALSE"
+#> [1] "SWIR_band = 11"
+#> [1] "trapezoid_method = linear"
+#> [1] "veg_index = NDVI"
+#> [1] "vi_step = 0.005"
 coeffs <- optram(aoi_file,
                  from_date, to_date,
-                 veg_index = veg_index,
                  S2_output_dir = output_dir,
-                 data_output_dir = output_dir,
-                 remote = "scihub",
-                 vi_step = 0.005,
-                 trapezoid_method = "linear",
-                 SWIR_band = 11)
+                 data_output_dir = output_dir)
 #> Reading layer `High' from data source 
 #>   `/home/micha/work/dev/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
 #> Simple feature collection with 1 feature and 1 field
@@ -82,30 +98,23 @@ coeffs <- optram(aoi_file,
 #> Dimension:     XY
 #> Bounding box:  xmin: 193120.5 ymin: 613272.1 xmax: 194476.3 ymax: 614546.5
 #> Projected CRS: Israel 1993 / Israeli TM Grid
-#> [1] "RMSE for fitted trapezoid:"
-#>    RMSE.wet  RMSE.dry
-#> 1 0.2589246 0.1288553
+#> Error in `httr2::oauth_flow_client_credentials()`:
+#> ! OAuth failure [invalid_client]
+#> • Invalid client or Invalid client credentials
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
+#> Error in knitr::kable(coeffs, caption = "Trapezoid coefficients"): object 'coeffs' not found
 ```
-
-
-
-Table: Trapezoid coefficients
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2589246| 0.1288553|
-
-
 ### Show trapezoid plot
 
 
 ```r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
+#> Error in file(file, "rt"): cannot open the connection
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
+#> Error in gzfile(file, "rb"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-#> Error in paste("Trapezoid Plot - ", aoi_name): object 'ttl' not found
+#> NULL
 knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 #> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_linear.png"
 ```
@@ -126,10 +135,7 @@ knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 # Using the same dates, and aoi as previous example
 s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
-                            output_dir = output_dir,
-                            veg_index =veg_index,
-                            remote = "scihub",
-                            SWIR_band = 11)
+                            output_dir = output_dir)
 #> Reading layer `High' from data source 
 #>   `/home/micha/work/dev/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
 #> Simple feature collection with 1 feature and 1 field
@@ -137,6 +143,9 @@ s2_file_list <- optram_acquire_s2(aoi_file,
 #> Dimension:     XY
 #> Bounding box:  xmin: 193120.5 ymin: 613272.1 xmax: 194476.3 ymax: 614546.5
 #> Projected CRS: Israel 1993 / Israeli TM Grid
+#> Error in `httr2::oauth_flow_client_credentials()`:
+#> ! OAuth failure [invalid_client]
+#> • Invalid client or Invalid client credentials
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -144,22 +153,14 @@ VI_list <- list.files(file.path(output_dir, "NDVI"),
 full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir,
                            rm.low.vi = TRUE, rm.hi.str = TRUE)
+#> Error in optram_ndvi_str(STR_list, VI_list, output_dir = output_dir, rm.low.vi = TRUE, : unused arguments (rm.low.vi = TRUE, rm.hi.str = TRUE)
 rmse <- optram_wetdry_coefficients(full_df,
                                    aoi_file,
                                    output_dir = output_dir)
+#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
+#> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```
-
-
-
-Table: RMSE of fitted trapezoid edges
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2589246| 0.1288553|
-
-
-
 
 
 ## Soil Moisture Estimate
@@ -173,8 +174,7 @@ VI_dir <- file.path(output_dir, "NDVI")
 STR_dir <- file.path(output_dir, "STR")
 data_dir <- output_dir
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
-                                     data_dir = data_dir,
-                                     trapezoid_method = "linear")
+                                     data_dir = data_dir)
 ```
 
 ### Soil moisture plot
@@ -183,7 +183,9 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ```r
 library(leaflet)
 names(SM) <- "Migda soil moisture"
+#> Error in names(SM) <- "Migda soil moisture": attempt to set an attribute on NULL
 SM[terra::values(SM) < 0] <- 0
+#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'values' for signature '"NULL"'
 
 sm_map <- leaflet("OpenStreetMap") |>
   addTiles() |>
@@ -191,6 +193,7 @@ sm_map <- leaflet("OpenStreetMap") |>
     colors = colorNumeric("RdYlGn",
       domain = c(-0.1, 2.0), na.color = NA),
     opacity = 0.9)
+#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : Don't know how to get path data from object of class NULL
 sm_map
-#> Error in path.expand(path): invalid 'path' argument
+#> Error in eval(expr, envir, enclos): object 'sm_map' not found
 ```

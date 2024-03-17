@@ -2,39 +2,37 @@ test_that("Check that calculate_vi returns SpatRaster", {
     img_stk <- terra::rast(system.file("extdata",
               "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
     # Test all VIs
-    expect_s4_class(calculate_vi(img_stk, viname = "NDVI"), "SpatRaster")
-    expect_s4_class(calculate_vi(img_stk, viname = "SAVI"), "SpatRaster")
-    expect_s4_class(calculate_vi(img_stk, viname = "MSAVI"), "SpatRaster")
-    expect_s4_class(calculate_vi(img_stk, viname = "CI"), "SpatRaster")
-    expect_s4_class(calculate_vi(img_stk, viname = "BSCI"), "SpatRaster")
+    optram_options("veg_index", "SAVI")
+    expect_s4_class(calculate_vi(img_stk), "SpatRaster")
+    optram_options("veg_index", "NDVI")
+    expect_s4_class(calculate_vi(img_stk), "SpatRaster")
 })
 
 test_that("Check that calculate_vi returns NULL for non-existant VI", {
     img_stk <- terra::rast(system.file("extdata",
               "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
-    expect_null(calculate_vi(img_stk, viname = "XXX"))
+    expect_message(optram_options("veg_index", "XXX"), "Incorrect")
 })
 
 test_that("In calculate_vi, img_stk has all 12 bands", {
   img_stk <- terra::rast(system.file("extdata",
-                                     "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
+                                     "BOA", "BOA_2022-12-11.tif",
+                                     package = "rOPTRAM"))
   short_stk <- img_stk[[1:10]]
-  expect_null(calculate_vi(short_stk, viname = "NDVI"))
+  expect_null(calculate_vi(short_stk))
 })
 
 test_that("Check that calculate_str returns SpatRaster", {
     img_stk <- terra::rast(system.file("extdata",
               "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
-    expect_s4_class(calculate_str(img_stk, SWIR_band = 11), "SpatRaster")
+    expect_s4_class(calculate_str(img_stk), "SpatRaster")
 })
 
 test_that("Check for invalid SWIR_band value", {
   img_stk <- terra::rast(system.file("extdata",
                                      "BOA", "BOA_2022-12-11.tif",
                                      package = "rOPTRAM"))
-  expect_null(calculate_str(img_stk, SWIR_band = 10))
-  short_stk <- img_stk[[1:10]]
-  expect_null(calculate_str(short_stk, SWIR_band=11))
+  expect_message(optram_options("SWIR_band", 10), "Incorrect")
 })
 
 test_that("Check if aoi_file is NULL", {

@@ -6,16 +6,11 @@
 #' @param STR_list, list of paths to STR raster files
 #' @param VI_list, list of paths to NDVI raster files
 #' @param output_dir, string, path to save data.frames (in RDS format)
-#' @param max_tbl_size, numeric, maximum size of NDVI-STR data.frame
-#'      default set to 5e+6
-#' @param rm.low.vi, boolean, Should VI values <= 0 be removed
-#'      default FALSE. If set to TRUE then all VI <= 0 will be set to NA.
-#' @param rm.hi.str, boolean, Should STR values > 1.5*IQR (outliers) be removed
-#'      default FALSE. If set to TRUE then outlier STR values will be set to NA.
 #' @return full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
 #' @export
 #' @note
-#' Use the `max_tbl_size` parameter to limit size of the NDVI-STR data.frame
+#' Use the option `max_tbl_size` (see `optram_options()`)
+#' to limit size of the NDVI-STR data.frame.
 #' With a large area of interest, and long time frame,
 #' the number of data points can overrun the computation resources.
 #' This parameter sets a total size of data.frame from the `max_tbl_size`
@@ -23,7 +18,7 @@
 #'
 #' In some cases (i.e. water surfaces) NDVI can have values
 #' below zero. These pixels can be removed from the trapezoid
-#' by setting `rm.low.vi` to TRUE.
+#' by setting `rm.low.vi` option to TRUE.
 #'
 #' The vegetation index column is named "NDVI" even though it can represent
 #' other vegetation indices, such as SAVI, or MSAVI.
@@ -38,10 +33,7 @@
 #' str(full_df)
 
 optram_ndvi_str <- function(STR_list, VI_list,
-                            output_dir = tempdir(),
-                            max_tbl_size = 5e+6,
-                            rm.low.vi = FALSE,
-                            rm.hi.str = FALSE){
+                            output_dir = tempdir()){
 
   # Avoid "no visible binding for global variable" NOTE
   date_str <- STR <- STR_1_df <- STR_df_file <- VI_df_list <- VI_df_1 <- NULL
@@ -51,6 +43,10 @@ optram_ndvi_str <- function(STR_list, VI_list,
     return(NULL)
   }
   if (!dir.exists(output_dir)) dir.create(output_dir)
+
+  max_tbl_size <- getOption("optram.max_tbl_size")
+  rm.low.vi <- getOption("optram.rm.low.vi")
+  rm.hi.str <- getOption("optram.rm.hi.str")
 
   # Get index of rows for sampling
   # Use the first raster (first date) list of both STR rasters
@@ -113,10 +109,20 @@ optram_ndvi_str <- function(STR_list, VI_list,
 
     # Use date from file name, and add Date column
     df_1['Date'] <- as.Date(date_str, format="%Y-%m-%d")
-
     return(df_1)
   })
   full_df <- do.call(rbind, df_list)
+
+  # Calculate point density and add Density column
+  # (Using: https://slowkow.com/notes/ggplot2-color-by-density/ )
+  get_density <- function(x, y, ...) {
+    dens <- MASS::kde2d(x, y, ...)
+    ix <- findInterval(x, dens$x)
+    iy <- findInterval(y, dens$y)
+    ii <- cbind(ix, iy)
+    return(dens$z[ii])
+  }
+  full_df$Density <- get_density(full_df$VI, full_df$STR, n = 128)
 
   df_file <- file.path(output_dir, "VI_STR_data.rds")
   saveRDS(full_df, df_file)

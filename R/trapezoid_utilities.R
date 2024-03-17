@@ -179,8 +179,7 @@ polynomial_coefficients <- function(df, output_dir) {
 #' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 #' SM <- optram_calculate_soil_moisture(img_date,
 #'             VI_dir, STR_dir,
-#'             data_dir = system.file("extdata"),
-#'             trapezoid_method = "linear")
+#'             data_dir = system.file("extdata"))
 #' @note
 #' This function is used after preparing the OPTRAM model coefficients with:
 #'  `optram_wetdry_coefficients()`. Typically a new image date,
@@ -228,8 +227,7 @@ linear_soil_moisture <- function(coeffs, VI, STR) {
 #' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 #' SM <- optram_calculate_soil_moisture(img_date,
 #'             VI_dir, STR_dir,
-#'             data_dir = system.file("extdata"),
-#'             trapezoid_method = "exponential")
+#'             data_dir = system.file("extdata"))
 exponential_soil_moisture <- function(coeffs, VI, STR) {
   # based on STR and two STR_dry and STR_wet bands
   # Using the exponential trapezoid edges
@@ -292,10 +290,10 @@ exponential_soil_moisture <- function(coeffs, VI, STR) {
 #' img_date <- "2023-03-11"
 #' VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
 #' STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
+#' optram_options("trapezoid_method", "polynomial")
 #' SM <- optram_calculate_soil_moisture(img_date,
 #'                           VI_dir, STR_dir,
-#'                           data_dir = system.file("extdata"),
-#'                           trapezoid_method = "polynomial")
+#'                           data_dir = system.file("extdata"))
 #'
 polynomial_soil_moisture <- function(coeffs, VI, STR) {
   # based on STR and two STR_dry and STR_wet bands
