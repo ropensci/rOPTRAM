@@ -93,11 +93,11 @@ optram_options("trapezoid_method", "linear")
 ```
 
 ```{r wrapper-2}
-coeffs <- optram(aoi_file,
+rmse <- optram(aoi_file,
                  from_date, to_date,
                  S2_output_dir = output_dir,
                  data_output_dir = output_dir)
-knitr::kable(coeffs, caption = "Trapezoid coefficients")
+knitr::kable(rmse, caption = "RMSE for linear fitted trapezoid edges")
 ```
 ### Show trapezoid plot
 
@@ -130,8 +130,7 @@ STR_list <- list.files(file.path(output_dir, "STR"),
 VI_list <- list.files(file.path(output_dir, "NDVI"),
                       pattern = ".tif$", full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list,
-                           output_dir = output_dir,
-                           rm.low.vi = TRUE, rm.hi.str = TRUE)
+                           output_dir = output_dir)
 rmse <- optram_wetdry_coefficients(full_df,
                                    aoi_file,
                                    output_dir = output_dir)
