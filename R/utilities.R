@@ -34,7 +34,8 @@
 #'  |max_tbl_size       | 1e+6         | depends on computer resources
 #'  |rm.low.vi          | FALSE        | TRUE
 #'  |rm.hi.str          | FALSE        | TRUE
-#'  |plot_density       | FALSE        | "colors" plots point density coloring
+#'  |plot_density       | "no"         | "colors" plots point density coloring
+#'  |                   |              | "contours" plots contour lines
 #'  |edge_points        | TRUE         | FALSE, whether to add
 #'                                     | the trapezoid edge points to the plot
 #'
@@ -100,7 +101,9 @@ optram_options <- function(opt_name = NULL, opt_value=NULL) {
                 return(is.logical(opt_value))
               },
               "plot_density" = function(opt_value) {
-                return(opt_value %in% c("no", "none", "color", "colors"))
+                return(opt_value %in% c("no", "none",
+                                        "color", "colors",
+                                        "contour", "contours"))
               }
       )
     msg <- ifelse(cond_func(opt_value),

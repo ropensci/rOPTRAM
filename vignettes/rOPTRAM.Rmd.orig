@@ -155,7 +155,7 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 
 ```{r sm-plot}
 library(leaflet)
-names(SM) <- "Migda soil moisture"
+names(SM) <- "Lachish soil moisture"
 SM[terra::values(SM) < 0] <- 0
 
 sm_map <- leaflet("OpenStreetMap") |>

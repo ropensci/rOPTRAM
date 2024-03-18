@@ -217,10 +217,16 @@ plot_vi_str_cloud <- function(
     pl <- pl +
       geom_point(aes(x = VI, y = STR, color = Density),
                  size = 0.2) +
-      scale_color_viridis_d(direction = -1, alpha = 0.1)
-  } else {
+      scale_color_continuous(type = "viridis",
+                             direction = -1, alpha = 0.1)
+  } else if (plot_density == "contours") {
     pl <- pl +
-      geom_point(aes(x=VI, y=STR), color = "#0070000b",
+      geom_point(aes(x=VI, y=STR), color = "green",
+                 alpha = 0.1, size = 0.2) +
+      geom_density2d(color = "darkgrey")
+  } else  {
+    pl <- pl +
+      geom_point(aes(x=VI, y=STR), color = "green",
                  alpha = 0.1, size = 0.2)
   }
   pl <-  pl + lims(y=c(y_min, y_max), x=c(x_min, x_max)) +
