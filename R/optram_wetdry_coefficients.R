@@ -223,7 +223,7 @@ plot_vi_str_cloud <- function(
     pl <- pl +
       geom_point(aes(x=VI, y=STR), color = "green",
                  alpha = 0.1, size = 0.2) +
-      geom_density2d(color = "darkgrey")
+      geom_density2d(aes(x=VI, y=STR), color = "darkgrey")
   } else  {
     pl <- pl +
       geom_point(aes(x=VI, y=STR), color = "green",
