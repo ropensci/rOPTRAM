@@ -215,22 +215,22 @@ plot_vi_str_cloud <- function(
   if (plot_density == "colors") {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x = VI, y = STR, color = Density),
-                 size = 0.2) +
+                 size = 0.2, alpha = 0.1) +
       scale_color_continuous(type = "viridis",
-                             direction = -1, alpha = 0.1) +
+                             direction = -1) +
       theme(legend.position = "none")
   } else if (plot_density == "contours") {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR), color = "green",
                  alpha = 0.1, size = 0.2) +
       geom_density2d(aes(x=VI, y=STR), color = "darkgrey")
-  } else {
+  } else { # No point density enhancement
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR), color = "green",
                  alpha = 0.1, size = 0.2)
   }
   pl <-  pl + lims(y=c(y_min, y_max), x=c(x_min, x_max)) +
-    labs(x="Vegetation Index", y="SWIR Transformed") +
+    labs(x=getOption("optram.veg_index"), y="SWIR Transformed") +
     # Dry edge
     geom_smooth(data = edges_df,
                 mapping = aes(x = VI, y = STR_dry_fit),
