@@ -251,7 +251,8 @@ plot_vi_str_cloud <- function(
     theme(axis.title = element_text(size = 14),
           axis.text = element_text(size = 12),
           plot.title = element_text(size = 18, face = "bold"),
-          plot.subtitle = element_text(size = 18))
+          plot.subtitle = element_text(size = 18),
+          legend.position = "none")
 
   if (edge_points) {
     pl <- pl + geom_point(aes(x=VI, y=STR_wet),
