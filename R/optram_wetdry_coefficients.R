@@ -212,21 +212,20 @@ plot_vi_str_cloud <- function(
   y_max <- str_q3 + stats::IQR(plot_df$STR, na.rm = TRUE) * 3
 
   # Start plot
-  pl <- ggplot2::ggplot(plot_df)
   if (plot_density == "colors") {
-    pl <- pl +
+    pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x = VI, y = STR, color = Density),
                  size = 0.2) +
       scale_color_continuous(type = "viridis",
                              direction = -1, alpha = 0.1) +
       theme(legend.position = "none")
   } else if (plot_density == "contours") {
-    pl <- pl +
+    pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR), color = "green",
                  alpha = 0.1, size = 0.2) +
       geom_density2d(aes(x=VI, y=STR), color = "darkgrey")
-  } else  {
-    pl <- pl +
+  } else {
+    pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR), color = "green",
                  alpha = 0.1, size = 0.2)
   }
@@ -263,9 +262,7 @@ plot_vi_str_cloud <- function(
                       color = "black", size=1.5, shape=6,
                       data = edges_df)
   }
-  if (plot_density == "colors") {
 
-  }
   plot_path <- file.path(output_dir,
                          paste0("trapezoid_",
                                 aoi_name, "_",
