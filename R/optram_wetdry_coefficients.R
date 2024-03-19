@@ -218,7 +218,8 @@ plot_vi_str_cloud <- function(
       geom_point(aes(x = VI, y = STR, color = Density),
                  size = 0.2) +
       scale_color_continuous(type = "viridis",
-                             direction = -1, alpha = 0.1)
+                             direction = -1, alpha = 0.1) +
+      theme(legend.position = "none")
   } else if (plot_density == "contours") {
     pl <- pl +
       geom_point(aes(x=VI, y=STR), color = "green",
@@ -248,11 +249,11 @@ plot_vi_str_cloud <- function(
             subtitle = paste(trapezoid_method, "fit"))
     # Set theme
     theme_bw() +
-    theme(axis.title = element_text(size = 14),
-          axis.text = element_text(size = 12),
-          plot.title = element_text(size = 18, face = "bold"),
-          plot.subtitle = element_text(size = 18),
-          legend.position = "none")
+    theme(legend.position = "none",
+      axis.title = element_text(size = 14),
+      axis.text = element_text(size = 12),
+      plot.title = element_text(size = 18, face = "bold"),
+      plot.subtitle = element_text(size = 18))
 
   if (edge_points) {
     pl <- pl + geom_point(aes(x=VI, y=STR_wet),
