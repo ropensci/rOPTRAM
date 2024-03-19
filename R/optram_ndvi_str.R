@@ -123,7 +123,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     return(dens$z[ii])
   }
   full_df$Density <- get_density(full_df$VI, full_df$STR, n = 128)
-  full_df$Density <- log(full_df$Density)
+  #full_df$Density <- log(full_df$Density)
 
   df_file <- file.path(output_dir, "VI_STR_data.rds")
   saveRDS(full_df, df_file)
