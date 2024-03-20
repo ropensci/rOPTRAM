@@ -43,9 +43,17 @@ test_that("Polynomial trapezoid method returns data.frame of length 6", {
   expect_equal(length(coeffs), 6)
 })
 
-test_that("Plot with edge points", {
+test_that("Plot with edge points and density coloring", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds", package = "rOPTRAM"))
   aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
+  res <- optram_wetdry_coefficients(full_df, aoi_file)
+  expect_true(inherits(res, "data.frame"))
+  expect_equal(ncol(res), 2)
+  optram_options("plot_density", "colors")
+  res <- optram_wetdry_coefficients(full_df, aoi_file)
+  expect_true(inherits(res, "data.frame"))
+  expect_equal(ncol(res), 2)
+  optram_options("plot_density", "contours")
   res <- optram_wetdry_coefficients(full_df, aoi_file)
   expect_true(inherits(res, "data.frame"))
   expect_equal(ncol(res), 2)

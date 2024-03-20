@@ -6,6 +6,10 @@ test_that("Check that calculate_vi returns SpatRaster", {
     expect_s4_class(calculate_vi(img_stk), "SpatRaster")
     optram_options("veg_index", "NDVI")
     expect_s4_class(calculate_vi(img_stk), "SpatRaster")
+    optram_options("veg_index", "MSAVI")
+    expect_s4_class(calculate_vi(img_stk), "SpatRaster")
+    optram_options("veg_index", "CI")
+    expect_s4_class(calculate_vi(img_stk), "SpatRaster")
 })
 
 test_that("Check that calculate_vi returns NULL for non-existant VI", {
@@ -107,4 +111,24 @@ test_that("CDSE credentials can be stored from environment variables", {
 
 test_that("Missing CDSE credentials cannot be stored", {
   expect_null(store_cdse_credentials(clientid = 'xyz', secret = ''))
+})
+
+test_that("Check for valid optram options", {
+  expect_null(optram_options())
+  expect_message(optram_options("veg_index", "XXX", show_opts = FALSE),
+                 "Incorrect value:")
+  expect_message(optram_options("trapezoid_method", "EXP", show_opts = FALSE),
+                 "Incorrect value:")
+  expect_message(optram_options("vi_step", "0.01", show_opts = FALSE),
+                 "Incorrect value:")
+  expect_message(optram_options("SWIR_band", 13, show_opts = FALSE),
+                 "Incorrect value:")
+  expect_message(optram_options("max_tbl_size", 1e2, show_opts = FALSE),
+                 "Incorrect value:")
+  expect_message(optram_options("plot_density", TRUE, show_opts = FALSE),
+                 "Incorrect value:")
+  expect_message(optram_options("remote", "CDSE", show_opts = FALSE),
+                 "Incorrect value:")
+  expect_message(optram_options("use_scihub", TRUE, show_opts = FALSE),
+                 "Unknown option name:")
 })

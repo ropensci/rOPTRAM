@@ -6,6 +6,7 @@
 #' @param opt_name, string, one of the package options.
 #' Default NULL
 #' @param opt_value, string, numeric, or boolean, depending on opt_name.
+#' @param show_opts, boolean, default TRUE, prints a list of all optram options
 #' Default NULL
 #' @return NULL
 #' @export
@@ -39,7 +40,8 @@
 #'  |edge_points        | TRUE         | FALSE, whether to add
 #'                                     | the trapezoid edge points to the plot
 #'
-optram_options <- function(opt_name = NULL, opt_value=NULL) {
+optram_options <- function(opt_name = NULL, opt_value=NULL,
+                           show_opts = TRUE) {
   # Internal functions
   display_optram_options <- function() {
     opts <- options()
@@ -110,7 +112,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL) {
                   add_new_option(opt_name, opt_value),
                   paste("Incorrect value:", opt_value, "for", opt_name))
     message("\n", msg, "\n")
-    display_optram_options()
+  if (show_opts) display_optram_options()
   } else {
     message("\nUnknown option name: ", opt_name)
   }
@@ -255,10 +257,6 @@ calculate_vi <- function(img_stk,
     } else if (viname == "BSCI") {
         vi_rast <- ((1-(2*(red - green))) /
             (terra::mean(green, red, nir, na.rm = TRUE)))
-    } else {
-        message("Unrecognized index: ", viname)
-        vi_rast <- NULL
-        return(NULL)
     }
     names(vi_rast) <- "VI"
     return(vi_rast)
@@ -375,7 +373,6 @@ store_cdse_credentials <- function (clientid = NULL,
   }
   if (!dir.exists(creds_path)) dir.create(creds_path)
   creds_file <- file.path(creds_path, "cdse_credentials.json")
-
   if (!is.null(clientid) & !is.null(secret)) {
     store_creds(clientid, secret, creds_file)
   } else {

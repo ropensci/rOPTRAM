@@ -4,13 +4,15 @@
 \alias{optram_options}
 \title{Display or Set Package Options}
 \usage{
-optram_options(opt_name = NULL, opt_value = NULL)
+optram_options(opt_name = NULL, opt_value = NULL, show_opts = TRUE)
 }
 \arguments{
 \item{opt_name, }{string, one of the package options.
 Default NULL}
 
-\item{opt_value, }{string, numeric, or boolean, depending on opt_name.
+\item{opt_value, }{string, numeric, or boolean, depending on opt_name.}
+
+\item{show_opts, }{boolean, default TRUE, prints a list of all optram options
 Default NULL}
 }
 \description{
