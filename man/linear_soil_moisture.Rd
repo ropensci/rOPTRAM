@@ -9,9 +9,9 @@ linear_soil_moisture(coeffs, VI, STR)
 \arguments{
 \item{coeffs, }{list, 4 trapezoid coefficients}
 
-\item{VI, }{terra rast, the vegetation index raster}
+\item{VI, }{SpatRaster, the vegetation index raster}
 
-\item{STR, }{terra rast, the STR raster}
+\item{STR, }{SpatRaster, the STR raster}
 }
 \value{
 rast, soil moisture grid

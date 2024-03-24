@@ -22,6 +22,7 @@
 #' coeffs
 #' }
 linear_coefficients <- function(df, output_dir) {
+  # Force intercept at zero
   wet_fit <- stats::lm(STR_wet ~ VI - 1, data = df)
   dry_fit <- stats::lm(STR_dry ~ VI - 1, data = df)
   #i_wet <- wet_fit$coefficients['(Intercept)']
@@ -170,8 +171,8 @@ polynomial_coefficients <- function(df, output_dir) {
 #' @description Prepare soil moisture grid from STR and VI images
 #'              for a single date, using linear trapezoid method, and
 #'              using the derived slope and intercept coefficients
-#' @param VI, terra rast, the vegetation index raster
-#' @param STR, terra rast, the STR raster
+#' @param VI, SpatRaster, the vegetation index raster
+#' @param STR, SpatRaster, the STR raster
 #' @param coeffs, list, 4 trapezoid coefficients
 #' @return rast, soil moisture grid
 #' @examples
