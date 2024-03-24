@@ -22,8 +22,8 @@
 #' coeffs
 #' }
 linear_coefficients <- function(df, output_dir) {
-  wet_fit <- stats::lm(STR_wet ~ VI, data = df)
-  dry_fit <- stats::lm(STR_dry ~ VI, data = df)
+  wet_fit <- stats::lm(STR_wet ~ VI - 1, data = df)
+  dry_fit <- stats::lm(STR_dry ~ VI - 1, data = df)
   i_wet <- wet_fit$coefficients[[1]]
   s_wet <- wet_fit$coefficients[[2]]
   i_dry <- dry_fit$coefficients[[1]]
