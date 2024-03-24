@@ -41,8 +41,8 @@ This function is used after preparing the OPTRAM model coefficients with:
 will be referenced in the \code{img_date} parameter.
 The resulting soil moisture raster is saved to \code{output_dir}.
 
-Three trapezoid models are offered through the trapezoid_method parameter:
-either "linear", "exponential", or "polynomial".
+Three trapezoid models are offered through the trapezoid_method option:
+either "linear", "exponential", or "polynomial". (set using \code{optram_options()})
 The \code{data_dir} parameter is a directory name.
 The coefficients CSV file that matches \code{trapezoid_method}
 should be in that directory
