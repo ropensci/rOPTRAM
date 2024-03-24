@@ -10,7 +10,7 @@
 #'  (the `output_dir` parameter in `optram_wetdry_coefficients()` function)
 #' @param output_dir, string, full path to output directory
 #'  for saving soil moisture raster
-#' @return list, name of the soil moisture file(s) saved in output_dir
+#' @return SpatRaster, raster of soil moisture, file(s) saved in output_dir
 #' @note
 #' This function is used after preparing the OPTRAM model coefficients with:
 #'  `optram_wetdry_coefficients()`. Typically a new image date,
@@ -120,5 +120,9 @@ optram_calculate_soil_moisture <- function(
     terra::writeRaster(W, outfile, NAflag=-9999.0, overwrite=TRUE)
     sm_files[[length(sm_files)+1]] <- outfile
   }
-  return(sm_files)
+  if (length(sm_files) > 1) {
+    message("Multiple tiles created: \n",
+            sm_files)
+  }
+  return(W)
 }
