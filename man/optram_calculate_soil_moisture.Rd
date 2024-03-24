@@ -27,7 +27,7 @@ formatted as "YYYY-MM-DD"}
 for saving soil moisture raster}
 }
 \value{
-rast, soil moisture grid
+list, name of the soil moisture file(s) saved in output_dir
 }
 \description{
 Prepare soil moisture grid from STR and VI images

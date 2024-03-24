@@ -10,7 +10,7 @@
 #'  (the `output_dir` parameter in `optram_wetdry_coefficients()` function)
 #' @param output_dir, string, full path to output directory
 #'  for saving soil moisture raster
-#' @return rast, soil moisture grid
+#' @return list, name of the soil moisture file(s) saved in output_dir
 #' @note
 #' This function is used after preparing the OPTRAM model coefficients with:
 #'  `optram_wetdry_coefficients()`. Typically a new image date,
@@ -50,7 +50,7 @@ optram_calculate_soil_moisture <- function(
   output_dir = tempdir()) {
 
   # Avoid "no visible binding for global variable" NOTE
-  VI_file <-  VI <- STR_file <- STR <- coeffs <- NULL
+  VI_files <-  VI <- STR_files <- STR <- coeffs <- NULL
   i_dry <- i_wet <- s_dry <- s_wet <- W <- outfile <-  NULL
 
   # Pre-flight checks...
@@ -65,14 +65,15 @@ optram_calculate_soil_moisture <- function(
     return(NULL)
   }
 
-  VI_file <- list.files(VI_dir,
+  # Possibly two files on same date (because of adjacent tiles)
+  VI_files <- list.files(VI_dir,
                         pattern = img_date, full.names = TRUE)
   if (length(VI_file) == 0) {
     message("No VI file, Exiting...")
     return(NULL)
   }
 
-  STR_file <- list.files(STR_dir,
+  STR_files <- list.files(STR_dir,
                         pattern = img_date, full.names = TRUE)
   if (length(STR_file) == 0) {
     message("No STR file, Exiting...")
@@ -95,23 +96,29 @@ optram_calculate_soil_moisture <- function(
   }
 
   # All OK, continue...
-  VI <- terra::rast(VI_file[1])
-  VI  <- VI / 10000
-  STR <- terra::rast(STR_file[1])
-  coeffs <- utils::read.csv(coeffs_file)
+  sm_files <- list()
+  for (i in 1:length(VI_files)) {
+    f <- VI_files[i]
+    date_tile <- unlist(strsplit(gsub(".tif", "", basename(f)), "_"))
+    Date <- as.Date(date_tile[1], format="%Y-%m-%d")
+    Tile <- date_tile[2]
+    VI <- terra::rast(f)
+    VI  <- VI / 10000
+    STR <- terra::rast(STR_files[i])
+    coeffs <- utils::read.csv(coeffs_file)
 
-  tryCatch(
-    expr = {trapezoid_method <- match.arg(trapezoid_method)},
-    error = function(e) { return(NULL) })
-  W <-  switch(trapezoid_method,
-            linear = linear_soil_moisture(coeffs, VI, STR),
-            exponential = exponential_soil_moisture(coeffs, VI, STR),
-            polynomial = polynomial_soil_moisture(coeffs, VI, STR))
-  if (is.null(W)) {
-    message("No soil moisture raster created. Exiting...")
-    return(NULL)
+    W <-  switch(trapezoid_method,
+              linear = linear_soil_moisture(coeffs, VI, STR),
+              exponential = exponential_soil_moisture(coeffs, VI, STR),
+              polynomial = polynomial_soil_moisture(coeffs, VI, STR))
+    if (is.null(W)) {
+      message("No soil moisture raster created. Exiting...")
+      return(NULL)
+    }
+    outfile <- file.path(output_dir, paste0("soil_moisture_",
+                                            Date, "_", Tile, ".tif"))
+    terra::writeRaster(W, outfile, NAflag=-9999.0, overwrite=TRUE)
+    sm_files[[length(sm_files)+1]] <- outfile
   }
-  outfile <- file.path(output_dir, paste0("soil_moisture_", img_date, ".tif"))
-  terra::writeRaster(W, outfile, NAflag=-9999.0, overwrite=TRUE)
-  return(W)
+  return(sm_files)
 }
