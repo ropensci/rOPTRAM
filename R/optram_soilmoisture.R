@@ -68,14 +68,14 @@ optram_calculate_soil_moisture <- function(
   # Possibly two files on same date (because of adjacent tiles)
   VI_files <- list.files(VI_dir,
                         pattern = img_date, full.names = TRUE)
-  if (length(VI_file) == 0) {
+  if (length(VI_files) == 0) {
     message("No VI file, Exiting...")
     return(NULL)
   }
 
   STR_files <- list.files(STR_dir,
                         pattern = img_date, full.names = TRUE)
-  if (length(STR_file) == 0) {
+  if (length(STR_files) == 0) {
     message("No STR file, Exiting...")
     return(NULL)
   }
