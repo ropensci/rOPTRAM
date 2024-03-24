@@ -255,14 +255,16 @@ exponential_soil_moisture <- function(coeffs, VI, STR) {
   i_wet <- coeffs$intercept_wet
   s_wet <- coeffs$slope_wet
   # Mask VI values below and above the d0 value
-  VI_lo <- terra::clamp(VI, upper = d0, values = FALSE)
-  VI_hi <- terra::clamp(VI, lower = d0, values = FALSE)
+  #VI_lo <- terra::clamp(VI, upper = d0, values = FALSE)
+  #VI_hi <- terra::clamp(VI, lower = d0, values = FALSE)
   #
-  W_hi <- (i_dry * exp(s_dry * VI_hi) - STR) /
-          (i_dry * exp(s_dry * VI_hi ) - i_wet * exp(s_wet * VI_hi))
-  W_lo <- (i_dry + s_dry * VI_lo - STR) /
-          (i_dry - i_wet +(s_dry - s_wet)* VI_lo)
-  W <- terra::merge(W_lo, W_hi)
+  #W_hi <- (i_dry * exp(s_dry * VI_hi) - STR) /
+  #        (i_dry * exp(s_dry * VI_hi ) - i_wet * exp(s_wet * VI_hi))
+  #W_lo <- (i_dry + s_dry * VI_lo - STR) /
+  #        (i_dry - i_wet +(s_dry - s_wet)* VI_lo)
+  #W <- terra::merge(W_lo, W_hi)
+  W <- (i_dry * exp(s_dry*VI) - STR) /
+    (i_dry * exp(s_dry*VI) - (i_wet * exp(s_wet*VI)))
   return(W)
 }
 
