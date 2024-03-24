@@ -84,8 +84,8 @@ optram_ndvi_str <- function(STR_list, VI_list,
     }
 
     # Also get the vegetation index raster for this date/tileid
-    date_str <- gsub("STR_", "", basename(f))
-    VI_f <- VI_list[grep(date_str, basename(VI_list))]
+    unique_str <- gsub("STR_", "", basename(f))
+    VI_f <- VI_list[grep(unique_str, basename(VI_list))]
     if (length(VI_f) == 0) { return(NULL) }
     else if (!file.exists(VI_f)) { return(NULL) }
 
@@ -106,8 +106,10 @@ optram_ndvi_str <- function(STR_list, VI_list,
     df_1 <- df_1[stats::complete.cases(df_1),]
     df_1 <- df_1[idx, ]
 
-    # Use date from file name, and add Date column
-    df_1['Date'] <- as.Date(date_str, format="%Y-%m-%d")
+    # Get date and tileid from file name, and add to data.frame
+    date_tile <- unlist(strsplit(gsub(".tif", "", unique_str), "_"))
+    df_1['Date'] <- as.Date(date_tile[1], format="%Y-%m-%d")
+    df_1['Tile'] <- date_tile[2]
     return(df_1)
   })
   full_df <- do.call(rbind, df_list)
