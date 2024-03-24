@@ -145,7 +145,7 @@ acquire_scihub <- function(
     result_list <- lapply(1:nrow(img_list), function(i){
       time_range <- as.character(img_list$acquisitionDate[i])
       # Get the tile id to use in raster name
-      tileid <- unlist(strsplit(img_list$sourceId[3], "_"))[6]
+      tileid <- unlist(strsplit(img_list$sourceId[i], "_"))[6]
       result_rast <- CDSE::GetArchiveImage(aoi = aoi,
                                      time_range = time_range,
                                      script = scrpt,
