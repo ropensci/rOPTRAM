@@ -142,8 +142,10 @@ acquire_scihub <- function(
 
   # Retrieve the images in BOA,STR and VI formats
   get_result_list <- function(scrpt, s_dir){
-    result_list <- lapply(img_list$acquisitionDate, function(d){
-      time_range <- as.character(d)
+    result_list <- lapply(1:nrow(img_list), function(i){
+      time_range <- as.character(img_list$acquisitionDate[i])
+      # Get the tile id to use in raster name
+      tileid <- unlist(strsplit(img_list$sourceId[3], "_"))[6]
       result_rast <- CDSE::GetArchiveImage(aoi = aoi,
                                      time_range = time_range,
                                      script = scrpt,
@@ -155,7 +157,7 @@ acquire_scihub <- function(
 
       raster_file <- file.path(s_dir,
                                paste0(basename(s_dir), "_",
-                                      as.character(time_range),
+                                      time_range, "_", tileid,
                                       ".tif"))
       terra::writeRaster(result_rast, raster_file, overwrite = TRUE)
       return(raster_file)
