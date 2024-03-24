@@ -104,7 +104,6 @@ optram_calculate_soil_moisture <- function(
     Date <- as.Date(date_tile[2], format="%Y-%m-%d")
     Tile <- date_tile[3]
     VI <- terra::rast(f)
-    VI  <- VI / 10000
     STR <- terra::rast(STR_files[i])
     coeffs <- utils::read.csv(coeffs_file)
 
