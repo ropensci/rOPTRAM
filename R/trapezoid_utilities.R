@@ -23,12 +23,12 @@
 #' }
 linear_coefficients <- function(df, output_dir) {
   # Force intercept at zero
-  wet_fit <- stats::lm(STR_wet ~ VI - 1, data = df)
-  dry_fit <- stats::lm(STR_dry ~ VI - 1, data = df)
-  #i_wet <- wet_fit$coefficients['(Intercept)']
-  i_wet <- i_dry <- 0
+  wet_fit <- stats::lm(STR_wet ~ VI, data = df)
+  dry_fit <- stats::lm(STR_dry ~ VI, data = df)
+  #i_wet <- i_dry <- 0
+  i_wet <- wet_fit$coefficients['(Intercept)']
   s_wet <- wet_fit$coefficients['VI']
-  #i_dry <- dry_fit$coefficients['(Intercept)']
+  i_dry <- dry_fit$coefficients['(Intercept)']
   s_dry <- dry_fit$coefficients['VI']
   coeffs <- data.frame("intercept_dry"=i_dry, "slope_dry"=s_dry,
                        "intercept_wet"=i_wet, "slope_wet"=s_wet)
