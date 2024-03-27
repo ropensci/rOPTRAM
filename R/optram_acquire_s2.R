@@ -102,7 +102,10 @@
 #' to_date <- "2019-04-30"
 #' aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 #' s2_file_list <- optram_acquire_s2(aoi,
-#'                                  from_date, to_date)
+#'                                  from_date, to_date,
+#'                                  remote = "scihub"
+#'                                  veg_index = "SAVI".
+#'                                  SWIR_band = 11)
 #' }
 
 optram_acquire_s2 <- function(
