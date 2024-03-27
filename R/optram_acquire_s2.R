@@ -110,7 +110,8 @@
 #' s2_file_list <- optram_acquire_s2(aoi,
 #'                                  from_date, to_date,
 #'                                  remote = "scihub"
-#'                                  veg_index = "SAVI")
+#'                                  veg_index = "SAVI".
+#'                                  SWIR_band = 11)
 #' }
 
 optram_acquire_s2 <- function(

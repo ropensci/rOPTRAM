@@ -60,14 +60,15 @@ check_date_string <- function(from_string, to_string) {
 #' check_swir_band(11)         # TRUE
 #' check_swir_band(10)         # FALSE
 #' check_swir_band(c(11, 12))  # FALSE
-check_swir_band <- function(SWIR_band) {
-  if (! is.numeric(SWIR_band)) {
-    message("SWIR band: ", SWIR_band, "
-            not correct. Please specify an integer")
+check_swir_band <- function(SWIR_band = c(11, 12)) {
+  if (length(SWIR_band) > 1 | missing(SWIR_band) | !is.numeric(SWIR_band)) {
+    message("SWIR band: ", SWIR_band, " not correct. Choose either 11, or 12")
     return(FALSE)
-  } else if (any(length(SWIR_band) > 1 | SWIR_band < 11 | SWIR_band > 12)) {
-    message("SWIR band: ", SWIR_band, "
-            not correct. Please specify either 11, or 12")
+  } else if (abs(SWIR_band - round(SWIR_band)) > .Machine$double.eps^0.5) {
+    message("SWIR band: ", SWIR_band, " not correct. Please specify an integer")
+    return(FALSE)
+  } else if (SWIR_band > 12 | SWIR_band < 11) {
+    message("SWIR band: ", SWIR_band, " not correct. Choose either 11, or 12")
     return(FALSE)
   }
   return(TRUE)
