@@ -18,7 +18,7 @@
 #'  SWIR is band 12 (2190 nm) or 11 (1610 nm)
 #' @export
 #' @examples
-#' BOA_dir <- system.file("extdata", "BOA")
+#' BOA_dir <- system.file("extdata", "BOA", package = "rOPTRAM")
 #' STR_dir = tempdir()
 #' STR <- optram_calculate_str(BOA_dir, STR_dir, SWIR_band=11)
 

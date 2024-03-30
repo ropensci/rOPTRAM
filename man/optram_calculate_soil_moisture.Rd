@@ -65,7 +65,7 @@ for "polynomial" it was saved as 'coefficients_poly.csv'
 }
 \examples{
 img_date <- "2023-03-11"
-VI_dir <- system.file("extdata", "SAVI", package = "rOPTRAM")
+VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
 STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 data_dir <- system.file("extdata")
 SM <- optram_calculate_soil_moisture(img_date,

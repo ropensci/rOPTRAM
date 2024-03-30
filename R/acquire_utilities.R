@@ -73,7 +73,8 @@
 #' to_date <- "2019-04-30"
 #' aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 #' acquire_scihub(aoi, from_date, to_date,
-#'                veg_index = "SAVI")
+#'                veg_index = "SAVI",
+#'                SWIR_band = 11)
 #' }
 
 acquire_scihub <- function(
