@@ -102,14 +102,15 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # Join two DF's
     df_1 <- dplyr::inner_join(VI_1_df, STR_1_df,
                               by = c("x", "y"), keep = FALSE)
-    # Remove NA and keep only sampled number of rows
-    df_1 <- df_1[stats::complete.cases(df_1),]
-    df_1 <- df_1[idx, ]
 
     # Get date and tileid from file name, and add to data.frame
     date_tile <- unlist(strsplit(gsub(".tif", "", unique_str), "_"))
     df_1['Date'] <- as.Date(date_tile[1], format="%Y-%m-%d")
     df_1['Tile'] <- date_tile[2]
+
+    # Remove NA and keep only sampled number of rows
+    df_1 <- df_1[stats::complete.cases(df_1),]
+    df_1 <- df_1[idx, ]
     return(df_1)
   })
   full_df <- do.call(rbind, df_list)
