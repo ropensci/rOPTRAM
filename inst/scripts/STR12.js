@@ -8,7 +8,6 @@ function setup() {
         output: { // this defines the output image type
             bands: 1,
             sampleType: "FLOAT32",
-            nodataValue: 0
         }
     };
 }
