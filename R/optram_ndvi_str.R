@@ -86,8 +86,9 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # Also get the vegetation index raster for this date/tileid
     unique_str <- gsub("STR_", "", basename(f))
     VI_f <- VI_list[grep(unique_str, basename(VI_list))]
-    if (length(VI_f) == 0) { return(NULL) }
-    else if (!file.exists(VI_f)) { return(NULL) }
+    if (length(VI_f) == 0) {
+      return(NULL)
+    } else if (!file.exists(VI_f)) { return(NULL) }
 
     VI <- terra::rast(VI_f)
     # Revert to original scale
@@ -99,18 +100,17 @@ optram_ndvi_str <- function(STR_list, VI_list,
       # Apply rm.low.vi parameter, set VI to NA when values <= 0.005
        VI_1_df$VI[VI_1_df$VI <= 0.005]  <- NA
     }
-    # Join two DF's
+    # Join two DF's and keep only sampled number of rows
     df_1 <- dplyr::inner_join(VI_1_df, STR_1_df,
                               by = c("x", "y"), keep = FALSE)
+    df_1 <- df_1[idx, ]
 
     # Get date and tileid from file name, and add to data.frame
     date_tile <- unlist(strsplit(gsub(".tif", "", unique_str), "_"))
     df_1['Date'] <- as.Date(date_tile[1], format="%Y-%m-%d")
     df_1['Tile'] <- date_tile[2]
-
-    # Remove NA and keep only sampled number of rows
+    # Remove NA
     df_1 <- df_1[stats::complete.cases(df_1),]
-    df_1 <- df_1[idx, ]
     return(df_1)
   })
   full_df <- do.call(rbind, df_list)
