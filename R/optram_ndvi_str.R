@@ -114,7 +114,8 @@ optram_ndvi_str <- function(STR_list, VI_list,
     return(df_1)
   })
   full_df <- do.call(rbind, df_list)
-  full_df <- full_df[stats::complete.cases(full_df),]
+  # Unnecessary to remove NA again
+  # full_df <- full_df[stats::complete.cases(full_df),]
 
   # Calculate point density and add Density column
   # (Using: https://slowkow.com/notes/ggplot2-color-by-density/ )
