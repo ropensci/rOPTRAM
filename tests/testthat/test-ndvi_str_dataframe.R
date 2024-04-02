@@ -29,11 +29,11 @@ test_that("Check that rm.low.vi and rm.hi.str works", {
                         full.names = TRUE)
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
                         full.names = TRUE)
-  optram_options("rm.low.vi", TRUE)
+  optram_options("rm.low.vi", TRUE, show_opts = FALSE)
   full_df <- optram_ndvi_str(STR_list, VI_list)
   min_ndvi <- min(full_df$VI, na.rm = TRUE)
   expect_gte(min_ndvi, 0)
-  optram_options("rm.hi.str", TRUE)
+  optram_options("rm.hi.str", TRUE, show_opts = FALSE)
   full_df <- optram_ndvi_str(STR_list, VI_list)
   max_str <- max(full_df$STR, na.rm = TRUE)
   expect_lte(max_str, 10)
@@ -45,7 +45,7 @@ test_that("Check that max_tbl_size works", {
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
                          full.names = TRUE)
   output_dir <- tempdir()
-  optram_options("max_tbl_size", 1e3)
-  full_df <- optram_ndvi_str(STR_list, VI_list, output_dir= output_dir)
+  optram_options("max_tbl_size", 1e3, show_opts = FALSE)
+  full_df <- optram_ndvi_str(STR_list, VI_list, output_dir = output_dir)
   expect_lte(nrow(full_df), getOption("optram.max_tbl_size"))
 })

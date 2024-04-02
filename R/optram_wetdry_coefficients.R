@@ -90,31 +90,37 @@ optram_wetdry_coefficients <- function(
   get_edges <- function(VI_series, full_df) {
 	  # Internal function to extract edges points
 	  # along both wet and dry trapezoid edges
+    # Returns data frame of edge points with VI and STR values
 	  edges_list <- lapply(VI_series, function(i){
-		# Set NDVI value at midpoint of each interval
-		vi_val <- i + vi_step/2.0
-		# Subset the data.frame to include only NDVI values between i and i+vi_step
-		interval_df <-  full_df[full_df$VI>=i & full_df$VI < (i+vi_step),]
-		# if too few data points in this interval, skip it, just return NULL
-		if (nrow(interval_df) < 20) {
-		  return(NA)
-		}	
-		# Remove outliers
-		quartiles <- stats::quantile(interval_df$STR, c(0.25, 0.75)) 
-		iqr <- stats::IQR(interval_df$STR) / 1.349
-		upper_bound <- quartiles[[2]] + iqr*1.5
-		lower_bound <- quartiles[[1]] - iqr*1.5
-		interval_df <- interval_df[interval_df$STR < upper_bound &
-								   interval_df$STR > lower_bound,]
-		# Now find the lower 5% and upper 95% quantile of STR values
-		# Use these values as min/max values for dry/wet edge points
-		Qs <- stats::quantile(interval_df$STR, c(0.05, 0.95), na.rm=TRUE)
-		str_max <- Qs[[2]]
-		str_min <- Qs[[1]]
-		edges_df1 <- data.frame("VI" = vi_val,
-								"STR_wet" = str_max,
-								"STR_dry" = str_min)
-		return(edges_df1)
+  		# Set NDVI value at midpoint of each interval
+  		vi_val <- i + vi_step/2.0
+  		# Subset the data.frame to include only NDVI values between i and i+vi_step
+  		interval_df <-  full_df[full_df$VI>=i & full_df$VI < (i+vi_step),]
+  		# if too few data points in this interval, skip it, just return NULL
+  		# Reasoning for cutoff of 20:
+  		# a minimum area of 100x100 m (1 Ha) is covered by 100 Sentinel pixels.
+  		# With a minimum time series of 20 images, there will be 2000 data points
+  		# With vi_step = 0.02, then ~ 50 steps,
+  		# so most intervals will have > 40 data points.
+  		if (nrow(interval_df) < 20) {
+  		  return(NA)
+  		}
+  		# Remove outliers, using IQR*1.5 rule
+  		quartiles <- stats::quantile(interval_df$STR, c(0.25, 0.75))
+  		iqr <- stats::IQR(interval_df$STR) / 1.349
+  		upper_bound <- quartiles[[2]] + iqr*1.5
+  		lower_bound <- quartiles[[1]] - iqr*1.5
+  		interval_df <- interval_df[interval_df$STR < upper_bound &
+  								   interval_df$STR > lower_bound,]
+  		# Now find the lower 5% and upper 95% quantile of STR values
+  		# Use these values as min/max values for dry/wet edge points
+  		Qs <- stats::quantile(interval_df$STR, c(0.05, 0.95), na.rm=TRUE)
+  		str_max <- Qs[[2]]
+  		str_min <- Qs[[1]]
+  		edges_df1 <- data.frame("VI" = vi_val,
+  								"STR_wet" = str_max,
+  								"STR_dry" = str_min)
+  		return(edges_df1)
 	  })
   	# Bind all interval results into one DF
 	edges_list <- edges_list[ !is.na(edges_list) ]
