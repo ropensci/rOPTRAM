@@ -249,7 +249,7 @@ store_cdse_credentials <- function (clientid = NULL,
          "Windows" = file.path(Sys.getenv("LOCALAPPDATA"), "CDSE"),
          "Linux" = file.path(Sys.getenv("HOME"), ".CDSE"),
          "Darwin" = file.path(Sys.getenv("HOME"),
-                              "Library", "Preferences", "CDSE")
+                              "Library", "Preferences", ".CDSE")
          # If nothing matches, switch returns NULL
   )
   if (is.null(creds_path)) {
@@ -287,7 +287,7 @@ retrieve_cdse_credentials <- function() {
          "Windows" = {file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
          "Linux" = {file.path(Sys.getenv("HOME"), ".CDSE")},
          "Darwin" = {file.path(Sys.getenv("HOME"),
-                              "Library", "Preferences", "CDSE")}
+                              "Library", "Preferences", ".CDSE")}
   )
   if (is.null(creds_path)) {
     warning("Platform is not identified. No credentials are available")
