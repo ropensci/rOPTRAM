@@ -60,10 +60,19 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 
 The {rOPTRAM} package is controlled by several options, set automatically when the package first loads. These defaults can be viewed by running the function `optram_options()` without arguments:
 
-```{r options-1}
+```{r options}
 optram_options()
 ```
-Users can override any of the defaults by calling this function with alternative values for the options. For example, three trapezoid fitting functions are implemented in {rOPTRAM}. The default is "linear", which can be changed as follows:
+
+Users can override any of the defaults by calling this function with alternative values for the options. For example, Sentinel images are downloaded, by default for all available image dates between the specified `from_date` and `to_date`. Users can, instead, choose to download images only for a specific season as follows:
+
+```{r options-1}
+optram_options("period", "seasonal")
+```
+Now, only images between the day/month of `from_date` and day/month of `to_date` will be acquired, but for all years in the date range.
+
+
+Three trapezoid fitting functions are implemented in {rOPTRAM}. The default is "linear", but users can change as follows:
 
 ```{r options-2}
 optram_options("trapezoid_method", "polynomial")

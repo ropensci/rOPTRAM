@@ -29,6 +29,7 @@
 #'  |:------------------|:-------------|:----------------
 #'  |veg_index          | "NDVI"       | "SAVI", "MSAVI"
 #'  |remote             | "scihub"     | "openeo"
+#'  |period             | "full"       | "seasonal"
 #'  |vi_step            | 0.005        | usually between 0.01 and 0.001
 #'  |trapezoid_method   | "linear"     | "polynomial" or "exponential"
 #'  |SWIR_band          | 11           | 12
@@ -69,7 +70,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
   }
 
   # Reset option
-  opt_names <- c("veg_index","remote","vi_step", "trapezoid_method",
+  opt_names <- c("veg_index","remote", "period", "vi_step", "trapezoid_method",
                  "SWIR_band", "max_tbl_size", "rm.low.vi", "rm.hi.str",
                  "plot_density", "edge_points")
   if (opt_name %in% opt_names) {
@@ -79,6 +80,9 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
                 return(opt_value %in% c("NDVI", "SAVI", "MSAVI"))},
               "remote" = function(opt_value) {
                 return(opt_value %in% c("scihub", "openeo"))
+              },
+              "period" = function(opt_value) {
+                return(opt_value %in% c("full", "seasonal"))
               },
               "vi_step" = function(opt_value) {
                 return(is.numeric(opt_value) & opt_value <= 0.02)

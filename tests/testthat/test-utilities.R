@@ -119,6 +119,8 @@ test_that("Check for valid optram options", {
                  "Incorrect value:")
   expect_message(optram_options("trapezoid_method", "EXP", show_opts = FALSE),
                  "Incorrect value:")
+  expect_message(optram_options("period", "season", show_opts = FALSE),
+                 "Incorrect value:")
   expect_message(optram_options("vi_step", "0.01", show_opts = FALSE),
                  "Incorrect value:")
   expect_message(optram_options("SWIR_band", 13, show_opts = FALSE),

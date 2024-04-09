@@ -26,6 +26,12 @@
 #' Sentinel downloaded products are saved to S2_output_dir.
 #' Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
 #'
+#' Products can be downloaded covering two "period" options:
+#' either "full" - all available images from `from_date` to `to_date` or
+#' "seasonal" - available images for all years but only for the months between
+#' day/month of `from_date` to the day/month of `to_date`.
+#' Use `optram_options()` to set this option.
+#'
 #' Three trapezoid fitting methods are implemented: "linear",
 #'  "exponential" and "polynomial". See the `optram_options()` function for details
 #'

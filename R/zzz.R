@@ -12,6 +12,7 @@
   optram_pkg_opts <- list(
     optram.veg_index = "NDVI",  # or "SAVI"
     optram.remote = "scihub",   # or "openeo
+    optram.period = "full",     # or "seasonal"
     optram.vi_step = 0.005,     # values between 0.01 and 0.001
     optram.trapezoid_method = "linear", # "exponential", or "polynomial"
     optram.SWIR_band = 11,      # or 12

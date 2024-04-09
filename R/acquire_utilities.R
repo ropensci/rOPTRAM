@@ -140,6 +140,13 @@ acquire_scihub <- function(
   # filter out cloud cover
   img_list <- img_list[img_list$tileCloudCover < max_cloud,]
 
+  # If option "period" is set to "seasonal" apply SeasonFilter
+  if (getOption("optram.period") == "seasonal") {
+    img_list <- CDSE::SeasonalFilter(catalog = img_list,
+                                     from = from_date,
+                                     to = to_date)
+  }
+
   # Retrieve the images in BOA,STR and VI formats
   get_result_list <- function(scrpt, s_dir){
     result_list <- lapply(1:nrow(img_list), function(i){
@@ -205,7 +212,7 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
   }
 
   # If clientid or secret is null, look for cdse_credentials file
-  if (is.null(clientid) || is.null(secret)) {
+  if (is.null(clientid) | is.null(secret)) {
     creds <- retrieve_cdse_credentials()
     if (is.null(creds)) {
       message("No CDSE credentials found. Exiting...")
