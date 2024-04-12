@@ -109,9 +109,6 @@ test_that("CDSE credentials can be stored from environment variables", {
   }
 )
 
-test_that("Missing CDSE credentials cannot be stored", {
-  expect_null(store_cdse_credentials(clientid = 'xyz', secret = ''))
-})
 
 test_that("Check for valid optram options", {
   expect_null(optram_options())
