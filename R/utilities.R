@@ -236,8 +236,7 @@ aoi_to_name <- function(aoi_file) {
 #' as function arguments) they will be used to store credentials.
 #' @export
 #' @examples
-#' \dontrun {
-#' # Do NOT use the ficticious values below.
+#' \dontrun{
 #' store_cdse_credentials(clientid="sh-abcdefgh-i012-j345-k678-9012345abc",
 #'                       secret = "AbCdEfGhIjKlMnOpQrStUv0123456789")
 #' }
