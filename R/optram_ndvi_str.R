@@ -92,7 +92,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     date_str <- unlist(strsplit(bn, split = "_", fixed = TRUE))[2]
     VI_f <- VI_list[grep(date_str, basename(VI_list))]
     if (length(VI_f) == 0) { return(NULL) }
-    else if (!file.exists(VI_f)) { return(NULL) }
+    else if (all(!file.exists(VI_f))) { return(NULL) }
 
     VI <- terra::rast(VI_f)
     # Revert to original scale

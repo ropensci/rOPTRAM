@@ -77,36 +77,27 @@ coeffs <- optram(aoi_file,
                  trapezoid_method = "linear",
                  SWIR_band = 11)
 #> Reading layer `High' from data source 
-#>   `/home/micha/work/dev/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
+#>   `/home/micha/work/BIDR/Colleagues/Ron/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
 #> Simple feature collection with 1 feature and 1 field
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
 #> Bounding box:  xmin: 193120.5 ymin: 613272.1 xmax: 194476.3 ymax: 614546.5
 #> Projected CRS: Israel 1993 / Israeli TM Grid
-#> [1] "RMSE for fitted trapezoid:"
-#>    RMSE.wet  RMSE.dry
-#> 1 0.2589246 0.1288553
+#> Error in if (!file.exists(VI_f)) {: the condition has length > 1
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
+#> Error in knitr::kable(coeffs, caption = "Trapezoid coefficients"): object 'coeffs' not found
 ```
-
-
-
-Table: Trapezoid coefficients
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2589246| 0.1288553|
-
-
 ### Show trapezoid plot
 
 
 ```r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
+#> Error in file(file, "rt"): cannot open the connection
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
+#> Error in gzfile(file, "rb"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-#> Error in paste("Trapezoid Plot - ", aoi_name): object 'ttl' not found
+#> NULL
 knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 #> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_linear.png"
 ```
@@ -132,7 +123,7 @@ s2_file_list <- optram_acquire_s2(aoi_file,
                             remote = "scihub",
                             SWIR_band = 11)
 #> Reading layer `High' from data source 
-#>   `/home/micha/work/dev/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
+#>   `/home/micha/work/BIDR/Colleagues/Ron/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
 #> Simple feature collection with 1 feature and 1 field
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
@@ -158,8 +149,6 @@ Table: RMSE of fitted trapezoid edges
 |  RMSE.wet|  RMSE.dry|
 |---------:|---------:|
 | 0.2589246| 0.1288553|
-
-
 
 
 

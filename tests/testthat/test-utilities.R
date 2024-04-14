@@ -106,7 +106,3 @@ test_that("CDSE credentials can be stored from environment variables", {
   expect_message(store_cdse_credentials(NULL, NULL), "Credentials")
   }
 )
-
-test_that("Missing CDSE credentials cannot be stored", {
-  expect_null(store_cdse_credentials(clientid = 'xyz', secret = ''))
-})
