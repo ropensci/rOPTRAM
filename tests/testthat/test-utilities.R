@@ -109,7 +109,6 @@ test_that("CDSE credentials can be stored from environment variables", {
   }
 )
 
-
 test_that("Check for valid optram options", {
   expect_null(optram_options())
   expect_message(optram_options("veg_index", "XXX", show_opts = FALSE),
@@ -131,3 +130,4 @@ test_that("Check for valid optram options", {
   expect_message(optram_options("use_scihub", TRUE, show_opts = FALSE),
                  "Unknown option name:")
 })
+

@@ -129,15 +129,19 @@ coeffs <- optram(aoi_file,
                  S2_output_dir = output_dir,
                  data_output_dir = output_dir)
 #> Reading layer `High' from data source 
-#>   `/home/micha/work/dev/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
+#>   `/home/micha/work/BIDR/Colleagues/Ron/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
 #> Simple feature collection with 1 feature and 1 field
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
 #> Bounding box:  xmin: 193120.5 ymin: 613272.1 xmax: 194476.3 ymax: 614546.5
 #> Projected CRS: Israel 1993 / Israeli TM Grid
+<<<<<<< HEAD
 #> Error in `httr2::oauth_flow_client_credentials()`:
 #> ! OAuth failure [invalid_client]
 #> • Invalid client or Invalid client credentials
+=======
+#> Error in if (!file.exists(VI_f)) {: the condition has length > 1
+>>>>>>> main
 knitr::kable(coeffs, caption = "Trapezoid coefficients")
 #> Error in knitr::kable(coeffs, caption = "Trapezoid coefficients"): object 'coeffs' not found
 ```
@@ -151,7 +155,11 @@ df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
 #> Error in gzfile(file, "rb"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
+<<<<<<< HEAD
 #> Error in "STR" %in% names(full_df): object 'full_df' not found
+=======
+#> NULL
+>>>>>>> main
 knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 #> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_linear.png"
 ```
@@ -174,7 +182,7 @@ s2_file_list <- optram_acquire_s2(aoi_file,
                             from_date, to_date,
                             output_dir = output_dir)
 #> Reading layer `High' from data source 
-#>   `/home/micha/work/dev/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
+#>   `/home/micha/work/BIDR/Colleagues/Ron/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
 #> Simple feature collection with 1 feature and 1 field
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
@@ -200,6 +208,18 @@ knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
 ```
 
 
+<<<<<<< HEAD
+=======
+
+Table: RMSE of fitted trapezoid edges
+
+|  RMSE.wet|  RMSE.dry|
+|---------:|---------:|
+| 0.2589246| 0.1288553|
+
+
+
+>>>>>>> main
 ## Soil Moisture Estimate
 
 ### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid

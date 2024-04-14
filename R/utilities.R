@@ -199,8 +199,6 @@ check_swir_band <- function(SWIR_band = c(11, 12)) {
   return(TRUE)
 }
 
-
-
 #' @title Calculate Vegetation Index from Bottom of Atmosphere Image Bands
 #' @description
 #' Use this function to prepare vegetation index from SAFE imagery
@@ -357,6 +355,11 @@ aoi_to_name <- function(aoi_file) {
 #' If these env variables are available (and no values are entered
 #' as function arguments) they will be used to store credentials.
 #' @export
+#' @examples
+#' \dontrun{
+#' store_cdse_credentials(clientid="sh-abcdefgh-i012-j345-k678-9012345abc",
+#'                       secret = "AbCdEfGhIjKlMnOpQrStUv0123456789")
+#' }
 
 store_cdse_credentials <- function (clientid = NULL,
                                     secret = NULL) {

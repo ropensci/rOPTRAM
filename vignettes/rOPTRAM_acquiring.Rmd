@@ -65,11 +65,37 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 
 ### Step 4: Saving Credentials:
 
--   Save your client ID and secret in a secure location.
--   At the first run, set `save_creds = TRUE` in the `acquire_scihub()` function to automatically save credentials. In future runs, credentials will automatically be read from the saved (json) file. Thus the user will not have to enter client ID and secret manually every time.
--   Alternatively, both the client ID and secret can be supplied as environment variables: `OAUTH_CLIENTID` and `OAUTH_SECRET`. If these environment variables are available (and no values are entered as function arguments), they will be used to store credentials. This approach allows for greater flexibility in managing credentials, particularly in environments where security or automation concerns may warrant the use of environment variables for configuration.
+-   **Save your client ID and secret in a secure location.**
+-   Then the easiest option to save your credentials is by using `store_cdse_credentials`. Simply call it with the appropriate client ID and secret as arguments. Alternatively, you can set environment variables `OAUTH_CLIENTID` and `OAUTH_SECRET`.
 
 ```{r prepare-save-1, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+# Example usage:
+store_cdse_credentials(clientid = "your_client_id", secret = "your_secret_key")
+
+# Alternatively, after setting your environment variables, you can use them like this:
+store_cdse_credentials(Sys.getenv("OAUTH_CLIENTID"), Sys.getenv("OAUTH_SECRET"))
+```
+
+Afterward, you can utilize either `optram_acquire_s2` or `acquire_scihub`
+
+```{r prepare-save-2, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+# For this example, outputs are saved to `tempdir()`
+from_date <- "2018-12-01"
+to_date <- "2019-04-30"
+# aoi <- "path/to/your/aoi_file.gpkg"
+# rOPTRAM_aoi_example
+aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+
+boa_files <- acquire_scihub(aoi,
+              from_date, to_date,
+              veg_index = "SAVI",
+              output_dir = tempdir(),
+              SWIR_band = 11)
+```
+
+Alternatively, you can use the `save_creds` option. At the first run, set `save_creds = TRUE` and enter your clientid and secret as variables in the `optram_acquire_s2` or `acquire_scihub` functions to automatically save credentials. From there, you can use those functions as shown above without needing to insert credentials again.
+
+```{r prepare-save-3, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
 # For this example, outputs are saved to `tempdir()`
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
@@ -89,9 +115,10 @@ boa_files <- acquire_scihub(aoi,
                )
 ```
 
+
 -   If you choose to use the env option, you can utilize either `optram_acquire_s2` or `acquire_scihub`. To enable the environment variable option, set `save_creds = TRUE` when calling either function. By doing so, you won't need to manually enter your Client ID and secret. Your code snippet might resemble the following:
 
-```{r prepare-save-2, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+```{r prepare-save-4, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 # aoi <- "path/to/your/aoi_file.gpkg"
@@ -106,12 +133,6 @@ boa_files <- acquire_scihub(aoi,
              )
 # It will trigger the store_cdse_credentials function from utilities.R, and your
 # credentials will be saved as a JSON file named cdse_credentials.json.
-# Manually storing credentials
-store_cdse_credentials(Sys.getenv("OAUTH_CLIENTID"), Sys.getenv("OAUTH_SECRET"))
-
-# This code retrieves environment variables and passes them to the 
-# store_cdse_credentials function, which then saves your credentials 
-# as a JSON file named cdse_credentials.json.
 ```
 
 ### Step 5: Acquire Sentinel-2 Imagery

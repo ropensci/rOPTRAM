@@ -132,7 +132,7 @@ function.
 Returns: the set of four (or six, in the case of polynomial curve)
 coefficients.
 
-#### optram_soil_moisture()
+#### optram_calculate_soil_moisture()
 
 Calculates soil moisture rasters for a time series of images, using the
 OPTRAM model coefficients from above procedure.

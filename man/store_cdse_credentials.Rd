@@ -24,3 +24,9 @@ environment variables: OAUTH_CLIENTID and OAUTH_SECRET.
 If these env variables are available (and no values are entered
 as function arguments) they will be used to store credentials.
 }
+\examples{
+\dontrun{
+store_cdse_credentials(clientid="sh-abcdefgh-i012-j345-k678-9012345abc",
+                      secret = "AbCdEfGhIjKlMnOpQrStUv0123456789")
+}
+}

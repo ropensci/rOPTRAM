@@ -146,7 +146,6 @@ rmse <- optram_wetdry_coefficients(full_df,
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
 ```
 
-
 ## Soil Moisture Estimate
 
 ### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid

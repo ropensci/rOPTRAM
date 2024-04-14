@@ -102,7 +102,13 @@ non-contiguous areas, but only one feature is permissible.
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+<<<<<<< HEAD
 optram_options("veg_index", "SAVI")
 acquire_scihub(aoi, from_date, to_date)
+=======
+acquire_scihub(aoi, from_date, to_date,
+               veg_index = "SAVI",
+               SWIR_band = 11)
+>>>>>>> main
 }
 }
