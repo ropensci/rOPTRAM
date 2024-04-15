@@ -20,7 +20,8 @@
     optram.rm.low.vi    = FALSE,
     optram.rm.hi.str    = FALSE,
     optram.plot_colors = "no",  # "colors"
-    optram.edge_points = TRUE    # whether to add edge points to the plot
+    optram.feature_col = "ID",  # Which column contains numeric ID's of features
+    optram.edge_points = TRUE   # whether to add edge points to the plot
   )
 
   op <- options()

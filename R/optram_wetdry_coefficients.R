@@ -205,6 +205,7 @@ plot_vi_str_cloud <- function(
   trapezoid_method <- getOption("optram.trapezoid_method")
   edge_points <- getOption("optram.edge_points")
   plot_colors <- getOption("optram.plot_colors")
+  feature_col <- getOption("optram.feature_col")
   # Prepare commom base plot
   # VI (x) axis limits
   x_min <- 0.0
@@ -232,10 +233,10 @@ plot_vi_str_cloud <- function(
       geom_point(aes(x=VI, y=STR), color = "green",
                  alpha = 0.1, size = 0.2) +
       geom_density2d(aes(x=VI, y=STR), color = "darkgrey")
-  } else if (plot_colors %in% c("features", "feature") &
-             ("ID" %in% names(plot_df))) {
+  } else if ( (plot_colors %in% c("features", "feature")) &
+              (feature_col %in% names(plot_df)) ) {
     pl <- ggplot2::ggplot(plot_df) +
-      geom_point(aes(x=VI, y=STR), color = ID,
+      geom_point(aes(x=VI, y=STR, color = .data[[feature_col]]),
                  alpha = 0.1, size = 0.2)
   } else {  # No plot_colors options fit, use default plot
       message("No ID column in data, reverting to default plot")

@@ -40,6 +40,8 @@
 #'  |                 |             | "features" = points colored by aoi features
 #'  |                 |             | "colors" = points colored by point density
 #'  |                 |             | "contours" = plots density contour lines
+#'  |feature_col      |"ID"         | string, name of *numeric* column
+#'  |                 |             | that contains feature ID's for coloring plot
 #'  |edge_points      | TRUE        | FALSE, whether to add
 #'                                  | the trapezoid edge points to the plot
 #'

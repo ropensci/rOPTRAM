@@ -89,11 +89,12 @@ optram_ndvi_str <- function(STR_list, VI_list,
 
     # In case coloring by features is requested, transform the AOI into raster
     # and get ID values to add to the VI_STR data.frame
-    if (optram_options("point_colors") %in% c("features", "feature") &
-        !is.null(aoi) &
-        ("ID" %in% names(aoi))) {
+    feature_col <- getOptions("optram.feature_col")
+    if ((getOptions("optram.plot_colors") %in% c("features", "feature")) &
+        (!is.null(aoi)) &
+        (feature_col %in% names(aoi))) {
       aoi_rast <- terra::rasterize(x = aoi, y = STR,
-                                   field = "ID", touches = TRUE)
+                                   field = feature_col, touches = TRUE)
       ID_df <- terra::as.data.frame(aoi_rast, xy = TRUE, na.rm = FALSE)
       names(ID_df) <- c("x", "y", "Feature_ID")
       STR_1_df <- dplyr::inner_join(STR_1_df, ID_df,

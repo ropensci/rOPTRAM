@@ -65,8 +65,6 @@ Both methods require [registering](https://dataspace.copernicus.eu/) on the Cope
 
 ## Available functions
 
-### Key functions
-
 #### optram_options()
 
 Several package options are defined, with default values, when {rOPTRAM} first loads. Each of these can be set individually to user chosen values. For example, the package uses a vegetation index (compared to SWIR Transformed Reflectance) values to plot the trapezoid. The default index is "NDVI". In a low vegetation, arid region, users can choose an alternative such as "SAVI" (see example below.)
@@ -107,11 +105,8 @@ Three possible fitting methods are offered in this function, thru the "trapezoid
 
 Returns: the set of four (or six, in the case of polynomial curve) coefficients.
 
-
 #### optram_calculate_soil_moisture()
 Calculates soil moisture rasters for a time series of images, using the OPTRAM model coefficients from above procedure.
-
-### Additional options
 
 #### optram_landsat()
 Prepares the OPTRAM coefficients from a time series of Landsat images, (instead of Sentinel). This function requires that the images are downloaded in advance.
@@ -128,7 +123,10 @@ In case Sentinel images have been downloaded in advance, this function prepares 
 First, a demonstration of choosing non-default package options.
 
 ```{r options}
-rOPTRAM::optram_options("veg_index", "SAVI")
+# Show default options
+rOPTRAM::optram_options()
+# Change one options
+rOPTRAM::optram_options("veg_index", "SAVI", show_opts = FALSE)
 ```
 
 Next a basic example which shows how to:
@@ -142,9 +140,9 @@ Next a basic example which shows how to:
 ```{r example, eval=FALSE}
 library(rOPTRAM)
 # basic example
-aoi_file <- system.file("extdata", "lachish.gpkg", package="rOPTRAM")
+aoi <- sf::st_read(system.file("extdata", "lachish.gpkg", package="rOPTRAM"))
 rmse <- rOPTRAM::optram(
-    aoi = aoi_file,
+    aoi = aoi,
     from_date = "2021-01-01", to_date = "2021-03-30",
     max_cloud = 10)
 print(rmse)

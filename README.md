@@ -69,8 +69,6 @@ the Copernicus DataSpace
 
 ## Available functions
 
-### Key functions
-
 #### optram_options()
 
 Several package options are defined, with default values, when {rOPTRAM}
@@ -137,8 +135,6 @@ coefficients.
 Calculates soil moisture rasters for a time series of images, using the
 OPTRAM model coefficients from above procedure.
 
-### Additional options
-
 #### optram_landsat()
 
 Prepares the OPTRAM coefficients from a time series of Landsat images,
@@ -159,19 +155,24 @@ Sentinel 2 images in the original SAFE file format.
 First, a demonstration of choosing non-default package options.
 
 ``` r
-rOPTRAM::optram_options("veg_index", "SAVI")
-#> 
-#> New option for veg_index applied.
+# Show default options
+rOPTRAM::optram_options()
 #> [1] "edge_points = TRUE"
 #> [1] "max_tbl_size = 1e+06"
-#> [1] "plot_density = no"
+#> [1] "period = full"
+#> [1] "plot_colors = no"
 #> [1] "remote = scihub"
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
 #> [1] "SWIR_band = 11"
 #> [1] "trapezoid_method = linear"
-#> [1] "veg_index = SAVI"
+#> [1] "veg_index = NDVI"
 #> [1] "vi_step = 0.005"
+#> NULL
+# Change one options
+rOPTRAM::optram_options("veg_index", "SAVI", show_opts = FALSE)
+#> 
+#> New option for veg_index applied.
 ```
 
 Next a basic example which shows how to:
@@ -186,9 +187,9 @@ Next a basic example which shows how to:
 ``` r
 library(rOPTRAM)
 # basic example
-aoi_file <- system.file("extdata", "lachish.gpkg", package="rOPTRAM")
+aoi <- sf::st_read(system.file("extdata", "lachish.gpkg", package="rOPTRAM"))
 rmse <- rOPTRAM::optram(
-    aoi = aoi_file,
+    aoi = aoi,
     from_date = "2021-01-01", to_date = "2021-03-30",
     max_cloud = 10)
 print(rmse)
