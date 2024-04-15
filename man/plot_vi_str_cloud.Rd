@@ -7,7 +7,6 @@
 plot_vi_str_cloud(
   full_df,
   edges_df,
-  output_dir = tempdir(),
   trapezoid_method = c("linear", "exponential", "polynomial"),
   edge_points = FALSE
 )

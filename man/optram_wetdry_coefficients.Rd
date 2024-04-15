@@ -8,8 +8,7 @@ optram_wetdry_coefficients(
   full_df,
   output_dir = tempdir(),
   vi_step = 0.005,
-  trapezoid_method = c("linear", "exponential", "polynomial"),
-  edge_points = FALSE
+  trapezoid_method = c("linear", "exponential", "polynomial")
 )
 }
 \arguments{

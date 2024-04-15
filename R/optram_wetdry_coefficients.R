@@ -47,8 +47,7 @@
 #'                  trapezoid_method = "linear")
 #' print(rmse_df)
 #' rmse_df <- optram_wetdry_coefficients(full_df,
-#'                   trapezoid_method = "polynomial",
-#'                   edge_points = TRUE)
+#'                   trapezoid_method = "polynomial")
 #' print(rmse_df)
 #'
 
