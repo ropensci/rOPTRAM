@@ -5,7 +5,7 @@
 \title{Prepare Sentinel Imagery for Soil Moisture Prediction Using OPTRAM.}
 \usage{
 optram(
-  aoi_file,
+  aoi,
   from_date,
   to_date,
   max_cloud = 15,
@@ -14,8 +14,7 @@ optram(
 )
 }
 \arguments{
-\item{aoi_file, }{string, full path to polygon spatial file
-of area of interest}
+\item{aoi, }{{sf} object, a POLYGON or MULTIPOLYGON, boundary of area of interest}
 
 \item{from_date, }{string, the start of the date range,
 Formatted as "YYYY-MM-DD"}
@@ -71,8 +70,9 @@ The \code{optram_options()} function also sets this option
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2020-04-30"
-aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-coeffs <- optram(aoi_file,
+aoi <- sf::st_read(system.file("extdata",
+                              "lachish.gpkg", package = "rOPTRAM"))
+rmse <- optram(aoi,
                  from_date, to_date,
                  veg_index = c("SAVI"))
 }

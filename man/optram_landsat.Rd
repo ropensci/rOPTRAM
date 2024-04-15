@@ -6,7 +6,7 @@
 \usage{
 optram_landsat(
   landsat_dir,
-  aoi_file,
+  aoi,
   LC_output_dir = tempdir(),
   data_output_dir = tempdir()
 )
@@ -16,7 +16,7 @@ optram_landsat(
 (unzipped) Landsat data in original landsat format,
 after atmospheric correction (L2A)}
 
-\item{aoi_file, }{string, path to boundary polygon spatial file
+\item{aoi, }{{sf} object, POLYGON or MULTIPOLYGON of AOI boundary
 of area of interest}
 
 \item{LC_output_dir, }{string, directory to save the derived products,
@@ -47,8 +47,10 @@ i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 }
 \examples{
 \dontrun{
-aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-optram_landsat(landsat_dir,  aoi_file,
+aoi <- sf::st_read(system.file("extdata",
+                              "lachish.gpkg", package = "rOPTRAM"))
+optram_landsat(landsat_dir,  aoi,
+               veg_index = 'SAVI',
                LC_output_dir = tempdir(), data_output_dir = tempdir())
 }
 }

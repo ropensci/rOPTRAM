@@ -4,34 +4,33 @@
 \alias{plot_vi_str_cloud}
 \title{Create Scatter Plot of STR-NDVI Data Points,}
 \usage{
-plot_vi_str_cloud(full_df, aoi_name, edges_df, output_dir = tempdir())
+plot_vi_str_cloud(full_df, edges_df, edge_points = FALSE)
 }
 \arguments{
 \item{full_df, }{data.frame of NDVI and STR pixel values}
 
-\item{aoi_name, }{string, used in plot title}
-
 \item{edges_df, }{data.frame, points along the wet/dry edges for trapezoid}
 
-\item{output_dir, }{string, directory to save plot png file.}
+\item{edge_points, }{boolean, whether to add to the plot the
+linear regression points that were used to derive coefficients.
+default FALSE}
 }
 \value{
-None
+ggplot object
 }
 \description{
 Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
 over scatterplot of multi-temporal STR and NDVI pixel values
 }
 \examples{
-aoi_name <- "Test"
+aoi_name <- "Soil Moisture AOI"
+optram_options("trapezoid_method", "polynomial")
 full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
         package = "rOPTRAM"))
 edges_df <- read.csv(system.file("extdata", "trapezoid_edges_lin.csv",
                         package = "rOPTRAM"))
-plot_vi_str_cloud(full_df, aoi_name, edges_df)
-edges_df <- read.csv(system.file("extdata", "trapezoid_edges_poly.csv",
-                        package = "rOPTRAM"))
-optram_options("trapezoid_method", "polynomial")
-plot_vi_str_cloud(full_df, aoi_name, edges_df)
+pl <- plot_vi_str_cloud(full_df, edges_df)
+pl + ggplot2::ggtitle(paste("Trapezoid plot for:", aoi_name))
+pl
 
 }

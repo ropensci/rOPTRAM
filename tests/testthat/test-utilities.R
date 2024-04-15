@@ -39,35 +39,11 @@ test_that("Check for invalid SWIR_band value", {
   expect_message(optram_options("SWIR_band", 10), "Incorrect")
 })
 
-test_that("Check if aoi_file is NULL", {
-    expect_false(check_aoi(aoi_file = ""))
-})
-
 test_that("Check for invalid SWIR band", {
   expect_false(check_swir_band(13))
   expect_false(check_swir_band("B12"))
 })
-test_that("Check if aoi_file is spatial", {
-    # Non spatial file
-    aoi_file <- system.file("extdata", "coefficients_lin.csv",
-                    package = "rOPTRAM")
-    expect_false(check_aoi(aoi_file))
-    # Non existing file
-    expect_false(check_aoi("blabla.txt"))
-    aoi_file <- system.file("extdata", "some_area.gpkg",
-                            package = "rOPTRAM")
-    expect_false(check_aoi(aoi_file))
-})
 
-test_that("Check for aoi_name NULL", {
-    expect_null(aoi_to_name(NULL))
-})
-
-test_that("Check aoi_to_name return value",{
-    # Test conversion of file name to aoi_name string
-    aoi_file <- system.file("extdata", "some_area.gpkg", package = "rOPTRAM")
-    expect_equal(aoi_to_name(aoi_file), "somearea")
-})
 
 test_that("Check format of from_date, to_date",{
   expect_false(check_date_string(2023-01-01, "2023-02-02"))

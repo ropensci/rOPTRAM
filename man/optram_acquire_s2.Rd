@@ -5,7 +5,7 @@
 \title{Acquire Sentinel 2 Images at a Given Location and Date Range}
 \usage{
 optram_acquire_s2(
-  aoi_file,
+  aoi,
   from_date,
   to_date,
   max_cloud = 10,
@@ -17,8 +17,7 @@ optram_acquire_s2(
 )
 }
 \arguments{
-\item{aoi_file, }{string, full path to polygon spatial file of
-boundary of area of interest}
+\item{aoi, }{{sf} POLYGON or MULTIPOLYGON, of boundary of area of interest}
 
 \item{from_date, }{string, represents start of date range,
 formatted as "YYYY-MM-DD"}
@@ -99,9 +98,7 @@ download is limited to 25 kilometers in both directions. Please be aware of
 this restriction when selecting your desired area for download.
 Area of Interest (AOI) Specification:
 When defining your Area of Interest (AOI), please ensure that it is
-represented as a polygonal layer with only one feature. This feature can
-either be a single POLYGON or a MULTIPOLYGON, which may consist of
-non-contiguous areas, but only one feature is permissible.
+represented as a POLYGON or MULTIPOLYGON layer.
 }
 
 "openeo",...
@@ -135,7 +132,8 @@ The parameter \code{SWIR_bands } allows to choose which band is used in this mod
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+aoi <- sf::st_read(system.file("extdata",
+                              "lachish.gpkg", package = 'rOPTRAM'))
 s2_file_list <- optram_acquire_s2(aoi,
                                  from_date, to_date,
                                  remote = "scihub"

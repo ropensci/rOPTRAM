@@ -2,11 +2,10 @@
 % Please edit documentation in R/acquire_utilities.R
 \name{acquire_scihub}
 \alias{acquire_scihub}
-\title{Utility Function to Acquire Sentinel-2 Imagery Using
-the \code{CDSE} Package}
+\title{Utility Function to Acquire Sentinel-2 Imagery Using \code{CDSE} Package}
 \usage{
 acquire_scihub(
-  aoi_file,
+  aoi,
   from_date,
   to_date,
   max_cloud = 10,
@@ -17,8 +16,7 @@ acquire_scihub(
 )
 }
 \arguments{
-\item{aoi_file, }{string, full path to polygon spatial file of
-boundary of area of interest}
+\item{aoi, }{{sf} object, POLYGON or MULTIPOLYGON of area of interest}
 
 \item{from_date, }{string, represents start of date range,
 formatted as "YYYY-MM-DD"}
@@ -101,14 +99,10 @@ non-contiguous areas, but only one feature is permissible.
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
-<<<<<<< HEAD
-optram_options("veg_index", "SAVI")
-acquire_scihub(aoi, from_date, to_date)
-=======
+aoi <- sf::st_read(system.file("extdata",
+                  "lachish.gpkg", package = 'rOPTRAM'))
 acquire_scihub(aoi, from_date, to_date,
                veg_index = "SAVI",
                SWIR_band = 11)
->>>>>>> main
 }
 }
