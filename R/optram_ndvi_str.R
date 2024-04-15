@@ -6,6 +6,9 @@
 #' @param STR_list, list of paths to STR raster files
 #' @param VI_list, list of paths to NDVI raster files
 #' @param output_dir, string, path to save data.frames (in RDS format)
+#' @param aoi, {sf} POLYGON or MULTIPOLYGON,
+#'  must have a numeric column named "ID" for coloring trapezoid points by features
+#'  Default NULL, (no coloring)
 #' @return full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
 #' @export
 #' @note
@@ -33,7 +36,8 @@
 #' str(full_df)
 
 optram_ndvi_str <- function(STR_list, VI_list,
-                            output_dir = tempdir()){
+                            output_dir = tempdir(),
+                            aoi = NULL){
 
   # Avoid "no visible binding for global variable" NOTE
   date_str <- STR <- STR_1_df <- STR_df_file <- VI_df_list <- VI_df_1 <- NULL
@@ -83,12 +87,26 @@ optram_ndvi_str <- function(STR_list, VI_list,
       STR_1_df$STR[STR_1_df$STR >= STR_IQR*1.5] <- NA
     }
 
+    # In case coloring by features is requested, transform the AOI into raster
+    # and get ID values to add to the VI_STR data.frame
+    if (!is.null(aoi) & ("ID" %in% names(aoi))) has_ID <- TRUE
+    if (optram_options("point_colors") %in% c("features", "feature") &
+        has_ID) {
+      aoi_rast <- terra::rasterize(x = aoi, y = STR,
+                                   field = "ID", touches = TRUE)
+      ID_df <- terra::as.data.frame(aoi_rast, xy = TRUE, na.rm = FALSE)
+      names(ID_df) <- c("x", "y", "Feature_ID")
+      STR_1_df <- dplyr::inner_join(STR_1_df, ID_df,
+                                    by = c("x", "y"), keep = FALSE)
+    }
+
     # Also get the vegetation index raster for this date/tileid
     unique_str <- gsub("STR_", "", basename(f))
     VI_f <- VI_list[grep(unique_str, basename(VI_list))]
     if (length(VI_f) == 0) {
       return(NULL)
-    } else if (all(!file.exists(VI_f))) { return(NULL) }
+    } else if (all(!file.exists(VI_f))) {
+      return(NULL)}
 
     VI <- terra::rast(VI_f)
     # Revert to original scale

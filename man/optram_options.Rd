@@ -36,13 +36,15 @@ a list of currently defined options is printed.
    max_tbl_size \tab 1e+6 \tab depends on computer resources \cr
    rm.low.vi \tab FALSE \tab TRUE \cr
    rm.hi.str \tab FALSE \tab TRUE \cr
-   plot_density \tab "no" \tab "colors" plots point density coloring \cr
-    \tab  \tab "contours" plots contour lines \cr
+   plot_colors \tab "no" \tab "no" = uniform green color for all points \cr
+    \tab  \tab "features" = points colored by aoi features \cr
+    \tab  \tab "colors" = points colored by point density \cr
+    \tab  \tab "contours" = plots density contour lines \cr
    edge_points \tab TRUE \tab FALSE, whether to add \cr
 }
 
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{                                | the trapezoid edge points to the plot
+\if{html}{\out{<div class="sourceCode">}}\preformatted{                             | the trapezoid edge points to the plot
 }\if{html}{\out{</div>}}
 }
 \examples{

@@ -25,21 +25,23 @@
 #'
 #' {rOPTRAM} defines the following options at startup
 #'
-#'  |opt_name           | opt_value    | other possible values
-#'  |:------------------|:-------------|:----------------
-#'  |veg_index          | "NDVI"       | "SAVI", "MSAVI"
-#'  |remote             | "scihub"     | "openeo"
-#'  |period             | "full"       | "seasonal"
-#'  |vi_step            | 0.005        | usually between 0.01 and 0.001
-#'  |trapezoid_method   | "linear"     | "polynomial" or "exponential"
-#'  |SWIR_band          | 11           | 12
-#'  |max_tbl_size       | 1e+6         | depends on computer resources
-#'  |rm.low.vi          | FALSE        | TRUE
-#'  |rm.hi.str          | FALSE        | TRUE
-#'  |plot_density       | "no"         | "colors" plots point density coloring
-#'  |                   |              | "contours" plots contour lines
-#'  |edge_points        | TRUE         | FALSE, whether to add
-#'                                     | the trapezoid edge points to the plot
+#'  |opt_name         | opt_value   | other possible values
+#'  |:----------------|:------------|:----------------
+#'  |veg_index        | "NDVI"      | "SAVI", "MSAVI"
+#'  |remote           | "scihub"    | "openeo"
+#'  |period           | "full"      | "seasonal"
+#'  |vi_step          | 0.005       | usually between 0.01 and 0.001
+#'  |trapezoid_method | "linear"    | "polynomial" or "exponential"
+#'  |SWIR_band        | 11          | 12
+#'  |max_tbl_size     | 1e+6        | depends on computer resources
+#'  |rm.low.vi        | FALSE       | TRUE
+#'  |rm.hi.str        | FALSE       | TRUE
+#'  |plot_colors      | "no"        | "no" = uniform green color for all points
+#'  |                 |             | "features" = points colored by aoi features
+#'  |                 |             | "colors" = points colored by point density
+#'  |                 |             | "contours" = plots density contour lines
+#'  |edge_points      | TRUE        | FALSE, whether to add
+#'                                  | the trapezoid edge points to the plot
 #'
 optram_options <- function(opt_name = NULL, opt_value=NULL,
                            show_opts = TRUE) {
@@ -106,9 +108,10 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
               "edge_points" = function(opt_value) {
                 return(is.logical(opt_value))
               },
-              "plot_density" = function(opt_value) {
+              "plot_colors" = function(opt_value) {
                 return(opt_value %in% c("no", "none",
                                         "color", "colors",
+                                        "feature", "features",
                                         "contour", "contours"))
               }
       )

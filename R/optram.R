@@ -88,7 +88,8 @@ optram <- function(aoi,
     # STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
     STR_list <- list.files(path = STR_dir, full.names = TRUE)
     VI_list <- list.files(path = VI_dir, full.names = TRUE)
-    VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)
+    VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list,
+                                          data_output_dir, aoi)
     vi_step <- getOption("optram.vi_step")
     trapezoid_method <- getOption("optram.trapezoid_method")
     rmse_df <- rOPTRAM::optram_wetdry_coefficients(VI_STR_df,

@@ -204,7 +204,7 @@ plot_vi_str_cloud <- function(
 
   trapezoid_method <- getOption("optram.trapezoid_method")
   edge_points <- getOption("optram.edge_points")
-  plot_density <- getOption("optram.plot_density")
+  plot_colors <- getOption("optram.plot_colors")
   # Prepare commom base plot
   # VI (x) axis limits
   x_min <- 0.0
@@ -216,23 +216,34 @@ plot_vi_str_cloud <- function(
   y_max <- str_q3 + stats::IQR(plot_df$STR, na.rm = TRUE) * 3
 
   # Start plot
-  if (plot_density == "colors") {
+  if (plot_colors %in% c("no", "none")) { # Default uniform green points
+    pl <- ggplot2::ggplot(plot_df) +
+      geom_point(aes(x=VI, y=STR), color = "green",
+                 alpha = 0.1, size = 0.2)
+  } else if (plot_colors %in% c("colors", "color")) {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x = VI, y = STR, color = Density),
                  size = 0.2, alpha = 0.1) +
       scale_color_continuous(type = "viridis",
                              direction = -1) +
       theme(legend.position = "none")
-  } else if (plot_density == "contours") {
+  } else if (plot_colors %in% c("contours", "contour")) {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR), color = "green",
                  alpha = 0.1, size = 0.2) +
       geom_density2d(aes(x=VI, y=STR), color = "darkgrey")
-  } else { # No point density enhancement
+  } else if (plot_colors %in% c("features", "feature") &
+             ("ID" %in% names(plot_df))) {
     pl <- ggplot2::ggplot(plot_df) +
-      geom_point(aes(x=VI, y=STR), color = "green",
+      geom_point(aes(x=VI, y=STR), color = ID,
+                 alpha = 0.1, size = 0.2)
+  } else {  # No plot_colors options fit, use default plot
+      message("No ID column in data, reverting to default plot")
+      pl <- ggplot2::ggplot(plot_df) +
+        geom_point(aes(x=VI, y=STR), color = "green",
                  alpha = 0.1, size = 0.2)
   }
+
   pl <-  pl + lims(y=c(y_min, y_max), x=c(x_min, x_max)) +
     labs(x=getOption("optram.veg_index"), y="SWIR Transformed") +
     # Dry edge

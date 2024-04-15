@@ -4,7 +4,7 @@
 \alias{optram_ndvi_str}
 \title{Prepare Dataframe with Pairs of NDVI and STR Values}
 \usage{
-optram_ndvi_str(STR_list, VI_list, output_dir = tempdir())
+optram_ndvi_str(STR_list, VI_list, output_dir = tempdir(), aoi = NULL)
 }
 \arguments{
 \item{STR_list, }{list of paths to STR raster files}
@@ -12,6 +12,10 @@ optram_ndvi_str(STR_list, VI_list, output_dir = tempdir())
 \item{VI_list, }{list of paths to NDVI raster files}
 
 \item{output_dir, }{string, path to save data.frames (in RDS format)}
+
+\item{aoi, }{{sf} POLYGON or MULTIPOLYGON,
+must have a numeric column named "ID" for coloring trapezoid points by features
+Default NULL, (no coloring)}
 }
 \value{
 full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR

@@ -101,7 +101,7 @@ test_that("Check for valid optram options", {
                  "Incorrect value:")
   expect_message(optram_options("max_tbl_size", 1e2, show_opts = FALSE),
                  "Incorrect value:")
-  expect_message(optram_options("plot_density", TRUE, show_opts = FALSE),
+  expect_message(optram_options("plot_colors", TRUE, show_opts = FALSE),
                  "Incorrect value:")
   expect_message(optram_options("remote", "CDSE", show_opts = FALSE),
                  "Incorrect value:")
