@@ -259,11 +259,8 @@ optram_safe <- function(safe_dir,
     saveRDS(full_VI_STR, full_df_path)
     message("VI-STR data saved to: ", full_df_path)
     # Now continue with regular process
-    rmse_df <- rOPTRAM::optram_wetdry_coefficients(
-      full_VI_STR,
-      trapezoid_method = trapezoid_method,
-      vi_step = vi_step,
-      output_dir = data_output_dir)
+    rmse_df <- optram_wetdry_coefficients(full_VI_STR,
+                                          output_dir = data_output_dir)
     message("RMSE for fitted trapezoid:")
     print(rmse_df)
     return(rmse_df)

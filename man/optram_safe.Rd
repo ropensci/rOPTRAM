@@ -28,9 +28,6 @@ defaults to TRUE}
 
 \item{data_output_dir, }{string, path to save coeffs_file
 and STR-VI data.frame, default is tempdir()}
-
-\item{veg_index, }{string, which VI to prepare, either 'NDVI' (default)
-or 'SAVI' or 'MSAVI'}
 }
 \value{
 rmse_df, data.frame, RMSE values of fitted trapezoid lines

@@ -38,10 +38,10 @@
 #' @examples
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'   package = "rOPTRAM"))
-#' rmse_df <- optram_wetdry_coefficients(full_df, aoi_file)
+#' rmse_df <- optram_wetdry_coefficients(full_df, tempdir())
 #' print(rmse_df)
 #' optram_options("trapezoid_method", "polynomial")
-#' rmse_df <- optram_wetdry_coefficients(full_df, aoi_file)
+#' rmse_df <- optram_wetdry_coefficients(full_df, tempdir())
 #' print(rmse_df)
 #'
 
