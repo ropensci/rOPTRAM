@@ -40,6 +40,8 @@ a list of currently defined options is printed.
     \tab  \tab "features" = points colored by aoi features \cr
     \tab  \tab "colors" = points colored by point density \cr
     \tab  \tab "contours" = plots density contour lines \cr
+   feature_col \tab "ID" \tab string, name of \emph{numeric} column \cr
+    \tab  \tab that contains feature ID's for coloring plot \cr
    edge_points \tab TRUE \tab FALSE, whether to add \cr
 }
 
