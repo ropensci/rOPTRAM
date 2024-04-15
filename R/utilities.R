@@ -15,7 +15,7 @@ check_aoi <- function(aoi) {
   } else if (!inherits(aoi, "sf")) {
       message("AOI is not a recognized {sf} spatial format")
       return(FALSE)
-  } else if (all(sf::st_geometry_type(aoi)) == "POLYGON" |
+  } else if (all(sf::st_geometry_type(aoi) == "POLYGON") |
              sf::st_geometry_type(aoi) == "MULTIPOLYGON") {
     return(TRUE)
   } else {
