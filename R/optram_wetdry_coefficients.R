@@ -47,7 +47,8 @@
 #'                  trapezoid_method = "linear")
 #' print(rmse_df)
 #' rmse_df <- optram_wetdry_coefficients(full_df,
-#'                   trapezoid_method = "polynomial")
+#'                   trapezoid_method = "polynomial",
+#'                   edge_points = TRUE)
 #' print(rmse_df)
 #'
 
@@ -56,8 +57,7 @@ optram_wetdry_coefficients <- function(full_df,
                                        vi_step = 0.005,
                                        trapezoid_method = c("linear",
                                                             "exponential",
-                                                            "polynomial"),
-                                       edge_points = FALSE) {
+                                                            "polynomial")) {
   # Derive slope and intercept to two sides of trapezoid
   # Based on:
   # https://github.com/teerathrai/OPTRAM
@@ -166,7 +166,6 @@ optram_wetdry_coefficients <- function(full_df,
 plot_vi_str_cloud <- function(
     full_df,
     edges_df,
-    output_dir = tempdir(),
     trapezoid_method = c("linear", "exponential", "polynomial"),
     edge_points = FALSE) {
   # Avoid "no visible binding for global variable" NOTE
@@ -232,5 +231,6 @@ plot_vi_str_cloud <- function(
                       color = "black", size=1.5, shape=6,
                       data = edges_df)
   }
+  print(pl)
   return(pl)
 }
