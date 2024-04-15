@@ -150,13 +150,13 @@
       # Prepare file name parts for saving rasters
       s_parts <- unlist(strsplit(basename(landsat_list[x]), "_"))
       VI_file <- paste(s_parts[1], s_parts[2],s_parts[3],s_parts[4],s_parts[6],
-                       aoi_name, "NDVI.tif", sep = "_")
+                       "NDVI.tif", sep = "_")
       terra::writeRaster(VI_idx,
                          file.path(VI_dir, VI_file), overwrite = TRUE)
       # Save STR to BOA_dir
       STR_file <- paste(s_parts[1], s_parts[2],
                         s_parts[3],s_parts[4],s_parts[6],
-                        aoi_name, "STR.tif", sep = "_")
+                        "STR.tif", sep = "_")
       terra::writeRaster(STR,
                          file.path(STR_dir, STR_file), overwrite = TRUE)
 
@@ -190,7 +190,7 @@
 #' }
 crop_landsat_list <- function(landsat_list) {
   # Avoid "no visible binding for global variable" NOTE
-  band_L89 <- band_L457 <- aoi <- BOA_dir <- aoi_name <- NULL
+  band_L89 <- band_L457 <- aoi <- BOA_dir <- NULL
 
   cropped_list <- lapply(landsat_list, function(s) {
     mtl_file <- list.files(s, pattern = "MTL.*xml$",
@@ -237,8 +237,7 @@ crop_landsat_list <- function(landsat_list) {
     # the name is formed from folder
     s_parts <- unlist(strsplit(basename(s), "_"))
     BOA_file <- paste(s_parts[1], s_parts[2], s_parts[3],
-                      s_parts[4], s_parts[6], aoi_name,
-                      "BOA.tif", sep = "_")
+                      s_parts[4], s_parts[6], "BOA.tif", sep = "_")
     terra::writeRaster(img_stk,
                        file.path(BOA_dir, BOA_file), overwrite = TRUE)
     return(img_stk)

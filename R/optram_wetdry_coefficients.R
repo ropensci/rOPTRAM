@@ -153,14 +153,14 @@ optram_wetdry_coefficients <- function(full_df,
 #' edges_df <- read.csv(system.file("extdata", "trapezoid_edges_lin.csv",
 #'                         package = "rOPTRAM"))
 #' pl <- plot_vi_str_cloud(full_df, edges_df)
-#' pl + ggtitle(paste("Trapezoid plot for:", aoi_name))
+#' pl + ggplot2::ggtitle(paste("Trapezoid plot for:", aoi_name))
 #' pl
 #'
 #' edges_df <- read.csv(system.file("extdata", "trapezoid_edges_poly.csv",
 #'                         package = "rOPTRAM"))
 #' pl <- plot_vi_str_cloud(full_df, edges_df,
 #'                     trapezoid_method = "polynomial")
-#' pl + ggtitle(paste("Trapezoid plot for:", aoi_name))
+#' pl + ggplot2::ggtitle(paste("Trapezoid plot for:", aoi_name))
 #' pl
 #'
 plot_vi_str_cloud <- function(
