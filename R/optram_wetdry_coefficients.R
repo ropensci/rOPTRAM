@@ -178,7 +178,7 @@ plot_vi_str_cloud <- function(
     edge_points = FALSE) {
 
   # Avoid "no visible binding for global variable" NOTE
-  VI <- STR <- STR_dry_fit <- STR_wet_fit <- STR_wet <- NULL
+  VI <- STR <- STR_dry_fit <- STR_wet_fit <- STR_wet <- ID <- NULL
   Density <- STR_dry <- NULL
   # Pre-flight test
   if (! "STR" %in% names(full_df)) {
