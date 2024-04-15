@@ -89,7 +89,7 @@ test_that("Output is a terra SpatRaster, for exponential trapezoid_method", {
   data_dir <- system.file("extdata", package = "rOPTRAM")
   Output_dir <- tempdir()
   img_date <- "2023-02-19"
-  optram_options("trapezoid_method", "exponential")
+  optram_options("trapezoid_method", "exponential", show_opts = FALSE)
   W_rast <- optram_calculate_soil_moisture(img_date = img_date,
         VI_dir = VI_dir,
         STR_dir = STR_dir,

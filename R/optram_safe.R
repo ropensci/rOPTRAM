@@ -11,8 +11,6 @@
 #'    (unzipped) Sentinel 2 data in original SAFE format,
 #'    after atmospheric correction (L2A)
 #' @param aoi, {sf} object, a POLYGON or MULTIPOLYGON of the AOI boundary
-#' @param veg_index, string, which VI to prepare, either 'NDVI' (default)
-#'    or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
 #'      defaults to tempdir()
 #' @param overwrite, boolean, overwrite derived products
@@ -70,6 +68,7 @@ optram_safe <- function(safe_dir,
     }
     SWIR_band <- getOption("optram.SWIR_band")
     if (!check_swir_band(SWIR_band))  return(NULL)
+    veg_index <- getOption("optram.veg_index")
 
     # Loop over the downloaded S2 folders (dates),
     # create NDVI and STR indices for each and crop to aoi
@@ -99,8 +98,7 @@ optram_safe <- function(safe_dir,
     # Get Area of interest as {terra} vect objcet
     aoi <- terra::vect(aoi)
 
-    SWIR_band <- getOption("optram.SWIR_band")
-    veg_index <- getOption("optram.veg_index")
+
     # Prepare output directories
     BOA_dir <- file.path(S2_output_dir, "BOA")
     if (!dir.exists(BOA_dir)) {

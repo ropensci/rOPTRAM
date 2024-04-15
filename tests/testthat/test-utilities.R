@@ -2,13 +2,13 @@ test_that("Check that calculate_vi returns SpatRaster", {
     img_stk <- terra::rast(system.file("extdata",
               "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
     # Test all VIs
-    optram_options("veg_index", "SAVI")
+    optram_options("veg_index", "SAVI", show_opts = FALSE)
     expect_s4_class(calculate_vi(img_stk), "SpatRaster")
-    optram_options("veg_index", "NDVI")
+    optram_options("veg_index", "NDVI", show_opts = FALSE)
     expect_s4_class(calculate_vi(img_stk), "SpatRaster")
-    optram_options("veg_index", "MSAVI")
+    optram_options("veg_index", "MSAVI", show_opts = FALSE)
     expect_s4_class(calculate_vi(img_stk), "SpatRaster")
-    optram_options("veg_index", "CI")
+    optram_options("veg_index", "CI", show_opts = FALSE)
     expect_s4_class(calculate_vi(img_stk), "SpatRaster")
 })
 

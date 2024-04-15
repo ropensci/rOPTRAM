@@ -4,8 +4,7 @@ test_that("Missing AOI file input", {
   from_date <- "2023-03-01"
   to_date  <- "2023-04-30"
   aoi <- NULL
-  expect_null(optram_acquire_s2(aoi, from_date, to_date,
-                                remote = "scihub", SWIR_band=11))
+  expect_null(optram_acquire_s2(aoi, from_date, to_date))
 })
 
 
