@@ -97,6 +97,8 @@ test_that("Check for valid optram options", {
                  "Incorrect value:")
   expect_message(optram_options("SWIR_band", 13, show_opts = FALSE),
                  "Incorrect value:")
+  expect_message(optram_options("SWIR_band", "B11", show_opts = FALSE),
+                 "Incorrect value:")
   expect_message(optram_options("max_tbl_size", 1e2, show_opts = FALSE),
                  "Incorrect value:")
   expect_message(optram_options("plot_density", TRUE, show_opts = FALSE),

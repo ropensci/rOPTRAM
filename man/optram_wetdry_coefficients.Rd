@@ -10,13 +10,6 @@ optram_wetdry_coefficients(full_df, output_dir = tempdir())
 \item{full_df, }{data.frame of STR and NDVI values}
 
 \item{output_dir, }{string, directory to save coefficients CSV file}
-
-\item{vi_step, }{float, width of intervals along VI axis
-default 0.005}
-
-\item{trapezoid_method, }{string, how to prepare wet and dry trapezoid edges
-Possible values: "linear", "exponential", "polynomial". See notes.
-Default "linear"}
 }
 \value{
 rmse_df, data.frame,  RMSE values of fitted trapezoid edges

@@ -5,11 +5,6 @@
 #' (as input to `optram_calculate_soil_moisture()` function)
 #' @param full_df, data.frame of STR and NDVI values
 #' @param output_dir, string, directory to save coefficients CSV file
-#' @param vi_step, float, width of intervals along VI axis
-#'    default 0.005
-#' @param trapezoid_method, string, how to prepare wet and dry trapezoid edges
-#'    Possible values: "linear", "exponential", "polynomial". See notes.
-#'    Default "linear"
 #' @return rmse_df, data.frame,  RMSE values of fitted trapezoid edges
 #' @export
 #' @note
