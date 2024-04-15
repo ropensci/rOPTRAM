@@ -1,8 +1,7 @@
 #' @title Acquire Sentinel 2 Images at a Given Location and Date Range
 #' @description Use the `CDSE` package to acquire, preprocess and crop
 #'  Sentinel 2 satellite imagery.
-#' @param aoi_file, string, full path to polygon spatial file of
-#'      boundary of area of interest
+#' @param aoi, {sf} POLYGON or MULTIPOLYGON, of boundary of area of interest
 #' @param from_date, string, represents start of date range,
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
@@ -71,9 +70,7 @@
 
 #' Area of Interest (AOI) Specification:
 #'  When defining your Area of Interest (AOI), please ensure that it is
-#'  represented as a polygonal layer with only one feature. This feature can
-#'  either be a single POLYGON or a MULTIPOLYGON, which may consist of
-#'  non-contiguous areas, but only one feature is permissible.
+#'  represented as a POLYGON or MULTIPOLYGON layer.
 #'
 #' "openeo",...
 #' If "openeo" then:
@@ -106,7 +103,8 @@
 #' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2019-04-30"
-#' aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+#' aoi <- sf::st_read(system.file("extdata",
+#'                               "lachish.gpkg", package = 'rOPTRAM'))
 #' s2_file_list <- optram_acquire_s2(aoi,
 #'                                  from_date, to_date,
 #'                                  remote = "scihub"
@@ -115,7 +113,7 @@
 #' }
 
 optram_acquire_s2 <- function(
-      aoi_file,
+      aoi,
       from_date, to_date,
       max_cloud = 10,
       output_dir = tempdir(),
@@ -130,13 +128,15 @@ optram_acquire_s2 <- function(
   scihub <- openeo <- NULL
 
   # Pre flight checks...
-  if (!check_aoi(aoi_file)) return(NULL)
+  if (!check_aoi(aoi)) return(NULL)
+  # Ensure that aoi is single POLYGON ro MULTIPOLYGON feature
+  aoi <- sf::st_union(aoi)
   if (!check_date_string(from_date, to_date)) return(NULL)
   if (!check_swir_band(SWIR_band)) return(NULL)
   remote <- match.arg(remote)
 
   switch(remote,
-         scihub = acquire_scihub(aoi_file = aoi_file,
+         scihub = acquire_scihub(aoi = aoi,
                                  from_date = from_date, to_date = to_date,
                                  max_cloud = max_cloud,
                                  output_dir = output_dir,
@@ -145,7 +145,7 @@ optram_acquire_s2 <- function(
                                  clientid = clientid,
                                  secret = secret,
                                  SWIR_band = SWIR_band),
-         openeo = acquire_openeo(aoi_file = aoi_file,
+         openeo = acquire_openeo(aoi = aoi,
                                  from_date = from_date, to_date = to_date,
                                  max_cloud = max_cloud,
                                  output_dir = output_dir,

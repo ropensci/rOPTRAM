@@ -6,19 +6,13 @@
 \usage{
 optram_wetdry_coefficients(
   full_df,
-  aoi_file,
   output_dir = tempdir(),
   vi_step = 0.005,
-  trapezoid_method = c("linear", "exponential", "polynomial"),
-  save_plot = TRUE,
-  edge_points = FALSE
+  trapezoid_method = c("linear", "exponential", "polynomial")
 )
 }
 \arguments{
 \item{full_df, }{data.frame of STR and NDVI values}
-
-\item{aoi_file, }{string, added to title of plot
-(Can be path to AOI file, then the file name is used in plot title)}
 
 \item{output_dir, }{string, directory to save coefficients CSV file}
 
@@ -28,13 +22,6 @@ default 0.005}
 \item{trapezoid_method, }{string, how to prepare wet and dry trapezoid edges
 Possible values: "linear", "exponential", "polynomial". See notes.
 Default "linear"}
-
-\item{save_plot, }{boolean, If TRUE (default) save scatterplot to output_dir}
-
-\item{edge_points, }{boolean, whether to add edge points to the plot.
-If \code{save_plot} is TRUE, and \code{edge_points} is TRUE
-add the original regression points that were used to derive coefficients.
-default FALSE}
 }
 \value{
 rmse_df, data.frame,  RMSE values of fitted trapezoid edges
@@ -74,13 +61,12 @@ alpha, beta_1, and beta_2 for both wet and dry edges
 }
 }
 \examples{
-aoi_file <- "Test"
 full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
   package = "rOPTRAM"))
-rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
+rmse_df <- optram_wetdry_coefficients(full_df,
                  trapezoid_method = "linear")
 print(rmse_df)
-rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
+rmse_df <- optram_wetdry_coefficients(full_df,
                   trapezoid_method = "polynomial")
 print(rmse_df)
 

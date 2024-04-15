@@ -58,9 +58,10 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
-aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
+aoi <- sf::st_read(system.file("extdata",
+                            "lachish.gpkg", package = "rOPTRAM"))
 veg_index <- "NDVI"
-s2_file_list <- optram_acquire_s2(aoi_file,
+s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
                             output_dir = output_dir,
                             veg_index =veg_index,
@@ -80,12 +81,10 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 ```{r plot-linear, fig.cap="Trapezoid scatterplot", out.width = '90%', warning=FALSE}
 meth <- "linear"
 rmse <- optram_wetdry_coefficients(full_df,
-                                   aoi_file = aoi_file,
                                    output_dir = output_dir,
-                                   trapezoid_method = meth,
-                                   save_plot = TRUE)
+                                   trapezoid_method = meth)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-plot_vi_str_cloud(full_df, ttl,
+plot_vi_str_cloud(full_df,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   output_dir = output_dir,
@@ -98,12 +97,10 @@ knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 ```{r plot-exp, fig.cap="Exponential fit trapezoid scatterplot", out.width = '90%', warning=FALSE}
 meth <- "exponential"
 coeffs <- optram_wetdry_coefficients(full_df,
-                                     aoi_file = aoi_file,
                                      output_dir = output_dir,
-                                     trapezoid_method = meth,
-                                     save_plot = TRUE)
+                                     trapezoid_method = meth)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
-plot_vi_str_cloud(full_df, ttl,
+plot_vi_str_cloud(full_df,
                   output_dir = output_dir,
                   edges_df = edges_df,
                   trapezoid_method = meth,
@@ -116,12 +113,11 @@ knitr::include_graphics("vignettes/images/trapezoid_lachish_exponential.png")
 ```{r plot-poly, fig.cap="Polynomial fit trapezoid scatterplot", out.width = '90%', warning=FALSE}
 meth <- "polynomial"
 coeffs <- optram_wetdry_coefficients(full_df,
-                                     aoi_file = aoi_file,
                                      output_dir = output_dir,
                                      trapezoid_method = meth,
                                      save_plot = TRUE)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
-plot_vi_str_cloud(full_df, ttl,
+plot_vi_str_cloud(full_df,
                   output_dir = output_dir,
                   edges_df = edges_df,
                   trapezoid_method = meth,

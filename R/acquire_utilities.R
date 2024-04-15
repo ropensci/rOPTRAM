@@ -3,8 +3,7 @@
 #' @description This function uses the `CDSE` package to send a request
 #' to Copernicus Dataspace, and prepare the products.
 #' Called by `optram_acquire_s2()`.
-#' @param aoi_file, string, full path to polygon spatial file of
-#'      boundary of area of interest
+#' @param aoi, {sf} object, POLYGON or MULTIPOLYGON of area of interest
 #' @param from_date, string, represents start of date range,
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
@@ -71,14 +70,15 @@
 #' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2019-04-30"
-#' aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+#' aoi <- sf::st_read(system.file("extdata",
+#'                   "lachish.gpkg", package = 'rOPTRAM'))
 #' acquire_scihub(aoi, from_date, to_date,
 #'                veg_index = "SAVI",
 #'                SWIR_band = 11)
 #' }
 
 acquire_scihub <- function(
-    aoi_file,
+    aoi,
     from_date, to_date,
     max_cloud = 10,
     output_dir = tempdir(),
@@ -87,8 +87,6 @@ acquire_scihub <- function(
     clientid = NULL,
     secret = NULL,
     SWIR_band = c(11, 12)) {
-
-  aoi <- sf::st_read(aoi_file, as_tibble = FALSE, quiet = TRUE)
 
   # Retrieve OAuth token using credentials from file directory
   tok <- check_scihub(clientid = clientid, secret = secret,
@@ -239,8 +237,7 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #' @description This non-exported function uses the `openeo` package
 #' to send a request to Copernicus DataSpace, and prepare the products.
 #' Called by optram_acquire_s2
-#' @param aoi_file, string, full path to polygon spatial file of
-#'      boundary of area of interest
+#' @param aoi, {sf} object, POLYGON or MULTIPOLYGON of area of interest
 #' @param from_date, string, represents start of date range,
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
@@ -280,13 +277,14 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2019-04-30"
-#' aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+#' aoi <- sf::st_read(system.file("extdata",
+#'                 "lachish.gpkg", package = 'rOPTRAM'))
 #' acquire_openeo(aoi, from_date, to_date,
 #'                veg_index = "SAVI")
 #' }
 
 acquire_openeo <- function(
-    aoi_file,
+    aoi,
     from_date, to_date,
     max_cloud = 10,
     output_dir = tempdir(),
@@ -295,10 +293,7 @@ acquire_openeo <- function(
     SWIR_band = c(11, 12)) {
 
   if(!check_openeo()) return(NULL)
-
-  # Extracting bbox from the aoi file
-  catchment <- sf::st_read(aoi_file)
-  bbox <- sf::st_bbox(obj = catchment)
+  bbox <- sf::st_bbox(aoi)
 
   # get the process collection to use the predefined processes of the back-end
   p <- openeo::processes()

@@ -7,7 +7,7 @@
 #' @param landsat_dir, string, full path to containing folder of downloaded
 #'    (unzipped) Landsat data in original landsat format,
 #'    after atmospheric correction (L2A)
-#' @param aoi_file, string, path to boundary polygon spatial file
+#' @param aoi, {sf} object, POLYGON or MULTIPOLYGON of AOI boundary
 #'    of area of interest
 #' @param veg_index, string, which VI to prepare, either 'NDVI' (default)
 #'    or 'SAVI' or 'MSAVI'
@@ -28,14 +28,15 @@
 #'  i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 #' @examples
 #' \dontrun{
-#' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-#' optram_landsat(landsat_dir,  aoi_file,
+#' aoi <- sf::st_read(system.file("extdata",
+#'                               "lachish.gpkg", package = "rOPTRAM"))
+#' optram_landsat(landsat_dir,  aoi,
 #'                veg_index = 'SAVI',
 #'                LC_output_dir = tempdir(), data_output_dir = tempdir())
 #' }
 
   optram_landsat <- function(landsat_dir,
-                             aoi_file,
+                             aoi,
                              veg_index = 'NDVI',
                              LC_output_dir = tempdir(),
                              data_output_dir = tempdir()) {
@@ -51,11 +52,12 @@
       message("The directory of downloaded Landsat images
               is a required parameter.")
       return(NULL)
-  } else {
-    if (!check_aoi(aoi_file)) {
-      return(NULL)
-    }
   }
+  if (!check_aoi(aoi)) {
+      return(NULL)
+  }
+  # Ensure aoi is single POLYGON or MULTIPOLYGON
+  aoi <- sf::st_union(aoi)
 
     # Loop over the downloaded LC folders (dates),
     # create NDVI and STR indices for each and crop to aoi
@@ -90,10 +92,9 @@
                        (as.character(terra::crs(rstt, describe = TRUE)[3])))
     # Get Area of interest,
     # make sure it is projected to the CRS of Landsat images
-    aoi <- sf::st_zm(sf::st_read(aoi_file), drop = TRUE, what = "zm")
+    aoi <- sf::st_zm(aoi, drop = TRUE, what = "zm")
     aoi <- terra::vect(aoi)
     aoi <- terra::project(aoi, epsg_code)
-    aoi_name <- aoi_to_name(aoi_file)
 
     # Prepare output directories
     BOA_dir <- file.path(LC_output_dir, "BOA")
@@ -110,10 +111,7 @@
     if (!dir.exists(STR_dir)) {
         dir.create(STR_dir)
     }
-
     cropped_rast_list <- crop_landsat_list(landsat_list)
-
-
 
     # Get VI and STR from this list of raster stacks
     VI_STR_list <- lapply(seq_along(cropped_rast_list), function(x) {
@@ -152,13 +150,13 @@
       # Prepare file name parts for saving rasters
       s_parts <- unlist(strsplit(basename(landsat_list[x]), "_"))
       VI_file <- paste(s_parts[1], s_parts[2],s_parts[3],s_parts[4],s_parts[6],
-                       aoi_name, "NDVI.tif", sep = "_")
+                       "NDVI.tif", sep = "_")
       terra::writeRaster(VI_idx,
                          file.path(VI_dir, VI_file), overwrite = TRUE)
       # Save STR to BOA_dir
       STR_file <- paste(s_parts[1], s_parts[2],
                         s_parts[3],s_parts[4],s_parts[6],
-                        aoi_name, "STR.tif", sep = "_")
+                        "STR.tif", sep = "_")
       terra::writeRaster(STR,
                          file.path(STR_dir, STR_file), overwrite = TRUE)
 
@@ -172,7 +170,6 @@
     message("VI-STR data saved to: ", full_df_path)
     # Now continue with regular wet-dry coefficients process
     rmse_df <- rOPTRAM::optram_wetdry_coefficients(full_VI_STR,
-                                                  aoi_file,
                                                   data_output_dir)
 
     return(rmse_df)
@@ -193,7 +190,7 @@
 #' }
 crop_landsat_list <- function(landsat_list) {
   # Avoid "no visible binding for global variable" NOTE
-  band_L89 <- band_L457 <- aoi <- BOA_dir <- aoi_name <- NULL
+  band_L89 <- band_L457 <- aoi <- BOA_dir <- NULL
 
   cropped_list <- lapply(landsat_list, function(s) {
     mtl_file <- list.files(s, pattern = "MTL.*xml$",
@@ -240,8 +237,7 @@ crop_landsat_list <- function(landsat_list) {
     # the name is formed from folder
     s_parts <- unlist(strsplit(basename(s), "_"))
     BOA_file <- paste(s_parts[1], s_parts[2], s_parts[3],
-                      s_parts[4], s_parts[6], aoi_name,
-                      "BOA.tif", sep = "_")
+                      s_parts[4], s_parts[6], "BOA.tif", sep = "_")
     terra::writeRaster(img_stk,
                        file.path(BOA_dir, BOA_file), overwrite = TRUE)
     return(img_stk)

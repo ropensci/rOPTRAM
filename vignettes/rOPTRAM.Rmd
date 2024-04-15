@@ -65,27 +65,29 @@ Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, out
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
-aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-veg_index <- "NDVI"
-coeffs <- optram(aoi_file,
-                 from_date, to_date,
-                 veg_index = veg_index,
-                 S2_output_dir = output_dir,
-                 data_output_dir = output_dir,
-                 remote = "scihub",
-                 vi_step = 0.005,
-                 trapezoid_method = "linear",
-                 SWIR_band = 11)
+aoi <- sf::st_read(system.file("extdata",
+                               "lachish.gpkg", package = "rOPTRAM"))
 #> Reading layer `High' from data source 
-#>   `/home/micha/work/BIDR/Colleagues/Ron/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
+#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/lachish.gpkg' 
+#>   using driver `GPKG'
 #> Simple feature collection with 1 feature and 1 field
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
 #> Bounding box:  xmin: 193120.5 ymin: 613272.1 xmax: 194476.3 ymax: 614546.5
 #> Projected CRS: Israel 1993 / Israeli TM Grid
-#> Error in if (!file.exists(VI_f)) {: the condition has length > 1
-knitr::kable(coeffs, caption = "Trapezoid coefficients")
-#> Error in knitr::kable(coeffs, caption = "Trapezoid coefficients"): object 'coeffs' not found
+veg_index <- "NDVI"
+rmse <- optram(aoi,
+              from_date, to_date,
+              veg_index = veg_index,
+              S2_output_dir = output_dir,
+              data_output_dir = output_dir,
+              remote = "scihub",
+              vi_step = 0.005,
+              trapezoid_method = "linear",
+              SWIR_band = 11)
+#> Error in Summary.factor(structure(7L, levels = c("GEOMETRY", "POINT", : 'all' not meaningful for factors
+knitr::kable(rmse, caption = "Trapezoid coefficients")
+#> Error in knitr::kable(rmse, caption = "Trapezoid coefficients"): object 'rmse' not found
 ```
 ### Show trapezoid plot
 
@@ -116,19 +118,13 @@ knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 
 ```r
 # Using the same dates, and aoi as previous example
-s2_file_list <- optram_acquire_s2(aoi_file,
+s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
                             output_dir = output_dir,
                             veg_index =veg_index,
                             remote = "scihub",
                             SWIR_band = 11)
-#> Reading layer `High' from data source 
-#>   `/home/micha/work/BIDR/Colleagues/Ron/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
-#> Simple feature collection with 1 feature and 1 field
-#> Geometry type: MULTIPOLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: 193120.5 ymin: 613272.1 xmax: 194476.3 ymax: 614546.5
-#> Projected CRS: Israel 1993 / Israeli TM Grid
+#> Error in Summary.factor(structure(7L, levels = c("GEOMETRY", "POINT", : 'all' not meaningful for factors
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -137,20 +133,11 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir,
                            rm.low.vi = TRUE, rm.hi.str = TRUE)
 rmse <- optram_wetdry_coefficients(full_df,
-                                   aoi_file,
                                    output_dir = output_dir)
+#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
+#> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```
-
-
-
-Table: RMSE of fitted trapezoid edges
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2589246| 0.1288553|
-
-
 
 ## Soil Moisture Estimate
 
@@ -173,7 +160,9 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ```r
 library(leaflet)
 names(SM) <- "Migda soil moisture"
+#> Error in names(SM) <- "Migda soil moisture": attempt to set an attribute on NULL
 SM[terra::values(SM) < 0] <- 0
+#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'values' for signature '"NULL"'
 
 sm_map <- leaflet("OpenStreetMap") |>
   addTiles() |>
@@ -181,6 +170,7 @@ sm_map <- leaflet("OpenStreetMap") |>
     colors = colorNumeric("RdYlGn",
       domain = c(-0.1, 2.0), na.color = NA),
     opacity = 0.9)
+#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : Don't know how to get path data from object of class NULL
 sm_map
-#> Error in path.expand(path): invalid 'path' argument
+#> Error in eval(expr, envir, enclos): object 'sm_map' not found
 ```
