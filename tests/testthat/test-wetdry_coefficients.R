@@ -28,8 +28,7 @@ test_that("Plot with edge points", {
   full_df <- readRDS(system.file("extdata",
                                  "VI_STR_data.rds", package = "rOPTRAM"))
   res <- optram_wetdry_coefficients(full_df,
-                                    trapezoid_method = "linear",
-                                    edge_points = TRUE)
+                                    trapezoid_method = "linear")
   expect_true(inherits(res, "data.frame"))
   expect_equal(ncol(res), 2)
 })
