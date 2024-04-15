@@ -27,7 +27,6 @@ Imports:
     ggplot2,
     sf,
     terra,
-    tools,
     utils
 Suggests:
     geojsonio,
