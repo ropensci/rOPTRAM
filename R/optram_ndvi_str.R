@@ -90,7 +90,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # In case coloring by features is requested, transform the AOI into raster
     # and get ID values to add to the VI_STR data.frame
     feature_col <- getOption("optram.feature_col")
-    if ((getOptions("optram.plot_colors") %in% c("features", "feature")) &
+    if ((getOption("optram.plot_colors") %in% c("features", "feature")) &
         (!is.null(aoi)) &
         (feature_col %in% names(aoi))) {
       aoi_rast <- terra::rasterize(x = aoi, y = STR,
