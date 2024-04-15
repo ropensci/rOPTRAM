@@ -8,7 +8,6 @@ Authors@R: c(
           comment = c(ORCID = "0000-0001-8065-9793")),
   person("Ron", "Beiden", , "beiden@post.bgu.ac.il", role = c("ctb")),
   person("Natalya", "Panov", , "npanov@bgu.ac.il", role = c("ctb"))
-  person("Harry", "Eslick", , "",role = c("rev"))
   )
 Description: The OPtical TRapezoid Model (OPTRAM) derives soil moisture
   based on the linear relation between a vegetation index

@@ -1,29 +1,27 @@
 #' @title Check Area of Interest File
 #' @description
-#' Check that aoi file exists, and is a spatial file
-#' @param aoi_file, string
-#' @return boolean, TRUE when file exists, and is spatial
+#' Check that aoi is {sf} POLYGON or MULTIPOLYGON
+#' @param aoi, an {sf} polygon object
+#' @return boolean, TRUE when aoi is spatial
 #' @noRd
 #' @examples
-#' aoi_file <- system.file("extdata", "lachish.gpkg")
-#' check_aoi(aoi_file)
+#' aoi <- sf::st_read(system.file("extdata", "lachish.gpkg"))
+#' check_aoi(aoi)
 
-check_aoi <- function(aoi_file) {
-  if (is.null(aoi_file) || !file.exists(aoi_file)) {
-      message("An area_of_interest polygon shapefile is required",
-      "\n", "Please prepare the area_of_interest boundary file.")
+check_aoi <- function(aoi) {
+  if (is.null(aoi)) {
+      message("An area_of_interest polygon {sf} object is required")
       return(FALSE)
-  } else {
-    aoi_result <- try(suppressWarnings(sf::st_read(aoi_file)))
-    if (inherits(aoi_result, "try-error")) {
-        message("Cannot read: ", aoi_file)
-        return(FALSE)
-    } else if (!inherits(aoi_result, "sf")) {
-        message(aoi_file, " is not a recognized spatial format")
-        return(FALSE)
-    }
-  }
+  } else if (!inherits(aoi, "sf")) {
+      message("AOI is not a recognized {sf} spatial format")
+      return(FALSE)
+  } else if (all(sf::st_geometry_type(aoi)) == "POLYGON" |
+             sf::st_geometry_type(aoi) == "MULTIPOLYGON") {
     return(TRUE)
+  } else {
+    message("AOI must be a POLYGON or MULTIPOLYGON")
+    return(FALSE)
+  }
 }
 
 #' @title Check Date Format
@@ -193,31 +191,6 @@ calculate_str <- function(img_stk,
   return(STR)
 }
 
-
-#' @title Get Name String for Area of Interest from Full File Name
-#' @description
-#' Extract a string from the full path to area of interest (AOI) file
-#' @param aoi_file, string, full path to AOI file
-#' @noRd
-#' @keywords Internal
-#' @return aoi_name, string
-#' @examples
-#' aoi_file <- system.file("extdata", "lachish.gpkg")
-#' aoi_name <- aoi_to_name(aoi_file)
-#' aoi_name
-
-aoi_to_name <- function(aoi_file) {
-    aoi_name <- NULL
-    if (is.null(aoi_file) || !file.exists(aoi_file)) {
-        return(NULL)
-    }
-    aoi_name <- tools::file_path_sans_ext(basename(aoi_file))
-    aoi_name <- gsub(x = aoi_name, pattern = " ", replacement = "")
-    aoi_name <- gsub(x = aoi_name, pattern = "\\.", replacement = "")
-    aoi_name <- gsub(x = aoi_name, pattern = "_", replacement = "")
-
-    return(aoi_name)
-}
 
 #' @title Store CDSE Client Credentials
 #' @description Store CDSE clientid and secret into a file

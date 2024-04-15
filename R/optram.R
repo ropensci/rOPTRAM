@@ -10,8 +10,7 @@
 #'   applied to Sentinel-2 and Landsat-8 observations.
 #'   Remote Sensing of Environment 198, 52–68,
 #'   https://doi.org/10.1016/j.rse.2017.05.041 .
-#' @param aoi_file, string, full path to polygon spatial file
-#'        of area of interest
+#' @param aoi, {sf} object, a POLYGON or MULTIPOLYGON, boundary of area of interest
 #' @param veg_index, string, which index to use. Default "NDVI"
 #' @param from_date, string, the start of the date range,
 #'        Formatted as "YYYY-MM-DD"
@@ -53,15 +52,16 @@
 #' \dontrun{
 #' from_date <- "2018-12-01"
 #' to_date <- "2020-04-30"
-#' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-#' coeffs <- optram(aoi_file,
+#' aoi <- sf::st_read(system.file("extdata",
+#'                               "lachish.gpkg", package = "rOPTRAM"))
+#' rmse <- optram(aoi,
 #'                  from_date, to_date,
 #'                  veg_index = c("SAVI"),
 #'                  trapezoid_method = "linear")
 #' }
 
 
-optram <- function(aoi_file,
+optram <- function(aoi,
                    veg_index = 'NDVI',
                    from_date, to_date,
                    max_cloud = 15,
@@ -76,35 +76,33 @@ optram <- function(aoi_file,
   access_ok <- s2_list <- s2_dirs <- BOA_dir <- NULL
   VI_dir <- VI_list <- VI_STR_df <- coeffs  <- NULL
 
-    # Loop over the downloaded S2 folders (dates),
-    # create NDVI and STR indices for each and crop to aoi
-    s2_list <- rOPTRAM::optram_acquire_s2(
-                    aoi_file,
-                    from_date, to_date,
-                    max_cloud = max_cloud,
-                    veg_index = veg_index,
-                    output_dir = S2_output_dir,
-                    remote = remote,
-                    SWIR_band = SWIR_band)
+  # Loop over the downloaded S2 folders (dates),
+  # create NDVI and STR indices for each and crop to aoi
+  s2_list <- rOPTRAM::optram_acquire_s2(
+                  aoi,
+                  from_date, to_date,
+                  max_cloud = max_cloud,
+                  veg_index = veg_index,
+                  output_dir = S2_output_dir,
+                  remote = remote,
+                  SWIR_band = SWIR_band)
 
-    # Get full output directories for BOA, STR and NDVI
-    s2_dirs <- list.dirs(S2_output_dir,  full.names = TRUE)
-    BOA_dir <- s2_dirs[basename(s2_dirs) == "BOA"]
-    STR_dir <- s2_dirs[basename(s2_dirs) == "STR"]
-    VI_dir <- s2_dirs[basename(s2_dirs) == veg_index]
+  # Get full output directories for BOA, STR and NDVI
+  s2_dirs <- list.dirs(S2_output_dir,  full.names = TRUE)
+  STR_dir <- s2_dirs[basename(s2_dirs) == "STR"]
+  VI_dir <- s2_dirs[basename(s2_dirs) == veg_index]
 
-    # Calculate SWIR Transformed Reflectance was done by optram_acquire_s2()
-    # STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
-    STR_list <- list.files(path = STR_dir, full.names = TRUE)
-    VI_list <- list.files(path = VI_dir, full.names = TRUE)
-    VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)
-    rmse_df <- rOPTRAM::optram_wetdry_coefficients(
-      VI_STR_df,
-      aoi_file = aoi_file,
-      output_dir = data_output_dir,
-      vi_step = vi_step,
-      trapezoid_method = trapezoid_method)
-    print("RMSE for fitted trapezoid:")
-    print(rmse_df)
-    return(rmse_df)
+  # Calculate SWIR Transformed Reflectance was done by optram_acquire_s2()
+  # STR_list <- rOPTRAM::optram_calculate_str(BOA_dir)
+  STR_list <- list.files(path = STR_dir, full.names = TRUE)
+  VI_list <- list.files(path = VI_dir, full.names = TRUE)
+  VI_STR_df <- rOPTRAM::optram_ndvi_str(STR_list, VI_list, data_output_dir)
+  rmse_df <- rOPTRAM::optram_wetdry_coefficients(
+    VI_STR_df,
+    output_dir = data_output_dir,
+    vi_step = vi_step,
+    trapezoid_method = trapezoid_method)
+  print("RMSE for fitted trapezoid:")
+  print(rmse_df)
+  return(rmse_df)
 }

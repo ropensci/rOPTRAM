@@ -82,9 +82,10 @@ Afterward, you can utilize either `optram_acquire_s2` or `acquire_scihub`
 # For this example, outputs are saved to `tempdir()`
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-# aoi <- "path/to/your/aoi_file.gpkg"
+# aoi <- {sf} object, POLYGON or MULTIPOLYGON of AOI area
 # rOPTRAM_aoi_example
-aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+aoi <- sf::st_read(system.file("extdata",
+                               "lachish.gpkg", package = 'rOPTRAM'))
 
 boa_files <- acquire_scihub(aoi,
               from_date, to_date,
@@ -99,9 +100,9 @@ Alternatively, you can use the `save_creds` option. At the first run, set `save_
 # For this example, outputs are saved to `tempdir()`
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-# aoi <- "path/to/your/aoi_file.gpkg"
 # rOPTRAM_aoi_example
-aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+aoi <- sf::st_read(system.file("extdata",
+                               "lachish.gpkg", package = 'rOPTRAM'))
 
 boa_files <- acquire_scihub(aoi,
               from_date, to_date,
@@ -120,9 +121,9 @@ boa_files <- acquire_scihub(aoi,
 ```{r prepare-save-4, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-# aoi <- "path/to/your/aoi_file.gpkg"
 # rOPTRAM_aoi_example
-aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+aoi <- sf::st_read(system.file("extdata",
+                               "lachish.gpkg", package = 'rOPTRAM'))
 
 boa_files <- acquire_scihub(aoi,
               from_date, to_date,

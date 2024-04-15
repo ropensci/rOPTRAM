@@ -6,7 +6,7 @@
 \usage{
 optram_safe(
   safe_dir,
-  aoi_file,
+  aoi,
   veg_index = "NDVI",
   S2_output_dir = tempdir(),
   overwrite = TRUE,
@@ -22,8 +22,7 @@ optram_safe(
 (unzipped) Sentinel 2 data in original SAFE format,
 after atmospheric correction (L2A)}
 
-\item{aoi_file, }{string, path to boundary polygon spatial file
-of area of interest}
+\item{aoi, }{{sf} object, a POLYGON or MULTIPOLYGON of the AOI boundary}
 
 \item{veg_index, }{string, which VI to prepare, either 'NDVI' (default)
 or 'SAVI' or 'MSAVI'}
@@ -79,9 +78,17 @@ The parameter \code{SWIR_bands } allows to choose which band is used in this mod
 }
 \examples{
 \dontrun{
-aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
+aoi <- sf::st_read(system.file("extdata",
+                  "lachish.gpkg", package = "rOPTRAM"))
 safe_dir  <- tempdir()
-coeffs <- optram_safe(safe_dir,
-                      aoi_file, veg_index = "NDVI", SWIR_band = 11)
+rmse <- optram_safe(safe_dir,
+                      aoi, veg_index = "NDVI", SWIR_band = 11)
+# Plot trapezoid
+full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
+        package = "rOPTRAM"))
+edges_df <- read.csv(system.file("extdata", "trapezoid_edges_lin.csv",
+                        package = "rOPTRAM"))
+pl <- plot_vi_str_cloud(full_df, edges_df, edge_points = TRUE)
+pl
 }
 }

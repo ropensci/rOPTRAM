@@ -5,7 +5,7 @@
 \title{Prepare Sentinel Imagery for Soil Moisture Prediction Using OPTRAM.}
 \usage{
 optram(
-  aoi_file,
+  aoi,
   veg_index = "NDVI",
   from_date,
   to_date,
@@ -19,8 +19,7 @@ optram(
 )
 }
 \arguments{
-\item{aoi_file, }{string, full path to polygon spatial file
-of area of interest}
+\item{aoi, }{{sf} object, a POLYGON or MULTIPOLYGON, boundary of area of interest}
 
 \item{veg_index, }{string, which index to use. Default "NDVI"}
 
@@ -85,8 +84,9 @@ The parameter \code{SWIR_bands } allows to choose which band is used in this mod
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2020-04-30"
-aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-coeffs <- optram(aoi_file,
+aoi <- sf::st_read(system.file("extdata",
+                              "lachish.gpkg", package = "rOPTRAM"))
+rmse <- optram(aoi,
                  from_date, to_date,
                  veg_index = c("SAVI"),
                  trapezoid_method = "linear")

@@ -7,7 +7,7 @@
 #' @param landsat_dir, string, full path to containing folder of downloaded
 #'    (unzipped) Landsat data in original landsat format,
 #'    after atmospheric correction (L2A)
-#' @param aoi_file, string, path to boundary polygon spatial file
+#' @param aoi, {sf} object, POLYGON or MULTIPOLYGON of AOI boundary
 #'    of area of interest
 #' @param veg_index, string, which VI to prepare, either 'NDVI' (default)
 #'    or 'SAVI' or 'MSAVI'
@@ -28,14 +28,15 @@
 #'  i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
 #' @examples
 #' \dontrun{
-#' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-#' optram_landsat(landsat_dir,  aoi_file,
+#' aoi <- sf::st_read(system.file("extdata",
+#'                               "lachish.gpkg", package = "rOPTRAM"))
+#' optram_landsat(landsat_dir,  aoi,
 #'                veg_index = 'SAVI',
 #'                LC_output_dir = tempdir(), data_output_dir = tempdir())
 #' }
 
   optram_landsat <- function(landsat_dir,
-                             aoi_file,
+                             aoi,
                              veg_index = 'NDVI',
                              LC_output_dir = tempdir(),
                              data_output_dir = tempdir()) {
@@ -51,11 +52,12 @@
       message("The directory of downloaded Landsat images
               is a required parameter.")
       return(NULL)
-  } else {
-    if (!check_aoi(aoi_file)) {
-      return(NULL)
-    }
   }
+  if (!check_aoi(aoi)) {
+      return(NULL)
+  }
+  # Ensure aoi is single POLYGON or MULTIPOLYGON
+  aoi <- sf::st_union(aoi)
 
     # Loop over the downloaded LC folders (dates),
     # create NDVI and STR indices for each and crop to aoi
@@ -90,10 +92,9 @@
                        (as.character(terra::crs(rstt, describe = TRUE)[3])))
     # Get Area of interest,
     # make sure it is projected to the CRS of Landsat images
-    aoi <- sf::st_zm(sf::st_read(aoi_file), drop = TRUE, what = "zm")
+    aoi <- sf::st_zm(aoi, drop = TRUE, what = "zm")
     aoi <- terra::vect(aoi)
     aoi <- terra::project(aoi, epsg_code)
-    aoi_name <- aoi_to_name(aoi_file)
 
     # Prepare output directories
     BOA_dir <- file.path(LC_output_dir, "BOA")
@@ -110,10 +111,7 @@
     if (!dir.exists(STR_dir)) {
         dir.create(STR_dir)
     }
-
     cropped_rast_list <- crop_landsat_list(landsat_list)
-
-
 
     # Get VI and STR from this list of raster stacks
     VI_STR_list <- lapply(seq_along(cropped_rast_list), function(x) {
@@ -172,7 +170,6 @@
     message("VI-STR data saved to: ", full_df_path)
     # Now continue with regular wet-dry coefficients process
     rmse_df <- rOPTRAM::optram_wetdry_coefficients(full_VI_STR,
-                                                  aoi_file,
                                                   data_output_dir)
 
     return(rmse_df)

@@ -7,16 +7,9 @@
 #' @param output_dir, string, directory to save coefficients CSV file
 #' @param vi_step, float, width of intervals along VI axis
 #'    default 0.005
-#' @param aoi_file, string, added to title of plot
-#'  (Can be path to AOI file, then the file name is used in plot title)
 #' @param trapezoid_method, string, how to prepare wet and dry trapezoid edges
 #'    Possible values: "linear", "exponential", "polynomial". See notes.
 #'    Default "linear"
-#' @param save_plot, boolean, If TRUE (default) save scatterplot to output_dir
-#' @param edge_points, boolean, whether to add edge points to the plot.
-#'    If `save_plot` is TRUE, and `edge_points` is TRUE
-#'    add the original regression points that were used to derive coefficients.
-#'    default FALSE
 #' @return rmse_df, data.frame,  RMSE values of fitted trapezoid edges
 #' @export
 #' @note
@@ -48,24 +41,23 @@
 #'  alpha, beta_1, and beta_2 for both wet and dry edges
 
 #' @examples
-#' aoi_file <- "Test"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'   package = "rOPTRAM"))
-#' rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
+#' rmse_df <- optram_wetdry_coefficients(full_df,
 #'                  trapezoid_method = "linear")
 #' print(rmse_df)
-#' rmse_df <- optram_wetdry_coefficients(full_df, aoi_file,
+#' rmse_df <- optram_wetdry_coefficients(full_df,
 #'                   trapezoid_method = "polynomial")
 #' print(rmse_df)
 #'
 
-optram_wetdry_coefficients <- function(
-    full_df, aoi_file,
-    output_dir = tempdir(),
-    vi_step = 0.005,
-    trapezoid_method = c("linear", "exponential", "polynomial"),
-    save_plot = TRUE,
-    edge_points = FALSE) {
+optram_wetdry_coefficients <- function(full_df,
+                                       output_dir = tempdir(),
+                                       vi_step = 0.005,
+                                       trapezoid_method = c("linear",
+                                                            "exponential",
+                                                            "polynomial"),
+                                       edge_points = FALSE) {
   # Derive slope and intercept to two sides of trapezoid
   # Based on:
   # https://github.com/teerathrai/OPTRAM
@@ -81,13 +73,6 @@ optram_wetdry_coefficients <- function(
   # Avoid "no visible binding for global variable" NOTE
   VI_min_max <- VI_series <- VI_STR_list <- VI_STR_df <- NULL
   Qs <- str_max <- str_min <- interval_df <- edges_df1 <- NULL
-
-  #  Pre-flight Check
-  if (is.null(aoi_file)) {
-    aoi_name <- NULL
-    } else if (!file.exists(aoi_file)) {
-      aoi_name <- aoi_file
-      } else {aoi_name <- aoi_to_name(aoi_file)}
 
   # Make sure no Inf or NA in full_df
   full_df <- full_df[is.finite(full_df$VI), ]
@@ -141,14 +126,6 @@ optram_wetdry_coefficients <- function(
         exponential = exponential_coefficients(edges_df, output_dir),
         polynomial = polynomial_coefficients(edges_df, output_dir))
 
-  if (save_plot) {
-    plot_vi_str_cloud(full_df,
-                     aoi_name,
-                     fitted_df,
-                     trapezoid_method = trapezoid_method,
-                     output_dir = output_dir,
-                     edge_points = edge_points )
-  }
   rmse_wet <- sqrt(mean((fitted_df$STR_wet_fit - fitted_df$STR_wet)^2))
   rmse_dry <- sqrt(mean((fitted_df$STR_dry_fit - fitted_df$STR_dry)^2))
   return(data.frame("RMSE wet" = rmse_wet, "RMSE dry" = rmse_dry))
@@ -160,32 +137,34 @@ optram_wetdry_coefficients <- function(
 #' Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
 #' over scatterplot of multi-temporal STR and NDVI pixel values
 #' @param full_df, data.frame of NDVI and STR pixel values
-#' @param aoi_name, string, used in plot title
 #' @param edges_df, data.frame, points along the wet/dry edges for trapezoid
-#' @param output_dir, string, directory to save plot png file.
 #' @param trapezoid_method, string, how to plot trapezoid line.
 #'    either "linear" or "exponential", default is "linear"
 #' @param edge_points, boolean, whether to add to the plot the
 #'    linear regression points that were used to derive coefficients.
 #'    default FALSE
-#' @return None
+#' @return ggplot object
 #' @export
 #' @import ggplot2
 #' @examples
-#' aoi_name <- "Test"
+#' aoi_name <- "Soil Moisture AOI"
 #' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
 #'         package = "rOPTRAM"))
 #' edges_df <- read.csv(system.file("extdata", "trapezoid_edges_lin.csv",
 #'                         package = "rOPTRAM"))
-#' plot_vi_str_cloud(full_df, aoi_name, edges_df)
+#' pl <- plot_vi_str_cloud(full_df, edges_df)
+#' pl + ggtitle(paste("Trapezoid plot for:", aoi_name))
+#' pl
+#'
 #' edges_df <- read.csv(system.file("extdata", "trapezoid_edges_poly.csv",
 #'                         package = "rOPTRAM"))
-#' plot_vi_str_cloud(full_df, aoi_name, edges_df,
+#' pl <- plot_vi_str_cloud(full_df, edges_df,
 #'                     trapezoid_method = "polynomial")
+#' pl + ggtitle(paste("Trapezoid plot for:", aoi_name))
+#' pl
 #'
 plot_vi_str_cloud <- function(
     full_df,
-    aoi_name,
     edges_df,
     output_dir = tempdir(),
     trapezoid_method = c("linear", "exponential", "polynomial"),
@@ -240,14 +219,10 @@ plot_vi_str_cloud <- function(
                 color="blue", se = FALSE,
                 linewidth = 2) +
 
-    ggtitle(paste("Trapezoid Plot - ", aoi_name),
-            subtitle = paste(trapezoid_method, "fit"))
     # Set theme
     theme_bw() +
     theme(axis.title = element_text(size = 14),
-          axis.text = element_text(size = 12),
-          plot.title = element_text(size = 18, face = "bold"),
-          plot.subtitle = element_text(size = 18))
+          axis.text = element_text(size = 12))
 
   if (edge_points) {
     pl <- pl + geom_point(aes(x=VI, y=STR_wet),
@@ -257,10 +232,5 @@ plot_vi_str_cloud <- function(
                       color = "black", size=1.5, shape=6,
                       data = edges_df)
   }
-  plot_path <- file.path(output_dir,
-                         paste0("trapezoid_",
-                                aoi_name, "_",
-                                trapezoid_method, ".png"))
-  ggsave(plot_path,
-         plot = pl, width = 10, height = 7, units = "in", dpi = 192)
+  return(pl)
 }

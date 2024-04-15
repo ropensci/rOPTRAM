@@ -10,8 +10,7 @@
 #' @param safe_dir, string, full path to containing folder of downloaded
 #'    (unzipped) Sentinel 2 data in original SAFE format,
 #'    after atmospheric correction (L2A)
-#' @param aoi_file, string, path to boundary polygon spatial file
-#'    of area of interest
+#' @param aoi, {sf} object, a POLYGON or MULTIPOLYGON of the AOI boundary
 #' @param veg_index, string, which VI to prepare, either 'NDVI' (default)
 #'    or 'SAVI' or 'MSAVI'
 #' @param S2_output_dir, string, directory to save the derived products,
@@ -49,14 +48,22 @@
 #'
 #' @examples
 #' \dontrun{
-#' aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
+#' aoi <- sf::st_read(system.file("extdata",
+#'                   "lachish.gpkg", package = "rOPTRAM"))
 #' safe_dir  <- tempdir()
-#' coeffs <- optram_safe(safe_dir,
-#'                       aoi_file, veg_index = "NDVI", SWIR_band = 11)
+#' rmse <- optram_safe(safe_dir,
+#'                       aoi, veg_index = "NDVI", SWIR_band = 11)
+#' # Plot trapezoid
+#' full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
+#'         package = "rOPTRAM"))
+#' edges_df <- read.csv(system.file("extdata", "trapezoid_edges_lin.csv",
+#'                         package = "rOPTRAM"))
+#' pl <- plot_vi_str_cloud(full_df, edges_df, edge_points = TRUE)
+#' pl
 #' }
 
 optram_safe <- function(safe_dir,
-                        aoi_file,
+                        aoi,
                         veg_index = 'NDVI',
                         S2_output_dir = tempdir(),
                         overwrite = TRUE,
@@ -73,9 +80,11 @@ optram_safe <- function(safe_dir,
     STR <- STR_df <- full_df <- NULL
 
     # Pre flight checks...
-    if (!check_aoi(aoi_file)) {
+    if (!check_aoi(aoi)) {
         return(NULL)
     }
+    # Ensure aoi is single POLYGON or MULTIPOLYGON
+    aoi <- sf::st_union(aoi)
 
     if (is.null(safe_dir) || !dir.exists(safe_dir)) {
       message("The directory of downloaded Landsat images
@@ -109,9 +118,8 @@ optram_safe <- function(safe_dir,
         "B11_20m", #SWIR 1600
         "B12_20m"  #SWIR 2200
     )
-    # Get Area of interest
-    aoi <- suppressWarnings(terra::vect(aoi_file))
-    aoi_name <- aoi_to_name(aoi_file)
+    # Get Area of interest as {terra} vect objcet
+    aoi <- terra::vect(aoi)
 
     # Prepare output directories
     BOA_dir <- file.path(S2_output_dir, "BOA")
@@ -275,7 +283,6 @@ optram_safe <- function(safe_dir,
     # Now continue with regular process
     rmse_df <- rOPTRAM::optram_wetdry_coefficients(
       full_VI_STR,
-      aoi_file,
       trapezoid_method = trapezoid_method,
       vi_step = vi_step,
       output_dir = data_output_dir)

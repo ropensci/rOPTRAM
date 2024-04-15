@@ -5,7 +5,7 @@
 \title{Utility Function to Acquire Sentinel-2 Imagery using openEO}
 \usage{
 acquire_openeo(
-  aoi_file,
+  aoi,
   from_date,
   to_date,
   max_cloud = 10,
@@ -16,8 +16,7 @@ acquire_openeo(
 )
 }
 \arguments{
-\item{aoi_file, }{string, full path to polygon spatial file of
-boundary of area of interest}
+\item{aoi, }{{sf} object, POLYGON or MULTIPOLYGON of area of interest}
 
 \item{from_date, }{string, represents start of date range,
 formatted as "YYYY-MM-DD"}
@@ -71,7 +70,8 @@ grant access - press "yes".
 \dontrun{
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
-aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
+aoi <- sf::st_read(system.file("extdata",
+                "lachish.gpkg", package = 'rOPTRAM'))
 acquire_openeo(aoi, from_date, to_date,
                veg_index = "SAVI")
 }
