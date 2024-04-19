@@ -72,9 +72,11 @@
 #' to_date <- "2019-04-30"
 #' aoi <- sf::st_read(system.file("extdata",
 #'                   "lachish.gpkg", package = 'rOPTRAM'))
-#' acquire_scihub(aoi, from_date, to_date,
-#'                veg_index = "SAVI",
-#'                SWIR_band = 11)
+#' acq_sh <- acquire_scihub(aoi, from_date, to_date,
+#'                         veg_index = "SAVI",
+#'                         clientid = 'paste id here',
+#'                         secret = 'paste secret here',
+#'                         SWIR_band = 11)
 #' }
 
 acquire_scihub <- function(
@@ -263,6 +265,9 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #' follow these steps:
 #' A. When the message "Press <enter> to proceed:" appears in the console,
 #' press enter.
+#' When prompted with 'Copy CTGB-UGFU and paste when requested by the browser' 
+#' in the console, it may appear but can be ignored, as it is related to an 
+#' older version of the openeo package.
 #' Calling this method opens your system web browser, with which
 #' you can authenticate yourself on the back-end authentication system. After
 #' that, the website will give you instructions to go back to the R client,
@@ -279,8 +284,9 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #' to_date <- "2019-04-30"
 #' aoi <- sf::st_read(system.file("extdata",
 #'                 "lachish.gpkg", package = 'rOPTRAM'))
-#' acquire_openeo(aoi, from_date, to_date,
-#'                veg_index = "SAVI")
+#' Important! Assign the output to an object for later retrieval
+#' acq <- acquire_openeo(aoi, from_date, to_date,
+#'                       veg_index = "SAVI")
 #' }
 
 acquire_openeo <- function(
