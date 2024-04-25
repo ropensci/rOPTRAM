@@ -50,7 +50,7 @@
 #' \itemize{
 #'  \item Now, you can utilize the generated \code{clientid} and \code{secret} in
 #'    the \code{aquire_scihub()} function.
-#'  \item If you want to store your credentials on your computer, ensure that when running \code{aquire_scihub}, the \code{save_creds} parameter is set to `TRUE`.
+#'  \item If you want to store your credentials on your computer, ensure that when running \code{aquire_scihub}, the \code{save_creds} parameter is set to TRUE.
 #'  \item During the first run of \code{aquire_scihub()}, manually input your \code{clientid} and \code{secret} in the function's signature.
 #'  \item Subsequent runs will use the stored credentials.
 #'}
@@ -85,7 +85,7 @@
 #'}
 #'
 #' Two SWIR bands are available in Sentinel-2: 1610 nanometer (nm) and 2190 nm.
-#' Setting the option \code{SWIR_bands} allows to choose which band is used in this model.
+#' Setting the option \code{SWIR_bands} with \code{\link[rOPTRAM]{optram_options}} allows to choose which band is used in this model.
 #'
 #' @examples
 #' \dontrun{
