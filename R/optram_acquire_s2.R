@@ -54,7 +54,7 @@
 #'  \item During the first run of \code{aquire_scihub()}, manually input your \code{clientid} and \code{secret} in the function's signature.
 #'  \item Subsequent runs will use the stored credentials.
 #'}
-#' 
+#'
 #' Subject Area Constraint:
 #'  The downloadable images are restricted to a maximum size of 2500 pixels on
 #'  each side. This limitation is established due to the final resolution set to
@@ -68,7 +68,7 @@
 #'
 #' "openeo",...
 #' If "openeo" then:
-#' This function utilizes the `openeo` package.
+#' This function utilizes the \code{openeo} package.
 #' Instructions for the login process:
 #' First of all, to authenticate your account on the backend of the Copernicus
 #' Data Space Ecosystem, it is necessary for you to complete the registration
@@ -83,7 +83,7 @@
 #'   \item Calling this method opens your system web browser, with which you can authenticate yourself on the back-end authentication system. After that, the website will give you instructions to go back to the R client, where your connection has logged your account in. This means that every call that comes after that via the connection variable is executed by your user account.
 #'   \item You will be redirected to \url{https://identity.dataspace.copernicus.eu/}. Ensure you have an account and are logged in. You will be required to grant access - press "yes".
 #'}
-#' 
+#'
 #' Two SWIR bands are available in Sentinel-2: 1610 nanometer (nm) and 2190 nm.
 #' Setting the option \code{SWIR_bands} allows to choose which band is used in this model.
 #'

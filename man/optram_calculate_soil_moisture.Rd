@@ -21,7 +21,7 @@ formatted as "YYYY-MM-DD"}
 \item{STR_dir, }{string, full path to directory holding the STR rasters}
 
 \item{data_dir, }{string, the directory where coefficients file was saved
-(the \code{output_dir} parameter in \code{optram_wetdry_coefficients()} function)}
+(the \code{output_dir} parameter in \code{\link[rOPTRAM]{optram_wetdry_coefficients}} function)}
 
 \item{output_dir, }{string, full path to output directory
 for saving soil moisture raster}

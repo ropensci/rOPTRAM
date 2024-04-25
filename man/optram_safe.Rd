@@ -53,7 +53,7 @@ The sample size is determined based on \code{max_tbl_size}
 and the total number of time slots in the full time range.
 
 Two SWIR bands are available in Sentinel-2: 1610 nanometer (nm) and 2190 nm.
-The parameter \code{SWIR_bands} allows to choose which band is used in this model.
+Set which band to use with \code{optram_options}.
 }
 \examples{
 \dontrun{

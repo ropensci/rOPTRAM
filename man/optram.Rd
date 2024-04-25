@@ -46,25 +46,14 @@ Remote Sensing of Environment 198, 52–68,
 \doi{https://doi.org/10.1016/j.rse.2017.05.041}
 }
 \note{
-Sentinel downloaded products are saved to S2_output_dir.
-Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
-
-Products can be downloaded covering two "period" options:
-either "full" - all available images from \code{from_date} to \code{to_date} or
-"seasonal" - available images for all years but only for the months between
-day/month of \code{from_date} to the day/month of \code{to_date}.
-Use \code{\link[rOPTRAM]{optram_options}} to set this option.
-
-Three trapezoid fitting methods are implemented: "linear",
-"exponential" and "polynomial". See the \code{\link[rOPTRAM]{optram_options}} function for details
-
-Two SWIR wavelength bands are available in Sentinel-2:
-1610 nanometer (nm) and 2190 nm.
-The option \code{SWIR_bands} can be set in \code{\link[rOPTRAM]{optram_options}}
-to choose which band is used in this model.
-
-Several vegetation indices are implemented: "NDVI", "SAVI", etc.
-The \code{\link[rOPTRAM]{optram_options}}function also sets this option.
+\itemize{
+\item Sentinel downloaded products are saved to S2_output_dir. Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
+\item Products can be downloaded covering two "period" options: either "full" - all available images from \code{from_date} to \code{to_date} or "seasonal" - available images for all years but only for the months between
+day/month of \code{from_date} to the day/month of \code{to_date}. Use \code{\link[rOPTRAM]{optram_options}} to set this option.
+\item Three trapezoid fitting methods are implemented: "linear", "exponential" and "polynomial". See the \code{\link[rOPTRAM]{optram_options}} function for details
+\item Two SWIR wavelength bands are available in Sentinel-2: 1610 nanometer (nm) and 2190 nm. The option \code{SWIR_bands} can be set in \code{\link[rOPTRAM]{optram_options}} to choose which band is used in this model.
+\item Several vegetation indices are implemented: "NDVI", "SAVI", etc. The \code{\link[rOPTRAM]{optram_options}}function also sets this option.
+}
 }
 \examples{
 \dontrun{

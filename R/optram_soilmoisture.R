@@ -7,7 +7,7 @@
 #' @param img_date, string, image date of single Sentinel 2 acquisition
 #'  formatted as "YYYY-MM-DD"
 #' @param data_dir, string, the directory where coefficients file was saved
-#'  (the \code{output_dir} parameter in \code{optram_wetdry_coefficients()} function)
+#'  (the \code{output_dir} parameter in \code{\link[rOPTRAM]{optram_wetdry_coefficients}} function)
 #' @param output_dir, string, full path to output directory
 #'  for saving soil moisture raster
 #' @return SpatRaster, raster of soil moisture, file(s) saved in output_dir

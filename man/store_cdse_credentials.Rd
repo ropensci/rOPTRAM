@@ -15,7 +15,7 @@ store_cdse_credentials(clientid = NULL, secret = NULL)
 Store CDSE clientid and secret into a file
 The file location is system specific.
 Users who chose to save CDSE credentials can use this function
-(and then the \code{retrieve_cdse_credentials()} afterwards)
+(and then the \code{\link[rOPTRAM]{retrieve_cdse_credentials}} afterwards)
 The clientid and secret are obtained from:
 }
 \note{

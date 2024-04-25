@@ -31,20 +31,22 @@
 #'   \item Enter a suitable "Client Name" and click the green "Create Client" button.
 #'   \item A Client secret is generated.
 #'   }
-#' the user must save her secret and clientid somewhere.
-#' these credentials will be saved automatically to a standard filesystem
-#' location if the user calls \code{check_scihub()} with the argument \code{save_creds}
-#' set to TRUE (recommended).
-#' if the user chooses not to save credentials to the standard filesystem
+#' The user must save her secret and clientid somewhere.
+#' These credentials will be saved automatically to a standard filesystem
+#' location if the user calls \code{store_cdse_credentials()}
+#' with the \code{clientid} and \code{secret} parameters.
+#' If the user chooses not to save credentials to the standard filesystem
 #' location, then she will need to add both clientid and secret to each
 #' \code{acquire_scihub()} function call.
 #'
 #' Using Credentials with \code{aquire_scihub}:
 #' \itemize{
-#'  \item Now, you can utilize the generated \code{clientid} and \code{secret} in the \code{aquire_scihub()} function.
+#'  \item In addition, you can utilize the generated \code{clientid} and \code{secret} within the \code{aquire_scihub()} function.
 #'  \item If you want to store your credentials on your computer, ensure that when running \code{aquire_scihub()}, the \code{save_creds} parameter is set to 'TRUE'.
 #'  \item During the first run of \code{aquire_scihub()}, manually input your \code{clientid} and \code{secret} in the function signature. Subsequent runs will use the stored credentials.
+#'  \item If the credentials were stored using \code{store_cdse_credentials()}, the credentials are retrieved automatically.
 #' }
+#'
 #' Subject Area Constraint:
 #'  The downloadable images are restricted to a maximum size of 2500 pixels on
 #'  each side. This limitation is established due to the final resolution set to

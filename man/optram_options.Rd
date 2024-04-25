@@ -28,7 +28,7 @@ a list of currently defined options is printed.
 {rOPTRAM} defines the following options at startup
 \tabular{lll}{
 opt_name  \tab default  \tab other possible values \cr
----------------- \tab---------------\tab --------------- \cr
+---------------- \tab---------------\tab ------------------- \cr
 veg_index  \tab "NDVI"  \tab "SAVI", "MSAVI" \cr
 remote  \tab "scihub"   \tab "openeo" \cr
 period  \tab "full"   \tab "seasonal" \cr
