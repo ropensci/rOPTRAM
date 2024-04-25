@@ -2,7 +2,7 @@
 % Please edit documentation in R/trapezoid_utilities.R
 \name{exponential_coefficients}
 \alias{exponential_coefficients}
-\title{Utility Function to Prepare Exponential FittedEedges of Trapezoid}
+\title{Utility Function to Prepare Exponential Fitted Eedges of Trapezoid}
 \usage{
 exponential_coefficients(df, output_dir)
 }
@@ -16,8 +16,7 @@ df, data.frame, the trapezoid line edge points
 with fitted wet/dry values added
 }
 \description{
-Called by \code{optram_wetdry_coefficients()}
-to prepare exponential curve along trapezoid edges
+Called by \code{\link[rOPTRAM]{optram_wetdry_coefficients}}  to prepare exponential curve along trapezoid edges.
 Calculates the intercept and slope of both wet and dry edges
 and updates the edges data.frame with these exp fitted values
 Not exported

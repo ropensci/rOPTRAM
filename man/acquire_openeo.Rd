@@ -34,7 +34,7 @@ list of BOA files
 \description{
 This non-exported function uses the \code{openeo} package
 to send a request to Copernicus DataSpace, and prepare the products.
-Called by optram_acquire_s2
+Called by \code{\link[rOPTRAM]{optram_acquire_s2}}
 }
 \note{
 This function utilizes the \code{openeo} package.
@@ -42,22 +42,17 @@ Instructions for the login process:
 First of all, to authenticate your account on the backend of the Copernicus
 Data Space Ecosystem, it is necessary for you to complete the registration
 process. Follow these instructions for registration:
-https://documentation.dataspace.copernicus.eu/Registration.html
+\url{https://documentation.dataspace.copernicus.eu/Registration.html}
 After you have registered and installed the \code{openeo} package, you can run the
 \code{acquire_openeo} function.
 During the process of connecting to the server and logging in, you need to
 follow these steps:
-A. When the message "Press \if{html}{\out{<enter>}} to proceed:" appears in the console,
-press enter.
-Calling this method opens your system web browser, with which
-you can authenticate yourself on the back-end authentication system. After
-that, the website will give you instructions to go back to the R client,
-where your connection has logged your account in. This means that every
-call that comes after that via the connection variable is executed by your
-user account.
-B. You will be redirected to "https://identity.dataspace.copernicus.eu/".
-Ensure you have an account and are logged in. You will be required to
-grant access - press "yes".
+\enumerate{
+\item When the message "Press \if{html}{\out{<enter>}} to proceed:" appears in the console, press enter.
+\item Calling this method opens your system web browser, with which you can authenticate yourself on the back-end authentication system.
+\item After that, the website will give you instructions to go back to the R client, where your connection has logged your account in. This means that every call that comes after that via the connection variable is executed by your user account.
+\item You will be redirected to \url{https://identity.dataspace.copernicus.eu/}. Ensure you have an account and are logged in. You will be required to grant access - press "yes".
+}
 }
 \examples{
 \dontrun{

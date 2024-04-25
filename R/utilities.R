@@ -24,27 +24,27 @@
 #' a list of currently defined options is printed.
 #'
 #' {rOPTRAM} defines the following options at startup
-#'
-#'  |opt_name         | opt_value   | other possible values
-#'  |:----------------|:------------|:----------------
-#'  |veg_index        | "NDVI"      | "SAVI", "MSAVI"
-#'  |remote           | "scihub"    | "openeo"
-#'  |period           | "full"      | "seasonal"
-#'  |vi_step          | 0.005       | usually between 0.01 and 0.001
-#'  |trapezoid_method | "linear"    | "polynomial" or "exponential"
-#'  |SWIR_band        | 11          | 12
-#'  |max_tbl_size     | 1e+6        | depends on computer resources
-#'  |rm.low.vi        | FALSE       | TRUE
-#'  |rm.hi.str        | FALSE       | TRUE
-#'  |plot_colors      | "no"        | "no" = uniform green color for all points
-#'  |                 |             | "features" = points colored by aoi features
-#'  |                 |             | "colors" = points colored by point density
-#'  |                 |             | "contours" = plots density contour lines
-#'  |feature_col      |"ID"         | string, name of *numeric* column
-#'  |                 |             | that contains feature ID's for coloring plot
-#'  |edge_points      | TRUE        | FALSE, whether to add
-#'                                  | the trapezoid edge points to the plot
-#'
+#'\tabular{lll}{
+#'  opt_name  \tab default  \tab other possible values \cr
+#'  ---------------- \tab---------------\tab ------------------- \cr
+#'  veg_index  \tab "NDVI"  \tab "SAVI", "MSAVI" \cr
+#'  remote  \tab "scihub"   \tab "openeo" \cr
+#'  period  \tab "full"   \tab "seasonal" \cr
+#'  vi_step  \tab 0.005  \tab usually between 0.01 and 0.001 \cr
+#'  trapezoid_method \tab "linear"  \tab "polynomial" or "exponential" \cr
+#'  SWIR_band        \tab 11    \tab 12 \cr
+#'  max_tbl_size     \tab 1e+6  \tab depends on computer resources \cr
+#'  rm.low.vi        \tab FALSE \tab TRUE \cr
+#'  rm.hi.str        \tab FALSE \tab TRUE \cr
+#'  plot_colors      \tab "no"  \tab "no" = uniform green color for all points \cr
+#'   \tab  \tab "features" = points colored by aoi features \cr
+#'   \tab  \tab "colors" = points colored by point density \cr
+#'   \tab  \tab "contours" = plots density contour lines \cr
+#'  feature_col      \tab "ID" \tab string, name of *numeric* column \cr
+#'   \tab  \tab that contains feature ID's for coloring plot \cr
+#'  edge_points      \tab TRUE  \tab FALSE, whether to add \cr
+#'   \tab  \tab the trapezoid edge points to the plot \cr
+#'}
 optram_options <- function(opt_name = NULL, opt_value=NULL,
                            show_opts = TRUE) {
   # Internal functions
@@ -321,22 +321,22 @@ calculate_str <- function(img_stk,
 #' @description Store CDSE clientid and secret into a file
 #' The file location is system specific.
 #' Users who chose to save CDSE credentials can use this function
-#' (and then the `retrieve_cdse_credentials()` afterwards)
+#' (and then the \code{retrieve_cdse_credentials()} afterwards)
 #' The clientid and secret are obtained from:
 #'
 #' @param clientid, string, user's OAuth client id
 #' @param secret, string, user's OAuth secret
 #' @return NULL
 #' @note
-#' Both clientid and secret can alternatively be supplied as
+#' Both \code{clientid} and \code{secret} can alternatively be supplied as
 #' environment variables: OAUTH_CLIENTID and OAUTH_SECRET.
 #' If these env variables are available (and no values are entered
 #' as function arguments) they will be used to store credentials.
 #' @export
 #' @examples
 #' \dontrun{
-#' store_cdse_credentials(clientid="sh-abcdefgh-i012-j345-k678-9012345abc",
-#'                       secret = "AbCdEfGhIjKlMnOpQrStUv0123456789")
+#' store_cdse_credentials(clientid="<...enter your client id...>",
+#'                       secret = "<...enter your secret...>")
 #' }
 
 store_cdse_credentials <- function (clientid = NULL,
@@ -377,7 +377,7 @@ store_cdse_credentials <- function (clientid = NULL,
 #' @title Retrieve CDSE Client Credentials from File
 #' @description Retrieve CDSE clientid and secret from file
 #' The file location is system specific. It would have been setup
-#' in advance using the `store_cdse_credentials()` function
+#' in advance using the \code{store_cdse_credentials()} function
 #' @return A data frame containing the retrieved CDSE clientid and secret,
 #' or NULL if credentials are not available.
 #' @export

@@ -2,7 +2,7 @@
 #' @description Collect all pixel values of both vegetation index,
 #' and Swir Transformed Reflectance, for a time series of images.
 #' Prepare data.frame of all pairs of values
-#' (as input for the `optram_wetdry_coefficients()` function)
+#' (as input for the \code{\link[rOPTRAM]{optram_wetdry_coefficients}} function)
 #' @param STR_list, list of paths to STR raster files
 #' @param VI_list, list of paths to NDVI raster files
 #' @param output_dir, string, path to save data.frames (in RDS format)
@@ -12,16 +12,17 @@
 #' @return full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
 #' @export
 #' @note
-#' Use the option `max_tbl_size` (see `optram_options()`)
+#' Use the option \code{max_tbl_size} (see \code{\link[rOPTRAM]{optram_options}})
 #' to limit size of the NDVI-STR data.frame.
 #' With a large area of interest, and long time frame,
 #' the number of data points can overrun the computation resources.
-#' This parameter sets a total size of data.frame from the `max_tbl_size`
+#' This parameter sets a total size of data.frame from the \code{max_tbl_size}
 #' parameter, together with the number of image time slots in the time range.
 #'
 #' In some cases (i.e. water surfaces) NDVI can have values
 #' below zero. These pixels can be removed from the trapezoid
-#' by setting `rm.low.vi` option to TRUE.
+#' by setting \code{rm.low.vi}
+#' option to TRUE.
 #'
 #' The vegetation index column is named "NDVI" even though it can represent
 #' other vegetation indices, such as SAVI, or MSAVI.

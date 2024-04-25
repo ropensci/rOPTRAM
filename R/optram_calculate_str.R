@@ -10,7 +10,7 @@
 #'  A novel approach to remote sensing of soil moisture
 #'  applied to Sentinel-2 and Landsat-8 observations.
 #'  Remote Sensing of Environment 198, 52–68.
-#'  https://doi.org/10.1016/j.rse.2017.05.041
+#'  \doi{https://doi.org/10.1016/j.rse.2017.05.041}
 #'
 #' SWIR Transformed Reflectance is calculated as
 #'  STR = (1-SWIR)^2 / 2*SWIR

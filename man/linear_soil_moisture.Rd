@@ -23,7 +23,7 @@ using the derived slope and intercept coefficients
 }
 \note{
 This function is used after preparing the OPTRAM model coefficients with:
-\code{optram_wetdry_coefficients()}. Typically a new image date,
+\code{\link[rOPTRAM]{optram_wetdry_coefficients}}. Typically a new image date,
 (that was not used for preparing the model),
 will be referenced in the \code{img_date} parameter.
 The resulting soil moisture raster is saved to \code{output_dir}.

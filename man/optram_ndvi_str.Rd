@@ -24,10 +24,10 @@ full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
 Collect all pixel values of both vegetation index,
 and Swir Transformed Reflectance, for a time series of images.
 Prepare data.frame of all pairs of values
-(as input for the \code{optram_wetdry_coefficients()} function)
+(as input for the \code{\link[rOPTRAM]{optram_wetdry_coefficients}} function)
 }
 \note{
-Use the option \code{max_tbl_size} (see \code{optram_options()})
+Use the option \code{max_tbl_size} (see \code{\link[rOPTRAM]{optram_options}})
 to limit size of the NDVI-STR data.frame.
 With a large area of interest, and long time frame,
 the number of data points can overrun the computation resources.
@@ -36,7 +36,8 @@ parameter, together with the number of image time slots in the time range.
 
 In some cases (i.e. water surfaces) NDVI can have values
 below zero. These pixels can be removed from the trapezoid
-by setting \code{rm.low.vi} option to TRUE.
+by setting \code{rm.low.vi}
+option to TRUE.
 
 The vegetation index column is named "NDVI" even though it can represent
 other vegetation indices, such as SAVI, or MSAVI.

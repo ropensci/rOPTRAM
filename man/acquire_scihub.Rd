@@ -40,7 +40,7 @@ list of BOA files
 \description{
 This function uses the \code{CDSE} package
 to send a request to Copernicus Dataspace, and prepare the products.
-Called by optram_acquire_s2()
+Called by \code{\link[rOPTRAM]{optram_acquire_s2}}
 }
 \note{
 This function utilizes the \code{CDSE} package.
@@ -48,41 +48,31 @@ Make sure to install the CDSE and jsonlite packages.
 Create OAuth account and token:
 Creating an Account:
 \enumerate{
-\item Navigate to the \href{https://dataspace.copernicus.eu/}{Copernicus portal}.
+\item Navigate to the \url{https://dataspace.copernicus.eu/}.
 \item Click the "Register" button to access the account creation page.
-\item If already registered, enter your username and password,
-and click "Login."
-\item Once logged in, go to the User dashboard and click "User Settings" to
-access the Settings page.
+\item If already registered, enter your username and password, and click "Login."
+\item Once logged in, go to the User dashboard and click "User Settings" to access the Settings page.
 }
-
 Creating OAuth Client:
 \enumerate{
-\item On the Settings page, click the green "Create New" button located on
-the right.
-\item Enter a suitable "Client Name" and click the green "Create Client"
-button.
+\item On the Settings page, click the green "Create New" button located on the right.
+\item Enter a suitable "Client Name" and click the green "Create Client" button.
 \item A Client secret is generated.
+}
 the user must save her secret and clientid somewhere.
 these credentials will be saved automatically to a standard filesystem
-location if the user calls check_scihub() with the argument save_creds
+location if the user calls \code{check_scihub()} with the argument \code{save_creds}
 set to TRUE (recommended).
 if the user chooses not to save credentials to the standard filesystem
 location, then she will need to add both clientid and secret to each
-acquire_scihub() function call.
-}
+\code{acquire_scihub()} function call.
 
 Using Credentials with \code{aquire_scihub}:
 \itemize{
-\item Now, you can utilize the generated \code{clientid} and \code{secret} in
-the \code{aquire_scihub} function.
-\item If you want to store your credentials on your computer, ensure that when
-running \code{aquire_scihub}, the \code{save_creds} parameter is set to \code{TRUE}.
-\item During the first run of \code{aquire_scihub}, manually input your \code{clientid}
-and \code{secret} in the function's signature. Subsequent runs will use the
-stored credentials.
+\item Now, you can utilize the generated \code{clientid} and \code{secret} in the \code{aquire_scihub()} function.
+\item If you want to store your credentials on your computer, ensure that when running \code{aquire_scihub()}, the \code{save_creds} parameter is set to 'TRUE'.
+\item During the first run of \code{aquire_scihub()}, manually input your \code{clientid} and \code{secret} in the function signature. Subsequent runs will use the stored credentials.
 }
-
 Subject Area Constraint:
 The downloadable images are restricted to a maximum size of 2500 pixels on
 each side. This limitation is established due to the final resolution set to

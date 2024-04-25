@@ -1,5 +1,5 @@
 #' @title Utility Function to Prepare Linear Regression Edges of Trapezoid
-#' @description Called by `optram_wetdry_coefficients()`
+#' @description Called by \code{\link[rOPTRAM]{optram_wetdry_coefficients}}
 #' to prepare linear regression line along trapezoid edges
 #' Calculates the intercept and slope of both wet and dry edges
 #' Not exported
@@ -9,9 +9,11 @@
 #'  with fitted wet/dry values added
 #' @note
 #'  Three CSV files are saved:
-#'   - the regressions coefficients,
-#'   - the trapezoid edge points
-#'   - RMSE of the fitted curve
+#'  \itemize{
+#'   \item the regressions coefficients,
+#'   \item the trapezoid edge points
+#'   \item RMSE of the fitted curve
+#'   }
 #' @examples
 #' \dontrun{
 #' edges_file <- system.file("extdata/trapezoid_edges.csv",
@@ -50,9 +52,8 @@ linear_coefficients <- function(df, output_dir) {
   return(df)
 }
 
-#' @title Utility Function to Prepare Exponential FittedEedges of Trapezoid
-#' @description Called by `optram_wetdry_coefficients()`
-#' to prepare exponential curve along trapezoid edges
+#' @title Utility Function to Prepare Exponential Fitted Eedges of Trapezoid
+#' @description Called by \code{\link[rOPTRAM]{optram_wetdry_coefficients}}  to prepare exponential curve along trapezoid edges.
 #' Calculates the intercept and slope of both wet and dry edges
 #' and updates the edges data.frame with these exp fitted values
 #' Not exported
@@ -61,10 +62,12 @@ linear_coefficients <- function(df, output_dir) {
 #' @return df, data.frame, the trapezoid line edge points
 #'  with fitted wet/dry values added
 #' @note
-#'  Three CSV files are saved:
-#'   - the regressions coefficients,
-#'   - the trapezoid edge points
-#'   - RMSE of the fitted curve
+#' Three CSV files are saved:
+#'  \itemize{
+#'   \item the regressions coefficients,
+#'   \item the trapezoid edge points
+#'   \item RMSE of the fitted curve
+#'   }
 #' @examples
 #' \dontrun{
 #'   df <- read.csv(system.file("extdata", "trapezoid_edges.csv",
@@ -77,9 +80,6 @@ exponential_coefficients <- function(df, output_dir) {
   wet_fit <- stats::lm(log(df$STR_wet) ~ df$VI)
   dry_fit <- stats::lm(log(df$STR_dry) ~ df$VI)
 
-  # d0 <- 0.2
-  # wet_fit <- stats::lm(STR_wet ~ VI, data = df)
-  # dry_fit <- stats::lm(STR_dry ~ VI, data = df)
   i_wet <- wet_fit$coefficients[[1]]
   s_wet <- wet_fit$coefficients[[2]]
   i_dry <- dry_fit$coefficients[[1]]
@@ -97,13 +97,6 @@ exponential_coefficients <- function(df, output_dir) {
                    file.path(output_dir, "trapezoid_rmse_exp.csv"),
                    row.names = FALSE)
 
-  # # The dry edge is exponential only above d0 = 0.2
-  # STR_lin <- i_dry + s_dry * df$VI[df$VI < d0]
-  # #i_d0 <- i_dry + s_dry * d0
-  # STR_d0 <- i_dry + s_dry *d0
-  # STR_exp <- STR_d0 * exp(s_dry * df$VI[df$VI >= d0])
-  # df$STR_dry_fit <- c(STR_lin, STR_exp)
-
   utils::write.csv(df,
                    file.path(output_dir, "trapezoid_edges_exp.csv"),
                    row.names = FALSE)
@@ -115,11 +108,10 @@ exponential_coefficients <- function(df, output_dir) {
 
 
 #' @title Utility Function to Prepare Polynomial Fitted Edges of Trapezoid
-#' @description Called by `optram_wetdry_coefficients()`
-#' to prepare second order polynomial curve along trapezoid edges
+#' @description Called by \code{\link[rOPTRAM]{optram_wetdry_coefficients}} to prepare second order polynomial curve along trapezoid edges
 #' Calculates six coefficients:  intercept (alpha)  of both wet and dry edges
 #' and first and second order coefficients (beta), as in
-#' $STR = alpha + beta_1 * VI + beta_2 * VI^2$
+#' \eqn{STR = alpha + beta_1 * VI + beta_2 * VI^2}
 #' and updates the edges data.frame with these polynomila values fitted values
 #' @param df, data.frame, values of VI and STR along edges of trapezoid
 #' @param output_dir, string, path to save coefficients CSV file
@@ -127,9 +119,11 @@ exponential_coefficients <- function(df, output_dir) {
 #'  for both wet and dry edges
 #' @note
 #'  Three CSV files are saved:
-#'   - the regressions coefficients,
-#'   - the trapezoid edge points
-#'   - RMSE of the fitted curve
+#' \itemize{
+#'   \item the regressions coefficients,
+#'   \item the trapezoid edge points
+#'   \item RMSE of the fitted curve
+#' }
 #' @examples
 #' \dontrun{
 #'   df <- read.csv(system.file("extdata", "trapezoid_edges.csv",
@@ -184,10 +178,10 @@ polynomial_coefficients <- function(df, output_dir) {
 #'             data_dir = system.file("extdata"))
 #' @note
 #' This function is used after preparing the OPTRAM model coefficients with:
-#'  `optram_wetdry_coefficients()`. Typically a new image date,
+#'  \code{\link[rOPTRAM]{optram_wetdry_coefficients}}. Typically a new image date,
 #'   (that was not used for preparing the model),
-#'   will be referenced in the `img_date` parameter.
-#'   The resulting soil moisture raster is saved to `output_dir`.
+#'   will be referenced in the \code{img_date} parameter.
+#'   The resulting soil moisture raster is saved to \code{output_dir}.
 linear_soil_moisture <- function(coeffs, VI, STR) {
   if (ncol(coeffs) < 4) {
     message("Incorrect number of coefficients. Exiting...")
@@ -213,16 +207,15 @@ linear_soil_moisture <- function(coeffs, VI, STR) {
 #' @return rast, soil moisture grid
 #' @note
 #' This function is used after preparing the OPTRAM model coefficients with:
-#'  `optram_wetdry_coefficients()`. Typically a new image date,
-#'   (that was not used for preparing the model),
-#'   will be referenced in the `img_date` parameter.
-#'   The resulting soil moisture raster is saved to `output_dir`.
+#'  \code{\link[rOPTRAM]{optram_wetdry_coefficients}}. Typically a new image date, (that was not used for preparing the model),
+#'   will be referenced in the \code{img_date} parameter.
+#'   The resulting soil moisture raster is saved to \code{output_dir}.
 #' This function implements an exponential trapezoid, following:
 #' Ambrosone, Mariapaola, et al. 2020.
 #'  “Retrieving Soil Moisture in Rainfed and Irrigated Fields
 #'   Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 #'  International Journal of Applied Earth Observation and Geoinformation 89 (July):
-#'   102113. https://doi.org/10.1016/j.jag.2020.102113.
+#'   102113. \doi{https://doi.org/10.1016/j.jag.2020.102113}
 #' @examples
 #' img_date <- "2023-03-11"
 #' VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
@@ -256,15 +249,7 @@ exponential_soil_moisture <- function(coeffs, VI, STR) {
   s_dry <- coeffs$slope_dry
   i_wet <- coeffs$intercept_wet
   s_wet <- coeffs$slope_wet
-  # Mask VI values below and above the d0 value
-  #VI_lo <- terra::clamp(VI, upper = d0, values = FALSE)
-  #VI_hi <- terra::clamp(VI, lower = d0, values = FALSE)
-  #
-  #W_hi <- (i_dry * exp(s_dry * VI_hi) - STR) /
-  #        (i_dry * exp(s_dry * VI_hi ) - i_wet * exp(s_wet * VI_hi))
-  #W_lo <- (i_dry + s_dry * VI_lo - STR) /
-  #        (i_dry - i_wet +(s_dry - s_wet)* VI_lo)
-  #W <- terra::merge(W_lo, W_hi)
+
   W <- (i_dry * exp(s_dry*VI) - STR) /
     (i_dry * exp(s_dry*VI) - (i_wet * exp(s_wet*VI)))
   return(W)
@@ -280,16 +265,15 @@ exponential_soil_moisture <- function(coeffs, VI, STR) {
 #' @return rast, soil moisture grid
 #' @note
 #' This function is used after preparing the OPTRAM model coefficients with:
-#'  `optram_wetdry_coefficients()`. Typically a new image date,
-#'   (that was not used for preparing the model),
-#'   will be referenced in the `img_date` parameter.
-#'   The resulting soil moisture raster is saved to `output_dir`.
+#'  \code{\link[rOPTRAM]{optram_wetdry_coefficients}}. Typically a new image date,  (that was not used for preparing the model),
+#'   will be referenced in the \code{img_date} parameter.
+#'   The resulting soil moisture raster is saved to \code{output_dir}
 #' This function implements an polynomial fitted curve, following:
 #' Ma, Chunfeng, Kasper Johansen, and Matthew F. McCabe. 2022.
 #'  “Combining Sentinel-2 Data with an Optical-Trapezoid Approach to Infer within-Field Soil Moisture Variability
 #'  and Monitor Agricultural Production Stages.”
 #'  Agricultural Water Management 274 (December): 107942.
-#'  https://doi.org/10.1016/j.agwat.2022.107942.
+#'  \doi{https://doi.org/10.1016/j.agwat.2022.107942}.
 #' @examples
 #' img_date <- "2023-03-11"
 #' VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
@@ -308,10 +292,10 @@ polynomial_soil_moisture <- function(coeffs, VI, STR) {
   #  “Retrieving Soil Moisture in Rainfed and Irrigated Fields Using Sentinel-2 Observations
   #   and a Modified OPTRAM Approach.”
   #  International Journal of Applied Earth Observation and Geoinformation 89 (July):
-  #   102113. https://doi.org/10.1016/j.jag.2020.102113.
+  #   102113. \doi{https://doi.org/10.1016/j.jag.2020.102113}.
   #
-  # W = (STR − (alpha_dry + beta1_dry * VI + beta2_dry * VI^2)) /
-  #     ((alpha-wet - alpha_dry) + (beta1_wet - beta1_dry)*VI + (beta2_wet - beta2_dry)*VI^2)
+  # \deqn{W = (STR − (alpha_dry + beta1_dry * VI + beta2_dry * VI^2)) /
+  #     ((alpha-wet - alpha_dry) + (beta1_wet - beta1_dry)*VI + (beta2_wet - beta2_dry)*VI^2)}
 
   if (ncol(coeffs) < 6) {
     message("Incorrect coefficients file. Exiting...")

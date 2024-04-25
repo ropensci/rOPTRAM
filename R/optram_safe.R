@@ -21,18 +21,18 @@
 #' @return rmse_df, data.frame, RMSE values of fitted trapezoid lines
 #' @export
 #' @note
-#' Use the `max_tbl_size` parameter to limit the total number of rows
+#' Use the \code{max_tbl_size} parameter to limit the total number of rows
 #' in the VI-STR data.frame.
 #' When the area of interest is large, or the time range of datasets is long,
 #' the total size of the data.frame can grow
 #' beyond the capacity of computation resources.
 #' This parameter limits the size of the table
 #' by sampling a number of data points from each time slot.
-#' The sample size is determined based on `max_tbl_size`
+#' The sample size is determined based on \code{max_tbl_size}
 #' and the total number of time slots in the full time range.
 #'
 #' Two SWIR bands are available in Sentinel-2: 1610 nanometer (nm) and 2190 nm.
-#' The parameter `SWIR_bands ` allows to choose which band is used in this model.
+#' The parameter \code{SWIR_bands} allows to choose which band is used in this model.
 #'
 #' @examples
 #' \dontrun{

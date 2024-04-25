@@ -19,14 +19,14 @@ Users who chose to save CDSE credentials can use this function
 The clientid and secret are obtained from:
 }
 \note{
-Both clientid and secret can alternatively be supplied as
+Both \code{clientid} and \code{secret} can alternatively be supplied as
 environment variables: OAUTH_CLIENTID and OAUTH_SECRET.
 If these env variables are available (and no values are entered
 as function arguments) they will be used to store credentials.
 }
 \examples{
 \dontrun{
-store_cdse_credentials(clientid="sh-abcdefgh-i012-j345-k678-9012345abc",
-                      secret = "AbCdEfGhIjKlMnOpQrStUv0123456789")
+store_cdse_credentials(clientid="<...enter your client id...>",
+                      secret = "<...enter your secret...>")
 }
 }

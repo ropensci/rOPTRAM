@@ -24,8 +24,7 @@ using the derived slope and intercept coefficients
 }
 \note{
 This function is used after preparing the OPTRAM model coefficients with:
-\code{optram_wetdry_coefficients()}. Typically a new image date,
-(that was not used for preparing the model),
+\code{\link[rOPTRAM]{optram_wetdry_coefficients}}. Typically a new image date, (that was not used for preparing the model),
 will be referenced in the \code{img_date} parameter.
 The resulting soil moisture raster is saved to \code{output_dir}.
 This function implements an exponential trapezoid, following:
@@ -33,7 +32,7 @@ Ambrosone, Mariapaola, et al. 2020.
 “Retrieving Soil Moisture in Rainfed and Irrigated Fields
 Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 International Journal of Applied Earth Observation and Geoinformation 89 (July):
-102113. https://doi.org/10.1016/j.jag.2020.102113.
+102113. \doi{https://doi.org/10.1016/j.jag.2020.102113}
 }
 \examples{
 img_date <- "2023-03-11"

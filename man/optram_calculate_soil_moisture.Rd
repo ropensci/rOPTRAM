@@ -36,13 +36,13 @@ using the derived slope and intercept coefficients
 }
 \note{
 This function is used after preparing the OPTRAM model coefficients with:
-\code{optram_wetdry_coefficients()}. Typically a new image date,
+\code{\link[rOPTRAM]{optram_wetdry_coefficients}}. Typically a new image date,
 (possibly an image that was not used for preparing the model),
 will be referenced in the \code{img_date} parameter.
 The resulting soil moisture raster is saved to \code{output_dir}.
 
 Three trapezoid models are offered through the trapezoid_method option:
-either "linear", "exponential", or "polynomial". (set using \code{optram_options()})
+either "linear", "exponential", or "polynomial". (set using \code{\link[rOPTRAM]{optram_options}})
 The \code{data_dir} parameter is a directory name.
 The coefficients CSV file that matches \code{trapezoid_method}
 should be in that directory
@@ -52,7 +52,7 @@ Ambrosone, Mariapaola, et al. 2020.
 “Retrieving Soil Moisture in Rainfed and Irrigated Fields
 Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 International Journal of Applied Earth Observation and Geoinformation 89 (July):
-102113. https://doi.org/10.1016/j.jag.2020.102113.
+102113. \doi{https://doi.org/10.1016/j.jag.2020.102113}.
 
 The data_dir directory must contain the coefficients CSV file
 i.e. for "linear" method the file was saved as 'coefficients_lin.csv'

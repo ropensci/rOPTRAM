@@ -9,7 +9,7 @@
 #'   A novel approach to remote sensing of soil moisture
 #'   applied to Sentinel-2 and Landsat-8 observations.
 #'   Remote Sensing of Environment 198, 52–68,
-#'   https://doi.org/10.1016/j.rse.2017.05.041 .
+#'   \doi{https://doi.org/10.1016/j.rse.2017.05.041}
 #' @param aoi, {sf} object, a POLYGON or MULTIPOLYGON, boundary of area of interest
 #' @param from_date, string, the start of the date range,
 #'        Formatted as "YYYY-MM-DD"
@@ -20,27 +20,27 @@
 #' @param data_output_dir, string, path to save coeffs_file
 #'  and STR-VI data.frame, default is tempdir()
 #' @return rmse_df, data.frame, RMSE values of fitted trapezoid lines
-#' the coefficients are also saved to a csv file in `data_output_dir`.
+#' the coefficients are also saved to a csv file in \code{data_output_dir}.
 #' @note
 #' Sentinel downloaded products are saved to S2_output_dir.
 #' Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
 #'
 #' Products can be downloaded covering two "period" options:
-#' either "full" - all available images from `from_date` to `to_date` or
+#' either "full" - all available images from \code{from_date} to \code{to_date} or
 #' "seasonal" - available images for all years but only for the months between
-#' day/month of `from_date` to the day/month of `to_date`.
-#' Use `optram_options()` to set this option.
+#' day/month of \code{from_date} to the day/month of \code{to_date}.
+#' Use \code{\link[rOPTRAM]{optram_options}} to set this option.
 #'
 #' Three trapezoid fitting methods are implemented: "linear",
-#'  "exponential" and "polynomial". See the `optram_options()` function for details
+#'  "exponential" and "polynomial". See the \code{\link[rOPTRAM]{optram_options}} function for details
 #'
 #' Two SWIR wavelength bands are available in Sentinel-2:
 #' 1610 nanometer (nm) and 2190 nm.
-#' The option `SWIR_bands ` can be set in `optram_options()`
+#' The option \code{SWIR_bands} can be set in \code{\link[rOPTRAM]{optram_options}}
 #' to choose which band is used in this model.
 #'
 #' Several vegetation indices are implemented: "NDVI", "SAVI", etc.
-#' The `optram_options()` function also sets this option
+#' The \code{\link[rOPTRAM]{optram_options}}function also sets this option.
 
 #' @export
 #' @examples

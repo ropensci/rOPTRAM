@@ -15,15 +15,13 @@
 #'      and STR-VI data.frame, default is tempdir()
 #' @return rmse_df, data.frame, RMSE values of fitted trapezoid edges
 #' @export
-#' @note Unlike the `optram_acquire_s2` function, there is no implementation
-#'  for automatic download of Landsat images.
-#'  This function requires a directory, set in the `landsat_dir` parameter,
-#'  which contains the set of Landsat tiles downloaded manually
-#'  by the user, in advance.
+#' @note Unlike the \code{\link[rOPTRAM]{optram_acquire_s2}} function, there is no implementation for automatic download of Landsat images.
+#'  This function requires a directory, set in the \code{landsat_dir} parameter,
+#'  which contains the set of Landsat tiles downloaded manually by the user, in advance.
 #'  This directory should contain folders of Landsat images, where each folder
-#'  consists of the individual Landsat bands as Geotiff files,
-#'  as well as the metadata files as downloaded from,
-#'  i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
+#'  consists of the individual Landsat bands as Geotiff files, as well as the metadata files as downloaded from,
+#'  i.e. the USGS EarthExplorer \url{https://earthexplorer.usgs.gov/} website.
+#' 
 #' @examples
 #' \dontrun{
 #' aoi <- sf::st_read(system.file("extdata",
@@ -221,7 +219,7 @@ crop_landsat_list <- function(landsat_list) {
       img_path <- dir(s)[grepl(pattern = "*_SR_B[0-9]*.TIF$", x = dir(s))]
       img_path <- img_path[grepl(pattern = b, img_path, fixed = TRUE)]
       img_path <- file.path(s, img_path)
-      # Use the `win` parameter of `terra::rast` to crop Landsat tile to aoi
+      # Use the \code{win} parameter of \code{terra::rast} to crop Landsat tile to aoi
       rst <- terra::rast(img_path, win = terra::ext(aoi))
       return(rst)
     })

@@ -1,5 +1,5 @@
 # Resources:
-# .onAttach & zzz.R explained: https://r-pkgs.org/r.html#when-you-do-need-side-effects
+# .onAttach & zzz.R explained: \url{https://r-pkgs.org/r.html#when-you-do-need-side-effects}
 
 .onAttach <- function(libname, pkgname) {
   m <- c(sprintf("rOPTRAM version %s",
