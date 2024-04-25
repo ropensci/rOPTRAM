@@ -196,22 +196,22 @@ calculate_str <- function(img_stk,
 #' @description Store CDSE clientid and secret into a file
 #' The file location is system specific.
 #' Users who chose to save CDSE credentials can use this function
-#' (and then the `retrieve_cdse_credentials()` afterwards)
+#' (and then the \code{\link[rOPTRAM]{retrieve_cdse_credentials}}  afterwards)
 #' The clientid and secret are obtained from:
 #'
 #' @param clientid, string, user's OAuth client id
 #' @param secret, string, user's OAuth secret
 #' @return NULL
 #' @note
-#' Both clientid and secret can alternatively be supplied as
+#' Both \code{clientid} and \code{secret} can alternatively be supplied as
 #' environment variables: OAUTH_CLIENTID and OAUTH_SECRET.
 #' If these env variables are available (and no values are entered
 #' as function arguments) they will be used to store credentials.
 #' @export
 #' @examples
 #' \dontrun{
-#' store_cdse_credentials(clientid="sh-abcdefgh-i012-j345-k678-9012345abc",
-#'                       secret = "AbCdEfGhIjKlMnOpQrStUv0123456789")
+#' store_cdse_credentials(clientid="...enter your clientid...",
+#'                       secret = "...enter your secret...")
 #' }
 
 store_cdse_credentials <- function (clientid = NULL,
@@ -253,7 +253,7 @@ store_cdse_credentials <- function (clientid = NULL,
 #' @title Retrieve CDSE Client Credentials from File
 #' @description Retrieve CDSE clientid and secret from file
 #' The file location is system specific. It would have been setup
-#' in advance using the `store_cdse_credentials()` function
+#' in advance using the \code{\link[rOPTRAM]{store_cdse_credentials}} function
 #' @return A data frame containing the retrieved CDSE clientid and secret,
 #' or NULL if credentials are not available.
 #' @export

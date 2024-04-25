@@ -17,15 +17,15 @@
 #'      and STR-VI data.frame, default is tempdir()
 #' @return rmse_df, data.frame, RMSE values of fitted trapezoid edges
 #' @export
-#' @note Unlike the `optram_acquire_s2` function, there is no implementation
+#' @note Unlike the \code{\link[rOPTRAM]{optram_acquire_s2}} function, there is no implementation
 #'  for automatic download of Landsat images.
-#'  This function requires a directory, set in the `landsat_dir` parameter,
+#'  This function requires a directory, set in the \code{landsat_dir} parameter,
 #'  which contains the set of Landsat tiles downloaded manually
 #'  by the user, in advance.
 #'  This directory should contain folders of Landsat images, where each folder
 #'  consists of the individual Landsat bands as Geotiff files,
 #'  as well as the metadata files as downloaded from,
-#'  i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
+#'  i.e. the USGS EarthExplorer (\url{https://earthexplorer.usgs.gov/}) website.
 #' @examples
 #' \dontrun{
 #' aoi <- sf::st_read(system.file("extdata",

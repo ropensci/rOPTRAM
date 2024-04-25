@@ -22,7 +22,7 @@ formatted as "YYYY-MM-DD"}
 \item{STR_dir, }{string, full path to directory holding the STR rasters}
 
 \item{data_dir, }{string, the directory where coefficients file was saved
-(the \code{output_dir} parameter in \code{optram_wetdry_coefficients()} function)}
+(the \code{output_dir} parameter in \code{\link[rOPTRAM]{optram_wetdry_coefficients}} function)}
 
 \item{output_dir, }{string, full path to output directory
 for saving soil moisture raster}
@@ -40,7 +40,7 @@ using the derived slope and intercept coefficients
 }
 \note{
 This function is used after preparing the OPTRAM model coefficients with:
-\code{optram_wetdry_coefficients()}. Typically a new image date,
+\code{\link[rOPTRAM]{optram_wetdry_coefficients}}. Typically a new image date,
 (possibly an image that was not used for preparing the model),
 will be referenced in the \code{img_date} parameter.
 The resulting soil moisture raster is saved to \code{output_dir}.
@@ -56,7 +56,7 @@ Ambrosone, Mariapaola, et al. 2020.
 “Retrieving Soil Moisture in Rainfed and Irrigated Fields
 Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 International Journal of Applied Earth Observation and Geoinformation 89 (July):
-102113. https://doi.org/10.1016/j.jag.2020.102113.
+102113. \doi{https://doi.org/10.1016/j.jag.2020.102113}.
 
 The data_dir directory must contain the coefficients CSV file
 i.e. for "linear" method the file was saved as 'coefficients_lin.csv'

@@ -39,7 +39,7 @@ when you have already downloaded landsat image files in advance.
 This function assumes that atmospheric correction has been applied.
 }
 \note{
-Unlike the \code{optram_acquire_s2} function, there is no implementation
+Unlike the \code{\link[rOPTRAM]{optram_acquire_s2}} function, there is no implementation
 for automatic download of Landsat images.
 This function requires a directory, set in the \code{landsat_dir} parameter,
 which contains the set of Landsat tiles downloaded manually
@@ -47,7 +47,7 @@ by the user, in advance.
 This directory should contain folders of Landsat images, where each folder
 consists of the individual Landsat bands as Geotiff files,
 as well as the metadata files as downloaded from,
-i.e. the USGS EarthExplorer (https://earthexplorer.usgs.gov/) website.
+i.e. the USGS EarthExplorer (\url{https://earthexplorer.usgs.gov/}) website.
 }
 \examples{
 \dontrun{

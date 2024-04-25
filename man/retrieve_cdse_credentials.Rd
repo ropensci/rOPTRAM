@@ -13,5 +13,5 @@ or NULL if credentials are not available.
 \description{
 Retrieve CDSE clientid and secret from file
 The file location is system specific. It would have been setup
-in advance using the \code{store_cdse_credentials()} function
+in advance using the \code{\link[rOPTRAM]{store_cdse_credentials}} function
 }
