@@ -60,7 +60,8 @@ The {rOPTRAM} package is controlled by several options, set automatically when t
 optram_options()
 #> [1] "edge_points = TRUE"
 #> [1] "max_tbl_size = 1e+06"
-#> [1] "plot_density = colors"
+#> [1] "period = full"
+#> [1] "plot_colors = no"
 #> [1] "remote = scihub"
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
@@ -70,14 +71,36 @@ optram_options()
 #> [1] "vi_step = 0.005"
 #> NULL
 ```
-Users can override any of the defaults by calling this function with alternative values for the options. For example, three trapezoid fitting functions are implemented in {rOPTRAM}. The default is "linear", which can be changed as follows:
+
+Users can override any of the defaults by calling this function with alternative values for the options. For example, Sentinel images are downloaded, by default for all available image dates between the specified `from_date` and `to_date`. Users can, instead, choose to download images only for a specific season as follows:
+
+
+```r
+optram_options("period", "seasonal")
+#> [1] "edge_points = TRUE"
+#> [1] "max_tbl_size = 1e+06"
+#> [1] "period = seasonal"
+#> [1] "plot_colors = no"
+#> [1] "remote = scihub"
+#> [1] "rm.hi.str = FALSE"
+#> [1] "rm.low.vi = FALSE"
+#> [1] "SWIR_band = 11"
+#> [1] "trapezoid_method = linear"
+#> [1] "veg_index = NDVI"
+#> [1] "vi_step = 0.005"
+```
+Now, only images between the day/month of `from_date` and day/month of `to_date` will be acquired, but for all years in the date range.
+
+
+Three trapezoid fitting functions are implemented in {rOPTRAM}. The default is "linear", but users can change as follows:
 
 
 ```r
 optram_options("trapezoid_method", "polynomial")
 #> [1] "edge_points = TRUE"
 #> [1] "max_tbl_size = 1e+06"
-#> [1] "plot_density = colors"
+#> [1] "period = seasonal"
+#> [1] "plot_colors = no"
 #> [1] "remote = scihub"
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
@@ -92,16 +115,6 @@ The default trapezoid plot shows a scatter plot cloud of vegetation index values
 
 ```r
 optram_options("plot_density", "colors")
-#> [1] "edge_points = TRUE"
-#> [1] "max_tbl_size = 1e+06"
-#> [1] "plot_density = colors"
-#> [1] "remote = scihub"
-#> [1] "rm.hi.str = FALSE"
-#> [1] "rm.low.vi = FALSE"
-#> [1] "SWIR_band = 11"
-#> [1] "trapezoid_method = polynomial"
-#> [1] "veg_index = NDVI"
-#> [1] "vi_step = 0.005"
 ```
 
 ## Main wrapper function
@@ -121,37 +134,22 @@ output_dir <- tempdir()
 aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
 optram_options("veg_index", "NDVI")
 optram_options("trapezoid_method", "linear")
+#> Error: <text>:4:1: unexpected input
+#> 3: output_dir <- tempdir()
+#> 4: <<
+#>    ^
 ```
 
 
 ```r
-coeffs <- optram(aoi_file,
+rmse <- optram(aoi_file,
                  from_date, to_date,
                  S2_output_dir = output_dir,
                  data_output_dir = output_dir)
+knitr::kable(rmse, caption = "RMSE for linear fitted trapezoid edges")
 =======
 aoi <- sf::st_read(system.file("extdata",
                                "lachish.gpkg", package = "rOPTRAM"))
->>>>>>> main
-#> Reading layer `High' from data source 
-#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/lachish.gpkg' 
-#>   using driver `GPKG'
-#> Simple feature collection with 1 feature and 1 field
-#> Geometry type: MULTIPOLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: 193120.5 ymin: 613272.1 xmax: 194476.3 ymax: 614546.5
-#> Projected CRS: Israel 1993 / Israeli TM Grid
-<<<<<<< HEAD
-<<<<<<< HEAD
-#> Error in `httr2::oauth_flow_client_credentials()`:
-#> ! OAuth failure [invalid_client]
-#> • Invalid client or Invalid client credentials
-=======
-#> Error in if (!file.exists(VI_f)) {: the condition has length > 1
->>>>>>> main
-knitr::kable(coeffs, caption = "Trapezoid coefficients")
-#> Error in knitr::kable(coeffs, caption = "Trapezoid coefficients"): object 'coeffs' not found
-=======
 veg_index <- "NDVI"
 rmse <- optram(aoi,
               from_date, to_date,
@@ -162,26 +160,25 @@ rmse <- optram(aoi,
               vi_step = 0.005,
               trapezoid_method = "linear",
               SWIR_band = 11)
-#> Error in Summary.factor(structure(7L, levels = c("GEOMETRY", "POINT", : 'all' not meaningful for factors
 knitr::kable(rmse, caption = "Trapezoid coefficients")
-#> Error in knitr::kable(rmse, caption = "Trapezoid coefficients"): object 'rmse' not found
 >>>>>>> main
+#> Error: <text>:6:1: unexpected '=='
+#> 5: knitr::kable(rmse, caption = "RMSE for linear fitted trapezoid edges")
+#> 6: ==
+#>    ^
 ```
 ### Show trapezoid plot
 
 
 ```r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-#> Error in file(file, "rt"): cannot open the connection
+#> Error in file.path(output_dir, "trapezoid_edges_lin.csv"): object 'output_dir' not found
 df_file <- file.path(output_dir, "VI_STR_data.rds")
+#> Error in file.path(output_dir, "VI_STR_data.rds"): object 'output_dir' not found
 full_df <- readRDS(df_file)
-#> Error in gzfile(file, "rb"): cannot open the connection
+#> Error in readRDS(df_file): object 'df_file' not found
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-<<<<<<< HEAD
-#> Error in "STR" %in% names(full_df): object 'full_df' not found
-=======
-#> NULL
->>>>>>> main
+#> Error in plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir): unused argument (output_dir = output_dir)
 knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 #> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_linear.png"
 ```
@@ -202,60 +199,24 @@ knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 # Using the same dates, and aoi as previous example
 s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
-<<<<<<< HEAD
                             output_dir = output_dir)
-#> Reading layer `High' from data source 
-#>   `/home/micha/work/BIDR/Colleagues/Ron/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
-#> Simple feature collection with 1 feature and 1 field
-#> Geometry type: MULTIPOLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: 193120.5 ymin: 613272.1 xmax: 194476.3 ymax: 614546.5
-#> Projected CRS: Israel 1993 / Israeli TM Grid
-#> Error in `httr2::oauth_flow_client_credentials()`:
-#> ! OAuth failure [invalid_client]
-#> • Invalid client or Invalid client credentials
-=======
-                            output_dir = output_dir,
-                            veg_index =veg_index,
-                            remote = "scihub",
-                            SWIR_band = 11)
-#> Error in Summary.factor(structure(7L, levels = c("GEOMETRY", "POINT", : 'all' not meaningful for factors
->>>>>>> main
+#> Error in check_aoi(aoi): object 'aoi' not found
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
+#> Error in file.path(output_dir, "STR"): object 'output_dir' not found
 VI_list <- list.files(file.path(output_dir, "NDVI"),
                       pattern = ".tif$", full.names = TRUE)
+#> Error in file.path(output_dir, "NDVI"): object 'output_dir' not found
 full_df <- optram_ndvi_str(STR_list, VI_list,
-                           output_dir = output_dir,
-                           rm.low.vi = TRUE, rm.hi.str = TRUE)
-#> Error in optram_ndvi_str(STR_list, VI_list, output_dir = output_dir, rm.low.vi = TRUE, : unused arguments (rm.low.vi = TRUE, rm.hi.str = TRUE)
+                           output_dir = output_dir)
+#> Error in optram_ndvi_str(STR_list, VI_list, output_dir = output_dir): object 'STR_list' not found
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir)
-<<<<<<< HEAD
-#> Error in optram_wetdry_coefficients(full_df, aoi_file, output_dir = output_dir): object 'full_df' not found
-=======
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
->>>>>>> main
+#> Error in optram_wetdry_coefficients(full_df, output_dir = output_dir): object 'full_df' not found
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
 #> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```
 
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-=======
-
-Table: RMSE of fitted trapezoid edges
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2589246| 0.1288553|
-
-
-
->>>>>>> main
-=======
->>>>>>> main
 ## Soil Moisture Estimate
 
 ### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid
@@ -264,10 +225,14 @@ Table: RMSE of fitted trapezoid edges
 ```r
 img_date <- "2023-01-10"   # After a rain
 VI_dir <- file.path(output_dir, "NDVI")
+#> Error in file.path(output_dir, "NDVI"): object 'output_dir' not found
 STR_dir <- file.path(output_dir, "STR")
+#> Error in file.path(output_dir, "STR"): object 'output_dir' not found
 data_dir <- output_dir
+#> Error in eval(expr, envir, enclos): object 'output_dir' not found
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
                                      data_dir = data_dir)
+#> Error in dir.exists(VI_dir): object 'VI_dir' not found
 ```
 
 ### Soil moisture plot
@@ -275,10 +240,10 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 
 ```r
 library(leaflet)
-names(SM) <- "Migda soil moisture"
-#> Error in names(SM) <- "Migda soil moisture": attempt to set an attribute on NULL
+names(SM) <- "Lachish soil moisture"
+#> Error in names(SM) <- "Lachish soil moisture": object 'SM' not found
 SM[terra::values(SM) < 0] <- 0
-#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'values' for signature '"NULL"'
+#> Error in SM[terra::values(SM) < 0] <- 0: object 'SM' not found
 
 sm_map <- leaflet("OpenStreetMap") |>
   addTiles() |>
@@ -286,7 +251,7 @@ sm_map <- leaflet("OpenStreetMap") |>
     colors = colorNumeric("RdYlGn",
       domain = c(-0.1, 2.0), na.color = NA),
     opacity = 0.9)
-#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : Don't know how to get path data from object of class NULL
+#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : object 'SM' not found
 sm_map
 #> Error in eval(expr, envir, enclos): object 'sm_map' not found
 ```

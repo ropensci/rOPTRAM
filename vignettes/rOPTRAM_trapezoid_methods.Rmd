@@ -54,27 +54,14 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
-<<<<<<< HEAD
-aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
-s2_file_list <- optram_acquire_s2(aoi_file,
-                            from_date, to_date,
-                            output_dir = output_dir,
-                            remote = "scihub")
-#> Error in `httr2::oauth_flow_client_credentials()`:
-#> ! OAuth failure [invalid_client]
-#> • Invalid client or Invalid client credentials
-=======
 aoi <- sf::st_read(system.file("extdata",
                             "lachish.gpkg", package = "rOPTRAM"))
 veg_index <- "NDVI"
 s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
                             output_dir = output_dir,
-                            veg_index =veg_index,
-                            remote = "scihub",
-                            SWIR_band = 11)
-#> Error in Summary.factor(structure(7L, levels = c("GEOMETRY", "POINT", : 'all' not meaningful for factors
->>>>>>> main
+                            remote = "scihub")
+#> Error in optram_acquire_s2(aoi, from_date, to_date, output_dir = output_dir, : unused argument (remote = "scihub")
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -91,29 +78,21 @@ optram_option("trapezoid_method", "linear")
 #> Error in optram_option("trapezoid_method", "linear"): could not find function "optram_option"
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir,
-<<<<<<< HEAD
-                                   save_plot = TRUE)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
-edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-#> Error in file(file, "rt"): cannot open the connection
-plot_vi_str_cloud(full_df, ttl,
-                  edges_df = edges_df,
-                  output_dir = output_dir)
-=======
                                    trapezoid_method = meth)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
+#> Error in optram_wetdry_coefficients(full_df, output_dir = output_dir, : unused argument (trapezoid_method = meth)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
 #> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df,
                   edges_df = edges_df,
-                  trapezoid_method = meth,
-                  output_dir = output_dir,
-                  edge_points = TRUE)
->>>>>>> main
-#> NULL
-knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_linear.png"
+                  output_dir = output_dir)
+#> Error in plot_vi_str_cloud(full_df, edges_df = edges_df, output_dir = output_dir): unused argument (output_dir = output_dir)
+knitr::include_graphics("images/trapezoid_lachish_linear.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_linear.png" alt="Trapezoid scatterplot" width="90%" />
+<p class="caption">Trapezoid scatterplot</p>
+</div>
 
 #### Show Exponential fitted trapezoid plot
 
@@ -122,7 +101,8 @@ knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 optram_options("trapezoid_method", "exponential")
 #> [1] "edge_points = TRUE"
 #> [1] "max_tbl_size = 1e+06"
-#> [1] "plot_density = no"
+#> [1] "period = seasonal"
+#> [1] "plot_colors = no"
 #> [1] "remote = scihub"
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
@@ -132,29 +112,21 @@ optram_options("trapezoid_method", "exponential")
 #> [1] "vi_step = 0.005"
 coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir,
-<<<<<<< HEAD
-                                     save_plot = TRUE)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
-edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
-#> Error in file(file, "rt"): cannot open the connection
-plot_vi_str_cloud(full_df, ttl,
-                  output_dir = output_dir,
-                  edges_df = edges_df)
-=======
                                      trapezoid_method = meth)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
+#> Error in optram_wetdry_coefficients(full_df, output_dir = output_dir, : unused argument (trapezoid_method = meth)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
 #> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df,
                   output_dir = output_dir,
-                  edges_df = edges_df,
-                  trapezoid_method = meth,
-                  edge_points = TRUE)
->>>>>>> main
-#> NULL
-knitr::include_graphics("vignettes/images/trapezoid_lachish_exponential.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_exponential.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_exponential.png"
+                  edges_df = edges_df)
+#> Error in plot_vi_str_cloud(full_df, output_dir = output_dir, edges_df = edges_df): unused argument (output_dir = output_dir)
+knitr::include_graphics("images/trapezoid_lachish_exponential.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_exponential.png" alt="Exponential fit trapezoid scatterplot" width="90%" />
+<p class="caption">Exponential fit trapezoid scatterplot</p>
+</div>
 
 #### Show Polynomial fitted trapezoid plot
 
@@ -163,7 +135,8 @@ knitr::include_graphics("vignettes/images/trapezoid_lachish_exponential.png")
 optram_options("trapezoid_method", "polynomial")
 #> [1] "edge_points = TRUE"
 #> [1] "max_tbl_size = 1e+06"
-#> [1] "plot_density = no"
+#> [1] "period = seasonal"
+#> [1] "plot_colors = no"
 #> [1] "remote = scihub"
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
@@ -174,24 +147,17 @@ optram_options("trapezoid_method", "polynomial")
 coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir,
                                      save_plot = TRUE)
-<<<<<<< HEAD
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
-edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
-#> Error in file(file, "rt"): cannot open the connection
-plot_vi_str_cloud(full_df, ttl,
-                  output_dir = output_dir,
-                  edges_df = edges_df)
-=======
 #> Error in optram_wetdry_coefficients(full_df, output_dir = output_dir, : unused argument (save_plot = TRUE)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
 #> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df,
                   output_dir = output_dir,
-                  edges_df = edges_df,
-                  trapezoid_method = meth,
-                  edge_points = TRUE)
->>>>>>> main
-#> NULL
-knitr::include_graphics("vignettes/images/trapezoid_lachish_polynomial.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_polynomial.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_polynomial.png"
+                  edges_df = edges_df)
+#> Error in plot_vi_str_cloud(full_df, output_dir = output_dir, edges_df = edges_df): unused argument (output_dir = output_dir)
+knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_polynomial.png" alt="Polynomial fit trapezoid scatterplot" width="90%" />
+<p class="caption">Polynomial fit trapezoid scatterplot</p>
+</div>
