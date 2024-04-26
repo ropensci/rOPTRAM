@@ -60,13 +60,13 @@ The {rOPTRAM} package is controlled by several options, set automatically when t
 optram_options()
 #> [1] "edge_points = TRUE"
 #> [1] "max_tbl_size = 1e+06"
-#> [1] "period = full"
+#> [1] "period = seasonal"
 #> [1] "plot_colors = no"
 #> [1] "remote = scihub"
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
 #> [1] "SWIR_band = 11"
-#> [1] "trapezoid_method = linear"
+#> [1] "trapezoid_method = polynomial"
 #> [1] "veg_index = NDVI"
 #> [1] "vi_step = 0.005"
 #> NULL
@@ -85,7 +85,7 @@ optram_options("period", "seasonal")
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
 #> [1] "SWIR_band = 11"
-#> [1] "trapezoid_method = linear"
+#> [1] "trapezoid_method = polynomial"
 #> [1] "veg_index = NDVI"
 #> [1] "vi_step = 0.005"
 ```
@@ -130,58 +130,50 @@ Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, out
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
-<<<<<<< HEAD
-aoi_file <- system.file("extdata", "lachish.gpkg", package = "rOPTRAM")
+aoi <- sf::st_read(system.file("extdata",
+                               "lachish.gpkg", package = "rOPTRAM"))
 optram_options("veg_index", "NDVI")
 optram_options("trapezoid_method", "linear")
-#> Error: <text>:4:1: unexpected input
-#> 3: output_dir <- tempdir()
-#> 4: <<
-#>    ^
 ```
 
 
 ```r
-rmse <- optram(aoi_file,
-                 from_date, to_date,
-                 S2_output_dir = output_dir,
-                 data_output_dir = output_dir)
-knitr::kable(rmse, caption = "RMSE for linear fitted trapezoid edges")
-=======
-aoi <- sf::st_read(system.file("extdata",
-                               "lachish.gpkg", package = "rOPTRAM"))
-veg_index <- "NDVI"
 rmse <- optram(aoi,
               from_date, to_date,
-              veg_index = veg_index,
               S2_output_dir = output_dir,
-              data_output_dir = output_dir,
-              remote = "scihub",
-              vi_step = 0.005,
-              trapezoid_method = "linear",
-              SWIR_band = 11)
+              data_output_dir = output_dir)
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp6tLe38/file2464c6c55cef7: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match
+#> SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
 knitr::kable(rmse, caption = "Trapezoid coefficients")
->>>>>>> main
-#> Error: <text>:6:1: unexpected '=='
-#> 5: knitr::kable(rmse, caption = "RMSE for linear fitted trapezoid edges")
-#> 6: ==
-#>    ^
+#> Error in knitr::kable(rmse, caption = "Trapezoid coefficients"): object 'rmse' not found
 ```
 ### Show trapezoid plot
 
 
 ```r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-#> Error in file.path(output_dir, "trapezoid_edges_lin.csv"): object 'output_dir' not found
+#> Error in file(file, "rt"): cannot open the connection
 df_file <- file.path(output_dir, "VI_STR_data.rds")
-#> Error in file.path(output_dir, "VI_STR_data.rds"): object 'output_dir' not found
 full_df <- readRDS(df_file)
-#> Error in readRDS(df_file): object 'df_file' not found
+#> Error in gzfile(file, "rb"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
 #> Error in plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir): unused argument (output_dir = output_dir)
-knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_linear.png"
+knitr::include_graphics("images/trapezoid_lachish_linear.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_linear.png" alt="Trapezoid scatterplot" width="90%" />
+<p class="caption">Trapezoid scatterplot</p>
+</div>
 
 ## Step by step
 
@@ -200,19 +192,16 @@ knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
 s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
                             output_dir = output_dir)
-#> Error in check_aoi(aoi): object 'aoi' not found
+#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
-#> Error in file.path(output_dir, "STR"): object 'output_dir' not found
 VI_list <- list.files(file.path(output_dir, "NDVI"),
                       pattern = ".tif$", full.names = TRUE)
-#> Error in file.path(output_dir, "NDVI"): object 'output_dir' not found
 full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir)
-#> Error in optram_ndvi_str(STR_list, VI_list, output_dir = output_dir): object 'STR_list' not found
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir)
-#> Error in optram_wetdry_coefficients(full_df, output_dir = output_dir): object 'full_df' not found
+#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
 #> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```
@@ -225,14 +214,10 @@ knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
 ```r
 img_date <- "2023-01-10"   # After a rain
 VI_dir <- file.path(output_dir, "NDVI")
-#> Error in file.path(output_dir, "NDVI"): object 'output_dir' not found
 STR_dir <- file.path(output_dir, "STR")
-#> Error in file.path(output_dir, "STR"): object 'output_dir' not found
 data_dir <- output_dir
-#> Error in eval(expr, envir, enclos): object 'output_dir' not found
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
                                      data_dir = data_dir)
-#> Error in dir.exists(VI_dir): object 'VI_dir' not found
 ```
 
 ### Soil moisture plot
@@ -241,9 +226,9 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ```r
 library(leaflet)
 names(SM) <- "Lachish soil moisture"
-#> Error in names(SM) <- "Lachish soil moisture": object 'SM' not found
+#> Error in names(SM) <- "Lachish soil moisture": attempt to set an attribute on NULL
 SM[terra::values(SM) < 0] <- 0
-#> Error in SM[terra::values(SM) < 0] <- 0: object 'SM' not found
+#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'values' for signature '"NULL"'
 
 sm_map <- leaflet("OpenStreetMap") |>
   addTiles() |>
@@ -251,7 +236,7 @@ sm_map <- leaflet("OpenStreetMap") |>
     colors = colorNumeric("RdYlGn",
       domain = c(-0.1, 2.0), na.color = NA),
     opacity = 0.9)
-#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : object 'SM' not found
+#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : Don't know how to get path data from object of class NULL
 sm_map
 #> Error in eval(expr, envir, enclos): object 'sm_map' not found
 ```
