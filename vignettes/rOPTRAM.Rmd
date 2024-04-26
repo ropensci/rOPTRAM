@@ -84,7 +84,7 @@ rmse <- optram(aoi,
               vi_step = 0.005,
               trapezoid_method = "linear",
               SWIR_band = 11)
-#> Error in Summary.factor(structure(7L, levels = c("GEOMETRY", "POINT", : 'all' not meaningful for factors
+#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
 knitr::kable(rmse, caption = "Trapezoid coefficients")
 #> Error in knitr::kable(rmse, caption = "Trapezoid coefficients"): object 'rmse' not found
 ```
@@ -98,10 +98,14 @@ df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
 #> Error in gzfile(file, "rb"): cannot open the connection
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-#> NULL
-knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_linear.png"
+#> Error in plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir): unused argument (output_dir = output_dir)
+knitr::include_graphics("images/trapezoid_lachish_linear.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_linear.png" alt="Trapezoid scatterplot" width="90%" />
+<p class="caption">Trapezoid scatterplot</p>
+</div>
 
 ## Step by step
 
@@ -123,7 +127,7 @@ s2_file_list <- optram_acquire_s2(aoi,
                             veg_index =veg_index,
                             remote = "scihub",
                             SWIR_band = 11)
-#> Error in Summary.factor(structure(7L, levels = c("GEOMETRY", "POINT", : 'all' not meaningful for factors
+#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),

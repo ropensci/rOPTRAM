@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rOPTRAM <img align="right" width="100" height="100" src="inst/paper/rOPTRAM_logo.jpg">
+# rOPTRAM <img align="right" width="100" height="100" src="vignettes/images/rOPTRAM_logo.jpg">
 
 <!-- badges: start -->
 
