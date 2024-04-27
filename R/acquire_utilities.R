@@ -276,7 +276,8 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #'                 "lachish.gpkg", package = 'rOPTRAM'))
 #' Important! Assign the output to an object for later retrieval
 #' acq <- acquire_openeo(aoi, from_date, to_date,
-#'                       veg_index = "SAVI")
+#'                       veg_index = "SAVI",
+#'                       SWIR_band = 11)
 #' }
 
 acquire_openeo <- function(
