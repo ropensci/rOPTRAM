@@ -36,7 +36,7 @@ full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
 Collect all pixel values of both vegetation index,
 and Swir Transformed Reflectance, for a time series of images.
 Prepare data.frame of all pairs of values
-(as input for the \code{optram_wetdry_coefficients()} function)
+(as input for the \code{\link[rOPTRAM]{optram_wetdry_coefficients}} function)
 }
 \note{
 Use the \code{max_tbl_size} parameter to limit size of the NDVI-STR data.frame

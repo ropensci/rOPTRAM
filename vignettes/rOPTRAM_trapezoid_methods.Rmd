@@ -63,7 +63,7 @@ s2_file_list <- optram_acquire_s2(aoi,
                             veg_index =veg_index,
                             remote = "scihub",
                             SWIR_band = 11)
-#> Error in Summary.factor(structure(7L, levels = c("GEOMETRY", "POINT", : 'all' not meaningful for factors
+#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -89,10 +89,14 @@ plot_vi_str_cloud(full_df,
                   trapezoid_method = meth,
                   output_dir = output_dir,
                   edge_points = TRUE)
-#> NULL
-knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_linear.png"
+#> Error in plot_vi_str_cloud(full_df, edges_df = edges_df, trapezoid_method = meth, : unused argument (output_dir = output_dir)
+knitr::include_graphics("images/trapezoid_lachish_linear.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_linear.png" alt="Trapezoid scatterplot" width="90%" />
+<p class="caption">Trapezoid scatterplot</p>
+</div>
 
 #### Show Exponential fitted trapezoid plot
 
@@ -110,10 +114,14 @@ plot_vi_str_cloud(full_df,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   edge_points = TRUE)
-#> NULL
-knitr::include_graphics("vignettes/images/trapezoid_lachish_exponential.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_exponential.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_exponential.png"
+#> Error in plot_vi_str_cloud(full_df, output_dir = output_dir, edges_df = edges_df, : unused argument (output_dir = output_dir)
+knitr::include_graphics("images/trapezoid_lachish_exponential.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_exponential.png" alt="Exponential fit trapezoid scatterplot" width="90%" />
+<p class="caption">Exponential fit trapezoid scatterplot</p>
+</div>
 
 #### Show Polynomial fitted trapezoid plot
 
@@ -132,7 +140,11 @@ plot_vi_str_cloud(full_df,
                   edges_df = edges_df,
                   trapezoid_method = meth,
                   edge_points = TRUE)
-#> NULL
-knitr::include_graphics("vignettes/images/trapezoid_lachish_polynomial.png")
-#> Error in knitr::include_graphics("vignettes/images/trapezoid_lachish_polynomial.png"): Cannot find the file(s): "vignettes/images/trapezoid_lachish_polynomial.png"
+#> Error in plot_vi_str_cloud(full_df, output_dir = output_dir, edges_df = edges_df, : unused argument (output_dir = output_dir)
+knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
 ```
+
+<div class="figure">
+<img src="images/trapezoid_lachish_polynomial.png" alt="Polynomial fit trapezoid scatterplot" width="90%" />
+<p class="caption">Polynomial fit trapezoid scatterplot</p>
+</div>

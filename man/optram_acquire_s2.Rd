@@ -70,37 +70,32 @@ Creating an Account:
 \enumerate{
 \item Navigate to the \href{https://dataspace.copernicus.eu/}{Copernicus portal}.
 \item Click the "Register" button to access the account creation page.
-\item If already registered, enter your username and password,
-and click "Login."
-\item Once logged in, go to the User dashboard and click "User Settings" to
-access the Settings page.
+\item If already registered, enter your username and password, and click "Login."
+\item Once logged in, go to the User dashboard and click "User Settings" to access the Settings page.
 }
-
 Creating OAuth Client:
 \enumerate{
-\item On the Settings page, click the green "Create New" button located on
-the right.
-\item Enter a suitable "Client Name" and click the green "Create Client"
-button.
+\item On the Settings page, click the green "Create New" button located on the right.
+\item Enter a suitable "Client Name" and click the green "Create Client" button.
 \item A Client secret is generated.
+}
 the user must save her secret and clientid somewhere.
 these credentials will be saved automatically to a standard filesystem
-location if the user calls check_scihub() with the argument save_creds
+location if the user calls \code{check_scihub()} with the argument save_creds
 set to TRUE (recommended).
 if the user chooses not to save credentials to the standard filesystem
 location, then she will need to add both clientid and secret to each
-acquire_scihub() function call.
-}
+\code{acquire_scihub()} function call.
 
-Using Credentials with \code{aquire_scihub}:
+Using Credentials with \code{aquire_scihub()}:
 \itemize{
 \item Now, you can utilize the generated \code{clientid} and \code{secret} in
-the \code{aquire_scihub} function.
-\item If you want to store your credentials on your computer, ensure that when
-running \code{aquire_scihub}, the \code{save_creds} parameter is set to \code{TRUE}.
-\item During the first run of \code{aquire_scihub}, manually input your \code{clientid}
-and \code{secret} in the function's signature. Subsequent runs will use the
-stored credentials.
+the \code{aquire_scihub()} function.
+\item If you want to store your credentials on your computer, ensure that when running \code{aquire_scihub}, the \code{save_creds} parameter is set to \code{TRUE}.
+\item During the first run of \code{aquire_scihub()}, manually input your \code{clientid} and \code{secret} in the function's signature.
+\item Subsequent runs will use the stored credentials.
+}
+
 Subject Area Constraint:
 The downloadable images are restricted to a maximum size of 2500 pixels on
 each side. This limitation is established due to the final resolution set to
@@ -110,7 +105,6 @@ this restriction when selecting your desired area for download.
 Area of Interest (AOI) Specification:
 When defining your Area of Interest (AOI), please ensure that it is
 represented as a POLYGON or MULTIPOLYGON layer.
-}
 
 "openeo",...
 If "openeo" then:
@@ -119,22 +113,16 @@ Instructions for the login process:
 First of all, to authenticate your account on the backend of the Copernicus
 Data Space Ecosystem, it is necessary for you to complete the registration
 process. Follow these instructions for registration:
-https://documentation.dataspace.copernicus.eu/Registration.html
+\url{https://documentation.dataspace.copernicus.eu/Registration.html}
 After you have registered and installed the \code{openeo} package, you can run the
 \code{acquire_openeo} function.
 During the process of connecting to the server and logging in, you need to
 follow these steps:
-A. When the message "Press \if{html}{\out{<enter>}} to proceed:" appears in the console,
-press enter.
-Calling this method opens your system web browser, with which
-you can authenticate yourself on the back-end authentication system. After
-that, the website will give you instructions to go back to the R client,
-where your connection has logged your account in. This means that every
-call that comes after that via the connection variable is executed by your
-user account.
-B. You will be redirected to "https://identity.dataspace.copernicus.eu/".
-Ensure you have an account and are logged in. You will be required to
-grant access - press "yes".
+\enumerate{
+\item When the message "Press \if{html}{\out{<enter>}} to proceed:" appears in the console, press enter.
+\item Calling this method opens your system web browser, with which you can authenticate yourself on the back-end authentication system. After that, the website will give you instructions to go back to the R client, where your connection has logged your account in. This means that every call that comes after that via the connection variable is executed by your user account.
+\item You will be redirected to \url{https://identity.dataspace.copernicus.eu/}. Ensure you have an account and are logged in. You will be required to grant access - press "yes".
+}
 
 Two SWIR bands are available in Sentinel-2: 1610 nanometer (nm) and 2190 nm.
 The parameter \code{SWIR_bands } allows to choose which band is used in this model.

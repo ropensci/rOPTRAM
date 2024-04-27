@@ -30,32 +30,34 @@ rmse_df, data.frame,  RMSE values of fitted trapezoid edges
 Derive slope and intercept coefficients
 for both wet and dry trapezoid lines.
 Write coefficients to a CSV file
-(as input to \code{optram_calculate_soil_moisture()} function)
+(as input to \code{\link[rOPTRAM]{optram_calculate_soil_moisture}} function)
 }
 \note{
 The vegetation index column is named "VI" though it can represent
 several vegetation indices, such as SAVI, or MSAVI.
 
-The \verb{trapezoid method} parameter allows to choose one of three models
+The \code{trapezoid method} parameter allows to choose one of three models
 for creating the edge coefficients of the trapezoid.
 \itemize{
 \item "linear" prepares a simple OLS regression line
 along the wet and dry edges of the trapezoid.
 Four coefficients are returned: intercept and slope for both edges.
+
 \item "exponential" creates an exponential curve fitted
 to the intercept and slope, following:
 Ambrosone, Mariapaola, Alessandro Matese, et al. 2020.
 “Retrieving Soil Moisture in Rainfed and Irrigated Fields
 Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 International Journal of Applied Earth Observation and Geoinformation
-https://doi.org/10.1016/j.jag.2020.102113.
+\doi{https://doi.org/10.1016/j.jag.2020.102113}.
+
 \item "polynomial" fits a second order polynomial curve to the
 wet and dry edges of the trapezoid, following:
 Ma, Chunfeng, Kasper Johansen, and Matthew F. McCabe. 2022.
 “Combining Sentinel-2 Data with an Optical-Trapezoid Approach to Infer within-Field Soil Moisture Variability
 and Monitor Agricultural Production Stages.”
 Agricultural Water Management 274 (December): 107942.
-https://doi.org/10.1016/j.agwat.2022.107942.
+\doi{https://doi.org/10.1016/j.agwat.2022.107942}
 This curve fitting function returns six coefficients:
 alpha, beta_1, and beta_2 for both wet and dry edges
 }

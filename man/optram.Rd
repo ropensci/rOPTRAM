@@ -64,21 +64,17 @@ The optical trapezoid model:
 A novel approach to remote sensing of soil moisture
 applied to Sentinel-2 and Landsat-8 observations.
 Remote Sensing of Environment 198, 52–68,
-https://doi.org/10.1016/j.rse.2017.05.041 .
+\doi{https://doi.org/10.1016/j.rse.2017.05.041}.
 }
 \note{
-to download imagery. Please first install \code{gcloud} following instructions:
-https://cloud.google.com/sdk/docs/install
-for your operating system.
-And be sure to initialize with you google username and password.
-
-Output can be separated:
-Sentinel downloads and products are saved to S2_output_dir.
-Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
-
-Two SWIR wavelength bands are available in Sentinel-2:
-1610 nanometer (nm) and 2190 nm.
-The parameter \code{SWIR_bands } allows to choose which band is used in this model.
+\itemize{
+\item Sentinel downloaded products are saved to S2_output_dir.
+\item Data files (Trapezoid coefficients and STR-VI data) to data_output_dir
+\item Three trapezoid fitting methods are implemented: "linear", "exponential" and "polynomial".
+\item Two SWIR wavelength bands are available in Sentinel-2: 1610 nanometer (nm) and 2190 nm.
+The parameter \code{SWIR_band} allows to choose which band is used in this model.
+\item Several vegetation indices are implemented with the \code{veg_index} parameter: "NDVI", "SAVI", etc.
+}
 }
 \examples{
 \dontrun{

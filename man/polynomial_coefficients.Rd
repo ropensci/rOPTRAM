@@ -16,15 +16,15 @@ df, data.frame, the trapezoid line edge points with fitted values added
 for both wet and dry edges
 }
 \description{
-Called by \code{optram_wetdry_coefficients()}
+Called by \code{\link[rOPTRAM]{optram_wetdry_coefficients}}
 to prepare second order polynomial curve along trapezoid edges
 Calculates six coefficients:  intercept (alpha)  of both wet and dry edges
 and first and second order coefficients (beta), as in
-$STR = alpha + beta_1 * VI + beta_2 * VI^2$
+\eqn{STR = alpha + beta_1 * VI + beta_2 * VI^2}
 and updates the edges data.frame with these polynomila values fitted values
 }
 \note{
-Three CSV files are saved:
+Three CSV files are saved
 \itemize{
 \item the regressions coefficients,
 \item the trapezoid edge points

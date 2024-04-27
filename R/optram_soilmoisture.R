@@ -7,7 +7,7 @@
 #' @param img_date, string, image date of single Sentinel 2 acquisition
 #'  formatted as "YYYY-MM-DD"
 #' @param data_dir, string, the directory where coefficients file was saved
-#'  (the `output_dir` parameter in `optram_wetdry_coefficients()` function)
+#'  (the \code{output_dir} parameter in \code{\link[rOPTRAM]{optram_wetdry_coefficients}} function)
 #' @param output_dir, string, full path to output directory
 #'  for saving soil moisture raster
 #' @param trapezoid_method, string,
@@ -15,15 +15,15 @@
 #' @return rast, soil moisture grid
 #' @note
 #' This function is used after preparing the OPTRAM model coefficients with:
-#'  `optram_wetdry_coefficients()`. Typically a new image date,
+#'  \code{\link[rOPTRAM]{optram_wetdry_coefficients}}. Typically a new image date,
 #'   (possibly an image that was not used for preparing the model),
-#'   will be referenced in the `img_date` parameter.
-#'   The resulting soil moisture raster is saved to `output_dir`.
+#'   will be referenced in the \code{img_date} parameter.
+#'   The resulting soil moisture raster is saved to \code{output_dir}.
 #'
 #' Three trapezoid models are offered through the trapezoid_method parameter:
 #'   either "linear", "exponential", or "polynomial".
-#' The `data_dir` parameter is a directory name.
-#' The coefficients CSV file that matches `trapezoid_method`
+#' The \code{data_dir} parameter is a directory name.
+#' The coefficients CSV file that matches \code{trapezoid_method}
 #' should be in that directory
 #'
 #'   For further details see:
@@ -31,7 +31,7 @@
 #' “Retrieving Soil Moisture in Rainfed and Irrigated Fields
 #'  Using Sentinel-2 Observations and a Modified OPTRAM Approach.”
 #' International Journal of Applied Earth Observation and Geoinformation 89 (July):
-#'   102113. https://doi.org/10.1016/j.jag.2020.102113.
+#'   102113. \doi{https://doi.org/10.1016/j.jag.2020.102113}.
 #'
 #' The data_dir directory must contain the coefficients CSV file
 #' i.e. for "linear" method the file was saved as 'coefficients_lin.csv'

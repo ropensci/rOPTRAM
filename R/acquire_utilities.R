@@ -1,8 +1,8 @@
 #' @title Utility Function to Acquire Sentinel-2 Imagery Using
-#' the `CDSE` Package
-#' @description This function uses the `CDSE` package to send a request
+#' the \code{CDSE}  Package
+#' @description This function uses the \code{CDSE}  package to send a request
 #' to Copernicus Dataspace, and prepare the products.
-#' Called by `optram_acquire_s2()`.
+#' Called by \code{\link[rOPTRAM]{optram_acquire_s2}}.
 #' @param aoi, {sf} object, POLYGON or MULTIPOLYGON of area of interest
 #' @param from_date, string, represents start of date range,
 #'      formatted as "YYYY-MM-DD"
@@ -12,47 +12,44 @@
 #' @param veg_index, string, which index to prepare. Default "NDVI".
 #'  Can be "NDVI", "SAVI", "MSAVI", etc
 #' @param save_creds, logical, whether to save CDSE credentials. Default TRUE.
-#' @param clientid, string, user's OAuth client id. Required if `save_creds`
+#' @param clientid, string, user's OAuth client id. Required if \code{save_creds}
 #'      is TRUE.
-#' @param secret, string, user's OAuth secret. Required if `save_creds` is TRUE.
+#' @param secret, string, user's OAuth secret. Required if \code{save_creds} is TRUE.
 #' @param SWIR_band, integer, either 11 or 12, determines which SWIR band to use
 #' @export
 #' @return list of BOA files
 #' @note
-#' This function utilizes the `CDSE` package.
-#' Make sure to install the CDSE and jsonlite packages.
+#' This function utilizes the \code{CDSE} package.
+#' Make sure to install the \code{CDSE} and \code{jsonlite} packages.
 #' Create OAuth account and token:
 #' Creating an Account:
-#'  1. Navigate to the [Copernicus portal](https://dataspace.copernicus.eu/).
-#'  2. Click the "Register" button to access the account creation page.
-#'  3. If already registered, enter your username and password,
-#'    and click "Login."
-#'  4. Once logged in, go to the User dashboard and click "User Settings" to
-#'    access the Settings page.
-#'
+#' \enumerate{
+#'  \item Navigate to the \url{https://dataspace.copernicus.eu/}.
+#'  \item Click the "Register" button to access the account creation page.
+#'  \item If already registered, enter your username and password, and click "Login."
+#'  \item Once logged in, go to the User dashboard and click "User Settings" to access the Settings page.
+#' }
 #' Creating OAuth Client:
-#'  1. On the Settings page, click the green "Create New" button located on
-#'    the right.
-#'  2. Enter a suitable "Client Name" and click the green "Create Client"
-#'    button.
-#'  3. A Client secret is generated.
-#' the user must save her secret and clientid somewhere.
-#' these credentials will be saved automatically to a standard filesystem
-#' location if the user calls check_scihub() with the argument save_creds
-#' set to TRUE (recommended).
-#' if the user chooses not to save credentials to the standard filesystem
+#' \enumerate{
+#'   \item On the Settings page, click the green "Create New" button located on the right.
+#'   \item Enter a suitable "Client Name" and click the green "Create Client" button.
+#'   \item A Client secret is generated.
+#'   }
+#' The user must save her secret and clientid somewhere.
+#' These credentials will be saved automatically to a standard filesystem
+#' location if the user calls \code{store_cdse_credentials()}
+#' with the \code{clientid} and \code{secret} parameters.
+#' If the user chooses not to save credentials to the standard filesystem
 #' location, then she will need to add both clientid and secret to each
-#' acquire_scihub() function call.
+#' \code{acquire_scihub()} function call.
 #'
-#' Using Credentials with `aquire_scihub`:
-#'  - Now, you can utilize the generated `clientid` and `secret` in
-#'    the `aquire_scihub` function.
-#'  - If you want to store your credentials on your computer, ensure that when
-#'    running `aquire_scihub`, the `save_creds` parameter is set to `TRUE`.
-#'  - During the first run of `aquire_scihub`, manually input your `clientid`
-#'    and `secret` in the function's signature. Subsequent runs will use the
-#'    stored credentials.
-#'
+#' Using Credentials with \code{aquire_scihub}:
+#' \itemize{
+#'  \item In addition, you can utilize the generated \code{clientid} and \code{secret} within the \code{aquire_scihub()} function.
+#'  \item If you want to store your credentials on your computer, ensure that when running \code{aquire_scihub()}, the \code{save_creds} parameter is set to 'TRUE'.
+#'  \item During the first run of \code{aquire_scihub()}, manually input your \code{clientid} and \code{secret} in the function signature. Subsequent runs will use the stored credentials.
+#'  \item If the credentials were stored using \code{store_cdse_credentials()}, the credentials are retrieved automatically.
+#' }
 #' Subject Area Constraint:
 #'  The downloadable images are restricted to a maximum size of 2500 pixels on
 #'  each side. This limitation is established due to the final resolution set to
@@ -175,7 +172,7 @@ acquire_scihub <- function(
 #' @title Check access to scihub API
 #' @description  The check_scihub function verifies the availability of a
 #' CDSE API, retrieves credentials from a file or by provided clientid and
-#' secret, obtains an OAuthClient through CDSE::GetOAuthClient(), and
+#' secret, obtains an OAuthClient through \code{\link[CDSE]{GetOAuthClient}}, and
 #' optionally saves the credentials to a file before returning the OAuthClient.
 #' @param clientid The client identifier used for authentication with CDSE.
 #' @param secret The secret key used for authentication with CDSE.
@@ -236,9 +233,9 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 }
 
 #' @title Utility Function to Acquire Sentinel-2 Imagery using openEO
-#' @description This non-exported function uses the `openeo` package
+#' @description This non-exported function uses the \code{openeo} package
 #' to send a request to Copernicus DataSpace, and prepare the products.
-#' Called by optram_acquire_s2
+#' Called by \code{\link[rOPTRAM]{optram_acquire_s2}}.
 #' @param aoi, {sf} object, POLYGON or MULTIPOLYGON of area of interest
 #' @param from_date, string, represents start of date range,
 #'      formatted as "YYYY-MM-DD"
@@ -253,30 +250,23 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #' @return list of BOA files
 #' @export
 #' @note
-#' This function utilizes the `openeo` package.
+#' This function utilizes the \code{openeo} package.
 #' Instructions for the login process:
 #' First of all, to authenticate your account on the backend of the Copernicus
 #' Data Space Ecosystem, it is necessary for you to complete the registration
 #' process. Follow these instructions for registration:
-#' https://documentation.dataspace.copernicus.eu/Registration.html
+#' \url{https://documentation.dataspace.copernicus.eu/Registration.html}
 #' After you have registered and installed the `openeo` package, you can run the
-#' `acquire_openeo` function.
+#' \code{acquire_openeo()} function.
 #' During the process of connecting to the server and logging in, you need to
 #' follow these steps:
-#' A. When the message "Press <enter> to proceed:" appears in the console,
-#' press enter.
-#' When prompted with 'Copy CTGB-UGFU and paste when requested by the browser' 
-#' in the console, it may appear but can be ignored, as it is related to an 
-#' older version of the openeo package.
-#' Calling this method opens your system web browser, with which
-#' you can authenticate yourself on the back-end authentication system. After
-#' that, the website will give you instructions to go back to the R client,
-#' where your connection has logged your account in. This means that every
-#' call that comes after that via the connection variable is executed by your
-#' user account.
-#' B. You will be redirected to "https://identity.dataspace.copernicus.eu/".
-#' Ensure you have an account and are logged in. You will be required to
-#' grant access - press "yes".
+#' \enumerate{
+#'   \item When the message "Press <enter> to proceed:" appears in the console, press enter.
+#'   \item When prompted with 'Copy CTGB-UGFU and paste when requested by the browser' in the console, it may appear but can be ignored, as it is related to an older version of the openeo package.
+#'   \item Calling this method opens your system web browser, with which you can authenticate yourself on the back-end authentication system.
+#'   \item After that, the website will give you instructions to go back to the R client, where your connection has logged your account in. This means that every call that comes after that via the connection variable is executed by your user account.
+#'   \item You will be redirected to \url{https://identity.dataspace.copernicus.eu/}. Ensure you have an account and are logged in. You will be required to grant access - press "yes".
+#'}
 #'
 #' @examples
 #' \dontrun{
@@ -489,12 +479,12 @@ acquire_openeo <- function(
 #' }
 #'@note
 #' Instructions for the login process:
-#' A. When the message "Press <enter> to proceed:" appears in the console,
+#' \itemize{
+#'   \item When the message "Press <enter> to proceed:" appears in the console,
 #' press enter.
-#' B. You will be redirected to "https://identity.dataspace.copernicus.eu/".
-#' Ensure you have an account and are logged in. You will be required to
-#' grant access - press "yes".
-
+#'   \item You will be redirected to \url{https://identity.dataspace.copernicus.eu/}.
+#'   \item Ensure you have an account and are logged in. You will be required to grant access - press "yes".
+#'   }
 check_openeo <- function() {
 
   openeo_ok <- "openeo" %in% utils::installed.packages()

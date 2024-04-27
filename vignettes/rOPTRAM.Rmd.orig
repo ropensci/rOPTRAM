@@ -89,7 +89,7 @@ edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
 plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-knitr::include_graphics("vignettes/images/trapezoid_lachish_linear.png")
+knitr::include_graphics("images/trapezoid_lachish_linear.png")
 ```
 
 ## Step by step
