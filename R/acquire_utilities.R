@@ -141,7 +141,7 @@ acquire_scihub <- function(
   get_result_list <- function(scrpt, s_dir){
     result_list <- lapply(img_list$acquisitionDate, function(d){
       time_range <- as.character(d)
-      result_rast <- CDSE::GetArchiveImage(aoi = aoi,
+      result_rast <- CDSE::GetImage(aoi = aoi,
                                      time_range = time_range,
                                      script = scrpt,
                                      collection = "sentinel-2-l2a",
