@@ -81,42 +81,54 @@ rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir,
                                    trapezoid_method = meth)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-plot_vi_str_cloud(full_df,
-                  edges_df = edges_df,
-                  trapezoid_method = meth,
-                  output_dir = output_dir,
-                  edge_points = TRUE)
-#> Error in plot_vi_str_cloud(full_df, edges_df = edges_df, trapezoid_method = meth, : unused argument (output_dir = output_dir)
-knitr::include_graphics("images/trapezoid_lachish_linear.png")
+pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
+                  trapezoid_method = meth, edge_points = TRUE)
 ```
 
-<div class="figure">
-<img src="images/trapezoid_lachish_linear.png" alt="Trapezoid scatterplot" width="90%" />
-<p class="caption">Trapezoid scatterplot</p>
-</div>
+![plot of chunk plot-1](figure/plot-1-1.png)
+
+```r
+pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
+                            subtitle = paste(meth, "fitted"))
+ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_", meth, ".png")),
+                width = 18, height = 12, units = "cm")
+```
+
+
+```r
+knitr::include_graphics(paste0("images/trapezoid_lachish_", meth, ".png"))
+```
+
+![plot of chunk plot-linear](images/trapezoid_lachish_linear.png)
 
 #### Show Exponential fitted trapezoid plot
 
 
 ```r
 meth <- "exponential"
-coeffs <- optram_wetdry_coefficients(full_df,
-                                     output_dir = output_dir,
-                                     trapezoid_method = meth)
+rmse <- optram_wetdry_coefficients(full_df,
+                                   output_dir = output_dir,
+                                   trapezoid_method = meth)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
-plot_vi_str_cloud(full_df,
-                  output_dir = output_dir,
-                  edges_df = edges_df,
-                  trapezoid_method = meth,
-                  edge_points = TRUE)
-#> Error in plot_vi_str_cloud(full_df, output_dir = output_dir, edges_df = edges_df, : unused argument (output_dir = output_dir)
-knitr::include_graphics("images/trapezoid_lachish_exponential.png")
+pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
+                  trapezoid_method = meth, edge_points = TRUE)
 ```
 
-<div class="figure">
-<img src="images/trapezoid_lachish_exponential.png" alt="Exponential fit trapezoid scatterplot" width="90%" />
-<p class="caption">Exponential fit trapezoid scatterplot</p>
-</div>
+![plot of chunk plot-2](figure/plot-2-1.png)
+
+```r
+pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
+                            subtitle = paste(meth, "fitted"))
+ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_", meth, ".png")),
+                width = 18, height = 12, units = "cm")
+```
+
+
+```r
+knitr::include_graphics(paste0("images/trapezoid_lachish_", meth, ".png"))
+```
+
+![plot of chunk plot_exp](images/trapezoid_lachish_exponential.png)
 
 #### Show Polynomial fitted trapezoid plot
 
@@ -129,16 +141,22 @@ coeffs <- optram_wetdry_coefficients(full_df,
                                      save_plot = TRUE)
 #> Error in optram_wetdry_coefficients(full_df, output_dir = output_dir, : unused argument (save_plot = TRUE)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
-plot_vi_str_cloud(full_df,
-                  output_dir = output_dir,
-                  edges_df = edges_df,
-                  trapezoid_method = meth,
-                  edge_points = TRUE)
-#> Error in plot_vi_str_cloud(full_df, output_dir = output_dir, edges_df = edges_df, : unused argument (output_dir = output_dir)
-knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
+pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
+                  trapezoid_method = meth, edge_points = TRUE)
 ```
 
-<div class="figure">
-<img src="images/trapezoid_lachish_polynomial.png" alt="Polynomial fit trapezoid scatterplot" width="90%" />
-<p class="caption">Polynomial fit trapezoid scatterplot</p>
-</div>
+![plot of chunk plot-3](figure/plot-3-1.png)
+
+```r
+pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
+                            subtitle = paste(meth, "fitted"))
+ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_", meth, ".png")),
+                width = 18, height = 12, units = "cm")
+```
+
+
+```r
+knitr::include_graphics(paste0("images/trapezoid_lachish_", meth, ".png"))
+```
+
+![plot of chunk plot-poly](images/trapezoid_lachish_polynomial.png)

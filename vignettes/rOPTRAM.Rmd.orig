@@ -84,15 +84,22 @@ rmse <- optram(aoi,
               SWIR_band = 11)
 knitr::kable(rmse, caption = "Trapezoid coefficients")
 ```
+
 ### Show trapezoid plot
 
-```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%', warning=FALSE}
+```{r plot-prepare, warning=FALSE, output=FALSE}
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
-pl <- plot_vi_str_cloud(full_df, edges_df, edge_points = TRUE)
-pl <- pl + ggtitle("Lachish area trapezoid plot", subtitle = "polynomial fitted")
-ggsave(pl, file.path(output_dir, "trapezoid_lachish_polynomial.png")
+pl <- plot_vi_str_cloud(full_df, edges_df,
+                        trapezoid_method = "polynomial", edge_points = TRUE)
+pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
+                            subtitle = "polynomial fitted")
+ggplot2::ggsave(file.path(output_dir, "trapezoid_lachish_polynomial.png"),
+                width = 18, height = 12, units = "cm")
+```
+
+```{r plot-trap}
 knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
 ```
 
@@ -143,16 +150,16 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 
 ### Soil moisture plot
 
-```{r sm-plot}
-library(leaflet)
+```{r sm-prepare, output=FALSE}
+install.packages("viridis")
+library(viridis)
 names(SM) <- "Migda soil moisture"
 SM[terra::values(SM) < 0] <- 0
 
-sm_map <- leaflet("OpenStreetMap") |>
-  addTiles() |>
-  addRasterImage(SM,
-    colors = colorNumeric("RdYlGn",
-      domain = c(-0.1, 6.0), na.color = NA),
-    opacity = 0.8)
-sm_map
+terra::plot(SM, col = rev(viridis(25)), smooth = TRUE,
+            main = "Soil moisture map")
+```
+
+```{r sm-plot}
+knitr::include_graphics("images/sm-plot.png")
 ```
