@@ -162,15 +162,10 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ### Soil moisture plot
 
 ```{r sm-plot}
-library(leaflet)
+install.packages(c("viridis", "terra"))
 names(SM) <- "Lachish soil moisture"
 SM[terra::values(SM) < 0] <- 0
 
-sm_map <- leaflet("OpenStreetMap") |>
-  addTiles() |>
-  addRasterImage(SM,
-    colors = colorNumeric("RdYlGn",
-      domain = c(-0.1, 2.0), na.color = NA),
-    opacity = 0.9)
-sm_map
+terra::plot(SM, col =  col = rev(viridis::viridis(25)), smooth = TRUE,
+            main = "Soil moisture map")
 ```

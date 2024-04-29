@@ -35,6 +35,7 @@ Three CSV files are saved:
   df <- read.csv(system.file("extdata", "trapezoid_edges.csv",
                   package = "rOPTRAM"))
   output_dir <- tempdir()
-
+  coeffs <- rOPTRAM::polynomial_coefficients(df, output_dir)
+  coeffs
  }
 }

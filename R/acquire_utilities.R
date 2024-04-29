@@ -15,8 +15,8 @@
 #' @export
 #' @return list of BOA files
 #' @note
-#' This function utilizes the \code{CDSE} package.
-#' Make sure to install the CDSE and jsonlite packages.
+#' #' This function utilizes the \code{CDSE} package.
+#' Make sure to install the \code{CDSE} and \code{jsonlite} packages.
 #' Create OAuth account and token:
 #' Creating an Account:
 #' \enumerate{
@@ -41,20 +41,20 @@
 #'
 #' Using Credentials with \code{aquire_scihub}:
 #' \itemize{
-#'  \item In addition, you can utilize the generated \code{clientid} and \code{secret} within the \code{aquire_scihub()} function.
+#'  \item If the credentials were stored using \code{store_cdse_credentials()}, the credentials are retrieved automatically.
+#'  \item Otherwise, you can utilize the generated \code{clientid} and \code{secret} from \url{https://dataspace.copernicus.eu/} within the \code{aquire_scihub()} function.
 #'  \item If you want to store your credentials on your computer, ensure that when running \code{aquire_scihub()}, the \code{save_creds} parameter is set to 'TRUE'.
 #'  \item During the first run of \code{aquire_scihub()}, manually input your \code{clientid} and \code{secret} in the function signature. Subsequent runs will use the stored credentials.
-#'  \item If the credentials were stored using \code{store_cdse_credentials()}, the credentials are retrieved automatically.
 #' }
 #'
-#' Subject Area Constraint:
+#' **Subject Area Constraint:**
 #'  The downloadable images are restricted to a maximum size of 2500 pixels on
 #'  each side. This limitation is established due to the final resolution set to
 #'  10 meters using JavaScript. Consequently, the subject area available for
 #'  download is limited to 25 kilometers in both directions. Please be aware of
 #'  this restriction when selecting your desired area for download.
 
-#' Area of Interest (AOI) Specification:
+#' **Area of Interest (AOI) Specification:**
 #'  When defining your Area of Interest (AOI), please ensure that it is
 #'  represented as a polygonal layer with only one feature. This feature can
 #'  either be a single POLYGON or a MULTIPOLYGON, which may consist of
@@ -66,9 +66,11 @@
 #' to_date <- "2019-04-30"
 #' aoi <- sf::st_read(system.file("extdata",
 #'                   "lachish.gpkg", package = 'rOPTRAM'))
+#' optram_options("veg_index", "NDVI", show_opts = FALSE)
+#' optram_options("SWIR_band", 11)
 #' acquire_scihub(aoi, from_date, to_date,
-#'                veg_index = "SAVI",
-#'                SWIR_band = 11)
+#'              clientid = '...enter clientid here...',
+#'              secret = '...enter secret here...')
 #' }
 
 acquire_scihub <- function(

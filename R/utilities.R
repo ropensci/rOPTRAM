@@ -234,38 +234,43 @@ calculate_vi <- function(img_stk,
                          blueband = 2,
                          nirband = 5,
                          scale_factor = 2^15) {
-    # Avoid "no visible binding for global variable" NOTE
-    nir <- red <- blue <- green <- vi_rast <- NULL
-    if (terra::nlyr(img_stk) < 12) {
+  # Avoid "no visible binding for global variable" NOTE
+  nir <- red <- blue <- green <- vi_rast <- NULL
+  if (terra::nlyr(img_stk) < 12) {
       message("BOA image stack does not contain all bands")
       return(NULL)
     }
-    viname = getOption("optram.veg_index")
-    nir <- img_stk[[nirband]]
-    red <- img_stk[[redband]]
-    blue <- img_stk[[blueband]]
-    green <- img_stk[[greenband]]
-    # Rescaling
-    nir <- 255 * (nir - min(terra::values(nir))) / scale_factor
-    red <- 255 * (red - min(terra::values(red))) / scale_factor
-    blue <- 255 * (blue - min(terra::values(blue))) / scale_factor
-    green <- 255 * (green - min(terra::values(green))) / scale_factor
+  viname = getOption("optram.veg_index")
+  nir <- img_stk[[nirband]]
+  red <- img_stk[[redband]]
+  blue <- img_stk[[blueband]]
+  green <- img_stk[[greenband]]
+  # Rescaling
+  nir <- 255 * (nir - min(terra::values(nir), na.rm = TRUE)) / scale_factor
+  red <- 255 * (red - min(terra::values(red), na.rm = TRUE)) / scale_factor
+  blue <- 255 * (blue - min(terra::values(blue), na.rm = TRUE)) / scale_factor
+  green <- 255 * (green - min(terra::values(green), na.rm = TRUE)) / scale_factor
+  
+  nir <- 255 * (nir - min(terra::values(nir))) / scale_factor
+  red <- 255 * (red - min(terra::values(red))) / scale_factor
+  blue <- 255 * (blue - min(terra::values(blue))) / scale_factor
+  green <- 255 * (green - min(terra::values(green))) / scale_factor
 
-    if (viname == "NDVI") {
-        vi_rast <- ((nir - red) / (nir + red))
-    } else if (viname == "SAVI") {
-        vi_rast <- ((1.5 * (nir - red)) / (nir + red + 0.5) )
-    } else if (viname == "MSAVI") {
-        vi_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 -
-            8 * (nir - red))) / 2)
-    } else if (viname == "CI") {
-        vi_rast <- (1-((red - blue) / (red + blue)))
-    } else if (viname == "BSCI") {
-        vi_rast <- ((1-(2*(red - green))) /
-            (terra::mean(green, red, nir, na.rm = TRUE)))
-    }
-    names(vi_rast) <- "VI"
-    return(vi_rast)
+  if (viname == "NDVI") {
+    vi_rast <- ((nir - red) / (nir + red))
+  } else if (viname == "SAVI") {
+    vi_rast <- ((1.5 * (nir - red)) / (nir + red + 0.5) )
+  } else if (viname == "MSAVI") {
+    vi_rast <- ((2 * nir + 1 - sqrt((2 * nir + 1)^2 -
+                                      8 * (nir - red))) / 2)
+  } else if (viname == "CI") {
+    vi_rast <- (1-((red - blue) / (red + blue)))
+  } else if (viname == "BSCI") {
+    vi_rast <- ((1-(2*(red - green))) /
+                  (terra::mean(green, red, nir, na.rm = TRUE)))
+  }
+  names(vi_rast) <- "VI"
+  return(vi_rast)
 }
 
 

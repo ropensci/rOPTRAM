@@ -29,9 +29,8 @@ and STR-VI data.frame, default is tempdir()}
 rmse_df, data.frame, RMSE values of fitted trapezoid edges
 }
 \description{
-Use this function to prepares vegetation index and
-SWIR Transformed Reflectance (STR) rasters
-when you have already downloaded landsat image files in advance.
+Use this function to prepare vegetation index and SWIR Transformed Reflectance (STR) rasters
+when you have already downloaded Landsat image files in advance.
 This function assumes that atmospheric correction has been applied.
 }
 \note{
