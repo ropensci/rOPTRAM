@@ -29,7 +29,7 @@
 #' other vegetation indices, such as SAVI, or MSAVI.
 #'
 #' @examples
-#' VI_list <- list.files(system.file("extdata", "SAVI"),
+#' VI_list <- list.files(system.file("extdata", "NDVI"),
 #'         pattern = ".tif$", full.names = TRUE)
 #' STR_list <- list.files(system.file("extdata", "STR"),
 #'         pattern = ".tif$", full.names = TRUE)

@@ -4,10 +4,10 @@
 \alias{crop_landsat_list}
 \title{Crop List of Landsat Bands to AOI}
 \usage{
-crop_landsat_list(landsat_list)
+crop_landsat_list(landsat_dir)
 }
 \arguments{
-\item{landsat_list, }{list of char, full paths landsat images}
+\item{landsat_dir, }{folder, contains the manually downloaded Landsat imagers}
 }
 \value{
 cropped_list, list, paths to derived BOA stacks, cropped to study area
@@ -17,8 +17,6 @@ Utility function to prepare BOA bands cropped to Area of Interest
 }
 \examples{
 \dontrun{
- landsat_list <- list.dirs(landsat_dir)[
-                grepl("L*_02_*",list.dirs(landsat_dir))]
-cropped_landsat_list <- crop_landsat_list(landsat_list)
+cropped_landsat_list <- crop_landsat_list(landsat_dir)
 }
 }

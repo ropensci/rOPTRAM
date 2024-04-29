@@ -50,6 +50,6 @@ set scale_factor to 255.
 }
 \examples{
 img_stk <- terra::rast(system.file("extdata", "BOA",
-         "BOA_2022-12-11.tif", package = "rOPTRAM"))
+         "BOA_2023-01-20.tif", package = "rOPTRAM"))
 vi <- calculate_vi(img_stk)
 }

@@ -97,7 +97,7 @@ check_swir_band <- function(SWIR_band = c(11, 12)) {
 #' @return vi_rast, SpatRaster of vegetation index
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata", "BOA",
-#'          "BOA_2022-12-11.tif", package = "rOPTRAM"))
+#'          "BOA_2023-01-20.tif", package = "rOPTRAM"))
 #' vi <- calculate_vi(img_stk)
 
 calculate_vi <- function(img_stk, viname = "NDVI",
@@ -117,10 +117,10 @@ calculate_vi <- function(img_stk, viname = "NDVI",
     blue <- img_stk[[blueband]]
     green <- img_stk[[greenband]]
     # Rescaling
-    nir <- 255 * (nir - min(terra::values(nir))) / scale_factor
-    red <- 255 * (red - min(terra::values(red))) / scale_factor
-    blue <- 255 * (blue - min(terra::values(blue))) / scale_factor
-    green <- 255 * (green - min(terra::values(green))) / scale_factor
+    nir <- 255 * (nir - min(terra::values(nir), na.rm = TRUE)) / scale_factor
+    red <- 255 * (red - min(terra::values(red), na.rm = TRUE)) / scale_factor
+    blue <- 255 * (blue - min(terra::values(blue), na.rm = TRUE)) / scale_factor
+    green <- 255 * (green - min(terra::values(green), na.rm = TRUE)) / scale_factor
 
     if (viname == "NDVI") {
         vi_rast <- ((nir - red) / (nir + red))

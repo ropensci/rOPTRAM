@@ -39,6 +39,6 @@ VI_dir <- system.file("extdata", "NDVI", package = "rOPTRAM")
 STR_dir <- system.file("extdata", "STR", package = "rOPTRAM")
 SM <- optram_calculate_soil_moisture(img_date,
             VI_dir, STR_dir,
-            data_dir = system.file("extdata"),
+            data_dir = tempdir(),
             trapezoid_method = "exponential")
 }

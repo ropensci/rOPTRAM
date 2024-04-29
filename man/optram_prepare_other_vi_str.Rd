@@ -29,6 +29,3 @@ output_files, list, full paths to saved Geotiff files
 This function prepares vegetation index and STR rasters
 from other (non-Sentinel) image files downloaded in advance.
 }
-\examples{
-print("Running prepare_other_vi_str.R")
-}

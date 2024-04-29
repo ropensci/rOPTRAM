@@ -14,8 +14,7 @@ optram_landsat(
 }
 \arguments{
 \item{landsat_dir, }{string, full path to containing folder of downloaded
-(unzipped) Landsat data in original landsat format,
-after atmospheric correction (L2A)}
+(unzipped) Landsat data in original landsat format, after atmospheric correction (L2A)}
 
 \item{aoi, }{{sf} object, POLYGON or MULTIPOLYGON of AOI boundary
 of area of interest}
@@ -33,26 +32,25 @@ and STR-VI data.frame, default is tempdir()}
 rmse_df, data.frame, RMSE values of fitted trapezoid edges
 }
 \description{
-Use this function to prepares vegetation index and
-SWIR Transformed Reflectance (STR) rasters
-when you have already downloaded landsat image files in advance.
+Use this function to prepare vegetation index and SWIR Transformed Reflectance (STR) rasters
+when you have already downloaded Landsat image files in advance.
 This function assumes that atmospheric correction has been applied.
 }
 \note{
-Unlike the \code{\link[rOPTRAM]{optram_acquire_s2}} function, there is no implementation
-for automatic download of Landsat images.
+Unlike the \code{\link[rOPTRAM]{optram_acquire_s2}} function,
+there is no implementation for automatic download of Landsat images.
 This function requires a directory, set in the \code{landsat_dir} parameter,
-which contains the set of Landsat tiles downloaded manually
-by the user, in advance.
+which contains the set of Landsat tiles downloaded manually by the user, in advance.
 This directory should contain folders of Landsat images, where each folder
 consists of the individual Landsat bands as Geotiff files,
-as well as the metadata files as downloaded from,
-i.e. the USGS EarthExplorer (\url{https://earthexplorer.usgs.gov/}) website.
+as well as the metadata files as downloaded from (i.e.) the USGS EarthExplorer:
+(\url{https://earthexplorer.usgs.gov/}) website.
 }
 \examples{
 \dontrun{
 aoi <- sf::st_read(system.file("extdata",
                               "lachish.gpkg", package = "rOPTRAM"))
+# landsat_dir is a folder containing the original downloaded Landsat images.
 optram_landsat(landsat_dir,  aoi,
                veg_index = 'SAVI',
                LC_output_dir = tempdir(), data_output_dir = tempdir())

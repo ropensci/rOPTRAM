@@ -17,10 +17,10 @@ with fitted wet/dry values added
 }
 \description{
 Called by \code{\link[rOPTRAM]{optram_wetdry_coefficients}}
-to prepare exponential curve along trapezoid edges
+to prepare exponential curve along trapezoid edges.
 Calculates the intercept and slope of both wet and dry edges
-and updates the edges data.frame with these exp fitted values
-Not exported
+and updates the edges data.frame with these exp fitted values.
+Not exported.
 }
 \note{
 Three CSV files are saved:
