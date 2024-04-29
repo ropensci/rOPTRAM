@@ -115,8 +115,7 @@ boa_files <- acquire_scihub(aoi,
               SWIR_band = 11)
 ```
 
-
--   If you choose to use the env option, you can utilize either `optram_acquire_s2` or `acquire_scihub`. To enable the environment variable option, set `save_creds = TRUE` when calling either function. By doing so, you won't need to manually enter your Client ID and secret. Your code snippet might resemble the following:
+- If you choose to use the env option, you can utilize either `optram_acquire_s2` or `acquire_scihub`. To enable the environment variable option, set `save_creds = TRUE` when calling either function. By doing so, you won't need to manually enter your Client ID and secret. Your code snippet might resemble the following:
 
 ```{r prepare-save-4, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
 from_date <- "2018-12-01"
