@@ -117,8 +117,8 @@ optram_acquire_s2 <- function(
   SWIR_band <- getOption("optram.SWIR_band")
   # Pre flight checks...
   if (!check_aoi(aoi)) return(NULL)
-  # Ensure that aoi is single POLYGON ro MULTIPOLYGON feature
-  aoi <- sf::st_union(aoi)
+  # Ensure that aoi is single POLYGON or MULTIPOLYGON feature (and sf NOT sfc)
+  aoi <- sf::st_as_sf(sf::st_union(aoi))
   if (!check_date_string(from_date, to_date)) return(NULL)
   if (!check_swir_band(SWIR_band)) return(NULL)
 
