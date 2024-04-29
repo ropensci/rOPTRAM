@@ -59,6 +59,8 @@ Registration on Copernicus DataSpace was done in advance, and the OAuth credenti
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 
+This example uses "polynomial" trapezoid fitted curve.
+
 
 ```r
 from_date <- "2022-05-01"
@@ -66,9 +68,7 @@ to_date <- "2023-04-30"
 output_dir <- tempdir()
 aoi <- sf::st_read(system.file("extdata",
                                "lachish.gpkg", package = "rOPTRAM"))
-#> Reading layer `High' from data source 
-#>   `/home/micha/R/x86_64-pc-linux-gnu-library/4.2/rOPTRAM/extdata/lachish.gpkg' 
-#>   using driver `GPKG'
+#> Reading layer `High' from data source `/home/micha/work/dev/roptram/inst/extdata/lachish.gpkg' using driver `GPKG'
 #> Simple feature collection with 1 feature and 1 field
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
@@ -82,23 +82,42 @@ rmse <- optram(aoi,
               data_output_dir = output_dir,
               remote = "scihub",
               vi_step = 0.005,
-              trapezoid_method = "linear",
+              trapezoid_method = "polynomial",
               SWIR_band = 11)
-#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
+#> [1] "RMSE for fitted trapezoid:"
+#>    RMSE.wet   RMSE.dry
+#> 1 0.1049979 0.07396959
 knitr::kable(rmse, caption = "Trapezoid coefficients")
-#> Error in knitr::kable(rmse, caption = "Trapezoid coefficients"): object 'rmse' not found
 ```
+
+
+
+Table: Trapezoid coefficients
+
+|  RMSE.wet|  RMSE.dry|
+|---------:|---------:|
+| 0.1049979| 0.0739696|
+
+
 ### Show trapezoid plot
 
 
 ```r
-edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-#> Error in file(file, "rt"): cannot open the connection
+edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
-#> Error in gzfile(file, "rb"): cannot open the connection
-plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-#> Error in plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir): unused argument (output_dir = output_dir)
+plot_vi_str_cloud(full_df, edges_df, edge_points = TRUE)
+```
+
+<div class="figure">
+<img src="figure/plot-1.png" alt="Trapezoid scatterplot" width="90%" />
+<p class="caption">Trapezoid scatterplot</p>
+</div><div class="figure">
+<img src="figure/plot-2.png" alt="Trapezoid scatterplot" width="90%" />
+<p class="caption">Trapezoid scatterplot</p>
+</div>
+
+```r
 knitr::include_graphics("images/trapezoid_lachish_linear.png")
 ```
 
@@ -127,7 +146,6 @@ s2_file_list <- optram_acquire_s2(aoi,
                             veg_index =veg_index,
                             remote = "scihub",
                             SWIR_band = 11)
-#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -137,10 +155,18 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
                            rm.low.vi = TRUE, rm.hi.str = TRUE)
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
-#> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```
+
+
+
+Table: RMSE of fitted trapezoid edges
+
+|  RMSE.wet|  RMSE.dry|
+|---------:|---------:|
+| 0.2589246| 0.1288553|
+
+
 
 ## Soil Moisture Estimate
 
@@ -154,7 +180,7 @@ STR_dir <- file.path(output_dir, "STR")
 data_dir <- output_dir
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
                                      data_dir = data_dir,
-                                     trapezoid_method = "linear")
+                                     trapezoid_method = "polynomial")
 ```
 
 ### Soil moisture plot
@@ -163,17 +189,15 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ```r
 library(leaflet)
 names(SM) <- "Migda soil moisture"
-#> Error in names(SM) <- "Migda soil moisture": attempt to set an attribute on NULL
 SM[terra::values(SM) < 0] <- 0
-#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'values' for signature '"NULL"'
 
 sm_map <- leaflet("OpenStreetMap") |>
   addTiles() |>
   addRasterImage(SM,
     colors = colorNumeric("RdYlGn",
-      domain = c(-0.1, 2.0), na.color = NA),
-    opacity = 0.9)
-#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : Don't know how to get path data from object of class NULL
+      domain = c(-0.1, 6.0), na.color = NA),
+    opacity = 0.8)
+#> Warning in colors(.): Some values were outside the color scale and will be treated as NA
 sm_map
-#> Error in eval(expr, envir, enclos): object 'sm_map' not found
+#> Error in path.expand(path): invalid 'path' argument
 ```

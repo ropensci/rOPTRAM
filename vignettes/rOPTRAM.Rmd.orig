@@ -64,6 +64,8 @@ Registration on Copernicus DataSpace was done in advance, and the OAuth credenti
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 
+This example uses "polynomial" trapezoid fitted curve.
+
 ```{r wrapper, warning=FALSE, message=FALSE}
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
@@ -78,18 +80,20 @@ rmse <- optram(aoi,
               data_output_dir = output_dir,
               remote = "scihub",
               vi_step = 0.005,
-              trapezoid_method = "linear",
+              trapezoid_method = "polynomial",
               SWIR_band = 11)
 knitr::kable(rmse, caption = "Trapezoid coefficients")
 ```
 ### Show trapezoid plot
 
 ```{r plot, fig.cap="Trapezoid scatterplot", out.width = '90%', warning=FALSE}
-edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
+edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
-plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-knitr::include_graphics("images/trapezoid_lachish_linear.png")
+pl <- plot_vi_str_cloud(full_df, edges_df, edge_points = TRUE)
+pl <- pl + ggtitle("Lachish area trapezoid plot", subtitle = "polynomial fitted")
+ggsave(pl, file.path(output_dir, "trapezoid_lachish_polynomial.png")
+knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
 ```
 
 ## Step by step
@@ -134,7 +138,7 @@ STR_dir <- file.path(output_dir, "STR")
 data_dir <- output_dir
 SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
                                      data_dir = data_dir,
-                                     trapezoid_method = "linear")
+                                     trapezoid_method = "polynomial")
 ```
 
 ### Soil moisture plot
@@ -148,7 +152,7 @@ sm_map <- leaflet("OpenStreetMap") |>
   addTiles() |>
   addRasterImage(SM,
     colors = colorNumeric("RdYlGn",
-      domain = c(-0.1, 2.0), na.color = NA),
-    opacity = 0.9)
+      domain = c(-0.1, 6.0), na.color = NA),
+    opacity = 0.8)
 sm_map
 ```

@@ -63,7 +63,6 @@ s2_file_list <- optram_acquire_s2(aoi,
                             veg_index =veg_index,
                             remote = "scihub",
                             SWIR_band = 11)
-#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -81,9 +80,7 @@ meth <- "linear"
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir,
                                    trapezoid_method = meth)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-#> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df,
                   edges_df = edges_df,
                   trapezoid_method = meth,
@@ -106,9 +103,7 @@ meth <- "exponential"
 coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir,
                                      trapezoid_method = meth)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
-#> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df,
                   output_dir = output_dir,
                   edges_df = edges_df,
@@ -134,7 +129,6 @@ coeffs <- optram_wetdry_coefficients(full_df,
                                      save_plot = TRUE)
 #> Error in optram_wetdry_coefficients(full_df, output_dir = output_dir, : unused argument (save_plot = TRUE)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
-#> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df,
                   output_dir = output_dir,
                   edges_df = edges_df,
