@@ -1,13 +1,10 @@
-test_that("Check for missing STR and VI columns in full_df", {
+test_that("Check that plot_vi_str_cloud returns ggplot object", {
   full_df <- readRDS(system.file("extdata", "VI_STR_data.rds",
                                  package = "rOPTRAM"))
-  full_df1 <- dplyr::select(full_df, !c(STR))
-  full_df2 <- dplyr::select(full_df, !c(VI))
-  aoi_name <- "Test"
-  coeffs <- read.csv(system.file("extdata", "coefficients_lin.csv",
-                                 package = "rOPTRAM"))
-  expect_null(plot_vi_str_cloud(full_df1, coeffs, aoi_name))
-  expect_null(plot_vi_str_cloud(full_df2, coeffs, aoi_name))
+  edges_df <- read.csv(system.file("extdata", "trapezoid_edges_lin.csv",
+                                         package = "rOPTRAM"))
+  pl <- plot_vi_str_cloud(full_df, edges_df)
+  expect_true(inherits(pl, "ggplot"))
   })
 
 

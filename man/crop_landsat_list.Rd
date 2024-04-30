@@ -17,6 +17,8 @@ Utility function to prepare BOA bands cropped to Area of Interest
 }
 \examples{
 \dontrun{
+# landsat_dir is a directory containing the original Landsat image folders
+landsat_dir <- "...enter full path here..."
 cropped_landsat_list <- crop_landsat_list(landsat_dir)
 }
 }

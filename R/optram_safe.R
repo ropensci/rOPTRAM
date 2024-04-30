@@ -50,7 +50,7 @@
 #' \dontrun{
 #' aoi <- sf::st_read(system.file("extdata",
 #'                   "lachish.gpkg", package = "rOPTRAM"))
-#' safe_dir  <- tempdir()
+#' safe_dir  <- "...enter directory of downloaded SAFE folders..."
 #' rmse <- optram_safe(safe_dir,
 #'                       aoi, veg_index = "NDVI", SWIR_band = 11)
 #' # Plot trapezoid

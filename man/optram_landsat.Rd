@@ -50,7 +50,8 @@ as well as the metadata files as downloaded from (i.e.) the USGS EarthExplorer:
 \dontrun{
 aoi <- sf::st_read(system.file("extdata",
                               "lachish.gpkg", package = "rOPTRAM"))
-# landsat_dir is a folder containing the original downloaded Landsat images.
+# landsat_dir is a directory containing the original downloaded Landsat images.
+landsat_dir <- "...enter full path here..."
 optram_landsat(landsat_dir,  aoi,
                veg_index = 'SAVI',
                LC_output_dir = tempdir(), data_output_dir = tempdir())

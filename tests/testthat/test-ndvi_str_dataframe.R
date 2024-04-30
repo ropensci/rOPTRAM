@@ -22,6 +22,7 @@ test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
   expect_true(inherits(optram_ndvi_str(STR_list, VI_list,
                                        output_dir = output_dir),
                        "data.frame"))
+  expect_true(dir.exists(output_dir))
 })
 
 test_that("Check that rm.low.vi and rm.hi.str works", {

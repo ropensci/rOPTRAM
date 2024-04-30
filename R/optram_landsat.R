@@ -27,7 +27,8 @@
 #' \dontrun{
 #' aoi <- sf::st_read(system.file("extdata",
 #'                               "lachish.gpkg", package = "rOPTRAM"))
-#' # landsat_dir is a folder containing the original downloaded Landsat images.
+#' # landsat_dir is a directory containing the original downloaded Landsat images.
+#' landsat_dir <- "...enter full path here..."
 #' optram_landsat(landsat_dir,  aoi,
 #'                veg_index = 'SAVI',
 #'                LC_output_dir = tempdir(), data_output_dir = tempdir())
@@ -171,6 +172,8 @@
 #' @export
 #' @examples
 #' \dontrun{
+#' # landsat_dir is a directory containing the original Landsat image folders
+#' landsat_dir <- "...enter full path here..."
 #' cropped_landsat_list <- crop_landsat_list(landsat_dir)
 #' }
 crop_landsat_list <- function(landsat_dir) {
