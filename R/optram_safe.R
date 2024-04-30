@@ -38,7 +38,7 @@
 #' \dontrun{
 #' aoi <- sf::st_read(system.file("extdata",
 #'                   "lachish.gpkg", package = "rOPTRAM"))
-#' safe_dir  <- tempdir()
+#' safe_dir  <- "...enter directory containing downloaded SAFE folders..."
 #' rmse <- optram_safe(safe_dir, aoi_file)
 #' }
 

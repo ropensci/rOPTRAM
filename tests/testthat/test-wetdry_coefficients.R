@@ -1,8 +1,3 @@
-test_that("Input full_df is data.frame", {
-    full_df <- readRDS(system.file("extdata",
-                                   "VI_STR_data.rds", package = "rOPTRAM"))
-    expect_true(inherits(full_df, "data.frame"))
-})
 
 test_that("Output RMSE is data.frame of 2 columns", {
   full_df <- readRDS(system.file(

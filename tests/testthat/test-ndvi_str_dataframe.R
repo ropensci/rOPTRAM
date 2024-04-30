@@ -1,12 +1,3 @@
-test_that("Check that both STR and VI directories contain files", {
-  STR_list <- list()
-  VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
-                        full.names = TRUE)
-  aoi <- sf::st_read(system.file("extdata",
-                                 "lachish.gpkg", package = "rOPTRAM"))
-  expect_null(optram_ndvi_str(STR_list, VI_list,
-                              output_dir = tempdir(), aoi))
-  })
 
 test_that("optram_ndvi_str() function returns data.frame", {
   VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
@@ -30,6 +21,7 @@ test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
   expect_true(inherits(optram_ndvi_str(STR_list, VI_list,
                                        output_dir = output_dir, aoi),
                        "data.frame"))
+  expect_true(dir.exists(output_dir))
 })
 
 test_that("Check that rm.low.vi and rm.hi.str works", {

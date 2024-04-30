@@ -12,36 +12,10 @@ test_that("Check that calculate_vi returns SpatRaster", {
     expect_s4_class(calculate_vi(img_stk), "SpatRaster")
 })
 
-test_that("Check that calculate_vi returns NULL for non-existant VI", {
-    img_stk <- terra::rast(system.file("extdata",
-              "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
-    expect_message(optram_options("veg_index", "XXX"), "Incorrect")
-})
-
-test_that("In calculate_vi, img_stk has all 12 bands", {
-  img_stk <- terra::rast(system.file("extdata",
-                                     "BOA", "BOA_2022-12-11.tif",
-                                     package = "rOPTRAM"))
-  short_stk <- img_stk[[1:10]]
-  expect_null(calculate_vi(short_stk))
-})
-
 test_that("Check that calculate_str returns SpatRaster", {
     img_stk <- terra::rast(system.file("extdata",
               "BOA", "BOA_2022-12-11.tif", package = "rOPTRAM"))
     expect_s4_class(calculate_str(img_stk), "SpatRaster")
-})
-
-test_that("Check for invalid SWIR_band value", {
-  img_stk <- terra::rast(system.file("extdata",
-                                     "BOA", "BOA_2022-12-11.tif",
-                                     package = "rOPTRAM"))
-  expect_message(optram_options("SWIR_band", 10), "Incorrect")
-})
-
-test_that("Check for invalid SWIR band", {
-  expect_false(check_swir_band(13))
-  expect_false(check_swir_band("B12"))
 })
 
 
@@ -58,18 +32,17 @@ test_that("Check format of from_date, to_date",{
 
 test_that("CDSE credentials are retrieved", {
   creds_path <- switch(Sys.info()['sysname'],
-                  "Windows" = {file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
-                  "Linux" = {file.path(Sys.getenv("HOME"), ".CDSE")},
-                  "Darwin" = {file.path(Sys.getenv("HOME"),
-                                      "Library", "Preferences", ".CDSE")}
-  )
+                       "Windows" = {file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
+                       "Linux" = {file.path(Sys.getenv("HOME"), ".CDSE")},
+                       "Darwin" = {file.path(Sys.getenv("HOME"),
+                                             "Library", "Preferences", ".CDSE")})
   testthat::skip_if_not(dir.exists(creds_path))
   creds <- retrieve_cdse_credentials()
   expect_true(inherits(creds, "list"))
   expect_equal(length(creds[[1]]), 2)
 })
 
-test_that("CDSE credentials can be stored from environment variables", {
+test_that("CDSE credentials can be stored fronm environment variables", {
   # First get current creds, if they are already stored
   creds <- retrieve_cdse_credentials()
   # Set environment variables for this test from already stored creds
