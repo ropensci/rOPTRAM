@@ -43,7 +43,7 @@ Both methods require [registering](https://dataspace.copernicus.eu/) on the Cope
 
 
 ```r
-remotes::install_gitlab("rsl-bidr/roptram")
+remotes::install_github("ropensci/rOPTRAM")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
 # The {CDSE} and {jsonlite} packages are required for downloading Sentinel imagery from Copernicus DataSpace.
@@ -56,7 +56,7 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 ### Run the full OPTRAM model procedure with a single function call
 
 Registration on Copernicus DataSpace was done in advance, and the OAuth credentials (*clientid*, and *secret*) have been saved to the user's home directory.
-If you haven't obtained the credentials, you can refer to the vignette [here](https://gitlab.com/rsl-bidr/roptram/-/blob/main/vignettes/rOPTRAM_acquiring.Rmd) where setting up OAuth is demonstrated.
+If you haven't obtained the credentials, you can refer to the vignette [here](https://github.com/ropensci/rOPTRAM/-/blob/main/vignettes/rOPTRAM_acquiring.Rmd) where setting up OAuth is demonstrated.
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 

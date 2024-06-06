@@ -15,8 +15,8 @@ Description: The OPtical TRapezoid Model (OPTRAM) derives soil moisture
   is used as a proxy for LST. See:
   Sadeghi, M. et al., 2017. <https://doi.org/10.1016/j.rse.2017.05.041> .
 License: GPL (>= 3) + file LICENSE
-URL: https://gitlab.com/rsl-bidr/roptram.git
-BugReports: https://gitlab.com/rsl-bidr/
+URL: https://github.com/ropensci/rOPTRAM.git
+BugReports: https://github.com/ropensci/rOPTRAM/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1

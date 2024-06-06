@@ -4,8 +4,8 @@
   "identifier": "rOPTRAM",
   "description": "The OPtical TRapezoid Model (OPTRAM) derives soil moisture based on the linear relation between a vegetation index and Land Surface Temperature (LST). The Short Wave Infra-red (SWIR) band is used as a proxy for LST. See: Sadeghi, M., Babaeian, E., Tuller, M., Jones, S.B., 2017. The optical trapezoid model: A novel approach to remote sensing of soil moisture applied to Sentinel-2 and Landsat-8 observations. Remote Sensing of Environment 198, 52–68, https://doi.org/10.1016/j.rse.2017.05.041 .",
   "name": "rOPTRAM: Derive soil moisture using the OPTRAM algorithm",
-  "codeRepository": "https://gitlab.com/rsl-bidr/roptram.git",
-  "issueTracker": "https://gitlab.com/rsl-bidr/",
+  "codeRepository": "https://github.com/ropensci/rOPTRAM.git",
+  "issueTracker": "https://github.com/ropensci/rOPTRAM/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
   "version": "0.0.0.9000",
   "programmingLanguage": {

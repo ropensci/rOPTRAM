@@ -41,7 +41,7 @@ The fitting method is chosen by setting the `trapezoid_method` parameter in the 
 
 
 ```r
-remotes::install_gitlab("rsl-bidr/roptram")
+remotes::install_github("ropensci/rOPTRAM")
 library(rOPTRAM)
 if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
 if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)

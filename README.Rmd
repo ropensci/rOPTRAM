@@ -34,7 +34,7 @@ knitr::opts_chunk$set(
 
 ## Installation
 
-`rOPTRAM` resides on gitlab.
+`rOPTRAM` resides on github.
 You can install the development version of rOPTRAM like so:
 
 ``` {r install, eval=FALSE}
@@ -42,7 +42,7 @@ You can install the development version of rOPTRAM like so:
 if (! require("remotes")) {
   install.packages("remotes")
 }
-remotes::install_gitlab("rsl-bidr/roptram")
+remotes::install_github("ropensci/rOPTRAM")
 ```
 
 #### Prerequisites
@@ -156,6 +156,6 @@ Instead, the following workflow can be used:
 
 ## Meta
 
-  - Please report any issues on [gitlab](https://gitlab.com/rsl-bidr/roptram/-/issues)
+  - Please report any issues on [github](https://github.com/ropensci/rOPTRAM/issues)
   - Anyone interested in collaborating is invited to "sign up" by contacting the maintainers.
   - This package is released with a [Contributor Code of Conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.

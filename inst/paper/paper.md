@@ -126,7 +126,7 @@ GIS_dir <- file.path(work_dir, "GIS")
 aoi_file <- file.path(GIS_dir, "lachish.gpkg")
 
 # load libraries
-remotes::install_gitlab("rsl-bidr/rOPTRAM")
+remotes::install_github("ropensci/rOPTRAM")
 pkgs <- c("knitr", "ggplot2", "rOPTRAM", "jsonlite")
 invisible(lapply(pkgs, require, character.only = TRUE))
 # model parameters
