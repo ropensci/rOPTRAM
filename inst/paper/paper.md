@@ -8,7 +8,7 @@ author:
 - name: Arnon Karnieli
   orcid: "0000-0001-8065-9793"
   affiliation: Ben Gurion University, Beer Sheva, Israel
-date: "01 March 2024"
+date: "07 June 2024"
 output:
   word_document: default
   html_document:
@@ -51,13 +51,10 @@ In all cases, the fitting function returns the root mean square error (RMSE) of 
 
 ### Linear regression fit of trapezoid edges
 
-\begin{equation}\label{eq:expdry}
-  STR_{dry} = i_{dry} + s_{dry} \cdot VI
-\end{equation}
+$$  STR_{dry} = i_{dry} + s_{dry} \cdot VI $$
 
-\begin{equation}\label{eq:expwet}
-  STR_{wet} = i_{wet} + s_{wet} \cdot VI
-\end{equation}
+$$ STR_{wet} = i_{wet} + s_{wet} \cdot VI $$
+
 
 where:
 $i_{wet}, i_{dry}$ are the regression line intercepts, and
@@ -65,51 +62,34 @@ $s_{wet}, s_{dry}$ are the slopes
 
 Then soil moisture can be derived from:
 
-\begin{equation}\label{eq:sm}
-  W = \frac{STR - STR_{dry}}{STR_{wet} - STR_{dry}}
-\end{equation}
+$$  W = \frac{STR - STR_{dry}}{STR_{wet} - STR_{dry}} $$
+
  
 ### Second order polynomial fit of trapezoid edges
 
 Polynomial fitted regression lines for the "wet" and "dry" edges can be expressed as:
 
-\begin{equation}
-  \label{eq:drypoly}
-  STR_{dry} = \alpha_{dry} + \beta1_{dry} \cdot VI + \beta2_{dry} \cdot VI^2
-\end{equation}
+$$  STR_{dry} = \alpha_{dry} + \beta1_{dry} \cdot VI + \beta2_{dry} \cdot VI^2 $$
 
-\begin{equation}
-  \label{eq:wetpoly}
-  STR_{wet} = \alpha_{wet} + \beta1_{wet} \cdot VI + \beta2_{wet} \cdot VI^2
-\end{equation}
+$$  STR_{wet} = \alpha_{wet} + \beta1_{wet} \cdot VI + \beta2_{wet} \cdot VI^2 $$
+
 
 and in this case, soil moisture is derived as:
 
-\begin{equation}
-  \label{eq:smpoly}
-  W = \frac{STR - (\alpha_{dry} + \beta1_{dry} \cdot VI + \beta2_{dry} \cdot VI^2)}{(\alpha_{wet} + \beta1_{wet} \cdot VI + \beta2_{wet} \cdot VI^2) - (\alpha_{dry} + \beta1_{dry} \cdot VI + \beta2_{dry} \cdot VI^2)}
-\end{equation}
+$$ W = \frac{STR - (\alpha_{dry} + \beta1_{dry} \cdot VI + \beta2_{dry} \cdot VI^2)}{(\alpha_{wet} + \beta1_{wet} \cdot VI + \beta2_{wet} \cdot VI^2) - (\alpha_{dry} + \beta1_{dry} \cdot VI + \beta2_{dry} \cdot VI^2)} $$
+
 
 ### Exponential curve fit of trapzoid edges
 
 Exponential fitted curves for the "wet" and "dry" edges can be expressed as:
 
-\begin{equation}
-  \label{eq:dryexp}
-  STR_{dry} = i_{dry} \cdot exp(s_{dry} \cdot VI)
-\end{equation}
+$$  STR_{dry} = i_{dry} \cdot exp(s_{dry} \cdot VI) $$
 
-\begin{equation}
-  \label{eq:wetexp}
-  STR_{wet} = i_{wet} \cdot exp(s_{wet} \cdot VI)
-\end{equation}
+$$  STR_{wet} = i_{wet} \cdot exp(s_{wet} \cdot VI)  $$
 
 and in this case, soil moisture is derived as:
 
-\begin{equation}
-  \label{eq:smexp}
-  W = \frac{STR - (i_{dry} \cdot exp(s_{dry} \cdot VI))}{(i_{wet} \cdot exp(s_{wet} \cdot VI)) - (i_{dry} \cdot exp(s_{dry} \cdot VI))}
-\end(equation}
+$$  W = \frac{STR - (i_{dry} \cdot exp(s_{dry} \cdot VI))}{(i_{wet} \cdot exp(s_{wet} \cdot VI)) - (i_{dry} \cdot exp(s_{dry} \cdot VI))} $$
 
 
 # Examples
@@ -209,7 +189,7 @@ All options will have a default value, and users will be able to define other ch
 
 # Acknowledgements
 
-The authors wish to thank Professor Maxim Shoshany, Faculty of Civil & Environmental Engineering, Technion, Israel, for advice and assistance in supplying relevant data for testing the model and software.
+The authors wish to thank Professor Maxim Shoshany, Faculty of Civil & Environmental Engineering, Technion, Israel, for advice and assistance in supplying relevant data for testing the model and software. We further thank the two reviewers, Lauren O'Brien and Harry Eslick, whose comments substantially improved the code in this package for submission to ROpenSci.
 
 # References
 
