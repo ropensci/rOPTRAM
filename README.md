@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Project Status:
-WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+ACTIVE](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 <!-- badges: end -->
 
 `rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) to derive soil
@@ -26,7 +26,7 @@ See: Sadeghi et al. (2017), Burdun et al. (2020), Ambrosone et al.
 
 ## Installation
 
-`rOPTRAM` resides on gitlab. You can install the development version of
+`rOPTRAM` resides on github. You can install the development version of
 rOPTRAM like so:
 
 ``` r
@@ -34,8 +34,7 @@ rOPTRAM like so:
 if (! require("remotes")) {
   install.packages("remotes")
 }
-remotes::install_gitlab("rsl-bidr/roptram")
-library(rOPTRAM)
+remotes::install_github("ropensci/rOPTRAM")
 ```
 
 #### Prerequisites
@@ -158,6 +157,7 @@ First, a demonstration of choosing non-default package options.
 # Show default options
 rOPTRAM::optram_options()
 #> [1] "edge_points = TRUE"
+#> [1] "feature_col = ID"
 #> [1] "max_tbl_size = 1e+06"
 #> [1] "period = full"
 #> [1] "plot_colors = no"
@@ -216,7 +216,7 @@ workflow can be used:
 ## Meta
 
 - Please report any issues on
-  [gitlab](https://gitlab.com/rsl-bidr/roptram/-/issues)
+  [github](https://github.com/ropensci/rOPTRAM/issues)
 - Anyone interested in collaborating is invited to “sign up” by
   contacting the maintainers.
 - This package is released with a [Contributor Code of

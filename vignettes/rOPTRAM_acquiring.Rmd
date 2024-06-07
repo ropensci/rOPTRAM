@@ -37,7 +37,7 @@ To utilize the CDSE package for accessing Copernicus data, follow these steps:
 Ensure you have the `CDSE` and `jsonlite` packages installed:
 
 ```{r setup, results='hide', eval=FALSE}
-remotes::install_gitlab("rsl-bidr/roptram")
+remotes::install_github("ropensci/rOPTRAM")
 library(rOPTRAM)
 if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
 if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
@@ -121,8 +121,7 @@ boa_files <- acquire_scihub(aoi,
                )
 ```
 
-
--   If you choose to use the env option, you can utilize either `optram_acquire_s2` or `acquire_scihub`. To enable the environment variable option, set `save_creds = TRUE` when calling either function. By doing so, you won't need to manually enter your Client ID and secret. Your code snippet might resemble the following:
+- If you choose to use the env option, you can utilize either `optram_acquire_s2` or `acquire_scihub`. To enable the environment variable option, set `save_creds = TRUE` when calling either function. By doing so, you won't need to manually enter your Client ID and secret. Your code snippet might resemble the following:
 
 ```{r prepare-save-4, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
 from_date <- "2018-12-01"

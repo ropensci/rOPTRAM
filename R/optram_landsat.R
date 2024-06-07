@@ -4,8 +4,7 @@
 #' when you have already downloaded Landsat image files in advance.
 #' This function assumes that atmospheric correction has been applied.
 #' @param landsat_dir, string, full path to containing folder of downloaded
-#'    (unzipped) Landsat data in original landsat format,
-#'    after atmospheric correction (L2A)
+#'    (unzipped) Landsat data in original landsat format, after atmospheric correction (L2A)
 #' @param aoi, {sf} object, POLYGON or MULTIPOLYGON of AOI boundary
 #'    of area of interest
 #' @param LC_output_dir, string, directory to save the derived products,
@@ -25,6 +24,8 @@
 #' \dontrun{
 #' aoi <- sf::st_read(system.file("extdata",
 #'                               "lachish.gpkg", package = "rOPTRAM"))
+#' # landsat_dir is a directory containing the original downloaded Landsat images.
+#' landsat_dir <- "...enter full path here..."
 #' optram_landsat(landsat_dir,  aoi,
 #'                veg_index = 'SAVI',
 #'                LC_output_dir = tempdir(), data_output_dir = tempdir())
@@ -216,8 +217,7 @@ crop_landsat_list <- function(landsat_dir) {
     img_stk <- img_stk*gain + offset
 
     # Save to BOA dir
-    # Create filename
-    # Prepare file name parts for saving rasters
+    # Create filename; Prepare file name parts for saving rasters
     # the name is formed from folder
     s_parts <- unlist(strsplit(basename(s), "_"))
     BOA_file <- paste(s_parts[1], s_parts[2], s_parts[3],

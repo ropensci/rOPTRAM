@@ -41,7 +41,7 @@ The fitting method is chosen by setting the `trapezoid_method` option using the 
 
 
 ```r
-remotes::install_gitlab("rsl-bidr/roptram")
+remotes::install_github("ropensci/rOPTRAM")
 library(rOPTRAM)
 if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
 if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
@@ -61,7 +61,6 @@ s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
                             output_dir = output_dir,
                             remote = "scihub")
-#> Error in optram_acquire_s2(aoi, from_date, to_date, output_dir = output_dir, : unused argument (remote = "scihub")
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -75,17 +74,14 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 
 ```r
 optram_option("trapezoid_method", "linear")
-#> Error in optram_option("trapezoid_method", "linear"): could not find function "optram_option"
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir,
                                    trapezoid_method = meth)
-#> Error in optram_wetdry_coefficients(full_df, output_dir = output_dir, : unused argument (trapezoid_method = meth)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-#> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df,
                   edges_df = edges_df,
                   output_dir = output_dir)
-#> Error in plot_vi_str_cloud(full_df, edges_df = edges_df, output_dir = output_dir): unused argument (output_dir = output_dir)
+
 knitr::include_graphics("images/trapezoid_lachish_linear.png")
 ```
 
@@ -113,13 +109,12 @@ optram_options("trapezoid_method", "exponential")
 coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir,
                                      trapezoid_method = meth)
-#> Error in optram_wetdry_coefficients(full_df, output_dir = output_dir, : unused argument (trapezoid_method = meth)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
-#> Error in file(file, "rt"): cannot open the connection
+
 plot_vi_str_cloud(full_df,
                   output_dir = output_dir,
                   edges_df = edges_df)
-#> Error in plot_vi_str_cloud(full_df, output_dir = output_dir, edges_df = edges_df): unused argument (output_dir = output_dir)
+
 knitr::include_graphics("images/trapezoid_lachish_exponential.png")
 ```
 
@@ -145,15 +140,11 @@ optram_options("trapezoid_method", "polynomial")
 #> [1] "veg_index = NDVI"
 #> [1] "vi_step = 0.005"
 coeffs <- optram_wetdry_coefficients(full_df,
-                                     output_dir = output_dir,
-                                     save_plot = TRUE)
-#> Error in optram_wetdry_coefficients(full_df, output_dir = output_dir, : unused argument (save_plot = TRUE)
+                                     output_dir = output_dir)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
-#> Error in file(file, "rt"): cannot open the connection
 plot_vi_str_cloud(full_df,
-                  output_dir = output_dir,
                   edges_df = edges_df)
-#> Error in plot_vi_str_cloud(full_df, output_dir = output_dir, edges_df = edges_df): unused argument (output_dir = output_dir)
+
 knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
 ```
 

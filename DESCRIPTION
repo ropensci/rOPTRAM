@@ -1,13 +1,15 @@
 Package: rOPTRAM
 Title: Derive Soil Moisture Using the OPTRAM Algorithm
-Version: 0.1.0.000
+Version: 0.2.0.000
 Authors@R: c(
   person("Micha", "Silver", , "silverm@post.bgu.ac.il", role = c("aut", "cre"),
           comment = c(ORCID = "0000-0002-1128-1325")),
   person("Arnon", "Karnieli", , "karnieli@bgu.ac.il", role = c("ctb", "fnd"),
           comment = c(ORCID = "0000-0001-8065-9793")),
   person("Ron", "Beiden", , "beiden@post.bgu.ac.il", role = c("ctb")),
-  person("Natalya", "Panov", , "npanov@bgu.ac.il", role = c("ctb"))
+  person("Natalya", "Panov", , "npanov@bgu.ac.il", role = c("ctb")),
+  person("Lauren", "O'Brien", ,"https://gitlab.com/obrl-soil", role = c("rev")),
+  person("Harry", "Eslick", ,"https://gitlab.com/harryeslick", role = c("rev"))
   )
 Description: The OPtical TRapezoid Model (OPTRAM) derives soil moisture
   based on the linear relation between a vegetation index
@@ -15,8 +17,8 @@ Description: The OPtical TRapezoid Model (OPTRAM) derives soil moisture
   is used as a proxy for LST. See:
   Sadeghi, M. et al., 2017. <https://doi.org/10.1016/j.rse.2017.05.041> .
 License: GPL (>= 3) + file LICENSE
-URL: https://gitlab.com/rsl-bidr/roptram.git
-BugReports: https://gitlab.com/rsl-bidr/
+URL: https://github.com/ropensci/rOPTRAM.git
+BugReports: https://github.com/ropensci/rOPTRAM/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1

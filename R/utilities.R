@@ -225,7 +225,7 @@ check_swir_band <- function(SWIR_band = c(11, 12)) {
 #' @return vi_rast, SpatRaster of vegetation index
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata", "BOA",
-#'          "BOA_2022-12-11.tif", package = "rOPTRAM"))
+#'          "BOA_2023-01-20.tif", package = "rOPTRAM"))
 #' vi <- calculate_vi(img_stk)
 
 calculate_vi <- function(img_stk,
@@ -355,7 +355,7 @@ store_cdse_credentials <- function (clientid = NULL,
          "Windows" = file.path(Sys.getenv("LOCALAPPDATA"), "CDSE"),
          "Linux" = file.path(Sys.getenv("HOME"), ".CDSE"),
          "Darwin" = file.path(Sys.getenv("HOME"),
-                              "Library", "Preferences", "CDSE")
+                              "Library", "Preferences", ".CDSE")
          # If nothing matches, switch returns NULL
   )
   if (is.null(creds_path)) {

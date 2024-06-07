@@ -49,6 +49,7 @@ During the process of connecting to the server and logging in, you need to
 follow these steps:
 \enumerate{
 \item When the message "Press \if{html}{\out{<enter>}} to proceed:" appears in the console, press enter.
+\item When prompted with 'Copy CTGB-UGFU and paste when requested by the browser' in the console, it may appear but can be ignored, as it is related to an older version of the openeo package.
 \item Calling this method opens your system web browser, with which you can authenticate yourself on the back-end authentication system.
 \item After that, the website will give you instructions to go back to the R client, where your connection has logged your account in. This means that every call that comes after that via the connection variable is executed by your user account.
 \item You will be redirected to \url{https://identity.dataspace.copernicus.eu/}. Ensure you have an account and are logged in. You will be required to grant access - press "yes".
@@ -60,7 +61,9 @@ from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 aoi <- sf::st_read(system.file("extdata",
                 "lachish.gpkg", package = 'rOPTRAM'))
-acquire_openeo(aoi, from_date, to_date,
-               veg_index = "SAVI")
+Important! Assign the output to an object for later retrieval
+acq <- acquire_openeo(aoi, from_date, to_date,
+                      veg_index = "SAVI",
+                      SWIR_band = 11)
 }
 }

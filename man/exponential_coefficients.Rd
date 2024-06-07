@@ -2,7 +2,7 @@
 % Please edit documentation in R/trapezoid_utilities.R
 \name{exponential_coefficients}
 \alias{exponential_coefficients}
-\title{Utility Function to Prepare Exponential Fitted Eedges of Trapezoid}
+\title{Utility Function to Prepare Exponential Fitted Edges of Trapezoid}
 \usage{
 exponential_coefficients(df, output_dir)
 }

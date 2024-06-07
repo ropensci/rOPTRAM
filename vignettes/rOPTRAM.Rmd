@@ -43,7 +43,7 @@ Both methods require [registering](https://dataspace.copernicus.eu/) on the Cope
 
 
 ```r
-remotes::install_gitlab("rsl-bidr/roptram")
+remotes::install_github("ropensci/rOPTRAM")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
 # The {CDSE} and {jsonlite} packages are required for downloading Sentinel imagery from Copernicus DataSpace.
@@ -122,8 +122,11 @@ optram_options("plot_density", "colors")
 ### Run the full OPTRAM model procedure with a single function call
 
 Registration on Copernicus DataSpace was done in advance, and the OAuth credentials (*clientid*, and *secret*) have been saved to the user's home directory.
+If you haven't obtained the credentials, you can refer to the vignette [here](https://github.com/ropensci/rOPTRAM/-/blob/main/vignettes/rOPTRAM_acquiring.Rmd) where setting up OAuth is demonstrated.
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
+
+This example uses "polynomial" trapezoid fitted curve.
 
 
 ```r
@@ -154,14 +157,23 @@ rmse <- optram(aoi,
 #> SamplesPerPixel. Defining non-color channels as ExtraSamples.
 #> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
 knitr::kable(rmse, caption = "Trapezoid coefficients")
-#> Error in knitr::kable(rmse, caption = "Trapezoid coefficients"): object 'rmse' not found
 ```
+
+
+
+Table: Trapezoid coefficients
+
+|  RMSE.wet|  RMSE.dry|
+|---------:|---------:|
+| 0.1049979| 0.0739696|
+
+
+
 ### Show trapezoid plot
 
 
 ```r
-edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-#> Error in file(file, "rt"): cannot open the connection
+edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
 #> Error in gzfile(file, "rb"): cannot open the connection
@@ -192,7 +204,7 @@ knitr::include_graphics("images/trapezoid_lachish_linear.png")
 s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
                             output_dir = output_dir)
-#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
+
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -201,10 +213,18 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir)
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
-#> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```
+
+
+
+Table: RMSE of fitted trapezoid edges
+
+|  RMSE.wet|  RMSE.dry|
+|---------:|---------:|
+| 0.2589246| 0.1288553|
+
+
 
 ## Soil Moisture Estimate
 
@@ -226,17 +246,17 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ```r
 library(leaflet)
 names(SM) <- "Lachish soil moisture"
-#> Error in names(SM) <- "Lachish soil moisture": attempt to set an attribute on NULL
 SM[terra::values(SM) < 0] <- 0
-#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'values' for signature '"NULL"'
 
-sm_map <- leaflet("OpenStreetMap") |>
-  addTiles() |>
-  addRasterImage(SM,
-    colors = colorNumeric("RdYlGn",
-      domain = c(-0.1, 2.0), na.color = NA),
-    opacity = 0.9)
-#> Error in addRasterImage(addTiles(leaflet("OpenStreetMap")), SM, colors = colorNumeric("RdYlGn", : Don't know how to get path data from object of class NULL
-sm_map
-#> Error in eval(expr, envir, enclos): object 'sm_map' not found
+terra::plot(SM, col = rev(viridis(25)), smooth = TRUE,
+            main = "Soil moisture map")
 ```
+
+![plot of chunk sm-prepare](figure/sm-prepare-1.png)
+
+
+```r
+knitr::include_graphics("images/sm-plot.png")
+```
+
+![plot of chunk sm-plot](images/sm-plot.png)

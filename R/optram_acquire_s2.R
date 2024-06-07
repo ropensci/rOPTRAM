@@ -40,11 +40,20 @@
 #' }
 #' the user must save her secret and clientid somewhere.
 #' these credentials will be saved automatically to a standard filesystem
-#' location if the user calls check_scihub() with the argument save_creds
+#' location if the user calls \code{check_scihub()} with the argument save_creds
 #' set to TRUE (recommended).
 #' if the user chooses not to save credentials to the standard filesystem
 #' location, then she will need to add both clientid and secret to each
-#' acquire_scihub() function call.
+#' \code{acquire_scihub()} function call.
+#'
+#' Using Credentials with \code{aquire_scihub()}:
+#' \itemize{
+#'  \item Now, you can utilize the generated \code{clientid} and \code{secret} in
+#'    the \code{aquire_scihub()} function.
+#'  \item If you want to store your credentials on your computer, ensure that when running \code{aquire_scihub}, the \code{save_creds} parameter is set to `TRUE`.
+#'  \item During the first run of \code{aquire_scihub()}, manually input your \code{clientid} and \code{secret} in the function's signature.
+#'  \item Subsequent runs will use the stored credentials.
+#'}
 #'
 #' Using Credentials with \code{aquire_scihub()}:
 #' \itemize{

@@ -11,8 +11,8 @@ The OPtical TRapezoid Model (OPTRAM) derives soil moisture based on the linear r
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://gitlab.com/rsl-bidr/roptram.git}
-  \item Report bugs at \url{https://gitlab.com/rsl-bidr/}
+  \item \url{https://github.com/ropensci/rOPTRAM.git}
+  \item Report bugs at \url{https://github.com/ropensci/rOPTRAM/issues}
 }
 
 }
@@ -24,6 +24,8 @@ Other contributors:
   \item Arnon Karnieli \email{karnieli@bgu.ac.il} (\href{https://orcid.org/0000-0001-8065-9793}{ORCID}) [contributor, funder]
   \item Ron Beiden \email{beiden@post.bgu.ac.il} [contributor]
   \item Natalya Panov \email{npanov@bgu.ac.il} [contributor]
+  \item Lauren O'Brien \email{https://gitlab.com/obrl-soil} [reviewer]
+  \item Harry Eslick \email{https://gitlab.com/harryeslick} [reviewer]
 }
 
 }

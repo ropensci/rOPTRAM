@@ -52,7 +52,7 @@ linear_coefficients <- function(df, output_dir) {
   return(df)
 }
 
-#' @title Utility Function to Prepare Exponential Fitted Eedges of Trapezoid
+#' @title Utility Function to Prepare Exponential Fitted Edges of Trapezoid
 #' @description Called by \code{\link[rOPTRAM]{optram_wetdry_coefficients}}
 #' to prepare exponential curve along trapezoid edges.
 #' Calculates the intercept and slope of both wet and dry edges
@@ -134,6 +134,7 @@ exponential_coefficients <- function(df, output_dir) {
 #'   coeffs <- rOPTRAM::polynomial_coefficients(df, output_dir)
 #'   coeffs
 #'  }
+#'
 polynomial_coefficients <- function(df, output_dir) {
   wet_fit <- stats::lm(df$STR_wet ~ poly(df$VI, 2))
   dry_fit <- stats::lm(df$STR_dry ~ poly(df$VI, 2))

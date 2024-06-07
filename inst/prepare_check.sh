@@ -10,7 +10,7 @@ R -e "install.packages(c('geojsonio'), dependencies = TRUE)"
 
 # Install rOPTRAM (prepare tarball for rhub)
 cd /home/docker/
-git clone https://gitlab.com/rsl-bidr/roptram.git
+git clone https://github.com/ropensci/rOPTRAM.git
 R CMD build ./roptram
 tarball=`ls rOPTRAM*.tar.gz`
 R CMD INSTALL $tarball
