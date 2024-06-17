@@ -6,8 +6,6 @@
 #' @param from_date, string, represents start of date range,
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
-#' @param max_cloud, integer, maximum percent of cloud cover.
-#'   Set in optram_options
 #' @param output_dir, string, path to save downloaded, and processed imagery
 #' @param save_creds, logical, whether to save CDSE credentials. Default TRUE.
 #' @param clientid, string, user's OAuth client id. Required if \code{save_creds}

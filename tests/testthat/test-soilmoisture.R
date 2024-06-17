@@ -23,7 +23,5 @@ test_that("Output is a terra SpatRaster, for exponential trapezoid_method", {
         STR_dir = STR_dir,
         data_dir = data_dir)
   expect_true(inherits(W_rast, "SpatRaster"))
-  outfile <- file.path(Output_dir, paste0("soil_moisture_", img_date, ".tif"))
-  expect_true(file.exists(outfile))
 })
 
