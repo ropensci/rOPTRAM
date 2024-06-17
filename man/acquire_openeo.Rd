@@ -8,7 +8,6 @@ acquire_openeo(
   aoi,
   from_date,
   to_date,
-  max_cloud = 10,
   output_dir = tempdir(),
   scale_factor = 10000
 )
@@ -20,8 +19,6 @@ acquire_openeo(
 formatted as "YYYY-MM-DD"}
 
 \item{to_date, }{string, end of date range, formatted as "YYYY-MM-DD"}
-
-\item{max_cloud, }{integer, maximum percent of cloud cover. Default 10.}
 
 \item{output_dir, }{string, path to save downloaded, and processed imagery}
 

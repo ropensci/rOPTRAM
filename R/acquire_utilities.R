@@ -6,7 +6,8 @@
 #' @param from_date, string, represents start of date range,
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
-#' @param max_cloud, integer, maximum percent of cloud cover. Default 10.
+#' @param max_cloud, integer, maximum percent of cloud cover.
+#'   Set in optram_options
 #' @param output_dir, string, path to save downloaded, and processed imagery
 #' @param save_creds, logical, whether to save CDSE credentials. Default TRUE.
 #' @param clientid, string, user's OAuth client id. Required if \code{save_creds}
@@ -76,7 +77,6 @@
 acquire_scihub <- function(
     aoi,
     from_date, to_date,
-    max_cloud = 10,
     output_dir = tempdir(),
     save_creds = TRUE,
     clientid = NULL,
@@ -85,7 +85,7 @@ acquire_scihub <- function(
   # Package options
   SWIR_band <- getOption("optram.SWIR_band")
   veg_index <- getOption("optram.veg_index")
-
+  max_cloud <- getOption("optram.max_cloud")
   # Retrieve OAuth token using credentials from file directory
   tok <- check_scihub(clientid = clientid, secret = secret,
                       save_creds = save_creds)
@@ -248,7 +248,6 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 #' @param from_date, string, represents start of date range,
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
-#' @param max_cloud, integer, maximum percent of cloud cover. Default 10.
 #' @param output_dir, string, path to save downloaded, and processed imagery
 #' @param scale_factor, integer, scaling factor for EO data source default 10000
 #' , to scale Sentinel-2 15 bit DN to range (0, 1)
@@ -288,7 +287,6 @@ check_scihub <- function(clientid = NULL, secret = NULL, save_creds = FALSE) {
 acquire_openeo <- function(
     aoi,
     from_date, to_date,
-    max_cloud = 10,
     output_dir = tempdir(),
     scale_factor = 10000) {
 
@@ -296,6 +294,7 @@ acquire_openeo <- function(
 
   SWIR_band <- getOption("optram.SWIR_band")
   veg_index <- getOption("optram.veg_index")
+  max_cloud <- getOption("optram.max_cloud")
   bbox <- sf::st_bbox(aoi)
 
   # get the process collection to use the predefined processes of the back-end

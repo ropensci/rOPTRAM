@@ -64,7 +64,7 @@ Both methods require [registering](https://dataspace.copernicus.eu/) on the Cope
 
 #### optram_options()
 
-Several package options are defined, with default values, when {rOPTRAM} first loads. Each of these can be set individually to user chosen values. For example, the package uses a vegetation index (compared to SWIR Transformed Reflectance) values to plot the trapezoid. The default index is "NDVI". In a low vegetation, arid region, users can choose an alternative such as "SAVI" (see example below.)
+Several package options are defined, with default values, when {rOPTRAM} first loads. Each of these can be set individually to user chosen values. For example, the package uses a vegetation index (compared to SWIR Transformed Reflectance) values to plot the trapezoid. The default index is "NDVI". In a low vegetation, arid region, users can choose an alternative such as "SAVI" (see example below). The default maximum cloud cover is set to 12 [%], and users can choose any value between 0-100. 
 
 #### optram()
 

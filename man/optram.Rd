@@ -8,7 +8,6 @@ optram(
   aoi,
   from_date,
   to_date,
-  max_cloud = 15,
   S2_output_dir = tempdir(),
   data_output_dir = tempdir()
 )
@@ -20,8 +19,6 @@ optram(
 Formatted as "YYYY-MM-DD"}
 
 \item{to_date, }{the end of the date range.}
-
-\item{max_cloud, }{integer, maximum percent cloud cover, Default 15.}
 
 \item{S2_output_dir, }{string, directory to save downloaded S2
 and the derived products, defaults to tempdir()}
@@ -62,7 +59,6 @@ to_date <- "2020-04-30"
 aoi <- sf::st_read(system.file("extdata",
                               "lachish.gpkg", package = "rOPTRAM"))
 rmse <- optram(aoi,
-                 from_date, to_date,
-                 veg_index = c("SAVI"))
+               from_date, to_date)
 }
 }

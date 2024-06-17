@@ -13,6 +13,7 @@
     optram.veg_index = "NDVI",  # or "SAVI"
     optram.remote = "scihub",   # or "openeo
     optram.period = "full",     # or "seasonal"
+    optram.max_cloud = 12,      # max cloud cover [%] between 0 and 100
     optram.vi_step = 0.005,     # values between 0.01 and 0.001
     optram.trapezoid_method = "linear", # "exponential", or "polynomial"
     optram.SWIR_band = 11,      # or 12

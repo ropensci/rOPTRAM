@@ -32,6 +32,7 @@ opt_name  \tab default  \tab other possible values \cr
 veg_index  \tab "NDVI"  \tab "SAVI", "MSAVI" \cr
 remote  \tab "scihub"   \tab "openeo" \cr
 period  \tab "full"   \tab "seasonal" \cr
+max_cloud \tab 12 \tab between 0 and 100 \cr
 vi_step  \tab 0.005  \tab usually between 0.01 and 0.001 \cr
 trapezoid_method \tab "linear"  \tab "polynomial" or "exponential" \cr
 SWIR_band        \tab 11    \tab 12 \cr

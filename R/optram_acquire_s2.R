@@ -5,7 +5,6 @@
 #' @param from_date, string, represents start of date range,
 #'      formatted as "YYYY-MM-DD"
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
-#' @param max_cloud, integer, maximum percent of cloud cover. Default 15.
 #' @param output_dir, string, path to save processed imagery.
 #' @param scale_factor, numeric, scale factor for reflectance values.
 #'      Default 10000.
@@ -112,7 +111,6 @@
 optram_acquire_s2 <- function(
       aoi,
       from_date, to_date,
-      max_cloud = 10,
       output_dir = tempdir(),
       scale_factor = 10000,
       save_creds = TRUE,
@@ -134,14 +132,12 @@ optram_acquire_s2 <- function(
   switch(remote,
          scihub = acquire_scihub(aoi = aoi,
                                  from_date = from_date, to_date = to_date,
-                                 max_cloud = max_cloud,
                                  output_dir = output_dir,
                                  save_creds = save_creds,
                                  clientid = clientid,
                                  secret = secret),
          openeo = acquire_openeo(aoi = aoi,
                                  from_date = from_date, to_date = to_date,
-                                 max_cloud = max_cloud,
                                  output_dir = output_dir,
                                  scale_factor = scale_factor)
          )

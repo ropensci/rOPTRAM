@@ -30,6 +30,7 @@
 #'  veg_index  \tab "NDVI"  \tab "SAVI", "MSAVI" \cr
 #'  remote  \tab "scihub"   \tab "openeo" \cr
 #'  period  \tab "full"   \tab "seasonal" \cr
+#'  max_cloud \tab 12 \tab between 0 and 100 \cr
 #'  vi_step  \tab 0.005  \tab usually between 0.01 and 0.001 \cr
 #'  trapezoid_method \tab "linear"  \tab "polynomial" or "exponential" \cr
 #'  SWIR_band        \tab 11    \tab 12 \cr
@@ -87,6 +88,9 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
               },
               "period" = function(opt_value) {
                 return(opt_value %in% c("full", "seasonal"))
+              },
+              "max_cloud" = function(opt_value) {
+                return(is.numeric(opt_value) & opt_value <=100 & opt_value >=0)
               },
               "vi_step" = function(opt_value) {
                 return(is.numeric(opt_value) & opt_value <= 0.02)
@@ -250,7 +254,7 @@ calculate_vi <- function(img_stk,
   red <- 255 * (red - min(terra::values(red), na.rm = TRUE)) / scale_factor
   blue <- 255 * (blue - min(terra::values(blue), na.rm = TRUE)) / scale_factor
   green <- 255 * (green - min(terra::values(green), na.rm = TRUE)) / scale_factor
-  
+
   nir <- 255 * (nir - min(terra::values(nir))) / scale_factor
   red <- 255 * (red - min(terra::values(red))) / scale_factor
   blue <- 255 * (blue - min(terra::values(blue))) / scale_factor

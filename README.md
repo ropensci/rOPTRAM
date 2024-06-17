@@ -73,7 +73,9 @@ first loads. Each of these can be set individually to user chosen
 values. For example, the package uses a vegetation index (compared to
 SWIR Transformed Reflectance) values to plot the trapezoid. The default
 index is “NDVI”. In a low vegetation, arid region, users can choose an
-alternative such as “SAVI” (see example below.)
+alternative such as “SAVI” (see example below). The default maximum
+cloud cover is set to 12 \[%\], and users can choose any value between
+0-100.
 
 #### optram()
 
@@ -155,8 +157,10 @@ First, a demonstration of choosing non-default package options.
 # Show default options
 rOPTRAM::optram_options()
 #> [1] "edge_points = TRUE"
+#> [1] "feature_col = ID"
 #> [1] "max_tbl_size = 1e+06"
-#> [1] "plot_density = no"
+#> [1] "period = full"
+#> [1] "plot_colors = no"
 #> [1] "remote = scihub"
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
@@ -219,7 +223,8 @@ workflow can be used:
   Conduct](https://github.com/ropensci/.github/blob/master/CODE_OF_CONDUCT.md).
   By contributing to this project, you agree to abide by its terms.
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
 
 <div id="ref-ambrosone_retrieving_2020" class="csl-entry">
 

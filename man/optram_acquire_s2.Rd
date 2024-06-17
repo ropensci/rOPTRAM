@@ -8,7 +8,6 @@ optram_acquire_s2(
   aoi,
   from_date,
   to_date,
-  max_cloud = 10,
   output_dir = tempdir(),
   scale_factor = 10000,
   save_creds = TRUE,
@@ -23,8 +22,6 @@ optram_acquire_s2(
 formatted as "YYYY-MM-DD"}
 
 \item{to_date, }{string, end of date range, formatted as "YYYY-MM-DD"}
-
-\item{max_cloud, }{integer, maximum percent of cloud cover. Default 15.}
 
 \item{output_dir, }{string, path to save processed imagery.}
 

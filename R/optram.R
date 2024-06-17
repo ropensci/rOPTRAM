@@ -14,7 +14,6 @@
 #' @param from_date, string, the start of the date range,
 #'        Formatted as "YYYY-MM-DD"
 #' @param to_date, the end of the date range.
-#' @param max_cloud, integer, maximum percent cloud cover, Default 15.
 #' @param S2_output_dir, string, directory to save downloaded S2
 #'  and the derived products, defaults to tempdir()
 #' @param data_output_dir, string, path to save coeffs_file
@@ -38,13 +37,11 @@
 #' aoi <- sf::st_read(system.file("extdata",
 #'                               "lachish.gpkg", package = "rOPTRAM"))
 #' rmse <- optram(aoi,
-#'                  from_date, to_date,
-#'                  veg_index = c("SAVI"))
+#'                from_date, to_date)
 #' }
 
 optram <- function(aoi,
                    from_date, to_date,
-                   max_cloud = 15,
                    S2_output_dir = tempdir(),
                    data_output_dir = tempdir()) {
 
@@ -57,7 +54,6 @@ optram <- function(aoi,
   s2_list <- rOPTRAM::optram_acquire_s2(
                   aoi,
                   from_date, to_date,
-                  max_cloud = max_cloud,
                   output_dir = S2_output_dir)
 
     veg_index <- getOption("optram.veg_index")

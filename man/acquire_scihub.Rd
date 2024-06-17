@@ -8,7 +8,6 @@ acquire_scihub(
   aoi,
   from_date,
   to_date,
-  max_cloud = 10,
   output_dir = tempdir(),
   save_creds = TRUE,
   clientid = NULL,
@@ -23,8 +22,6 @@ formatted as "YYYY-MM-DD"}
 
 \item{to_date, }{string, end of date range, formatted as "YYYY-MM-DD"}
 
-\item{max_cloud, }{integer, maximum percent of cloud cover. Default 10.}
-
 \item{output_dir, }{string, path to save downloaded, and processed imagery}
 
 \item{save_creds, }{logical, whether to save CDSE credentials. Default TRUE.}
@@ -33,6 +30,9 @@ formatted as "YYYY-MM-DD"}
 is TRUE.}
 
 \item{secret, }{string, user's OAuth secret. Required if \code{save_creds} is TRUE.}
+
+\item{max_cloud, }{integer, maximum percent of cloud cover.
+Set in optram_options}
 }
 \value{
 list of BOA files
