@@ -30,9 +30,6 @@ formatted as "YYYY-MM-DD"}
 is TRUE.}
 
 \item{secret, }{string, user's OAuth secret. Required if \code{save_creds} is TRUE.}
-
-\item{max_cloud, }{integer, maximum percent of cloud cover.
-Set in optram_options}
 }
 \value{
 list of BOA files
