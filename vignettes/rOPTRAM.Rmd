@@ -59,14 +59,16 @@ The {rOPTRAM} package is controlled by several options, set automatically when t
 ```r
 optram_options()
 #> [1] "edge_points = TRUE"
+#> [1] "feature_col = ID"
+#> [1] "max_cloud = 12"
 #> [1] "max_tbl_size = 1e+06"
-#> [1] "period = seasonal"
+#> [1] "period = full"
 #> [1] "plot_colors = no"
 #> [1] "remote = scihub"
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
 #> [1] "SWIR_band = 11"
-#> [1] "trapezoid_method = polynomial"
+#> [1] "trapezoid_method = linear"
 #> [1] "veg_index = NDVI"
 #> [1] "vi_step = 0.005"
 #> NULL
@@ -78,6 +80,8 @@ Users can override any of the defaults by calling this function with alternative
 ```r
 optram_options("period", "seasonal")
 #> [1] "edge_points = TRUE"
+#> [1] "feature_col = ID"
+#> [1] "max_cloud = 12"
 #> [1] "max_tbl_size = 1e+06"
 #> [1] "period = seasonal"
 #> [1] "plot_colors = no"
@@ -85,7 +89,7 @@ optram_options("period", "seasonal")
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
 #> [1] "SWIR_band = 11"
-#> [1] "trapezoid_method = polynomial"
+#> [1] "trapezoid_method = linear"
 #> [1] "veg_index = NDVI"
 #> [1] "vi_step = 0.005"
 ```
@@ -98,6 +102,8 @@ Three trapezoid fitting functions are implemented in {rOPTRAM}. The default is "
 ```r
 optram_options("trapezoid_method", "polynomial")
 #> [1] "edge_points = TRUE"
+#> [1] "feature_col = ID"
+#> [1] "max_cloud = 12"
 #> [1] "max_tbl_size = 1e+06"
 #> [1] "period = seasonal"
 #> [1] "plot_colors = no"
@@ -122,11 +128,8 @@ optram_options("plot_density", "colors")
 ### Run the full OPTRAM model procedure with a single function call
 
 Registration on Copernicus DataSpace was done in advance, and the OAuth credentials (*clientid*, and *secret*) have been saved to the user's home directory.
-If you haven't obtained the credentials, you can refer to the vignette [here](https://github.com/ropensci/rOPTRAM/-/blob/main/vignettes/rOPTRAM_acquiring.Rmd) where setting up OAuth is demonstrated.
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
-
-This example uses "polynomial" trapezoid fitted curve.
 
 
 ```r
@@ -145,47 +148,35 @@ rmse <- optram(aoi,
               from_date, to_date,
               S2_output_dir = output_dir,
               data_output_dir = output_dir)
-#> Warning: 'CDSE::GetArchiveImage' is deprecated.
-#> Use 'GetImage' instead.
-#> See help("Deprecated")
-#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
-#> /tmp/Rtmp6tLe38/file2464c6c55cef7: TIFFReadDirectory:Sum of Photometric type-related color
-#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
-#> ExtraSamples.
-#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
-#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples doesn't match
-#> SamplesPerPixel. Defining non-color channels as ExtraSamples.
-#> Error in (function (classes, fdef, mtable) : unable to find an inherited method for function 'crs' for signature '"sfc_MULTIPOLYGON"'
+#> Error: 'SeasonalFilter' is not an exported object from 'namespace:CDSE'
 knitr::kable(rmse, caption = "Trapezoid coefficients")
+#> Error in knitr::kable(rmse, caption = "Trapezoid coefficients"): object 'rmse' not found
 ```
-
-
-
-Table: Trapezoid coefficients
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.1049979| 0.0739696|
-
-
 
 ### Show trapezoid plot
 
 
 ```r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
+#> Error in file(file, "rt"): cannot open the connection
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
 #> Error in gzfile(file, "rb"): cannot open the connection
-plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir)
-#> Error in plot_vi_str_cloud(full_df, ttl, edges_df, output_dir = output_dir): unused argument (output_dir = output_dir)
-knitr::include_graphics("images/trapezoid_lachish_linear.png")
+pl <- plot_vi_str_cloud(full_df, edges_df)
+#> Error in "STR" %in% names(full_df): object 'full_df' not found
+pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
+                            subtitle = "polynomial fitted")
+#> Error in eval(expr, envir, enclos): object 'pl' not found
+ggplot2::ggsave(file.path(output_dir, "trapezoid_lachish_polynomial.png"),
+                width = 18, height = 12, units = "cm")
 ```
 
-<div class="figure">
-<img src="images/trapezoid_lachish_linear.png" alt="Trapezoid scatterplot" width="90%" />
-<p class="caption">Trapezoid scatterplot</p>
-</div>
+
+```r
+knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
+```
+
+![plot of chunk plot-trap](images/trapezoid_lachish_polynomial.png)
 
 ## Step by step
 
@@ -204,7 +195,7 @@ knitr::include_graphics("images/trapezoid_lachish_linear.png")
 s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
                             output_dir = output_dir)
-
+#> Error: 'SeasonalFilter' is not an exported object from 'namespace:CDSE'
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -213,18 +204,10 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir)
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir)
+#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
+#> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```
-
-
-
-Table: RMSE of fitted trapezoid edges
-
-|  RMSE.wet|  RMSE.dry|
-|---------:|---------:|
-| 0.2589246| 0.1288553|
-
-
 
 ## Soil Moisture Estimate
 
@@ -244,19 +227,14 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 
 
 ```r
-library(leaflet)
+install.packages(c("viridis", "terra"))
 names(SM) <- "Lachish soil moisture"
 SM[terra::values(SM) < 0] <- 0
 
-terra::plot(SM, col = rev(viridis(25)), smooth = TRUE,
+terra::plot(SM, col =  col = rev(viridis::viridis(25)), smooth = TRUE,
             main = "Soil moisture map")
+#> Error: <text>:5:28: unexpected '='
+#> 4: 
+#> 5: terra::plot(SM, col =  col =
+#>                               ^
 ```
-
-![plot of chunk sm-prepare](figure/sm-prepare-1.png)
-
-
-```r
-knitr::include_graphics("images/sm-plot.png")
-```
-
-![plot of chunk sm-plot](images/sm-plot.png)
