@@ -42,11 +42,9 @@ The overarching goal of the current project was to program the original OPTRAM a
 
 The proposed ``rOPTRAM`` package, on the other hand, delineates the upper and lower, "wet" and "dry" bounds of the STR/VI scatterplot programmatically, through the following approach. Sentinel-2 images are acquired using the ``CDSE`` package [@karaman_cdse_2023], clipped to the study area, and for the user-specified time range. The Application Programming Interface (API) request sent to the Copernicus DataSpace Ecosystem[^1] (CDSE) prepares both VI and STR indices. All pixel values for both indices, and all images along the time series are collected into a table and plotted as a scatterplot. The VI axis of the scatterplot is divided, programmatically, into a series of small intervals, and a subset of the STR values, within that narrow interval of VI is extracted. Outlier STR values are removed at this stage based on the accepted 1.5 times Inter Quartile Range (IQR) method. Then, among the remaining values, the top and bottom 2% quartiles of these STR values are found for each interval. The upper quartile values are paired with the VI values for each interval, thus collecting points along the "wet" trapezoid edge. Similarly the bottom quartile values, paired with VI values, make up the "dry" trapezoid edge. Each of these two sets, typically consisting of 50 to 100 points, delineates trapezoid edges, thus offering a mathematically robust and repeatable implementation of the OPTRAM model.
 
-One of three possible equations is fitted to each of these "wet" and "dry" sets of trapezoid edges. A linear Ordinary Least Squares (OLS) regression line is fitted to each set of points in the most straightforward case. The intercept and slope of these lines give the coefficients for calculating soil water content. Two additional fitted options are implemented in ``rOPTRAM``: exponential and second-order polynomial. For OLS fitted curves, two coefficients are derived for each line, the slope and intercept. Similarly, the exponential fitted curve requires two coefficients, the intercept and the multiplier of VI in the exponential term. A polynomial fit, on the other hand, consists of 3 coefficients, the intercept, and the coefficents for the first-order and second-order terms. 
+One of three possible equations is fitted to each of these "wet" and "dry" sets of trapezoid edges (Figure \autoref{fig:diag}. A linear Ordinary Least Squares (OLS) regression line is fitted to each set of points in the most straightforward case. The intercept and slope of these lines give the coefficients for calculating soil water content. Two additional fitted options are implemented in ``rOPTRAM``: exponential and second-order polynomial. For OLS fitted curves, two coefficients are derived for each line, the slope and intercept. Similarly, the exponential fitted curve requires two coefficients, the intercept and the multiplier of VI in the exponential term. A polynomial fit, on the other hand, consists of 3 coefficients, the intercept, and the coefficents for the first-order and second-order terms. 
 
-
-<img src="GIS/OPTRAM_diagram.jpg"
-style="width:18cm" alt="OPTRAM diagram" />
+![OPTRAM schematic diagram.\label{fig:diag}](GIS/OPTRAM_diagram.jpg)
 
 In all cases, the fitting function returns the root mean square error (RMSE) of the fitted line to the original 2% quartile trapezoid edges, enabling evaluation of the fitted result.
 
@@ -152,10 +150,7 @@ rmse <- optram_wetdry_coefficients(
 |:----------|----------:|----------:|
 |Linear fit: |0.2460|0.0955|
 
-
-
-<img src="GIS/trapezoid_lachish_linear.png"
-style="width:18cm" alt="Linear trapezoid plot" />
+![Linear fitted trapezoid plot.\label{fig:trapezoid_linear}](GIS/trapezoid_lachish_linear.png)
 
 ### Second run: polynomial fitted curves
 
@@ -173,9 +168,7 @@ rmse <- optram_wetdry_coefficients(
 |:--------------|---------:|---------:|
 |Polynomial fit:| 0.1490| 0.0931|
 
-
-<img src="GIS/trapezoid_lachish_polynomial.png"
-style="width:18cm" alt="Polynomial trapezoid plot" />
+![Polynomial fitted trapezoid plot.\label{fig:trapezoid_poly}](GIS/trapezoid_lachish_polynomial.png)
 
 # Future work
 
