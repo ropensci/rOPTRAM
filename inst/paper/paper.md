@@ -1,19 +1,22 @@
 ---
-title: "`rOPTRAM`: Implementation of the OPTRAM Algorithm in `R`"
-author:
+title: "rOPTRAM: Implementation of the OPTRAM Algorithm in R"
+authors:
 - name: Micha Silver
   orcid: "0000-0002-1128-1325"
-  affiliation: Ben Gurion University, Beer Sheva, Israel
+  affiliation: 1
   corresponding: yes
 - name: Arnon Karnieli
   orcid: "0000-0001-8065-9793"
-  affiliation: Ben Gurion University, Beer Sheva, Israel
+  affiliation: 1
+affiliations:
+ - name: Blaustein Institutes for Desert Research, Ben Gurion University, Israel
+   index: 1
 date: "07 June 2024"
 output:
-  word_document: default
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
+  word_document: default
 bibliography: bibliography.bib
 tags:
 - soil moisture
@@ -26,7 +29,7 @@ tags:
 
 While drylands supply a livelihood to much of the world's rural population, these arid and semi-arid areas are under increased pressure due to both growing demand and the current climate crisis. Maintaining a sustainable food source for rural populations depends on reliable grazing, and the quality of grazing is in turn determined by soil moisture. Thus soil moisture must be monitored to ensure a sustainable food supply. Classic soil moisture monitoring methods rely on sensors, inserted into the soil, that give accurate measurements at high temporal resolution, but at a point location.
 
-However, addressing the needs of populations that depend on extensive grazing lands requires a regional scale soil moisture assessment. Point measurements, albeit accurate, do not afford the needed information to prepare for, or mitigate drought events at regional scale. To this end, remote sensing methods to estimate soil moisture have been developed. Among them, the OPTRAM model has been shown to accurately determine soil moisture over large areas. The `rOPTRAM` package in `R` has implemented that model allowing researchers and practitioners to monitor grazing potential at regional scale and long time intervals.
+However, addressing the needs of populations that depend on extensive grazing lands requires a regional scale soil moisture assessment. Point measurements, albeit accurate, do not afford the needed information to prepare for, or mitigate drought events at regional scale. To this end, remote sensing methods to estimate soil moisture have been developed. Among them, the OPTRAM model has been shown to accurately determine soil moisture over large areas. The rOPTRAM package in R has implemented that model allowing researchers and practitioners to monitor grazing potential at regional scale and long time intervals.
 
 # Introduction
 
@@ -39,11 +42,11 @@ The overarching goal of the current project was to program OPTRAM using the open
 
 # Algorithm
 
-`rOPTRAM` produces a large dataset of pixel values of two satellite-based raster layers: a vegetation index (VI), such as Normalized Difference Vegetation Index (NDVI) and the STR layer. All pairs of pixel values, at all acquired image dates are plotted as a scatter plot. Then regression lines are extracted at both the upper ("wet") and lower ("dry") bounds of the scatter plot. The slopes and intercepts of these two regression lines are the model coefficients, used to derive a spatially explicit soil moisture map. This soil moisture map is calculated, following @sadeghi_optical_2017, using  \autoref{eq:sm}. In his original work, @sadeghi_optical_2017 used a visual examination of the scatterplot to locate the trapezoid edges.
+rOPTRAM produces a large dataset of pixel values of two satellite-based raster layers: a vegetation index (VI), such as Normalized Difference Vegetation Index (NDVI) and the STR layer. All pairs of pixel values, at all acquired image dates are plotted as a scatter plot. Then regression lines are extracted at both the upper ("wet") and lower ("dry") bounds of the scatter plot. The slopes and intercepts of these two regression lines are the model coefficients, used to derive a spatially explicit soil moisture map. This soil moisture map is calculated, following @sadeghi_optical_2017, using  \autoref{eq:sm}. In his original work, @sadeghi_optical_2017 used a visual examination of the scatterplot to locate the trapezoid edges.
 
-The new `rOPTRAM` package, on the other hand, delineates the upper and lower, "wet" and "dry" bounds of the VI/STR scatterplot programatically, through the following approach. Sentinel-2 images are acquired, through the `CDSE` package [@karaman_cdse_2023], clipped to the study area, and for the user-specified time range. The API request sent to the Copernicus DataSpace Ecosystem[^1] prepares both VI and STR indices. All pixel values for both indices, and for all images along the time series are collected into a table, and plotted as a scatterplot. The VI axis of the scatterplot is divided, programatically, into a series of small intervals, and a subset of the STR values, within that narrow interval of VI is extracted. At this stage, outlier STR values are removed, based on the accepted 1.5 times Inter Quartile Range (IQR) method. Then, among the remaining values, the top and bottom 2% quartiles of these STR values are found for each of these intervals. The upper quartile values are paired together with the VI values for each interval, thus collecting points along the "wet" trapezoid edge. Similarly the bottom quartile values, paired with VI values, make up the "dry" trapezoid edge. Each of these two sets, typically consisting of 50 to 100 points, is used to delineate the "wet" and "dry" trapezoid edges, thus offering a mathematically robust and repeatable implementation of the OPTRAM model.
+The new rOPTRAM package, on the other hand, delineates the upper and lower, "wet" and "dry" bounds of the VI/STR scatterplot programatically, through the following approach. Sentinel-2 images are acquired, through the CDSE package [@karaman_cdse_2023], clipped to the study area, and for the user-specified time range. The API request sent to the Copernicus DataSpace Ecosystem[^1] prepares both VI and STR indices. All pixel values for both indices, and for all images along the time series are collected into a table, and plotted as a scatterplot. The VI axis of the scatterplot is divided, programatically, into a series of small intervals, and a subset of the STR values, within that narrow interval of VI is extracted. At this stage, outlier STR values are removed, based on the accepted 1.5 times Inter Quartile Range (IQR) method. Then, among the remaining values, the top and bottom 2% quartiles of these STR values are found for each of these intervals. The upper quartile values are paired together with the VI values for each interval, thus collecting points along the "wet" trapezoid edge. Similarly the bottom quartile values, paired with VI values, make up the "dry" trapezoid edge. Each of these two sets, typically consisting of 50 to 100 points, is used to delineate the "wet" and "dry" trapezoid edges, thus offering a mathematically robust and repeatable implementation of the OPTRAM model.
 
-One of three possible equations is fitted to each of these "wet" and "dry" sets of trapezoid edges. In the simplest cast, a linear Ordinary Least Squares (OLS) regression line is fitted to each of the sets of points. The intercept and slope of these lines gives the coefficients for calculating soil water content. Two additional fitted options are implemented in `rOPTRAM`: second order polynomial and exponential. For OLS fitted curves, two coefficients are derived for each line, the slope and intercept. Similarly, the exponential fitted curve requires two coefficients, the intercept and the multiplier of VI in the exponential term. A polynomial fit, on the other hand, consists of 3 coefficients, the intercept, and the coefficents for the first order and second order terms. 
+One of three possible equations is fitted to each of these "wet" and "dry" sets of trapezoid edges. In the simplest cast, a linear Ordinary Least Squares (OLS) regression line is fitted to each of the sets of points. The intercept and slope of these lines gives the coefficients for calculating soil water content. Two additional fitted options are implemented in rOPTRAM: second order polynomial and exponential. For OLS fitted curves, two coefficients are derived for each line, the slope and intercept. Similarly, the exponential fitted curve requires two coefficients, the intercept and the multiplier of VI in the exponential term. A polynomial fit, on the other hand, consists of 3 coefficients, the intercept, and the coefficents for the first order and second order terms. 
 
 In all cases, the fitting function returns the root mean square error (RMSE) of the fitted line to the original 2% quartile trapezoid edges, enabling evaluation of the fitted result.
 
