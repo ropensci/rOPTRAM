@@ -3,14 +3,17 @@ title: "`rOPTRAM`: Implementation of the OPTRAM Algorithm in `R`"
 author:
 - name: Micha Silver
   orcid: "0000-0002-1128-1325"
-  affiliation: Ben Gurion University, Beer Sheva, Israel
+  affiliation: 1
   corresponding: yes
 - name: Dong Zhe
   orcid: 0009-0007-5298-8355
-  affiliation: Ben Gurion University, Beer Sheva, Israel
+  affiliation: 1
 - name: Arnon Karnieli
   orcid: "0000-0001-8065-9793"
-  affiliation: Ben Gurion University, Beer Sheva, Israel
+  affiliation: 1
+affiliations:
+  name: Blaustein Institutes for Desert Research, Ben Gurion University, Israel
+  index: 1
 date: "07 June 2024"
 output:
   html_document:
