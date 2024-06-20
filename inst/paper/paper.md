@@ -5,26 +5,21 @@ tags:
   - remote sensing
   - Sentinel-2
   - R
-author:
+  - grasslands
+authors:
   - name: Micha Silver
     orcid: 0000-0002-1128-1325
     affiliation: 1
-    corresponding: true
   - name: Dong Zhe
     orcid: 0009-0007-5298-8355
     affiliation: 1
   - name: Arnon Karnieli
-    orcid: "0000-0001-8065-9793"
+    orcid: 0000-0001-8065-9793
     affiliation: 1
 affiliations:
-  - name: Blaustein Institutes for Desert Research, Ben Gurion University, Israel
-    index: 1
-date: "07 June 2024"
-output:
-  html_document:
-  pdf_print: paged
-  pdf_document: default
-  word_document: default
+ - name: Blaustein Institutes for Desert Research, Ben Gurion University, Israel
+   index: 1
+date: 07 June 2024
 bibliography: bibliography.bib
 ---
 
@@ -163,8 +158,6 @@ rmse <- optram_wetdry_coefficients(
 style="width:18cm" alt="Linear trapezoid plot" />
 
 ### Second run: polynomial fitted curves
-
-Refer to \autoref{eq:smpoly}.
 
 ```r
 rmse <- optram_wetdry_coefficients(
