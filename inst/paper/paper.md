@@ -33,7 +33,7 @@ Soil moisture (SM) at the Earth’s surface is essential in many hydrological, p
 
 Less than a decade ago, @sadeghi_optical_2017 showed that shortwave infrared (SWIR) Transformed Reflectance (STR) is applicative to assess SM. They developed a novel physical-based model, OPtical TRApezoid Model (OPTRAM) using designated spectral bands of remote sensing imagery. OPTRAM was recently validated [@longo-minnolo_stand-alone_2022] to address the need to estimate SM over vast areas in watershed and regional scales. Consequently the model can now be applied to various earth observation systems, such as Sentinel-2 or Landsat, with visible, near-infrared, and SWIR bands. [@ambrosone_retrieving_2020; @dubinin_using_2020].
 
-The overarching goal of the current project was to program the original OPTRAM algorithm, with some improvements, using the open-source ``R`` [@r_core_2022] language. The spectral data were obtained from different spaceborne systems to calculate several vegetation indices, and the model was adjusted to various SM conditions.  
+The overarching goal of the current project was to program the original OPTRAM algorithm, with some improvements, using the open-source ``R`` language. The spectral data were obtained from different spaceborne systems to calculate several vegetation indices, and the model was adjusted to various SM conditions.  
 
 
 # Algorithm
