@@ -42,7 +42,7 @@ Both methods require [registering](https://dataspace.copernicus.eu/) on the Cope
 
 
 
-```r
+``` r
 remotes::install_github("ropensci/rOPTRAM")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
@@ -56,14 +56,13 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 ### Run the full OPTRAM model procedure with a single function call
 
 Registration on Copernicus DataSpace was done in advance, and the OAuth credentials (*clientid*, and *secret*) have been saved to the user's home directory.
-If you haven't obtained the credentials, you can refer to the vignette [here](https://github.com/ropensci/rOPTRAM/-/blob/main/vignettes/rOPTRAM_acquiring.Rmd) where setting up OAuth is demonstrated.
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 
 This example uses "polynomial" trapezoid fitted curve.
 
 
-```r
+``` r
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
@@ -76,6 +75,9 @@ aoi <- sf::st_read(system.file("extdata",
 #> Dimension:     XY
 #> Bounding box:  xmin: 193120.5 ymin: 613272.1 xmax: 194476.3 ymax: 614546.5
 #> Projected CRS: Israel 1993 / Israeli TM Grid
+```
+
+``` r
 veg_index <- "NDVI"
 rmse <- optram(aoi,
               from_date, to_date,
@@ -89,6 +91,9 @@ rmse <- optram(aoi,
 #> [1] "RMSE for fitted trapezoid:"
 #>    RMSE.wet   RMSE.dry
 #> 1 0.1049979 0.07396959
+```
+
+``` r
 knitr::kable(rmse, caption = "Trapezoid coefficients")
 ```
 
@@ -105,7 +110,7 @@ Table: Trapezoid coefficients
 ### Show trapezoid plot
 
 
-```r
+``` r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
@@ -115,7 +120,7 @@ pl <- plot_vi_str_cloud(full_df, edges_df,
 
 ![plot of chunk plot-prepare](figure/plot-prepare-1.png)
 
-```r
+``` r
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
                             subtitle = "polynomial fitted")
 ggplot2::ggsave(file.path(output_dir, "trapezoid_lachish_polynomial.png"),
@@ -123,7 +128,7 @@ ggplot2::ggsave(file.path(output_dir, "trapezoid_lachish_polynomial.png"),
 ```
 
 
-```r
+``` r
 knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
 ```
 
@@ -141,7 +146,7 @@ knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
   - Get trapezoid coefficients from the scatterplot of VI-STR pixels
 
 
-```r
+``` r
 # Using the same dates, and aoi as previous example
 s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
@@ -176,7 +181,7 @@ Table: RMSE of fitted trapezoid edges
 ### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid
 
 
-```r
+``` r
 img_date <- "2023-01-10"   # After a rain
 VI_dir <- file.path(output_dir, "NDVI")
 STR_dir <- file.path(output_dir, "STR")
@@ -189,7 +194,7 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ### Soil moisture plot
 
 
-```r
+``` r
 install.packages("viridis")
 library(viridis)
 names(SM) <- "Migda soil moisture"
@@ -202,7 +207,7 @@ terra::plot(SM, col = rev(viridis(25)), smooth = TRUE,
 ![plot of chunk sm-prepare](figure/sm-prepare-1.png)
 
 
-```r
+``` r
 knitr::include_graphics("images/sm-plot.png")
 ```
 
