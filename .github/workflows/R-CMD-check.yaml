@@ -2,7 +2,7 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-#    branches: [main, master]
+    branches: [main, dev-options]
 #  pull_request:
 #    branches: [main, master]
 
@@ -25,6 +25,8 @@ jobs:
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
+
+    environment: CDSE_environment
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
