@@ -12,6 +12,7 @@ test_that("optram_acquire_s2 returns list", {
 
   boa_list <- optram_acquire_s2(aoi, from_date, to_date,
                                 clientid = clientid, secret = secret,
+                                save_creds = FALSE,
                                 remote = "scihub", SWIR_band = 11)
   expect_true(inherits(boa_list, "list"))
 })
