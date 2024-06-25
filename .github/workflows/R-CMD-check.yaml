@@ -8,7 +8,12 @@ on: workflow_dispatch
 
 name: R-CMD-check
 
-permissions: read-all
+permissions:
+  actions: write
+  checks: write
+  issues: write
+  contents: read
+  statuses: read
 
 jobs:
   R-CMD-check:
