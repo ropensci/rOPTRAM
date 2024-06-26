@@ -20,10 +20,6 @@ jobs:
 
     name: One platform check
     
-    secrets:
-      clientid: ${{ secrets.SCIHUB_CLIENTID }}
-      secret: ${{ secrets.SCIHUB_SECRET }}
-    
     strategy:
       fail-fast: false
 
@@ -41,14 +37,21 @@ jobs:
           r-version: 'release'
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-
+        env:
+          clientid: ${{ secrets.SCIHUB_CLIENTID }}
+          secret: ${{ secrets.SCIHUB_SECRET }}
       - uses: r-lib/actions/setup-r-dependencies@v2
-
         with:
           extra-packages: any::rcmdcheck
           needs: check
-
+        env:
+          clientid: ${{ secrets.SCIHUB_CLIENTID }}
+          secret: ${{ secrets.SCIHUB_SECRET }}
+          
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+        env:
+          clientid: ${{ secrets.SCIHUB_CLIENTID }}
+          secret: ${{ secrets.SCIHUB_SECRET }}
