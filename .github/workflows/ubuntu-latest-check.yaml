@@ -40,6 +40,7 @@ jobs:
         env:
           clientid: ${{ secrets.SCIHUB_CLIENTID }}
           secret: ${{ secrets.SCIHUB_SECRET }}
+          
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
