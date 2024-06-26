@@ -19,15 +19,17 @@ jobs:
     runs-on: ubuntu-latest
 
     name: One platform check
-
+    
+    secrets:
+      clientid: ${{ secrets.SCIHUB_CLIENTID }}
+      secret: ${{ secrets.SCIHUB_SECRET }}
+    
     strategy:
       fail-fast: false
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      clientid: ${{ secrets.SCIHUB_CLIENTID }}
-      secret: ${{ secrets.SCIHUB_SECRET }}
 
     steps:
       - uses: actions/checkout@v4
@@ -41,17 +43,12 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
-        secrets:
-          clientid: ${{ secrets.SCIHUB_CLIENTID }}
-          secret: ${{ secrets.SCIHUB_SECRET }}
+
         with:
           extra-packages: any::rcmdcheck
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
-        secrets:
-          clientid: ${{ secrets.SCIHUB_CLIENTID }}
-          secret: ${{ secrets.SCIHUB_SECRET }}
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
