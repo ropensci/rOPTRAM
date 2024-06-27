@@ -42,7 +42,7 @@ Both methods require [registering](https://dataspace.copernicus.eu/) on the Cope
 
 
 
-```r
+``` r
 remotes::install_github("ropensci/rOPTRAM")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
@@ -56,7 +56,7 @@ if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
 The {rOPTRAM} package is controlled by several options, set automatically when the package first loads. These defaults can be viewed by running the function `optram_options()` without arguments:
 
 
-```r
+``` r
 optram_options()
 #> [1] "edge_points = TRUE"
 #> [1] "feature_col = ID"
@@ -77,7 +77,7 @@ optram_options()
 Users can override any of the defaults by calling this function with alternative values for the options. For example, Sentinel images are downloaded, by default for all available image dates between the specified `from_date` and `to_date`. Users can, instead, choose to download images only for a specific season as follows:
 
 
-```r
+``` r
 optram_options("period", "seasonal")
 #> [1] "edge_points = TRUE"
 #> [1] "feature_col = ID"
@@ -99,7 +99,7 @@ Now, only images between the day/month of `from_date` and day/month of `to_date`
 Three trapezoid fitting functions are implemented in {rOPTRAM}. The default is "linear", but users can change as follows:
 
 
-```r
+``` r
 optram_options("trapezoid_method", "polynomial")
 #> [1] "edge_points = TRUE"
 #> [1] "feature_col = ID"
@@ -119,7 +119,7 @@ optram_options("trapezoid_method", "polynomial")
 The default trapezoid plot shows a scatter plot cloud of vegetation index values vs SWIR Transformed Reflectance, where all points have a uniform color. This plot can be improved by coloring the points by their density within the scatterplot. This is accomplished by choosing to set the option "plot_density" to "colors":
 
 
-```r
+``` r
 optram_options("plot_density", "colors")
 ```
 
@@ -132,7 +132,7 @@ Registration on Copernicus DataSpace was done in advance, and the OAuth credenti
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 
 
-```r
+``` r
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
@@ -143,36 +143,2013 @@ optram_options("trapezoid_method", "linear")
 ```
 
 
-```r
+``` r
 rmse <- optram(aoi,
               from_date, to_date,
               S2_output_dir = output_dir,
               data_output_dir = output_dir)
-#> Error: 'SeasonalFilter' is not an exported object from 'namespace:CDSE'
-knitr::kable(rmse, caption = "Trapezoid coefficients")
-#> Error in knitr::kable(rmse, caption = "Trapezoid coefficients"): object 'rmse' not found
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b82e23f: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b82e23f: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b6f51ea0: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b6f51ea0: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b69794a25: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b69794a25: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b4eabc2b6: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b4eabc2b6: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b46fb7f91: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b46fb7f91: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b4f145233: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b4f145233: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b52aa8a3b: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b52aa8a3b: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b2b7c296b: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b2b7c296b: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b1d8d90ab: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b1d8d90ab: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b1026c7ff: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b1026c7ff: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b100a6de7: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b100a6de7: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b6a64da2b: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b6a64da2b: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b51451a63: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b51451a63: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b3c866c6d: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b3c866c6d: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b730a421a: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b730a421a: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b557e632f: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b557e632f: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b518bd627: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b518bd627: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b7bf33eec: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b7bf33eec: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b45fad7c1: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b45fad7c1: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b6e62bb9a: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b6e62bb9a: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b45a4f0df: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b45a4f0df: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b4251dd84: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b4251dd84: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b15186ca8: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b15186ca8: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b5db89466: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b5db89466: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b18e1be67: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b18e1be67: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364bf5fb0bd: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364bf5fb0bd: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b5418df49: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b5418df49: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b37fa1eb3: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b37fa1eb3: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b25e0cb79: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b25e0cb79: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b69419af1: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b69419af1: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b7ad3869e: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b7ad3869e: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b75ad4c38: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b75ad4c38: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b48a3cad3: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b48a3cad3: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b295a6378: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b295a6378: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b7de81531: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b7de81531: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b65615c1c: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b65615c1c: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b8b73614: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b8b73614: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b7e829853: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b7e829853: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b52b44fa6: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b52b44fa6: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b6807ab78: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b6807ab78: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b72597114: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b72597114: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b4ad0fd70: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b4ad0fd70: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b6cd36a67: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b6cd36a67: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b1c426c3c: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b1c426c3c: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b457c1fa: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b457c1fa: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b43d005a5: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b43d005a5: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b9415fba: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b9415fba: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364bd2469d9: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364bd2469d9: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b4e35cc08: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b4e35cc08: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b7526061b: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b7526061b: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b189a4d9c: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b189a4d9c: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b5b60f382: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b5b60f382: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b5da2da52: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b5da2da52: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b63165a1f: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b63165a1f: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b64414a6c: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b64414a6c: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b598a47d1: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b598a47d1: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b103cad82: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b103cad82: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b67c155ac: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b67c155ac: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b4bfe525c: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b4bfe525c: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b5aff36c0: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b5aff36c0: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364be02d585: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364be02d585: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b247c1e95: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b247c1e95: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b1be5ffef: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b1be5ffef: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364bd13450e: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364bd13450e: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b33a28c58: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b33a28c58: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b46d90269: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b46d90269: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b1c6b4cc7: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b1c6b4cc7: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b1b5ce7c0: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b1b5ce7c0: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b6bb7f30e: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b6bb7f30e: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b1eb72dd4: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b1eb72dd4: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b58b9a63f: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b58b9a63f: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b58bc2d4d: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b58bc2d4d: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b69bb8c16: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b69bb8c16: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b70a0316e: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b70a0316e: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b3b619bc1: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b3b619bc1: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b1deabf4b: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b1deabf4b: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b2e876194: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b2e876194: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b541ce4fe: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b541ce4fe: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b4c2eb85f: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b4c2eb85f: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364beafe4c: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364beafe4c: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b5b8d5856: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b5b8d5856: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b28bd4707: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b28bd4707: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b2ce38058: TIFFReadDirectory:Sum of Photometric type-related
+#> color channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color
+#> channels as ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b2ce38058: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364b40bf275: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364b40bf275: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> /tmp/Rtmp4c6sSr/file364bad3af50: TIFFReadDirectory:Sum of Photometric type-related color
+#> channels and ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as
+#> ExtraSamples.
+#> Warning in new_CppObject_xp(fields$.module, fields$.pointer, ...): GDAL Message 1:
+#> TIFFReadDirectory:Sum of Photometric type-related color channels and ExtraSamples
+#> doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: /tmp/Rtmp4c6sSr/file364bad3af50: TIFFReadDirectory:Sum of Photometric
+#> type-related color channels and ExtraSamples doesn't match SamplesPerPixel. Defining
+#> non-color channels as ExtraSamples.
+#> Warning in x@ptr$warp(SpatRaster$new(), y, method, mask, FALSE, FALSE, opt): GDAL
+#> Message 1: TIFFReadDirectory:Sum of Photometric type-related color channels and
+#> ExtraSamples doesn't match SamplesPerPixel. Defining non-color channels as ExtraSamples.
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> Warning: 'CDSE::GetArchiveImage' is deprecated.
+#> Use 'GetImage' instead.
+#> See help("Deprecated")
+#> [1] "RMSE for fitted trapezoid:"
+#>    RMSE.wet  RMSE.dry
+#> 1 0.2787176 0.1400713
 ```
+
+``` r
+knitr::kable(rmse, caption = "Trapezoid coefficients")
+```
+
+
+
+Table: Trapezoid coefficients
+
+|  RMSE.wet|  RMSE.dry|
+|---------:|---------:|
+| 0.2787176| 0.1400713|
+
+
 
 ### Show trapezoid plot
 
 
-```r
+``` r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
 #> Error in file(file, "rt"): cannot open the connection
+```
+
+``` r
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
-#> Error in gzfile(file, "rb"): cannot open the connection
 pl <- plot_vi_str_cloud(full_df, edges_df)
-#> Error in "STR" %in% names(full_df): object 'full_df' not found
+#> Error in fortify(data): object 'edges_df' not found
+```
+
+``` r
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
                             subtitle = "polynomial fitted")
 #> Error in eval(expr, envir, enclos): object 'pl' not found
+```
+
+``` r
 ggplot2::ggsave(file.path(output_dir, "trapezoid_lachish_polynomial.png"),
                 width = 18, height = 12, units = "cm")
 ```
 
 
-```r
+``` r
 knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
 ```
 
@@ -190,12 +2167,11 @@ knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
   - Get trapezoid coefficients from the scatterplot of VI-STR pixels
 
 
-```r
+``` r
 # Using the same dates, and aoi as previous example
 s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
                             output_dir = output_dir)
-#> Error: 'SeasonalFilter' is not an exported object from 'namespace:CDSE'
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -204,17 +2180,25 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir)
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
-#> Error in knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges"): object 'rmse' not found
 ```
+
+
+
+Table: RMSE of fitted trapezoid edges
+
+|  RMSE.wet|  RMSE.dry|
+|---------:|---------:|
+| 0.2787176| 0.1400713|
+
+
 
 ## Soil Moisture Estimate
 
 ### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid
 
 
-```r
+``` r
 img_date <- "2023-01-10"   # After a rain
 VI_dir <- file.path(output_dir, "NDVI")
 STR_dir <- file.path(output_dir, "STR")
@@ -226,7 +2210,7 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ### Soil moisture plot
 
 
-```r
+``` r
 install.packages(c("viridis", "terra"))
 names(SM) <- "Lachish soil moisture"
 SM[terra::values(SM) < 0] <- 0

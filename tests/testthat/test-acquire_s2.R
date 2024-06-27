@@ -5,7 +5,14 @@ test_that("optram_acquire_s2 returns list", {
   to_date <- "2023-04-30"
   aoi <- sf::st_read(system.file("extdata",
                                  "lachish.gpkg", package = "rOPTRAM"))
-  boa_list <- optram_acquire_s2(aoi, from_date, to_date)
+  clientid <- Sys.getenv("SCIHUB_CLIENTID")
+  if (clientid == "") clientid <- NULL
+  secret <- Sys.getenv("SCIHUB_SECRET")
+  if (secret == "") secret <- NULL
+  boa_list <- optram_acquire_s2(aoi, from_date, to_date,
+                                clientid = clientid, secret = secret,
+                                save_creds = FALSE,
+                                remote = "scihub", SWIR_band = 11)
   expect_true(inherits(boa_list, "list"))
 })
 

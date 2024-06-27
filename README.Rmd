@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Project Status: ACTIVE](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![R-CMD-check](https://github.com/ropensci/rOPTRAM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/rOPTRAM/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `rOPTRAM` implements The OPtical TRapezoid Model (OPTRAM) 

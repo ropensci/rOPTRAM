@@ -145,11 +145,9 @@ acquire_scihub <- function(
 
   # Retrieve the images in BOA,STR and VI formats
   get_result_list <- function(scrpt, s_dir){
-    result_list <- lapply(1:nrow(img_list), function(i){
-      time_range <- as.character(img_list$acquisitionDate[i])
-      # Get the tile id to use in raster name
-      tileid <- unlist(strsplit(img_list$sourceId[i], "_"))[6]
-      result_rast <- CDSE::GetArchiveImage(aoi = aoi,
+    result_list <- lapply(img_list$acquisitionDate, function(d){
+      time_range <- as.character(d)
+      result_rast <- CDSE::GetImage(aoi = aoi,
                                      time_range = time_range,
                                      script = scrpt,
                                      collection = "sentinel-2-l2a",
