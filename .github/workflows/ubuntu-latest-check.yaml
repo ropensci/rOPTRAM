@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     name: One platform check
-    
+
     strategy:
       fail-fast: false
 
@@ -38,21 +38,21 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
         env:
-          clientid: ${{ secrets.SCIHUB_CLIENTID }}
-          secret: ${{ secrets.SCIHUB_SECRET }}
-          
+          SCIHUB_CLIENTID: ${{ secrets.SCIHUB_CLIENTID }}
+          SCIHUB_SECRET: ${{ secrets.SCIHUB_SECRET }}
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
           needs: check
         env:
-          clientid: ${{ secrets.SCIHUB_CLIENTID }}
-          secret: ${{ secrets.SCIHUB_SECRET }}
-          
+          SCIHUB_CLIENTID: ${{ secrets.SCIHUB_CLIENTID }}
+          SCIHUB_SECRET: ${{ secrets.SCIHUB_SECRET }}
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
         env:
-          clientid: ${{ secrets.SCIHUB_CLIENTID }}
-          secret: ${{ secrets.SCIHUB_SECRET }}
+          SCIHUB_CLIENTID: ${{ secrets.SCIHUB_CLIENTID }}
+          SCIHUB_SECRET: ${{ secrets.SCIHUB_SECRET }}
