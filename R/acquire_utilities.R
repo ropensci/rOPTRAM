@@ -145,9 +145,11 @@ acquire_scihub <- function(
 
   # Retrieve the images in BOA,STR and VI formats
   get_result_list <- function(scrpt, s_dir){
-    result_list <- lapply(img_list$acquisitionDate, function(d){
-      time_range <- as.character(d)
-      result_rast <- CDSE::GetImage(aoi = aoi,
+    result_list <- lapply(seq_along(img_list), function(d){
+        time_range <- as.character(img_list$acquisitionDate[d])
+        sourceId <- img_list$sourceId[d]
+        tileid <- unlist(strsplit(sourceId, split="_"))[6]
+        result_rast <- CDSE::GetImage(aoi = aoi,
                                      time_range = time_range,
                                      script = scrpt,
                                      collection = "sentinel-2-l2a",
@@ -156,12 +158,12 @@ acquire_scihub <- function(
                                      resolution = c(10,10),
                                      token = tok)
 
-      raster_file <- file.path(s_dir,
+        raster_file <- file.path(s_dir,
                                paste0(basename(s_dir), "_",
                                       time_range, "_", tileid,
                                       ".tif"))
-      terra::writeRaster(result_rast, raster_file, overwrite = TRUE)
-      return(raster_file)
+        terra::writeRaster(result_rast, raster_file, overwrite = TRUE)
+        return(raster_file)
     })
     return(result_list)
   }
