@@ -90,6 +90,8 @@ from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 aoi <- sf::st_read(system.file("extdata",
                   "lachish.gpkg", package = 'rOPTRAM'))
+Make sure the AOI is a MULTIPOLYGON
+aoi <- sf::st_as_sf(sf::st_union(aoi))
 optram_options("veg_index", "NDVI", show_opts = FALSE)
 optram_options("SWIR_band", 11)
 acquire_scihub(aoi, from_date, to_date,

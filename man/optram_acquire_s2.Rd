@@ -128,10 +128,8 @@ from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 aoi <- sf::st_read(system.file("extdata",
                               "lachish.gpkg", package = 'rOPTRAM'))
+aoi <- sf::st_as_sf(sf::st_union(aoi))
 s2_file_list <- optram_acquire_s2(aoi,
-                                 from_date, to_date,
-                                 remote = "scihub",
-                                 veg_index = "SAVI",
-                                 SWIR_band = 11)
+                                 from_date, to_date)
 }
 }
