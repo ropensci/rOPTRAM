@@ -82,7 +82,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
     # Setup conditions for each option name
     cond_func <- switch(opt_name,
               "veg_index" = function(opt_value) {
-                return(opt_value %in% c("NDVI", "SAVI", "MSAVI"))},
+                return(opt_value %in% c("NDVI", "SAVI", "MSAVI", "CI", "BSCI"))},
               "remote" = function(opt_value) {
                 return(opt_value %in% c("scihub", "openeo"))
               },

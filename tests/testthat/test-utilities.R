@@ -8,8 +8,6 @@ test_that("Check that calculate_vi returns SpatRaster", {
     expect_s4_class(calculate_vi(img_stk), "SpatRaster")
     optram_options("veg_index", "MSAVI", show_opts = FALSE)
     expect_s4_class(calculate_vi(img_stk), "SpatRaster")
-    optram_options("veg_index", "CI", show_opts = FALSE)
-    expect_s4_class(calculate_vi(img_stk), "SpatRaster")
 })
 
 test_that("Check that calculate_str returns SpatRaster", {

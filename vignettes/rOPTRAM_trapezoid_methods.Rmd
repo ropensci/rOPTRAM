@@ -61,6 +61,10 @@ optram_options("veg_index", "NDVI")
 s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
                             output_dir = output_dir)
+#> Error in paste0(basename(s_dir), "_", time_range, "_", tileid, ".tif"): object 'tileid' not found
+```
+
+``` r
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -81,17 +85,17 @@ optram_option("trapezoid_method", "linear")
 
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir)
-edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
-                        edge_points = TRUE)
+#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
 ```
 
-<div class="figure">
-<img src="figure/plot-linear-1.png" alt="Trapezoid scatterplot" width="90%" />
-<p class="caption">Trapezoid scatterplot</p>
-</div>
+``` r
+edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
+#> Error in file(file, "rt"): cannot open the connection
+```
 
 ``` r
+pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
+                        edge_points = TRUE)
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
                             subtitle = paste(getOptions("optram.trapezoid_method"), "fitted"))
 #> Error in getOptions("optram.trapezoid_method"): could not find function "getOptions"
