@@ -29,7 +29,6 @@ optram_calculate_str <- function(BOA_dir,
 
   if (!dir.exists(BOA_dir)) return(NULL)
   SWIR_band <- getOption("optram.SWIR_band")
-  if (!check_swir_band(SWIR_band))  return(NULL)
 
   BOA_list <- list.files(BOA_dir,
                         pattern = ".tif$", full.names = TRUE)

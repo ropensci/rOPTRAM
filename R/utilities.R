@@ -182,30 +182,6 @@ check_date_string <- function(from_string, to_string) {
 }
 
 
-#' @title Check SWIR band values
-#' @description
-#' Check that SWIR_band is specified as one of (11, 12)
-#' @param SWIR_band, numeric
-#' @return boolean, TRUE when value is OK
-#' @noRd
-#' @examples
-#' check_swir_band(11)         # TRUE
-#' check_swir_band(10)         # FALSE
-#' check_swir_band(c(11, 12))  # FALSE
-check_swir_band <- function(SWIR_band = c(11, 12)) {
-  if (length(SWIR_band) > 1 | missing(SWIR_band) | !is.numeric(SWIR_band)) {
-    message("SWIR band: ", SWIR_band, " not correct. Choose either 11, or 12")
-    return(FALSE)
-  } else if (abs(SWIR_band - round(SWIR_band)) > .Machine$double.eps^0.5) {
-    message("SWIR band: ", SWIR_band, " not correct. Please specify an integer")
-    return(FALSE)
-  } else if (SWIR_band > 12 | SWIR_band < 11) {
-    message("SWIR band: ", SWIR_band, " not correct. Choose either 11, or 12")
-    return(FALSE)
-  }
-  return(TRUE)
-}
-
 #' @title Calculate Vegetation Index from Bottom of Atmosphere Image Bands
 #' @description
 #' Use this function to prepare vegetation index from SAFE imagery
@@ -306,10 +282,8 @@ calculate_str <- function(img_stk,
   # https://doi.org/10.1016/j.rse.2017.05.041
   #
   # STR = (1-SWIR)^2 / 2*SWIR
-  #
-  # Make sure SWIR_band is one of 11 or 12
+
   SWIR_band = getOption("optram.SWIR_band")
-  if (!check_swir_band(SWIR_band)) return(NULL)
   if (terra::nlyr(img_stk) < 12) {
     message("BOA image stack does not contain all bands")
     return(NULL)

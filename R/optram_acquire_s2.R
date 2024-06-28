@@ -125,18 +125,17 @@ optram_acquire_s2 <- function(
   # Pre flight checks...
   if (!check_aoi(aoi)) return(NULL)
   # Ensure that aoi is single POLYGON or MULTIPOLYGON feature (and sf NOT sfc)
-  aoi <- sf::st_as_sf(sf::st_union(aoi))
+  aoi1 <- sf::st_as_sf(sf::st_union(aoi))
   if (!check_date_string(from_date, to_date)) return(NULL)
-  if (!check_swir_band(SWIR_band)) return(NULL)
 
   switch(remote,
-         scihub = acquire_scihub(aoi = aoi,
+         scihub = acquire_scihub(aoi = aoi1,
                                  from_date = from_date, to_date = to_date,
                                  output_dir = output_dir,
                                  save_creds = save_creds,
                                  clientid = clientid,
                                  secret = secret),
-         openeo = acquire_openeo(aoi = aoi,
+         openeo = acquire_openeo(aoi = aoi1,
                                  from_date = from_date, to_date = to_date,
                                  output_dir = output_dir,
                                  scale_factor = scale_factor)
