@@ -122,6 +122,7 @@ optram_acquire_s2 <- function(
   # Ensure that aoi is single POLYGON or MULTIPOLYGON feature (and sf NOT sfc)
   aoi1 <- sf::st_as_sf(sf::st_union(aoi))
   if (!check_date_string(from_date, to_date)) return(NULL)
+  remote <- getOption("optram.remote")
 
   switch(remote,
          scihub = acquire_scihub(aoi = aoi1,

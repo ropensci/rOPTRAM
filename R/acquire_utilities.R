@@ -147,8 +147,8 @@ acquire_scihub <- function(
 
   # Retrieve the images in BOA,STR and VI formats
   get_result_list <- function(scrpt, s_dir){
-    result_list <- lapply(seq_along(img_list), function(d){
-        time_range <- as.character(img_list$acquisitionDate[d])
+    result_list <- lapply(seq_along(img_list$acquisitionDate), function(d){
+        time_range <- as.Date(img_list$acquisitionDate[d])
         sourceId <- img_list$sourceId[d]
         tileid <- unlist(strsplit(sourceId, split="_"))[6]
         result_rast <- CDSE::GetImage(aoi = aoi,
