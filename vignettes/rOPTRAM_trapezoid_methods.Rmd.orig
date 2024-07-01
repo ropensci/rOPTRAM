@@ -46,7 +46,7 @@ The fitting method is chosen by setting the `trapezoid_method` option using the 
 
 
 ```{r setup, results='hide'}
-#remotes::install_github("ropensci/rOPTRAM")
+remotes::install_github("ropensci/rOPTRAM")
 library("rOPTRAM")
 library("CDSE")
 library("jsonlite")

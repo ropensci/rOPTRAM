@@ -43,7 +43,7 @@ Both methods require [registering](https://dataspace.copernicus.eu/) on the Cope
 
 
 ``` r
-#remotes::install_github("ropensci/rOPTRAM")
+remotes::install_github("ropensci/rOPTRAM")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
 # The {CDSE} and {jsonlite} packages are required for downloading Sentinel imagery from Copernicus DataSpace.
