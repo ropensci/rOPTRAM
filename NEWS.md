@@ -1,3 +1,14 @@
+rOPTRAM 0.2.0 (2024-07-02)
+=========================
+
+
+### NEW FEATURES
+
+  * Implements `optram_options()` function to allow setting many algorithm options that are applied throughout the model.
+  * Implements four coloring options for the VI-STR scatter plot: colors by point density, colors by a categorical attribute column in the aoi polygon, colors by image date, uniform color with contour lines of point density, 
+  * Adds tileid (Sentinel-2 tiles) to downloaded images. This allows to save images from adjacent tiles when an AOI extends beyond a single tile.
+  * The `CDSE` function `GetArchiveImage()` has been deprecated. This version of `rOPTRAM` uses the new `GetImage()` function.
+  
 rOPTRAM 0.2.0 (2024-06-06)
 =========================
 

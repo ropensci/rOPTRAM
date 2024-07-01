@@ -222,7 +222,7 @@ plot_vi_str_cloud <- function(
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR), color = "green",
                  alpha = 0.1, size = 0.2)
-  } else if (plot_colors %in% c("colors", "color")) {
+  } else if (plot_colors == "density") {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x = VI, y = STR, color = Density),
                  size = 0.2, alpha = 0.1) +

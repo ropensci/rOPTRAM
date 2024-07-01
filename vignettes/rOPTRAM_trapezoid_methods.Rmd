@@ -41,10 +41,10 @@ The fitting method is chosen by setting the `trapezoid_method` option using the 
 
 
 ``` r
-remotes::install_github("ropensci/rOPTRAM")
-library(rOPTRAM)
-if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
-if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
+#remotes::install_github("ropensci/rOPTRAM")
+library("rOPTRAM")
+library("CDSE")
+library("jsonlite")
 ```
 
 #### Prepare data.frame of pixel values
@@ -61,10 +61,6 @@ optram_options("veg_index", "NDVI")
 s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
                             output_dir = output_dir)
-#> Error in paste0(basename(s_dir), "_", time_range, "_", tileid, ".tif"): object 'tileid' not found
-```
-
-``` r
 STR_list <- list.files(file.path(output_dir, "STR"),
                       pattern = ".tif$", full.names = TRUE)
 VI_list <- list.files(file.path(output_dir, "NDVI"),
@@ -77,42 +73,45 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 
 
 ``` r
-optram_option("trapezoid_method", "linear")
-#> Error in optram_option("trapezoid_method", "linear"): could not find function "optram_option"
+optram_options("trapezoid_method", "linear")
+#> [1] "edge_points = TRUE"
+#> [1] "feature_col = ID"
+#> [1] "max_cloud = 12"
+#> [1] "max_tbl_size = 1e+06"
+#> [1] "period = seasonal"
+#> [1] "plot_colors = colors"
+#> [1] "remote = scihub"
+#> [1] "rm.hi.str = FALSE"
+#> [1] "rm.low.vi = FALSE"
+#> [1] "SWIR_band = 11"
+#> [1] "trapezoid_method = linear"
+#> [1] "veg_index = NDVI"
+#> [1] "vi_step = 0.005"
 ```
 
 ``` r
 
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir)
-#> Error in seq.default(VI_min_max[[1]], VI_min_max[[2]], vi_step): 'from' must be a finite number
-```
-
-``` r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
-#> Error in file(file, "rt"): cannot open the connection
-```
-
-``` r
 pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
                         edge_points = TRUE)
+```
+
+<div class="figure">
+<img src="figure/plot-linear-1.png" alt="Trapezoid scatterplot" width="90%" />
+<p class="caption">Trapezoid scatterplot</p>
+</div>
+
+``` r
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-                            subtitle = paste(getOptions("optram.trapezoid_method"), "fitted"))
-#> Error in getOptions("optram.trapezoid_method"): could not find function "getOptions"
-```
-
-``` r
+                            subtitle = paste(getOption("optram.trapezoid_method"), "fitted"))
 ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
-                                             getOptions("optram.trapezoid_method"), ".png")),
+                                             getOption("optram.trapezoid_method"), ".png")),
                 width = 18, height = 12, units = "cm")
-#> Error in getOptions("optram.trapezoid_method"): could not find function "getOptions"
 ```
 
-``` r
-knitr::include_graphics(paste0("images/trapezoid_lachish_",
-                               getOptions("optram.trapezoid_method"), ".png"))
-#> Error in getOptions("optram.trapezoid_method"): could not find function "getOptions"
-```
+![](images/trapezoid_lachish_linear.png)
 
 #### Show Exponential fitted trapezoid plot
 
@@ -125,37 +124,58 @@ edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
 pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
                         edge_points = TRUE)
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-                            subtitle = paste(getOption("optram.trapezoid_metnod), "fitted"))
+                            subtitle = paste(getOption("optram.trapezoid_method), "fitted"))
 ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
 getOption("optram_trapezoid_method"), ".png")),
                 width = 18, height = 12, units = "cm")
-knitr::include_graphics(paste0("images/trapezoid_lachish_",
-getOption("optram_trapezoid_method"), ".png"))
 #> Error: <text>:8:84: unexpected symbol
 #> 7: pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-#> 8:                             subtitle = paste(getOption("optram.trapezoid_metnod), "fitted
+#> 8:                             subtitle = paste(getOption("optram.trapezoid_method), "fitted
 #>                                                                                       ^
 ```
+
+![](images/trapezoid_lachish_exponential.png)
+
 
 #### Show Polynomial fitted trapezoid plot
 
 
 ``` r
-optram_options("trapezoid_getOptions("optram.trapezoid_method")od", "polynomial")
+optram_options("trapezoid_method", "polynomial")
+#> [1] "edge_points = TRUE"
+#> [1] "feature_col = ID"
+#> [1] "max_cloud = 12"
+#> [1] "max_tbl_size = 1e+06"
+#> [1] "period = seasonal"
+#> [1] "plot_colors = colors"
+#> [1] "remote = scihub"
+#> [1] "rm.hi.str = FALSE"
+#> [1] "rm.low.vi = FALSE"
+#> [1] "SWIR_band = 11"
+#> [1] "trapezoid_method = polynomial"
+#> [1] "veg_index = NDVI"
+#> [1] "vi_step = 0.005"
+```
+
+``` r
 coeffs <- optram_wetdry_coefficients(full_df,
-                                     output_dir = output_dir,
-                                     save_plot = TRUE)
+                                     output_dir = output_dir)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
 pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
                         edge_points = TRUE)
+```
+
+<div class="figure">
+<img src="figure/plot-poly-1.png" alt="Polynomial fit trapezoid scatterplot" width="90%" />
+<p class="caption">Polynomial fit trapezoid scatterplot</p>
+</div>
+
+``` r
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
                             subtitle = paste(getOption("optram.trapezoid_method"), "fitted"))
 ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
                                              getOption("optram.trapezoid_method"), ".png")),
                 width = 18, height = 12, units = "cm")
-knitr::include_graphics(paste0("images/trapezoid_lachish_",
-                               getOption("optram.trapezoid_method"), ".png"))
-#> Error: <text>:1:39: unexpected symbol
-#> 1: optram_options("trapezoid_getOptions("optram.trapezoid_method
-#>                                           ^
 ```
+
+![](images/trapezoid_lachish_polynomial.png)

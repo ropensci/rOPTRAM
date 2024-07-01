@@ -74,6 +74,8 @@ test_that("Check for valid optram options", {
                  "Incorrect value:")
   expect_message(optram_options("plot_colors", TRUE, show_opts = FALSE),
                  "Incorrect value:")
+  expect_message(optram_options("plot_colors", "color", show_opts = FALSE),
+                 "Incorrect value:")
   expect_message(optram_options("remote", "CDSE", show_opts = FALSE),
                  "Incorrect value:")
   expect_message(optram_options("use_scihub", TRUE, show_opts = FALSE),

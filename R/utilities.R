@@ -39,7 +39,7 @@
 #'  rm.hi.str        \tab FALSE \tab TRUE \cr
 #'  plot_colors      \tab "no"  \tab "no" = uniform green color for all points \cr
 #'   \tab  \tab "features" = points colored by aoi features \cr
-#'   \tab  \tab "colors" = points colored by point density \cr
+#'   \tab  \tab "density" = points colored by point density \cr
 #'   \tab  \tab "contours" = plots density contour lines \cr
 #'  feature_col      \tab "ID" \tab string, name of *numeric* column \cr
 #'   \tab  \tab that contains feature ID's for coloring plot \cr
@@ -115,8 +115,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
                 return(is.logical(opt_value))
               },
               "plot_colors" = function(opt_value) {
-                return(opt_value %in% c("no", "none",
-                                        "color", "colors",
+                return(opt_value %in% c("no", "none", "density",
                                         "feature", "features",
                                         "contour", "contours"))
               }

@@ -48,12 +48,12 @@ Both methods require [registering](https://dataspace.copernicus.eu/) on the Cope
 
 
 ```{r setup, results='hide'}
-remotes::install_github("ropensci/rOPTRAM")
+#remotes::install_github("ropensci/rOPTRAM")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
 # The {CDSE} and {jsonlite} packages are required for downloading Sentinel imagery from Copernicus DataSpace.
-if (!require("CDSE")) install.packages("CDSE", dependencies = TRUE)
-if (!require("jsonlite")) install.packages("jsonlite", dependencies = TRUE)
+library("CDSE")
+library("jsonlite")
 ```
 
 ## Package options
@@ -78,10 +78,10 @@ Three trapezoid fitting functions are implemented in {rOPTRAM}. The default is "
 optram_options("trapezoid_method", "polynomial")
 ```
 
-The default trapezoid plot shows a scatter plot cloud of vegetation index values vs SWIR Transformed Reflectance, where all points have a uniform color. This plot can be improved by coloring the points by their density within the scatterplot. This is accomplished by choosing to set the option "plot_density" to "colors":
+The default trapezoid plot shows a scatter plot cloud of vegetation index values vs SWIR Transformed Reflectance, where all points have a uniform color. This plot can be improved by coloring the points by their density within the scatterplot. This is accomplished by choosing to set the option "plot_colors" to "colors":
 
 ```{r options-3}
-optram_options("plot_density", "colors")
+optram_options("plot_colors", "colors")
 ```
 
 ## Main wrapper function
@@ -102,7 +102,7 @@ optram_options("veg_index", "NDVI")
 optram_options("trapezoid_method", "linear")
 ```
 
-```{r wrapper-2}
+```{r wrapper-2, warning=FALSE, message=FALSE}
 rmse <- optram(aoi,
               from_date, to_date,
               S2_output_dir = output_dir,
@@ -113,18 +113,18 @@ knitr::kable(rmse, caption = "Trapezoid coefficients")
 ### Show trapezoid plot
 
 ```{r plot-prepare, warning=FALSE, output=FALSE}
-edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
+edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
 pl <- plot_vi_str_cloud(full_df, edges_df)
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-                            subtitle = "polynomial fitted")
-ggplot2::ggsave(file.path(output_dir, "trapezoid_lachish_polynomial.png"),
+                            subtitle = "linear fitted")
+ggplot2::ggsave(file.path(output_dir, "trapezoid_lachish_linear.png"),
                 width = 18, height = 12, units = "cm")
 ```
 
 ```{r plot-trap}
-knitr::include_graphics("images/trapezoid_lachish_polynomial.png")
+knitr::include_graphics("images/trapezoid_lachish_linear.png")
 ```
 
 ## Step by step
@@ -170,10 +170,15 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 ### Soil moisture plot
 
 ```{r sm-plot}
-install.packages(c("viridis", "terra"))
+library("viridis")
+library("terra")
 names(SM) <- "Lachish soil moisture"
 SM[terra::values(SM) < 0] <- 0
 
-terra::plot(SM, col =  col = rev(viridis::viridis(25)), smooth = TRUE,
+terra::plot(SM, col = rev(viridis::viridis(25)), smooth = TRUE,
             main = "Soil moisture map")
+```
+
+```{r sm-plot-1}
+knitr::include_graphics("images/sm-plot.png")
 ```
