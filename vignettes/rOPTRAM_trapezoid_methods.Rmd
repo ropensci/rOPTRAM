@@ -73,13 +73,14 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 
 
 ``` r
-optram_options("trapezoid_method", "linear")
+meth <- "linear"
+optram_options("trapezoid_method", meth)
 #> [1] "edge_points = TRUE"
 #> [1] "feature_col = ID"
 #> [1] "max_cloud = 12"
 #> [1] "max_tbl_size = 1e+06"
-#> [1] "period = seasonal"
-#> [1] "plot_colors = colors"
+#> [1] "period = full"
+#> [1] "plot_colors = no"
 #> [1] "remote = scihub"
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
@@ -105,9 +106,9 @@ pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
 
 ``` r
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-                            subtitle = paste(getOption("optram.trapezoid_method"), "fitted"))
+                            subtitle = paste(meth, "fitted"))
 ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
-                                             getOption("optram.trapezoid_method"), ".png")),
+                                             meth, ".png")),
                 width = 18, height = 12, units = "cm")
 ```
 
@@ -117,21 +118,42 @@ ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
 
 
 ``` r
-optram_options("trapezoid_method", "exponential")
+meth <- "exponential"
+optram_options("trapezoid_method", meth)
+#> [1] "edge_points = TRUE"
+#> [1] "feature_col = ID"
+#> [1] "max_cloud = 12"
+#> [1] "max_tbl_size = 1e+06"
+#> [1] "period = full"
+#> [1] "plot_colors = no"
+#> [1] "remote = scihub"
+#> [1] "rm.hi.str = FALSE"
+#> [1] "rm.low.vi = FALSE"
+#> [1] "SWIR_band = 11"
+#> [1] "trapezoid_method = exponential"
+#> [1] "veg_index = NDVI"
+#> [1] "vi_step = 0.005"
+```
+
+``` r
 coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
 pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
                         edge_points = TRUE)
+```
+
+<div class="figure">
+<img src="figure/plot-exp-1.png" alt="Exponential fit trapezoid scatterplot" width="90%" />
+<p class="caption">Exponential fit trapezoid scatterplot</p>
+</div>
+
+``` r
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-                            subtitle = paste(getOption("optram.trapezoid_method), "fitted"))
+                            subtitle = paste(meth, "fitted"))
 ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
-getOption("optram_trapezoid_method"), ".png")),
+                                            meth, ".png")),
                 width = 18, height = 12, units = "cm")
-#> Error: <text>:8:84: unexpected symbol
-#> 7: pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-#> 8:                             subtitle = paste(getOption("optram.trapezoid_method), "fitted
-#>                                                                                       ^
 ```
 
 ![](images/trapezoid_lachish_exponential.png)
@@ -141,13 +163,14 @@ getOption("optram_trapezoid_method"), ".png")),
 
 
 ``` r
-optram_options("trapezoid_method", "polynomial")
+meth <- "polynomial"
+optram_options("trapezoid_method", meth)
 #> [1] "edge_points = TRUE"
 #> [1] "feature_col = ID"
 #> [1] "max_cloud = 12"
 #> [1] "max_tbl_size = 1e+06"
-#> [1] "period = seasonal"
-#> [1] "plot_colors = colors"
+#> [1] "period = full"
+#> [1] "plot_colors = no"
 #> [1] "remote = scihub"
 #> [1] "rm.hi.str = FALSE"
 #> [1] "rm.low.vi = FALSE"
@@ -172,9 +195,9 @@ pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
 
 ``` r
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-                            subtitle = paste(getOption("optram.trapezoid_method"), "fitted"))
+                            subtitle = paste(meth, "fitted"))
 ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
-                                             getOption("optram.trapezoid_method"), ".png")),
+                                             meth, ".png")),
                 width = 18, height = 12, units = "cm")
 ```
 

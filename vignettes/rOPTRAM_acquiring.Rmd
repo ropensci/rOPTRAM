@@ -101,15 +101,11 @@ Alternatively, you can use the `save_creds` option. At the first run, set `save_
 from_date <- "2018-12-01"
 to_date <- "2019-04-30"
 # rOPTRAM_aoi_example
-<<<<<<< HEAD
-aoi <- system.file("extdata", "lachish.gpkg", package = 'rOPTRAM')
 optram_options("SWIR_band", 11)
 optram_options("veg_index", "SAVI")
-=======
 aoi <- sf::st_read(system.file("extdata",
                                "lachish.gpkg", package = 'rOPTRAM'))
 
->>>>>>> main
 boa_files <- acquire_scihub(aoi,
               from_date, to_date,
               veg_index = "SAVI",

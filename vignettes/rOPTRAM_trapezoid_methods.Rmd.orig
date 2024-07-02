@@ -76,7 +76,8 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
 #### Show Linear trapezoid plot
 
 ```{r plot-linear, fig.cap="Trapezoid scatterplot", out.width = '90%', warning=FALSE}
-optram_options("trapezoid_method", "linear")
+meth <- "linear"
+optram_options("trapezoid_method", meth)
 
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir)
@@ -84,9 +85,9 @@ edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
 pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
                         edge_points = TRUE)
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-                            subtitle = paste(getOption("optram.trapezoid_method"), "fitted"))
+                            subtitle = paste(meth, "fitted"))
 ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
-                                             getOption("optram.trapezoid_method"), ".png")),
+                                             meth, ".png")),
                 width = 18, height = 12, units = "cm")
 ```
 
@@ -95,16 +96,17 @@ ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
 #### Show Exponential fitted trapezoid plot
 
 ```{r plot-exp, fig.cap="Exponential fit trapezoid scatterplot", out.width = '90%', warning=FALSE}
-optram_options("trapezoid_method", "exponential")
+meth <- "exponential"
+optram_options("trapezoid_method", meth)
 coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_exp.csv"))
 pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
                         edge_points = TRUE)
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-                            subtitle = paste(getOption("optram.trapezoid_method), "fitted"))
+                            subtitle = paste(meth, "fitted"))
 ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
-getOption("optram_trapezoid_method"), ".png")),
+                                            meth, ".png")),
                 width = 18, height = 12, units = "cm")
 ```
 
@@ -114,16 +116,17 @@ getOption("optram_trapezoid_method"), ".png")),
 #### Show Polynomial fitted trapezoid plot
 
 ```{r plot-poly, fig.cap="Polynomial fit trapezoid scatterplot", out.width = '90%', warning=FALSE}
-optram_options("trapezoid_method", "polynomial")
+meth <- "polynomial"
+optram_options("trapezoid_method", meth)
 coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir)
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
 pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
                         edge_points = TRUE)
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
-                            subtitle = paste(getOption("optram.trapezoid_method"), "fitted"))
+                            subtitle = paste(meth, "fitted"))
 ggplot2::ggsave(file.path(output_dir, paste0("trapezoid_lachish_",
-                                             getOption("optram.trapezoid_method"), ".png")),
+                                             meth, ".png")),
                 width = 18, height = 12, units = "cm")
 ```
 

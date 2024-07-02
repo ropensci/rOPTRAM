@@ -75,9 +75,10 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
   }
 
   # Reset option
-  opt_names <- c("veg_index","remote", "period", "vi_step", "trapezoid_method",
-                 "SWIR_band", "max_tbl_size", "rm.low.vi", "rm.hi.str",
-                 "plot_colors", "edge_points")
+  opt_names <- c("veg_index","remote", "period", "max_cloud", "vi_step",
+                 "trapezoid_method", "SWIR_band", "max_tbl_size",
+                 "rm.low.vi", "rm.hi.str", "plot_colors", "feature_col",
+                 "edge_points")
   if (opt_name %in% opt_names) {
     # Setup conditions for each option name
     cond_func <- switch(opt_name,
@@ -118,6 +119,9 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
                 return(opt_value %in% c("no", "none", "density",
                                         "feature", "features",
                                         "contour", "contours"))
+              },
+              "feature_col" = function(opt_value) {
+                return(is.character(opt_value))
               }
       )
     msg <- ifelse(cond_func(opt_value),
