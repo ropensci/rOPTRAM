@@ -43,6 +43,7 @@ plot_colors      \tab "no"  \tab "no" = uniform green color for all points \cr
 \tab  \tab "features" = points colored by aoi features \cr
 \tab  \tab "density" = points colored by point density \cr
 \tab  \tab "contours" = plots density contour lines \cr
+\tab  \tab "months" = points colored by month of image date \cr
 feature_col      \tab "ID" \tab string, name of \emph{numeric} column \cr
 \tab  \tab that contains feature ID's for coloring plot \cr
 edge_points      \tab TRUE  \tab FALSE, whether to add \cr

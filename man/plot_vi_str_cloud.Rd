@@ -22,6 +22,17 @@ ggplot object
 Plot STR-NDVI scatterplot to show dry and wet trapezoid lines
 over scatterplot of multi-temporal STR and NDVI pixel values
 }
+\note{
+Points in scatter plot can be colored in various ways, depending on the
+\code{plot_colors} option, as set in \code{optram_options()}
+If "plot_colors = none" all points are colored green.
+If "plot_colors = density" points are colored by point density on the plot.
+If "plot_colors = contour" points are colored green and density contour lines
+are overlayed
+If "plot_colors = feature" points are colored by some feature ID
+in the original AOI polygon.
+If "plot_colors = month" points are colored by the month of image acquisition.
+}
 \examples{
 aoi_name <- "Soil Moisture AOI"
 optram_options("trapezoid_method", "polynomial")

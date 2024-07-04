@@ -15,12 +15,13 @@ test_that("Trapezoid methods return data.frame", {
 
 test_that("Soil moisture raster is returned for all methods", {
   img_date <- "2023-01-25"
+  tile <- "_T36RXV"
   VI_file <- system.file("extdata", "NDVI",
-                         paste0("NDVI_", img_date, ".tif"),
+                         paste0("NDVI_", img_date, tile, ".tif"),
                          package = "rOPTRAM")
   VI <- terra::rast(VI_file)
   STR_file <- system.file("extdata", "STR",
-                          paste0("STR_", img_date, ".tif"),
+                          paste0("STR_", img_date, tile, ".tif"),
                           package = "rOPTRAM")
   STR <- terra::rast(STR_file)
   coeffs_csv <- system.file("extdata", "coefficients_lin.csv",

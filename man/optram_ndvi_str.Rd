@@ -18,7 +18,11 @@ must have a numeric column named "ID" for coloring trapezoid points by features
 Default NULL, (no coloring)}
 }
 \value{
-full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
+full_df, data.frame with 7 columns: X,Y,Date,Month,NDVI,STR,Density
+and optionally a 7th column with feature ID values from the AOI polygon.
+The columns Month, Density, Feature_ID  can be used in
+\code{plot_vi_str_cloud()} function to color the points in the scatter plot
+in various ways.
 }
 \description{
 Collect all pixel values of both vegetation index,
@@ -43,9 +47,9 @@ The vegetation index column is named "NDVI" even though it can represent
 other vegetation indices, such as SAVI, or MSAVI.
 }
 \examples{
-VI_list <- list.files(system.file("extdata", "NDVI"),
+VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
         pattern = ".tif$", full.names = TRUE)
-STR_list <- list.files(system.file("extdata", "STR"),
+STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
         pattern = ".tif$", full.names = TRUE)
 full_df <- optram_ndvi_str(STR_list, VI_list)
 # Show structure of output data.frame

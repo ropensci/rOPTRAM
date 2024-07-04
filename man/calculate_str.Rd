@@ -27,7 +27,7 @@ for scaling image bands.
 }
 \examples{
 img_stk <- terra::rast(system.file("extdata", "BOA",
-         "BOA_2022-12-11.tif", package = "rOPTRAM"))
+         "BOA_2022-12-11_T36RXV.tif", package = "rOPTRAM"))
 STR_dir = tempdir()
 str <- calculate_str(img_stk)
 }
