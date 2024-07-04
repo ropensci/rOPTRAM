@@ -135,7 +135,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     df_1['Date'] <- as.Date(date_tile[1], format="%Y-%m-%d")
     df_1['Tile'] <- date_tile[2]
     # Get month, for plotting "season trajectory" option in scatterplot
-    df_1['Month'] <- factor(format(df_1$Date, "%m"))
+    df_1['Month'] <- format(df_1$Date, "%m")
     # Remove rows with NA in VI or STR columns
     df_1 <- df_1[stats::complete.cases(df_1[3:4]),]
     return(df_1)
