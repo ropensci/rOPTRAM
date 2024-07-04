@@ -86,7 +86,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
       (!is.null(aoi)) &
       (feature_col %in% names(aoi))) {
     aoi_rast <- terra::rasterize(x = terra::vect(aoi),
-                                 y = rast(STR_list[1]),
+                                 y = terra::rast(STR_list[1]),
                                  field = feature_col, touches = TRUE)
     ID_df <- terra::as.data.frame(aoi_rast, xy = TRUE, na.rm = FALSE)
     names(ID_df) <- c("x", "y", "Feature_ID")
