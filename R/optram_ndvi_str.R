@@ -85,7 +85,8 @@ optram_ndvi_str <- function(STR_list, VI_list,
   if ((getOption("optram.plot_colors") %in% c("features", "feature")) &
       (!is.null(aoi)) &
       (feature_col %in% names(aoi))) {
-    aoi_rast <- terra::rasterize(x = aoi, y = STR,
+    aoi_rast <- terra::rasterize(x = terra::vect(aoi),
+                                 y = rast(STR_list[1]),
                                  field = feature_col, touches = TRUE)
     ID_df <- terra::as.data.frame(aoi_rast, xy = TRUE, na.rm = FALSE)
     names(ID_df) <- c("x", "y", "Feature_ID")
