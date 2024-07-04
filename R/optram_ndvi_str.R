@@ -102,7 +102,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
                                    field = feature_col, touches = TRUE)
       ID_df <- terra::as.data.frame(aoi_rast, xy = TRUE, na.rm = FALSE)
       names(ID_df) <- c("x", "y", "Feature_ID")
-      ID_df$Feature_ID <- factor(ID_df$Feature_ID)
+      #ID_df$Feature_ID <- factor(ID_df$Feature_ID)
       STR_1_df <- dplyr::inner_join(STR_1_df, ID_df,
                                     by = c("x", "y"), keep = FALSE)
     }
