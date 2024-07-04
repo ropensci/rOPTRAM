@@ -58,27 +58,6 @@ optram_ndvi_str <- function(STR_list, VI_list,
   rm.low.vi <- getOption("optram.rm.low.vi")
   rm.hi.str <- getOption("optram.rm.hi.str")
 
-  # Get index of rows for sampling
-  # Use the first raster (first date) list of both STR rasters
-  # and VI rasters to determine index for random sampling
-  # Get minimum length of non-NA values from both rasters
-  rs <- terra::rast(STR_list[1])
-  rs_df <- terra::as.data.frame(rs, xy = TRUE, na.rm = TRUE)
-  rv <- terra::rast(VI_list[1])
-  rv_df <- terra::as.data.frame(rv, xy = TRUE, na.rm = TRUE)
-  # Make sure length of data.frame is less than:
-  # max_tbl_size / number of raster dates.
-  # Other wise, take a sample
-  nr <- min(nrow(rv_df), nrow(rs_df))
-  if (nr > (max_tbl_size / length(STR_list))) {
-    # Set sample size as:
-    # maximum table / number of dates in date range
-    samp_size <- max_tbl_size / length(STR_list)
-    idx <- sample(nr, samp_size)
-  } else {
-    idx <- seq(1, nr)
-  }
-
   # In case coloring by features is requested, transform the AOI into raster
   # and get ID values to add to the VI_STR data.frame
   feature_col <- getOption("optram.feature_col")
@@ -141,6 +120,15 @@ optram_ndvi_str <- function(STR_list, VI_list,
     df_1['Month'] <- format(df_1$Date, "%m")
     # Remove rows with NA in VI or STR columns
     df_1 <- df_1[stats::complete.cases(df_1[3:4]),]
+
+    # Now make sure we are below the max_tbl_size
+    if (nrow(df_1) > (max_tbl_size / length(STR_list))) {
+      # Set sample size as:
+      # maximum table / number of dates in date range
+      samp_size <- max_tbl_size / length(STR_list)
+      idx <- sample(nrow(df_1), samp_size)
+      df_1 <- df_1[idx,]
+    }
     return(df_1)
   })
   full_df <- do.call(rbind, df_list)
