@@ -78,6 +78,18 @@ optram_ndvi_str <- function(STR_list, VI_list,
     idx <- seq(1, nr)
   }
 
+  # In case coloring by features is requested, transform the AOI into raster
+  # and get ID values to add to the VI_STR data.frame
+  feature_col <- getOption("optram.feature_col")
+  if ((getOption("optram.plot_colors") %in% c("features", "feature")) &
+      (!is.null(aoi)) &
+      (feature_col %in% names(aoi))) {
+    aoi_rast <- terra::rasterize(x = aoi, y = STR,
+                                 field = feature_col, touches = TRUE)
+    ID_df <- terra::as.data.frame(aoi_rast, xy = TRUE, na.rm = FALSE)
+    names(ID_df) <- c("x", "y", "Feature_ID")
+  }
+
   df_list <- lapply(STR_list, function(f){
     # Read STR raster and convert to data.frame,
     STR <- terra::rast(f)
@@ -91,22 +103,11 @@ optram_ndvi_str <- function(STR_list, VI_list,
       STR_IQR <- STR_q[2] - STR_q[1]
       STR_1_df$STR[STR_1_df$STR >= STR_IQR*1.5] <- NA
     }
-
-    # In case coloring by features is requested, transform the AOI into raster
-    # and get ID values to add to the VI_STR data.frame
-    feature_col <- getOption("optram.feature_col")
-    if ((getOption("optram.plot_colors") %in% c("features", "feature")) &
-        (!is.null(aoi)) &
-        (feature_col %in% names(aoi))) {
-      aoi_rast <- terra::rasterize(x = aoi, y = STR,
-                                   field = feature_col, touches = TRUE)
-      ID_df <- terra::as.data.frame(aoi_rast, xy = TRUE, na.rm = FALSE)
-      names(ID_df) <- c("x", "y", "Feature_ID")
-      #ID_df$Feature_ID <- factor(ID_df$Feature_ID)
+    # Add the Feature_ID if it exists
+    if (!is.null(ID_df)) {
       STR_1_df <- dplyr::inner_join(STR_1_df, ID_df,
                                     by = c("x", "y"), keep = FALSE)
     }
-
     # Also get the vegetation index raster for this date/tileid
     unique_str <- gsub("STR_", "", basename(f))
     VI_f <- VI_list[grep(unique_str, basename(VI_list))]
