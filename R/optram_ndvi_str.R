@@ -45,7 +45,8 @@ optram_ndvi_str <- function(STR_list, VI_list,
                             aoi = NULL){
 
   # Avoid "no visible binding for global variable" NOTE
-  date_str <- STR <- STR_1_df <- STR_df_file <- VI_df_list <- VI_df_1 <- NULL
+  date_str <- STR <- STR_1_df <- STR_df_file <- NULL
+  ID_df <- VI_df_list <- VI_df_1 <- NULL
 
   if (length(STR_list) == 0 || length(VI_list) == 0) {
     message("No raster files in directories")
