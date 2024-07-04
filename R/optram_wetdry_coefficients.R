@@ -162,6 +162,15 @@ optram_wetdry_coefficients <- function(full_df,
 #' @return ggplot object
 #' @export
 #' @import ggplot2
+#' @note Points in scatter plot can be colored in various ways, depending on the
+#' \code{plot_colors} option, as set in \code{optram_options()}
+#' If "plot_colors = none" all points are colored green.
+#' If "plot_colors = density" points are colored by point density on the plot.
+#' If "plot_colors = contour" points are colored green and density contour lines
+#'    are overlayed
+#' If "plot_colors = feature" points are colored by some feature ID
+#'    in the original AOI polygon.
+#' If "plot_colors = month" points are colored by the month of image acquisition.
 #' @examples
 #' aoi_name <- "Soil Moisture AOI"
 #' optram_options("trapezoid_method", "polynomial")
@@ -180,7 +189,7 @@ plot_vi_str_cloud <- function(
 
   # Avoid "no visible binding for global variable" NOTE
   VI <- STR <- STR_dry_fit <- STR_wet_fit <- STR_wet <- ID <- NULL
-  Density <- STR_dry <- NULL
+  Density <- STR_dry <- Feature_ID <- Month <- NULL
   # Pre-flight test
   if (! "STR" %in% names(full_df)) {
     message("STR column missing from data.frame. Exiting...")
@@ -237,7 +246,11 @@ plot_vi_str_cloud <- function(
   } else if ( (plot_colors %in% c("features", "feature")) &
               (feature_col %in% names(plot_df)) ) {
     pl <- ggplot2::ggplot(plot_df) +
-      geom_point(aes(x=VI, y=STR, color = .data[[feature_col]]),
+      geom_point(aes(x=VI, y=STR, color = Feature_ID),
+                 alpha = 0.1, size = 0.2)
+  } else if (plot_colors %in% c("months", "month")) {
+    pl <- ggplot2::ggplot(plot_df) +
+      geom_point(aes(x=VI, y=STR, color = Month),
                  alpha = 0.1, size = 0.2)
   } else {  # No plot_colors options fit, use default plot
       message("No ID column in data, reverting to default plot")

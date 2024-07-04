@@ -41,6 +41,7 @@
 #'   \tab  \tab "features" = points colored by aoi features \cr
 #'   \tab  \tab "density" = points colored by point density \cr
 #'   \tab  \tab "contours" = plots density contour lines \cr
+#'   \tab  \tab "months" = points colored by month of image date \cr
 #'  feature_col      \tab "ID" \tab string, name of *numeric* column \cr
 #'   \tab  \tab that contains feature ID's for coloring plot \cr
 #'  edge_points      \tab TRUE  \tab FALSE, whether to add \cr
@@ -118,7 +119,8 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
               "plot_colors" = function(opt_value) {
                 return(opt_value %in% c("no", "none", "density",
                                         "feature", "features",
-                                        "contour", "contours"))
+                                        "contour", "contours",
+                                        "month", "months"))
               },
               "feature_col" = function(opt_value) {
                 return(is.character(opt_value))
@@ -208,7 +210,7 @@ check_date_string <- function(from_string, to_string) {
 #' @return vi_rast, SpatRaster of vegetation index
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata", "BOA",
-#'          "BOA_2023-01-20.tif", package = "rOPTRAM"))
+#'          "BOA_2023-01-20_T36RXV.tif", package = "rOPTRAM"))
 #' vi <- calculate_vi(img_stk)
 
 calculate_vi <- function(img_stk,
@@ -272,7 +274,7 @@ calculate_vi <- function(img_stk,
 #' @return STR, SpatRaster of STR band
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata", "BOA",
-#'          "BOA_2022-12-11.tif", package = "rOPTRAM"))
+#'          "BOA_2022-12-11_T36RXV.tif", package = "rOPTRAM"))
 #' STR_dir = tempdir()
 #' str <- calculate_str(img_stk)
 calculate_str <- function(img_stk,

@@ -9,7 +9,11 @@
 #' @param aoi, {sf} POLYGON or MULTIPOLYGON,
 #'  must have a numeric column named "ID" for coloring trapezoid points by features
 #'  Default NULL, (no coloring)
-#' @return full_df, data.frame with 5 columns: X,Y,Date,NDVI,STR
+#' @return full_df, data.frame with 7 columns: X,Y,Date,Month,NDVI,STR,Density
+#'  and optionally a 7th column with feature ID values from the AOI polygon.
+#'  The columns Month, Density, Feature_ID  can be used in
+#'  \code{plot_vi_str_cloud()} function to color the points in the scatter plot
+#'  in various ways.
 #' @export
 #' @note
 #' Use the option \code{max_tbl_size} (see \code{\link[rOPTRAM]{optram_options}})
@@ -28,9 +32,9 @@
 #' other vegetation indices, such as SAVI, or MSAVI.
 #'
 #' @examples
-#' VI_list <- list.files(system.file("extdata", "NDVI"),
+#' VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
 #'         pattern = ".tif$", full.names = TRUE)
-#' STR_list <- list.files(system.file("extdata", "STR"),
+#' STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
 #'         pattern = ".tif$", full.names = TRUE)
 #' full_df <- optram_ndvi_str(STR_list, VI_list)
 #' # Show structure of output data.frame
@@ -98,6 +102,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
                                    field = feature_col, touches = TRUE)
       ID_df <- terra::as.data.frame(aoi_rast, xy = TRUE, na.rm = FALSE)
       names(ID_df) <- c("x", "y", "Feature_ID")
+      ID_df$Feature_ID <- factor(ID_df$Feature_ID)
       STR_1_df <- dplyr::inner_join(STR_1_df, ID_df,
                                     by = c("x", "y"), keep = FALSE)
     }
@@ -129,6 +134,8 @@ optram_ndvi_str <- function(STR_list, VI_list,
     date_tile <- unlist(strsplit(gsub(".tif", "", unique_str), "_"))
     df_1['Date'] <- as.Date(date_tile[1], format="%Y-%m-%d")
     df_1['Tile'] <- date_tile[2]
+    # Get month, for plotting "season trajectory" option in scatterplot
+    df_1['Month'] <- factor(format(df_1$Date, "%m"))
     # Remove rows with NA in VI or STR columns
     df_1 <- df_1[stats::complete.cases(df_1[3:4]),]
     return(df_1)
