@@ -1,26 +1,23 @@
 
-test_that("optram_ndvi_str() function returns data.frame", {
-  VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
-                        full.names = TRUE)
-  STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
-                        full.names = TRUE)
-  aoi <- sf::st_read(system.file("extdata",
-                                 "lachish.gpkg", package = "rOPTRAM"))
-  expect_true(inherits(optram_ndvi_str(STR_list, VI_list,
-                                       output_dir = tempdir(), aoi), "data.frame",))
-})
-
 test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
   VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
                         full.names = TRUE)
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
                          full.names = TRUE)
+  aoi <- NULL
+  # No Feature_ID so only 8 columns
+  output_dir <- file.path(tempdir(), "XXX")
+  res <- optram_ndvi_str(STR_list, VI_list, aoi=aoi, output_dir = output_dir)
+  expect_true(inherits(res, "data.frame"))
+  expect_equal(ncol(res), 8)
+  # With Feature_ID, another column is created,
+  # but only if optram_colors = "feature"
+  optram_options("plot_colors", "feature")
   aoi <- sf::st_read(system.file("extdata",
                                  "lachish.gpkg", package = "rOPTRAM"))
-  output_dir <- file.path(tempdir(), "XXX")
-  expect_true(inherits(optram_ndvi_str(STR_list, VI_list,
-                                       output_dir = output_dir, aoi),
-                       "data.frame"))
+  res <- optram_ndvi_str(STR_list, VI_list, aoi=aoi, output_dir = output_dir)
+  expect_true(inherits(res, "data.frame"))
+  expect_equal(ncol(res), 9)
   expect_true(dir.exists(output_dir))
 })
 
