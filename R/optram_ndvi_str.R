@@ -110,7 +110,6 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # Join two DF's and keep only sampled number of rows
     df_1 <- dplyr::inner_join(VI_1_df, STR_1_df,
                               by = c("x", "y"), keep = FALSE)
-    df_1 <- df_1[idx, ]
 
     # Get date and tileid from file name, and add to data.frame
     date_tile <- unlist(strsplit(gsub(".tif", "", unique_str), "_"))
