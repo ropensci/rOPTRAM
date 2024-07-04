@@ -244,7 +244,7 @@ plot_vi_str_cloud <- function(
                  alpha = 0.1, size = 0.2) +
       geom_density2d(aes(x=VI, y=STR), color = "darkgrey")
   } else if ( (plot_colors %in% c("features", "feature")) &
-              (feature_col %in% names(plot_df)) ) {
+              ("Feature_ID" %in% names(plot_df)) ) {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR, color = Feature_ID),
                  alpha = 0.1, size = 0.2)
