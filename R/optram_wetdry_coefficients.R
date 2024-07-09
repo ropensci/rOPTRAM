@@ -234,25 +234,25 @@ plot_vi_str_cloud <- function(
   } else if (plot_colors == "density") {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x = VI, y = STR, color = Density),
-                 size = 0.3, alpha = 0.1) +
+                 size = 0.3, alpha = 0.2) +
       scale_color_continuous(type = "viridis",
                              direction = -1) +
       theme(legend.position = "none")
   } else if (plot_colors %in% c("contours", "contour")) {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR), color = "green",
-                 alpha = 0.1, size = 0.3) +
+                 alpha = 0.2, size = 0.3) +
       geom_density2d(aes(x=VI, y=STR), color = "darkgrey")
   } else if ( (plot_colors %in% c("features", "feature")) &
               ("Feature_ID" %in% names(plot_df)) ) {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR, color = Feature_ID),
-                 alpha = 0.1, size = 0.3) +
+                 alpha = 0.2, size = 0.3) +
       theme(legend.position = "right")
   } else if (plot_colors %in% c("months", "month")) {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR, color = Month),
-                 alpha = 0.1, size = 0.3) +
+                 alpha = 0.2, size = 0.3) +
       theme(legend.position = "right")
   } else {  # No plot_colors options fit, use default plot
       message("No ID column in data, reverting to default plot")
