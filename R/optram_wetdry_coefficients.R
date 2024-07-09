@@ -247,11 +247,13 @@ plot_vi_str_cloud <- function(
               ("Feature_ID" %in% names(plot_df)) ) {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR, color = Feature_ID),
-                 alpha = 0.1, size = 0.2)
+                 alpha = 0.1, size = 0.2) +
+      theme(legend.position = "right")
   } else if (plot_colors %in% c("months", "month")) {
     pl <- ggplot2::ggplot(plot_df) +
       geom_point(aes(x=VI, y=STR, color = Month),
-                 alpha = 0.1, size = 0.2)
+                 alpha = 0.1, size = 0.2) +
+      theme(legend.position = "right")
   } else {  # No plot_colors options fit, use default plot
       message("No ID column in data, reverting to default plot")
       pl <- ggplot2::ggplot(plot_df) +
@@ -266,13 +268,13 @@ plot_vi_str_cloud <- function(
                 mapping = aes(x = VI, y = STR_dry_fit),
                 method = "loess",
                 color = "orange2", se = FALSE,
-                linewidth = 2) +
+                linewidth = 1.3) +
     # Wet edge
     geom_smooth(data = edges_df,
                 aes(x = VI, y = STR_wet_fit),
                 method = "loess",
                 color="blue", se = FALSE,
-                linewidth = 2) +
+                linewidth = 1.3) +
 
     # Set theme
     theme_bw() +
@@ -284,10 +286,10 @@ plot_vi_str_cloud <- function(
 
   if (edge_points) {
     pl <- pl + geom_point(aes(x=VI, y=STR_wet),
-                      color = "black", size=1.5, shape=2,
+                      color = "black", size=1.2, shape=2,
                       data = edges_df) +
                geom_point(aes(x=VI, y=STR_dry),
-                      color = "black", size=1.5, shape=6,
+                      color = "black", size=1.2, shape=6,
                       data = edges_df)
   }
   print(pl)
