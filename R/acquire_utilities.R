@@ -143,7 +143,7 @@ acquire_scihub <- function(
   # filter by tileID
   if (!is.na(tileid) & nchar(tileid) == 5) {
     img_tile <- unlist(strsplit(img_list$sourceId, split = "_"))[6]
-    img_list <- img_list[img_tile == tileid,]
+    img_list <- img_list[paste0('T', img_tile) == tileid,]
   }
 
     # If option "period" is set to "seasonal" apply SeasonFilter
