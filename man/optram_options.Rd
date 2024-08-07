@@ -48,6 +48,7 @@ feature_col      \tab "ID" \tab string, name of \emph{numeric} column \cr
 \tab  \tab that contains feature ID's for coloring plot \cr
 edge_points      \tab TRUE  \tab FALSE, whether to add \cr
 \tab  \tab the trapezoid edge points to the plot \cr
+only_vi_str  \tab  FALSE \tab TRUE (avoids downloading all Sentinel bands) \cr
 }
 }
 \examples{

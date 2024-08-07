@@ -22,7 +22,9 @@
     optram.rm.hi.str    = FALSE,
     optram.plot_colors = "no",  # "density", "contours", "feature, months"
     optram.feature_col = "ID",  # Which column contains numeric ID's of features
-    optram.edge_points = TRUE   # whether to add edge points to the plot
+    optram.edge_points = TRUE,   # whether to add edge points to the plot
+    optram.only_vi_str = FALSE, # whether to avoid downloading all bands
+    optram.tileid = NA # allow to filter download by Sentinel tile ID
   )
 
   op <- options()

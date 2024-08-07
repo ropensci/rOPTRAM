@@ -86,6 +86,8 @@ acquire_scihub <- function(
   SWIR_band <- getOption("optram.SWIR_band")
   veg_index <- getOption("optram.veg_index")
   max_cloud <- getOption("optram.max_cloud")
+  only_vi_str <- getOption("optram.only_vi_str")
+  tileid <- getOption("optram.tileid")
   # Retrieve OAuth token using credentials from file directory
   tok <- check_scihub(clientid = clientid, secret = secret,
                       save_creds = save_creds)
@@ -138,7 +140,13 @@ acquire_scihub <- function(
   # filter out cloud cover
   img_list <- img_list[img_list$tileCloudCover < max_cloud,]
 
-  # If option "period" is set to "seasonal" apply SeasonFilter
+  # filter by tileID
+  if (!is.na(tileid) & nchar(tileid) == 5) {
+    img_tile <- unlist(strsplit(img_list$sourceId, split = "_"))[6]
+    img_list <- img_list[img_tile == tileid,]
+  }
+
+    # If option "period" is set to "seasonal" apply SeasonFilter
   if (getOption("optram.period") == "seasonal") {
     img_list <- CDSE::SeasonalFilter(catalog = img_list,
                                      from = from_date,
@@ -169,8 +177,9 @@ acquire_scihub <- function(
     })
     return(result_list)
   }
-
-  result_boa <- get_result_list(script_file_boa, result_folder_boa)
+  if (!only_vi_str) {
+    result_boa <- get_result_list(script_file_boa, result_folder_boa)
+  }
   result_str <- get_result_list(script_file_str, result_folder_str)
   result_vi <- get_result_list(script_file_vi, result_folder_vi)
 

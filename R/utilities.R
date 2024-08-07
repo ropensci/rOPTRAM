@@ -46,6 +46,7 @@
 #'   \tab  \tab that contains feature ID's for coloring plot \cr
 #'  edge_points      \tab TRUE  \tab FALSE, whether to add \cr
 #'   \tab  \tab the trapezoid edge points to the plot \cr
+#'  only_vi_str  \tab  FALSE \tab TRUE (avoids downloading all Sentinel bands) \cr
 #'}
 optram_options <- function(opt_name = NULL, opt_value=NULL,
                            show_opts = TRUE) {
@@ -79,7 +80,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
   opt_names <- c("veg_index","remote", "period", "max_cloud", "vi_step",
                  "trapezoid_method", "SWIR_band", "max_tbl_size",
                  "rm.low.vi", "rm.hi.str", "plot_colors", "feature_col",
-                 "edge_points")
+                 "edge_points", "only_vi_str", "tileid")
   if (opt_name %in% opt_names) {
     # Setup conditions for each option name
     cond_func <- switch(opt_name,
@@ -124,6 +125,12 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
               },
               "feature_col" = function(opt_value) {
                 return(is.character(opt_value))
+              },
+              "only_vi_str" = function(opt_value) {
+                return(is.logical(opt_value))
+              },
+              "tileid" = function(opt_value) {
+                return(is.character(opt_value) & nchar(opt_value) == 5)
               }
       )
     msg <- ifelse(cond_func(opt_value),
