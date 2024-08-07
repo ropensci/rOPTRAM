@@ -12,7 +12,7 @@
 #'      is TRUE.
 #' @param secret, string, user's OAuth secret. Required if \code{save_creds} is TRUE.
 #' @export
-#' @return list of BOA files
+#' @return list of STR files
 #' @note
 #' #' This function utilizes the \code{CDSE} package.
 #' Make sure to install the \code{CDSE} and \code{jsonlite} packages.
@@ -183,7 +183,7 @@ acquire_scihub <- function(
   result_str <- get_result_list(script_file_str, result_folder_str)
   result_vi <- get_result_list(script_file_vi, result_folder_vi)
 
-  return(result_boa)
+  return(result_str)
 }
 
 #' @title Check access to scihub API
