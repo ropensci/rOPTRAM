@@ -47,6 +47,8 @@
 #'  edge_points      \tab TRUE  \tab FALSE, whether to add \cr
 #'   \tab  \tab the trapezoid edge points to the plot \cr
 #'  only_vi_str  \tab  FALSE \tab TRUE (avoids downloading all Sentinel bands) \cr
+#'  tileid  \tab  NA \tab a string of 5 characters, \cr
+#'  \tab \tab  download only the requested tileid  \cr
 #'}
 optram_options <- function(opt_name = NULL, opt_value=NULL,
                            show_opts = TRUE) {
@@ -130,7 +132,8 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
                 return(is.logical(opt_value))
               },
               "tileid" = function(opt_value) {
-                return(is.character(opt_value) & nchar(opt_value) == 5)
+                return(is.na(opt_value) |
+                         (is.character(opt_value) & nchar(opt_value) == 5))
               }
       )
     msg <- ifelse(cond_func(opt_value),
