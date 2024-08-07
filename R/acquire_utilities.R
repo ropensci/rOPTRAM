@@ -140,10 +140,9 @@ acquire_scihub <- function(
   # filter out cloud cover
   img_list <- img_list[img_list$tileCloudCover < max_cloud,]
 
-  # filter by tileID
+  # filter by tileId
   if (!is.na(tileid) & nchar(tileid) == 5) {
-    img_tile <- unlist(strsplit(img_list$sourceId, split = "_"))[6]
-    img_list <- img_list[paste0('T', tileid) == img_tile,]
+    img_list <- img_list[grep(tileid, img_list$sourceId),]
   }
 
     # If option "period" is set to "seasonal" apply SeasonFilter
