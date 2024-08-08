@@ -3,6 +3,6 @@ bibentry(
   title    = "rOPTRAM: an R package for preparing soil moisture grids based on the OPTRAM model",
   author   = "Micha Silver, Ron Beiden, Arnon Karnieli",
   year     = "2023",
-  doi      = "",
+  doi      = "https://doi.org/10.5281/zenodo.13257767",
   school   = "Ben Gurion University"
 )
