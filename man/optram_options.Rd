@@ -51,6 +51,8 @@ edge_points      \tab TRUE  \tab FALSE, whether to add \cr
 only_vi_str  \tab  FALSE \tab TRUE (avoids downloading all Sentinel bands) \cr
 tileid  \tab  NA \tab a string of 5 characters, \cr
 \tab \tab  download only the requested tileid  \cr
+scm_mask \tab TRUE \tab FALSE, whether to mask out: \cr
+\tab \tab cloud shadows, clouds, water, snow, using the Copernicus SCM product. \cr
 }
 }
 \examples{

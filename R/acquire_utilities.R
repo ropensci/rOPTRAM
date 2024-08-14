@@ -88,6 +88,8 @@ acquire_scihub <- function(
   max_cloud <- getOption("optram.max_cloud")
   only_vi_str <- getOption("optram.only_vi_str")
   tileid <- getOption("optram.tileid")
+  use_scm_mask <- getOption("optram.scm_mask")
+
   # Retrieve OAuth token using credentials from file directory
   tok <- check_scihub(clientid = clientid, secret = secret,
                       save_creds = save_creds)
@@ -127,7 +129,12 @@ acquire_scihub <- function(
   }
 
   str_script <- paste0("STR", as.character(SWIR_band), ".js")
-  vi_script <- paste0(veg_index, ".js")
+  if (use_scm_mask) {
+    vi_script <- paste0(veg_index, "_masked.js")
+  } else {
+    vi_script <- paste0(veg_index, ".js")
+  }
+
   # Retrieve the necessary scripts
   script_file_boa <- system.file("scripts", "BOA.js", package = "rOPTRAM")
   script_file_str <- system.file("scripts", str_script, package = "rOPTRAM")

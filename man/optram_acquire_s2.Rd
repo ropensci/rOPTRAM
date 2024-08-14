@@ -36,7 +36,7 @@ is TRUE.}
 \item{secret, }{string, user's OAuth secret. Required if \code{save_creds} is TRUE.}
 }
 \value{
-output_path, string, path to downloaded files
+output_paths, strings, list of downloaded (STR) files
 }
 \description{
 Use the \code{CDSE} package to acquire, preprocess and crop

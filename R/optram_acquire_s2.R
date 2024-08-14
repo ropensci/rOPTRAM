@@ -12,7 +12,7 @@
 #' @param clientid, string, user's OAuth client id. Required if \code{save_creds}
 #'      is TRUE.
 #' @param secret, string, user's OAuth secret. Required if \code{save_creds} is TRUE.
-#' @return output_path, string, path to downloaded files
+#' @return output_paths, strings, list of downloaded (STR) files
 #' @export
 #' @note
 #' This wrapper function calls one of multiple download functions,

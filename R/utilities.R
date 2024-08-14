@@ -49,6 +49,8 @@
 #'  only_vi_str  \tab  FALSE \tab TRUE (avoids downloading all Sentinel bands) \cr
 #'  tileid  \tab  NA \tab a string of 5 characters, \cr
 #'  \tab \tab  download only the requested tileid  \cr
+#'  scm_mask \tab TRUE \tab FALSE, whether to mask out: \cr
+#'    \tab \tab cloud shadows, clouds, water, snow, using the Copernicus SCM product. \cr
 #'}
 optram_options <- function(opt_name = NULL, opt_value=NULL,
                            show_opts = TRUE) {
@@ -82,7 +84,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
   opt_names <- c("veg_index","remote", "period", "max_cloud", "vi_step",
                  "trapezoid_method", "SWIR_band", "max_tbl_size",
                  "rm.low.vi", "rm.hi.str", "plot_colors", "feature_col",
-                 "edge_points", "only_vi_str", "tileid")
+                 "edge_points", "only_vi_str", "tileid", "scm_mask")
   if (opt_name %in% opt_names) {
     # Setup conditions for each option name
     cond_func <- switch(opt_name,
@@ -134,6 +136,9 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
               "tileid" = function(opt_value) {
                 return(is.na(opt_value) |
                          (is.character(opt_value) & nchar(opt_value) == 5))
+              },
+              "scm_mask" = function(opt_value) {
+                return(is.logical(opt_value))
               }
       )
     msg <- ifelse(cond_func(opt_value),
