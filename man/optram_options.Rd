@@ -53,6 +53,7 @@ tileid  \tab  NA \tab a string of 5 characters, \cr
 \tab \tab  download only the requested tileid  \cr
 scm_mask \tab TRUE \tab FALSE, whether to mask out: \cr
 \tab \tab cloud shadows, clouds, water, snow, using the Copernicus SCM product. \cr
+overwrite \tab  FALSE \tab Set to TRUE to re-download previously acquired images
 }
 }
 \examples{
