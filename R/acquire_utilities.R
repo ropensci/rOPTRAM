@@ -165,7 +165,12 @@ acquire_scihub <- function(
         time_range <- as.Date(img_list$acquisitionDate[d])
         sourceId <- img_list$sourceId[d]
         tileid <- unlist(strsplit(sourceId, split="_"))[6]
-        result_rast <- CDSE::GetImage(aoi = aoi,
+        raster_file <- file.path(s_dir,
+                                 paste0(basename(s_dir), "_",
+                                        time_range, "_", tileid,
+                                        ".tif"))
+        if (!file.exists(raster_file) | getOption("optram.overwrite")) {
+          result_rast <- CDSE::GetImage(aoi = aoi,
                                      time_range = time_range,
                                      script = scrpt,
                                      collection = "sentinel-2-l2a",
@@ -173,12 +178,8 @@ acquire_scihub <- function(
                                      mask = TRUE,
                                      resolution = c(10,10),
                                      token = tok)
-
-        raster_file <- file.path(s_dir,
-                               paste0(basename(s_dir), "_",
-                                      time_range, "_", tileid,
-                                      ".tif"))
-        terra::writeRaster(result_rast, raster_file, overwrite = TRUE)
+          terra::writeRaster(result_rast, raster_file, overwrite = TRUE)
+        }
         return(raster_file)
     })
     return(result_list)

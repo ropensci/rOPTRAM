@@ -25,7 +25,8 @@
     optram.edge_points = TRUE,   # whether to add edge points to the plot
     optram.only_vi_str = FALSE, # whether to avoid downloading all bands
     optram.tileid = NA, # allow to filter download by Sentinel tile ID
-    optram.scm_mask = TRUE # mask out clouds, cloud shadow, snow, water.
+    optram.scm_mask = TRUE, # mask out clouds, cloud shadow, snow, water.
+    optram.overwrite = FALSE # whether to re-download previously acquired images
   )
 
   op <- options()
