@@ -158,7 +158,7 @@ acquire_scihub <- function(
         # Run the GetImage() func only if:
         # the file has not been downloaded already
         # or overwrite was set to TRUE
-        if (!file.exists(raster_file) | getOption(optram.overwrite) ) {
+        if (!file.exists(raster_file) | getOption("optram.overwrite") ) {
           result_rast <- CDSE::GetImage(aoi = aoi,
                                      time_range = time_range,
                                      script = scrpt,
