@@ -27,27 +27,28 @@ a list of currently defined options is printed.
 
 {rOPTRAM} defines the following options at startup
 \tabular{lll}{
-opt_name  \tab default  \tab other possible values \cr
+opt_name     \tab default  \tab other possible values \cr
 ---------------- \tab---------------\tab ------------------- \cr
-veg_index  \tab "NDVI"  \tab "SAVI", "MSAVI" \cr
-remote  \tab "scihub"   \tab "openeo" \cr
-period  \tab "full"   \tab "seasonal" \cr
-max_cloud \tab 12 \tab between 0 and 100 \cr
-vi_step  \tab 0.005  \tab usually between 0.01 and 0.001 \cr
+veg_index    \tab "NDVI"  \tab "SAVI", "MSAVI" \cr
+remote       \tab "scihub"   \tab "openeo" \cr
+period       \tab "full"   \tab "seasonal" \cr
+max_cloud    \tab 12 \tab between 0 and 100 \cr
+vi_step      \tab 0.005  \tab usually between 0.01 and 0.001 \cr
 trapezoid_method \tab "linear"  \tab "polynomial" or "exponential" \cr
-SWIR_band        \tab 11    \tab 12 \cr
-max_tbl_size     \tab 1e+6  \tab depends on computer resources \cr
-rm.low.vi        \tab FALSE \tab TRUE \cr
-rm.hi.str        \tab FALSE \tab TRUE \cr
-plot_colors      \tab "no"  \tab "no" = uniform green color for all points \cr
+SWIR_band    \tab 11    \tab 12 \cr
+max_tbl_size \tab 1e+6  \tab depends on computer resources \cr
+rm.low.vi    \tab FALSE \tab TRUE \cr
+rm.hi.str    \tab FALSE \tab TRUE \cr
+plot_colors  \tab "no"  \tab "no" = uniform green color for all points \cr
 \tab  \tab "features" = points colored by aoi features \cr
 \tab  \tab "density" = points colored by point density \cr
 \tab  \tab "contours" = plots density contour lines \cr
 \tab  \tab "months" = points colored by month of image date \cr
-feature_col      \tab "ID" \tab string, name of \emph{numeric} column \cr
+feature_col  \tab "ID" \tab string, name of \emph{numeric} column \cr
 \tab  \tab that contains feature ID's for coloring plot \cr
-edge_points      \tab TRUE  \tab FALSE, whether to add \cr
+edge_points  \tab TRUE  \tab FALSE, whether to add \cr
 \tab  \tab the trapezoid edge points to the plot \cr
+overwrite    \tab  FALSE \tab Set to TRUE to re-download already acquired S2 images \cr
 }
 }
 \examples{
