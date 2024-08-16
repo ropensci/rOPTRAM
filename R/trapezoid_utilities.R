@@ -136,8 +136,10 @@ exponential_coefficients <- function(df, output_dir) {
 #'  }
 #'
 polynomial_coefficients <- function(df, output_dir) {
-  wet_fit <- stats::lm(df$STR_wet ~ poly(df$VI, 2))
-  dry_fit <- stats::lm(df$STR_dry ~ poly(df$VI, 2))
+  wet_fit <- stats::lm(STR_wet ~ poly(VI, degree = 2, raw = TRUE),
+                      data = df)
+  dry_fit <- stats::lm(STR_dry ~ poly(VI, degree = 2, raw = TRUE),
+                      data = df)
 
   coeffs <- data.frame("alpha_dry" = dry_fit$coefficients[1],
                        "beta1_dry" = dry_fit$coefficients[2],
