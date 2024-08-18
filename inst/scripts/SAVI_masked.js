@@ -3,7 +3,7 @@
 function setup() {
     return {
         input: [{ // this sets which bands to use
-            bands: ["B04", "B08"]
+            bands: ["B04", "B08", "SCL"]
             }],
         output: { // this defines the output image type
             bands: 1,
