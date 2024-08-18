@@ -72,7 +72,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
     new_opt <- list(opt_val)
     names(new_opt) <- paste0("optram.", opt_name)
     options(new_opt)
-    return(paste("New option for", opt_name, "applied."))
+    return(paste("Option for:", opt_name, "set to:", opt_val))
   }
 
   if (any(is.null(opt_name) | is.null(opt_value))) {
