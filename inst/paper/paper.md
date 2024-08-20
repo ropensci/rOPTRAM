@@ -10,9 +10,6 @@ authors:
   - name: Micha Silver
     orcid: 0000-0002-1128-1325
     affiliation: 1
-  - name: Dong Zhe
-    orcid: 0009-0007-5298-8355
-    affiliation: 1
   - name: Ron Beiden
     affiliation: 1
   - name: Zhe Dong
