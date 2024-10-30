@@ -23,7 +23,10 @@
     optram.plot_colors = "no",  # "density", "contours", "feature, months"
     optram.feature_col = "ID",  # Which column contains numeric ID's of features
     optram.edge_points = TRUE,   # whether to add edge points to the plot
-    optram.overwrite = FALSE    # whether to overwrite previously downloaded S2 files
+    optram.only_vi_str = FALSE, # whether to avoid downloading all bands
+    optram.tileid = NA, # allow to filter download by Sentinel tile ID
+    optram.scm_mask = TRUE, # mask out clouds, cloud shadow, snow, water.
+    optram.overwrite = FALSE # whether to re-download previously acquired images
   )
 
   op <- options()

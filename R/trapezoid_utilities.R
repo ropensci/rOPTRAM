@@ -58,7 +58,7 @@ linear_coefficients <- function(df, output_dir) {
 #' Calculates the intercept and slope of both wet and dry edges
 #' and updates the edges data.frame with these exp fitted values.
 #' Not exported.
-#' 
+#'
 #' @param df, data.frame, values of VI and STR along edges of trapezoid
 #' @param output_dir, string, path to save coefficients CSV file
 #' @return df, data.frame, the trapezoid line edge points
@@ -136,8 +136,10 @@ exponential_coefficients <- function(df, output_dir) {
 #'  }
 #'
 polynomial_coefficients <- function(df, output_dir) {
-  wet_fit <- stats::lm(df$STR_wet ~ poly(df$VI, 2))
-  dry_fit <- stats::lm(df$STR_dry ~ poly(df$VI, 2))
+  wet_fit <- stats::lm(STR_wet ~ poly(VI, degree = 2, raw = TRUE),
+                      data = df)
+  dry_fit <- stats::lm(STR_dry ~ poly(VI, degree = 2, raw = TRUE),
+                      data = df)
 
   coeffs <- data.frame("alpha_dry" = dry_fit$coefficients[1],
                        "beta1_dry" = dry_fit$coefficients[2],
@@ -238,7 +240,6 @@ exponential_soil_moisture <- function(coeffs, VI, STR) {
   #  International Journal of Applied Earth Observation and Geoinformation 89 (July):
   #   102113. https://doi.org/10.1016/j.jag.2020.102113.
   #
-  # Soil moisture calculated separately for VI values below and above d0
   # Below uses linear fitted equation, above uses exponential
   # W_lo = (i_dry + s_dry*VI_lo - STR) /
   #        (i_dry - i_wet +  (s_dry-s_wet)*VI_lo)
@@ -248,7 +249,6 @@ exponential_soil_moisture <- function(coeffs, VI, STR) {
     message("Incorrect coefficients file. Exiting...")
     return(NULL)
   }
-  d0 <- 0.2
   i_dry <- coeffs$intercept_dry
   s_dry <- coeffs$slope_dry
   i_wet <- coeffs$intercept_wet
@@ -312,8 +312,9 @@ polynomial_soil_moisture <- function(coeffs, VI, STR) {
   b1_dry <- coeffs$beta1_dry
   b2_dry <- coeffs$beta2_dry
 
-  W <- (STR - (a_dry + b1_dry * VI + b2_dry * VI^2)) /
-       ((a_wet - a_dry) + (b1_wet - b1_dry)*VI + (b2_wet - b2_dry)*VI^2)
+  STR_dry <- a_dry + b1_dry * VI + b2_dry * VI^2
+  STR_wet <- a_wet + b1_wet * VI + b2_wet * VI^2
+  W <- (STR_dry - STR) / (STR_dry - STR_wet)
 
   return(W)
 }

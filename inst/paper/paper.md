@@ -15,7 +15,7 @@ authors:
   - name: Zhe Dong
     orcid: 0009-0007-5298-8355
     affiliation: 1
-  - name: Natalya Panov
+  - name: Ron Beiden
     affiliation: 1
   - name: Arnon Karnieli
     orcid: 0000-0001-8065-9793

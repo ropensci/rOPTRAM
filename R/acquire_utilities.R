@@ -12,7 +12,7 @@
 #'      is TRUE.
 #' @param secret, string, user's OAuth secret. Required if \code{save_creds} is TRUE.
 #' @export
-#' @return list of BOA files
+#' @return list of STR files
 #' @note
 #' #' This function utilizes the \code{CDSE} package.
 #' Make sure to install the \code{CDSE} and \code{jsonlite} packages.
@@ -86,6 +86,10 @@ acquire_scihub <- function(
   SWIR_band <- getOption("optram.SWIR_band")
   veg_index <- getOption("optram.veg_index")
   max_cloud <- getOption("optram.max_cloud")
+  only_vi_str <- getOption("optram.only_vi_str")
+  tileid <- getOption("optram.tileid")
+  use_scm_mask <- getOption("optram.scm_mask")
+
   # Retrieve OAuth token using credentials from file directory
   tok <- check_scihub(clientid = clientid, secret = secret,
                       save_creds = save_creds)
@@ -125,7 +129,12 @@ acquire_scihub <- function(
   }
 
   str_script <- paste0("STR", as.character(SWIR_band), ".js")
-  vi_script <- paste0(veg_index, ".js")
+  if (use_scm_mask) {
+    vi_script <- paste0(veg_index, "_masked.js")
+  } else {
+    vi_script <- paste0(veg_index, ".js")
+  }
+
   # Retrieve the necessary scripts
   script_file_boa <- system.file("scripts", "BOA.js", package = "rOPTRAM")
   script_file_str <- system.file("scripts", str_script, package = "rOPTRAM")
@@ -138,7 +147,12 @@ acquire_scihub <- function(
   # filter out cloud cover
   img_list <- img_list[img_list$tileCloudCover < max_cloud,]
 
-  # If option "period" is set to "seasonal" apply SeasonFilter
+  # filter by tileId
+  if (!is.na(tileid) & nchar(tileid) == 5) {
+    img_list <- img_list[grep(tileid, img_list$sourceId),]
+  }
+
+    # If option "period" is set to "seasonal" apply SeasonFilter
   if (getOption("optram.period") == "seasonal") {
     img_list <- CDSE::SeasonalFilter(catalog = img_list,
                                      from = from_date,
@@ -155,10 +169,7 @@ acquire_scihub <- function(
                                  paste0(basename(s_dir), "_",
                                         time_range, "_", tileid,
                                         ".tif"))
-        # Run the GetImage() func only if:
-        # the file has not been downloaded already
-        # or overwrite was set to TRUE
-        if (!file.exists(raster_file) | getOption("optram.overwrite") ) {
+        if (!file.exists(raster_file) | getOption("optram.overwrite")) {
           result_rast <- CDSE::GetImage(aoi = aoi,
                                      time_range = time_range,
                                      script = scrpt,
@@ -173,12 +184,13 @@ acquire_scihub <- function(
     })
     return(result_list)
   }
-
-  result_boa <- get_result_list(script_file_boa, result_folder_boa)
+  if (!only_vi_str) {
+    result_boa <- get_result_list(script_file_boa, result_folder_boa)
+  }
   result_str <- get_result_list(script_file_str, result_folder_str)
   result_vi <- get_result_list(script_file_vi, result_folder_vi)
 
-  return(result_boa)
+  return(result_str)
 }
 
 #' @title Check access to scihub API

@@ -32,7 +32,7 @@ is TRUE.}
 \item{secret, }{string, user's OAuth secret. Required if \code{save_creds} is TRUE.}
 }
 \value{
-list of BOA files
+list of STR files
 }
 \description{
 This function uses the \code{CDSE} package
