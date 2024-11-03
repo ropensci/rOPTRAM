@@ -189,7 +189,7 @@ plot_vi_str_cloud <- function(
 
   # Avoid "no visible binding for global variable" NOTE
   VI <- STR <- STR_dry_fit <- STR_wet_fit <- STR_wet <- ID <- NULL
-  Density <- STR_dry <- Feature_ID <- Month <- NULL
+  STR_dry <- Feature_ID <- Month <- NULL
   # Pre-flight test
   if (! "STR" %in% names(full_df)) {
     message("STR column missing from data.frame. Exiting...")
@@ -233,8 +233,9 @@ plot_vi_str_cloud <- function(
                  alpha = 0.1, size = 0.3)
   } else if (plot_colors == "density") {
     pl <- ggplot2::ggplot(plot_df) +
-      geom_point(aes(x = VI, y = STR, color = Density),
-                 size = 0.3, alpha = 0.2) +
+      #geom_point(aes(x = VI, y = STR, color = Density),
+      #           size = 0.3, alpha = 0.2) +
+      geom_bin2d(aes(x = VI, y = STR), bins=c(80,80)) +
       scale_color_continuous(type = "viridis",
                              direction = -1) +
       theme(legend.position = "none")

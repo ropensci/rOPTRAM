@@ -9,7 +9,7 @@ test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
   output_dir <- file.path(tempdir(), "XXX")
   res <- optram_ndvi_str(STR_list, VI_list, aoi=aoi, output_dir = output_dir)
   expect_true(inherits(res, "data.frame"))
-  expect_equal(ncol(res), 8)
+  expect_equal(ncol(res), 7)
   # With Feature_ID, another column is created,
   # but only if optram_colors = "feature"
   optram_options("plot_colors", "feature")
@@ -17,7 +17,7 @@ test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
                                  "lachish.gpkg", package = "rOPTRAM"))
   res <- optram_ndvi_str(STR_list, VI_list, aoi=aoi, output_dir = output_dir)
   expect_true(inherits(res, "data.frame"))
-  expect_equal(ncol(res), 9)
+  expect_equal(ncol(res), 8)
   expect_true(dir.exists(output_dir))
 })
 

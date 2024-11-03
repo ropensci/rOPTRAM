@@ -101,7 +101,8 @@ acquire_scihub <- function(
   result_folder_boa <- file.path(output_dir, "BOA")
 
   # Check if the folder already exists; if not, create it
-  if (!dir.exists(result_folder_boa)) {
+  # (only if option "only_vi_str" is FALSE)
+  if (!dir.exists(result_folder_boa) & !getOption("optram.only_vi_str")) {
     dir.create(result_folder_boa)
   }
 
@@ -161,13 +162,16 @@ acquire_scihub <- function(
 
   # Retrieve the images in BOA,STR and VI formats
   get_result_list <- function(scrpt, s_dir){
-    result_list <- lapply(seq_along(img_list$acquisitionDate), function(d){
-        time_range <- as.Date(img_list$acquisitionDate[d])
-        sourceId <- img_list$sourceId[d]
+    result_list <- lapply(1:nrow(img_list), function(d){
+        img <- img_list[d,]
+        time_range <- as.Date(img$acquisitionDate)
+        timestampUTC <- gsub(" ", "_", img$acquisitionTimestampUTC)
+        timestampUTC <- gsub(":", "-", timestampUTC)
+        sourceId <- img$sourceId
         tileid <- unlist(strsplit(sourceId, split="_"))[6]
         raster_file <- file.path(s_dir,
                                  paste0(basename(s_dir), "_",
-                                        time_range, "_", tileid,
+                                        timestampUTC, "_", tileid,
                                         ".tif"))
         if (!file.exists(raster_file) | getOption("optram.overwrite")) {
           result_rast <- CDSE::GetImage(aoi = aoi,

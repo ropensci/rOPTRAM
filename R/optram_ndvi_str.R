@@ -113,10 +113,13 @@ optram_ndvi_str <- function(STR_list, VI_list,
 
     # Get date and tileid from file name, and add to data.frame
     date_tile <- unlist(strsplit(gsub(".tif", "", unique_str), "_"))
-    df_1['Date'] <- as.Date(date_tile[1], format="%Y-%m-%d")
-    df_1['Tile'] <- date_tile[2]
+    # After strsplit:
+    #   first string is date, second is the time UTC, and third is tileid
+    df_1['TimestampUTC'] <- as.POSIXct(paste(date_tile[1], date_tile[2]),
+                                    format="%Y-%m-%d %H-%M-%S", tz="UTC")
+    df_1['Tile'] <- date_tile[3]
     # Get month, for plotting "season trajectory" option in scatterplot
-    df_1['Month'] <- format(df_1$Date, "%m")
+    df_1['Month'] <- format(df_1$Timestamp, "%m")
     # Remove rows with NA in VI or STR columns
     df_1 <- df_1[stats::complete.cases(df_1[3:4]),]
 
@@ -132,17 +135,17 @@ optram_ndvi_str <- function(STR_list, VI_list,
   })
   full_df <- do.call(rbind, df_list)
 
-  # Calculate point density and add Density column
-  # (Using: https://slowkow.com/notes/ggplot2-color-by-density/ )
-  get_density <- function(x, y, ...) {
-    dens <- MASS::kde2d(x, y, ...)
-    ix <- findInterval(x, dens$x)
-    iy <- findInterval(y, dens$y)
-    ii <- cbind(ix, iy)
-    return(dens$z[ii])
-  }
-  full_df$Density <- get_density(full_df$VI, full_df$STR, n = 128)
-  #full_df$Density <- log(full_df$Density)
+  # # Calculate point density and add Density column
+  # # (Using: https://slowkow.com/notes/ggplot2-color-by-density/ )
+  # get_density <- function(x, y, ...) {
+  #   dens <- MASS::kde2d(x, y, ...)
+  #   ix <- findInterval(x, dens$x)
+  #   iy <- findInterval(y, dens$y)
+  #   ii <- cbind(ix, iy)
+  #   return(dens$z[ii])
+  # }
+  # full_df$Density <- get_density(full_df$VI, full_df$STR, n = 128)
+  # #full_df$Density <- log(full_df$Density)
 
   df_file <- file.path(output_dir, "VI_STR_data.rds")
   saveRDS(full_df, df_file)

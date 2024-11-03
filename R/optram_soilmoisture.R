@@ -99,10 +99,11 @@ optram_calculate_soil_moisture <- function(
   sm_files <- list()
   for (i in 1:length(VI_files)) {
     f <- VI_files[i]
-    # after split: "NDVI", "<date>", "<tileid>"
+    # after split: "NDVI", "<date>", "<time>", "<tileid>"
     date_tile <- unlist(strsplit(gsub(".tif", "", basename(f)), "_"))
     Date <- as.Date(date_tile[2], format="%Y-%m-%d")
-    Tile <- date_tile[3]
+    # date_tile[3] is the UTC time
+    Tile <- date_tile[4]
     VI <- terra::rast(f)
     STR <- terra::rast(STR_files[i])
     coeffs <- utils::read.csv(coeffs_file)
