@@ -233,8 +233,8 @@ plot_vi_str_cloud <- function(
                  alpha = 0.1, size = 0.3)
   } else if (plot_colors == "density") {
     pl <- ggplot2::ggplot(plot_df) +
-      geom_point(aes(x = VI, y = STR, color = NA)) +
-      geom_bin2d(aes(x = VI, y = STR), bins=c(100,100)) +
+      geom_point(aes(x = VI, y = STR, color = NA, fill = NA)) +
+      geom_bin2d(aes(x = VI, y = STR), bins=c(120,120)) +
       scale_fill_viridis_c(direction = -1) +
       theme(legend.position = "none")
   } else if (plot_colors %in% c("contours", "contour")) {
