@@ -7,6 +7,7 @@ rOPTRAM 0.3.0 (2024-08-15)
     * Adds option to filter out clouds, cloud shadows, water, using the Sentinel-2 SCM mask layer.
     * Implements check for existing STR and VI files to avoid downloading again and overwriting. 
     * Adds option to save list of images from CDSE::SearchCatalog after filtering for max cloud cover.
+    * Adds option to set output resolution of downloaded images.
 
 
 rOPTRAM 0.2.0 (2024-07-02)

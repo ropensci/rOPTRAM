@@ -163,6 +163,7 @@ acquire_scihub <- function(
   if (getOption("optram.save_img_list"))
     saveRDS(img_list, file.path(output_dir, "image_list.rds"))
 
+  res <- as.numeric(getOption("optram.resolution"))
   # Retrieve the images in BOA,STR and VI formats
   get_result_list <- function(scrpt, s_dir){
     result_list <- lapply(1:nrow(img_list), function(d){
@@ -183,7 +184,7 @@ acquire_scihub <- function(
                                      collection = "sentinel-2-l2a",
                                      format = "image/tiff",
                                      mask = TRUE,
-                                     resolution = c(10,10),
+                                     resolution = c(res,res),
                                      token = tok)
           terra::writeRaster(result_rast, raster_file, overwrite = TRUE)
         }

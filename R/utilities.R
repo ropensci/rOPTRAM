@@ -51,7 +51,9 @@
 #'   \tab \tab  download only the requested tileid  \cr
 #'  scm_mask    \tab TRUE \tab FALSE, whether to mask out: \cr
 #'    \tab \tab cloud shadows, clouds, water, snow, using the Copernicus SCM product. \cr
-#'  overwrite   \tab  FALSE \tab Set to TRUE to re-download previously acquired images \cr
+#'  overwrite   \tab  FALSE \tab Set to TRUE to re-download previously acquired images. \cr
+#'  save_img_list   \tab  FALSE \tab Set to TRUE to save list of available images to RDS file. \cr
+#'  resolution   \tab  10 \tab Choose resolution of downloaded Sentinel images, 10m, 20m or 60m \cr
 #'}
 optram_options <- function(opt_name = NULL, opt_value=NULL,
                            show_opts = TRUE) {
