@@ -159,6 +159,9 @@ acquire_scihub <- function(
                                      from = from_date,
                                      to = to_date)
   }
+  # If option to save image list is TRUE, save as RDS
+  if (getOption("optram.save_img_list"))
+    saveRDS(img_list, file.path(output_dir, "image_list.rds"))
 
   # Retrieve the images in BOA,STR and VI formats
   get_result_list <- function(scrpt, s_dir){

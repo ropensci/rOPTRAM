@@ -26,7 +26,8 @@
     optram.only_vi_str = FALSE, # whether to avoid downloading all bands
     optram.tileid = NA, # allow to filter download by Sentinel tile ID
     optram.scm_mask = TRUE, # mask out clouds, cloud shadow, snow, water.
-    optram.overwrite = FALSE # whether to re-download previously acquired images
+    optram.overwrite = FALSE, # whether to re-download previously acquired images
+    optram.save_img_list = FALSE # whether to save the list of available images
   )
 
   op <- options()
