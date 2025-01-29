@@ -87,7 +87,8 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
   opt_names <- c("veg_index","remote", "period", "max_cloud", "vi_step",
                  "trapezoid_method", "SWIR_band", "max_tbl_size",
                  "rm.low.vi", "rm.hi.str", "plot_colors", "feature_col",
-                 "edge_points", "only_vi_str", "tileid", "scm_mask", "overwrite")
+                 "edge_points", "only_vi_str", "tileid", "scm_mask",
+                 "overwrite", "save_img_list", "resolution")
   if (opt_name %in% opt_names) {
     # Setup conditions for each option name
     cond_func <- switch(opt_name,
@@ -145,6 +146,13 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
               },
               "overwrite" = function(opt_value) {
                 return(is.logical(opt_value))
+              },
+              "save_img_list" = function(opt_value) {
+                return(is.logical(opt_value))
+              },
+              "resolution" = function(opt_value) {
+                return(is.numeric(opt_value) &
+                         opt_value %in% c(10, 20, 60))
               }
       )
     msg <- ifelse(cond_func(opt_value),
