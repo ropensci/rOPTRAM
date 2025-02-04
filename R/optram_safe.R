@@ -49,10 +49,10 @@ optram_safe <- function(safe_dir,
                         data_output_dir = tempdir()) {
 
     # Avoid "no visible binding for global variable" NOTE
-    safe_list <- band_ids <- aoi <- cropped_rast_list <- xml_file <- NULL
-    img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- epsg_code <- NULL
-    datestr <- VI_STR_list <- stk <- VI_df <- VI_idx <- NULL
-    STR <- STR_df <- full_df <- max_tbl_size <- NULL
+    safe_list <- band_ids <- cropped_rast_list <- xml_file <- NULL
+    img_nodes <- img_paths <- img_path <- mtd_file <- mtd <- NULL
+    epsg_code <- datestr <- VI_STR_list <- stk <- VI_df <- NULL
+    VI_idx <- STR <- STR_df <- full_df <- max_tbl_size <- NULL
 
     # Pre flight checks...
     if (!check_aoi(aoi)) {
