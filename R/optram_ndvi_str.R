@@ -135,18 +135,6 @@ optram_ndvi_str <- function(STR_list, VI_list,
   })
   full_df <- do.call(rbind, df_list)
 
-  # # Calculate point density and add Density column
-  # # (Using: https://slowkow.com/notes/ggplot2-color-by-density/ )
-  # get_density <- function(x, y, ...) {
-  #   dens <- MASS::kde2d(x, y, ...)
-  #   ix <- findInterval(x, dens$x)
-  #   iy <- findInterval(y, dens$y)
-  #   ii <- cbind(ix, iy)
-  #   return(dens$z[ii])
-  # }
-  # full_df$Density <- get_density(full_df$VI, full_df$STR, n = 128)
-  # #full_df$Density <- log(full_df$Density)
-
   df_file <- file.path(output_dir, "VI_STR_data.rds")
   saveRDS(full_df, df_file)
   message("Saved: ", nrow(full_df), " rows of VI-STR data to: ", df_file)

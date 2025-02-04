@@ -9,6 +9,9 @@ rOPTRAM 0.3.0 (2024-08-15)
     * Adds option to save list of images from CDSE::SearchCatalog after filtering for max cloud cover.
     * Adds option to set output resolution of downloaded images.
 
+### BUG FIXES
+
+  * Fixes error in optram_safe(), offered by @kiviarttu:  [github issue][https://github.com/ropensci/rOPTRAM/issues/4]
 
 rOPTRAM 0.2.0 (2024-07-02)
 =========================
