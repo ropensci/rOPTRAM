@@ -153,6 +153,10 @@ acquire_scihub <- function(
     img_list <- img_list[grep(tileid, img_list$sourceId),]
   }
 
+  # filter by aoi coverage, only 100% coverage
+  # TODO: Do we need an optram.option for this?
+  img_list <- img_list[img_list$areaCoverage >= 99.,]
+
     # If option "period" is set to "seasonal" apply SeasonFilter
   if (getOption("optram.period") == "seasonal") {
     img_list <- CDSE::SeasonalFilter(catalog = img_list,
@@ -198,6 +202,9 @@ acquire_scihub <- function(
   result_str <- get_result_list(script_file_str, result_folder_str)
   result_vi <- get_result_list(script_file_vi, result_folder_vi)
 
+  if (length(result_str) == 0) {
+    warning("No STR rasters found! Check dates, tileid, cloud cover...")
+  }
   return(result_str)
 }
 
