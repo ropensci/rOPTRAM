@@ -163,6 +163,15 @@ acquire_scihub <- function(
                                      from = from_date,
                                      to = to_date)
   }
+
+  # If img_list is empty, fail gracefully
+  if (length(img_list) == 0) {
+    message("Search Catalog returned no results \n",
+            "Check image filters: tileid, cloud cover, dates, etc. \n",
+            "Exiting..."
+            )
+    return(list())
+  }
   # If option to save image list is TRUE, save as RDS
   if (getOption("optram.save_img_list"))
     saveRDS(img_list, file.path(output_dir, "image_list.rds"))
