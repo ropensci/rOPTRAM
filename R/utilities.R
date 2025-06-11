@@ -155,7 +155,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
                 return(is.numeric(opt_value) &
                          opt_value %in% c(10, 20, 60))
               },
-              "max_tbl_size" = function(opt_value) {
+              "area_cover" = function(opt_value) {
                 return(is.numeric(opt_value) & opt_value <= 100.0 & opt_value >= 0)
               },
       )
