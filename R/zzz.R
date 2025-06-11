@@ -28,7 +28,8 @@
     optram.scm_mask = TRUE, # mask out clouds, cloud shadow, snow, water.
     optram.overwrite = FALSE, # whether to re-download previously acquired images
     optram.save_img_list = FALSE, # whether to save the list of available images
-    optram.resolution = 10 # What output resolution (10, 20, or 60)
+    optram.resolution = 10, # What output resolution (10, 20, or 60)
+    optram.area_cover = 99.0 # Only use images that cover at least area-cover percent of aoi
   )
 
   op <- options()

@@ -54,6 +54,7 @@
 #'  overwrite   \tab  FALSE \tab Set to TRUE to re-download previously acquired images. \cr
 #'  save_img_list   \tab  FALSE \tab Set to TRUE to save list of available images to RDS file. \cr
 #'  resolution   \tab  10 \tab Choose resolution of downloaded Sentinel images, 10m, 20m or 60m \cr
+#'  area_cover   \tab  99.0 \tab Use only images that cover at least area_cover % of AOI \cr
 #'}
 optram_options <- function(opt_name = NULL, opt_value=NULL,
                            show_opts = TRUE) {
@@ -88,7 +89,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
                  "trapezoid_method", "SWIR_band", "max_tbl_size",
                  "rm.low.vi", "rm.hi.str", "plot_colors", "feature_col",
                  "edge_points", "only_vi_str", "tileid", "scm_mask",
-                 "overwrite", "save_img_list", "resolution")
+                 "overwrite", "save_img_list", "resolution", "area_cover")
   if (opt_name %in% opt_names) {
     # Setup conditions for each option name
     cond_func <- switch(opt_name,
@@ -153,7 +154,10 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
               "resolution" = function(opt_value) {
                 return(is.numeric(opt_value) &
                          opt_value %in% c(10, 20, 60))
-              }
+              },
+              "max_tbl_size" = function(opt_value) {
+                return(is.numeric(opt_value) & opt_value <= 100.0 & opt_value >= 0)
+              },
       )
     msg <- ifelse(cond_func(opt_value),
                   add_new_option(opt_name, opt_value),
