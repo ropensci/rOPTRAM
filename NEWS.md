@@ -1,4 +1,14 @@
 
+rOPTRAM 0.3.1 (2025-06-10)
+=========================
+
+### New Features
+
+    * Bumps to version 0.3.1.
+    * Adds new option `area_cover` to set minimum coverage of the AOI by sentinel tile.
+    * Checks for length of image list returned by `SearchCatalog`. If no images are left, exits gracefully.
+    * Removed uncessary dependency on `MASS` package.
+
 rOPTRAM 0.3.0 (2024-08-15)
 =========================
 
@@ -11,7 +21,7 @@ rOPTRAM 0.3.0 (2024-08-15)
 
 ### BUG FIXES
 
-  * Fixes error in optram_safe(), offered by @kiviarttu:  [github issue][https://github.com/ropensci/rOPTRAM/issues/4]
+    * Fixes error in optram_safe(), offered by @kiviarttu:  [github issue][https://github.com/ropensci/rOPTRAM/issues/4]
 
 rOPTRAM 0.2.0 (2024-07-02)
 =========================
