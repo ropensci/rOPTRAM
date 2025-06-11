@@ -153,9 +153,8 @@ acquire_scihub <- function(
     img_list <- img_list[grepl(tileid, img_list$sourceId, fixed = TRUE),]
   }
 
-  # filter by aoi coverage, only 100% coverage
-  # TODO: Do we need an optram.option for this?
-  img_list <- img_list[img_list$areaCoverage >= 99.,]
+  # filter by aoi coverage, only greater than % area_cover
+  img_list <- img_list[img_list$areaCoverage >= params$area_cover,]
 
     # If option "period" is set to "seasonal" apply SeasonFilter
   if (getOption("optram.period") == "seasonal") {
@@ -165,7 +164,7 @@ acquire_scihub <- function(
   }
 
   # If img_list is empty, fail gracefully
-  if (length(img_list) == 0) {
+  if (nrow(img_list) == 0) {
     message("Search Catalog returned no results \n",
             "Check image filters: tileid, cloud cover, dates, etc. \n",
             "Exiting..."
