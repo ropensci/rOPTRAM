@@ -150,7 +150,7 @@ acquire_scihub <- function(
 
   # filter by tileId
   if (!is.na(tileid) & nchar(tileid) == 5) {
-    img_list <- img_list[grep(tileid, img_list$sourceId),]
+    img_list <- img_list[grepl(tileid, img_list$sourceId, fixed = TRUE),]
   }
 
   # filter by aoi coverage, only 100% coverage
