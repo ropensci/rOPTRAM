@@ -8,14 +8,14 @@ function setup() {
             }],
         output: { // this defines the output image type
             bands: 1,
-            sampleType: "FLOAT32"
+            sampleType: "INT16"
         }
     };
 }
 
 function evaluatePixel(sample) {
   // this computes the NDVI value
-    let ndvi = (sample.B08 - sample.B04) / (sample.B08 + sample.B04);
+    let ndvi = 10000 * (sample.B08 - sample.B04) / (sample.B08 + sample.B04);
     return [ ndvi ];
 }
 

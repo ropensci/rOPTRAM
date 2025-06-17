@@ -7,7 +7,7 @@ function setup() {
             }],
         output: { // this defines the output image type
             bands: 1,
-            sampleType: "FLOAT32",
+            sampleType: "INT16",
         }
     };
 }
@@ -15,7 +15,7 @@ function setup() {
 function evaluatePixel(sample) {
     var value = sample.B11;
     if (value != 0) {
-      str = (1 - value)**2 / (2*value);
+      str = 10000 * (1 - value)**2 / (2*value);
     } else {
       str = 0
     };
