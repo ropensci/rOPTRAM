@@ -8,6 +8,8 @@ rOPTRAM 0.3.1 (2025-06-10)
     * Adds new option `area_cover` to set minimum coverage of the AOI by sentinel tile.
     * Checks for length of image list returned by `SearchCatalog`. If no images are left, exits gracefully.
     * Removed uncessary dependency on `MASS` package.
+    * Changes evalscripts to download indices in INT16 datatype, to save both CDSE processing units and download time.
+      (Indices are scaled back to range (-1.0, 1.0) after download.)
 
 rOPTRAM 0.3.0 (2024-08-15)
 =========================
