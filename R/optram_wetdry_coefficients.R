@@ -65,6 +65,7 @@ optram_wetdry_coefficients <- function(full_df,
   Qs <- str_max <- str_min <- interval_df <- edges_df1 <- NULL
 
   trapezoid_method <- getOption("optram.trapezoid_method")
+  #meth_abbrev <- strtrim(meth, 3)
   vi_step <- getOption("optram.vi_step")
 
   # Make sure no Inf or NA in full_df
@@ -131,7 +132,7 @@ optram_wetdry_coefficients <- function(full_df,
     dir.create(output_dir, recursive = TRUE)
   }
   utils::write.csv(edges_df,
-            file.path(output_dir, "trapezoid_edges.csv"),
+            file.path(output_dir, "trapezoid_points.csv"),
             row.names = FALSE)
 
   tryCatch(

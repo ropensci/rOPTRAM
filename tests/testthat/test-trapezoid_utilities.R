@@ -34,7 +34,7 @@ test_that("Soil moisture raster is returned for all methods", {
   coeffs <- read.csv(coeffs_csv)
   W <- exponential_soil_moisture(coeffs, VI, STR)
   expect_true(inherits(W, "SpatRaster"))
-  coeffs_csv <- system.file("extdata", "coefficients_poly.csv",
+  coeffs_csv <- system.file("extdata", "coefficients_pol.csv",
                           package = "rOPTRAM")
   coeffs <- read.csv(coeffs_csv)
   W <- polynomial_soil_moisture(coeffs, VI, STR)

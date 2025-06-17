@@ -155,13 +155,13 @@ polynomial_coefficients <- function(df, output_dir) {
   rmse_dry <- sqrt(mean(dry_fit$residuals^2))
   rmse_df <- data.frame("RMSE dry" = rmse_dry, "RMSE wet" = rmse_wet)
   utils::write.csv(rmse_df,
-                   file.path(output_dir, "trapezoid_rmse_poly.csv"),
+                   file.path(output_dir, "trapezoid_rmse_pol.csv"),
                    row.names = FALSE)
   utils::write.csv(df,
-                   file.path(output_dir, "trapezoid_edges_poly.csv"),
+                   file.path(output_dir, "trapezoid_edges_pol.csv"),
                    row.names = FALSE)
   utils::write.csv(coeffs,
-                   file.path(output_dir, "coefficients_poly.csv"),
+                   file.path(output_dir, "coefficients_pol.csv"),
                    row.names=FALSE)
   return(df)
 }

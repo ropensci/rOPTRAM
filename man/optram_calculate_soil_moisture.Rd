@@ -57,7 +57,7 @@ International Journal of Applied Earth Observation and Geoinformation 89 (July):
 The data_dir directory must contain the coefficients CSV file
 i.e. for "linear" method the file was saved as 'coefficients_lin.csv'
 for "exponential" it was saved as 'coefficients_exp.csv'
-for "polynomial" it was saved as 'coefficients_poly.csv'
+for "polynomial" it was saved as 'coefficients_pol.csv'
 }
 \examples{
 img_date <- "2023-03-11"

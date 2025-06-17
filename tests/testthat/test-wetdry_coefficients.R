@@ -14,7 +14,7 @@ test_that("Polynomial trapezoid method returns data.frame of length 6", {
   optram_options("trapezoid_method","polynomial", show_opts = FALSE)
   output_dir = tempdir()
   res <- optram_wetdry_coefficients(full_df, output_dir)
-  coeffs <- read.csv(file.path(output_dir, "coefficients_poly.csv"))
+  coeffs <- read.csv(file.path(output_dir, "coefficients_pol.csv"))
   expect_true(inherits(coeffs, "data.frame"))
   expect_equal(length(coeffs), 6)
 })

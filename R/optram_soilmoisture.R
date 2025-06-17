@@ -34,7 +34,7 @@
 #' The data_dir directory must contain the coefficients CSV file
 #' i.e. for "linear" method the file was saved as 'coefficients_lin.csv'
 #'      for "exponential" it was saved as 'coefficients_exp.csv'
-#'      for "polynomial" it was saved as 'coefficients_poly.csv'
+#'      for "polynomial" it was saved as 'coefficients_pol.csv'
 #' @export
 #' @examples
 #' img_date <- "2023-03-11"
@@ -89,7 +89,7 @@ optram_calculate_soil_moisture <- function(
   coeffs_file <-  switch(trapezoid_method,
           linear = file.path(data_dir, "coefficients_lin.csv"),
           exponential = file.path(data_dir, "coefficients_exp.csv"),
-          polynomial = file.path(data_dir, "coefficients_poly.csv"))
+          polynomial = file.path(data_dir, "coefficients_pol.csv"))
   if (!file.exists(coeffs_file)) {
     message("No coefficients file, Exiting...")
     return(NULL)

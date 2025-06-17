@@ -120,7 +120,7 @@ meth <- "polynomial"
 optram_options("trapezoid_method", meth)
 coeffs <- optram_wetdry_coefficients(full_df,
                                      output_dir = output_dir)
-edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_poly.csv"))
+edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_pol.csv"))
 pl <- plot_vi_str_cloud(full_df,  edges_df = edges_df,
                         edge_points = TRUE)
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
