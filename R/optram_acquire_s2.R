@@ -7,7 +7,7 @@
 #' @param to_date, string, end of date range, formatted as "YYYY-MM-DD"
 #' @param output_dir, string, path to save processed imagery.
 #' @param scale_factor, numeric, scale factor for reflectance values.
-#'      Default 10000.
+#'      Default 10000. Required only if `optram_option` "remote" is set to "openeo".
 #' @param save_creds, logical, whether to save CDSE credentials. Default TRUE.
 #' @param clientid, string, user's OAuth client id. Required if \code{save_creds}
 #'      is TRUE.

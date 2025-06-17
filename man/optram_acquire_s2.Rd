@@ -26,7 +26,7 @@ formatted as "YYYY-MM-DD"}
 \item{output_dir, }{string, path to save processed imagery.}
 
 \item{scale_factor, }{numeric, scale factor for reflectance values.
-Default 10000.}
+Default 10000. Required only if \code{optram_option} "remote" is set to "openeo".}
 
 \item{save_creds, }{logical, whether to save CDSE credentials. Default TRUE.}
 
