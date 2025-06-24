@@ -154,7 +154,8 @@ acquire_scihub <- function(
   }
 
   # filter by aoi coverage, only greater than % area_cover
-  img_list <- img_list[img_list$areaCoverage >= params$area_cover,]
+  cvr <- getOption("optram.area_cover")
+  img_list <- img_list[img_list$areaCoverage >= cvr,]
 
     # If option "period" is set to "seasonal" apply SeasonFilter
   if (getOption("optram.period") == "seasonal") {
