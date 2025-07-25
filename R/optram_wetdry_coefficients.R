@@ -114,13 +114,15 @@ optram_wetdry_coefficients <- function(full_df,
 	edges_df <- do.call(rbind, edges_list)
 	return(edges_df)
   }
-  # Get table of edge points, check that it's not NULL, and enough points
+  # Get table of edge points, check that it's not NULL,
+  # remove any NA rows, and cehck for enough points
   edges_df <- get_edges(VI_series, full_df)
   if (is.null(edges_df)) {
     message("No edge points found!\n",
             "Consider choosing a larger vi_step parameter.")
     return(NULL)
   }
+  edges_df <- na.omit(edges_df)
   if (nrow(edges_df) < (0.5 * length(VI_series))) {
     message("Too many edge points were dropped!\n",
             "Consider choosing a larger vi_step parameter.")
