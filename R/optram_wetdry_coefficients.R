@@ -115,7 +115,7 @@ optram_wetdry_coefficients <- function(full_df,
 	return(edges_df)
   }
   # Get table of edge points, check that it's not NULL,
-  # remove any NA rows, and cehck for enough points
+  # remove any NA rows, and check for enough points
   edges_df <- get_edges(VI_series, full_df)
   if (is.null(edges_df)) {
     message("No edge points found!\n",
