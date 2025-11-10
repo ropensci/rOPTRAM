@@ -9,6 +9,8 @@ R/create_icon\.R$
 ^inst/paper$
 ^\.gitlab-ci\.yml$
 ^inst/extdata/S2A$
-
+^inst/rOPTRAM_logo
 ^doc$
 ^Meta$
+agpl-3.0.txt
+^figure/
