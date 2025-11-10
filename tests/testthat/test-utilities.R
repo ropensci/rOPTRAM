@@ -42,6 +42,12 @@ test_that("CDSE credentials are retrieved", {
 
 test_that("CDSE credentials can be stored fronm environment variables", {
   # First get current creds, if they are already stored
+  creds_path <- switch(Sys.info()['sysname'],
+                       "Windows" = {file.path(Sys.getenv("LOCALAPPDATA"), "CDSE")},
+                       "Linux" = {file.path(Sys.getenv("HOME"), ".CDSE")},
+                       "Darwin" = {file.path(Sys.getenv("HOME"),
+                                             "Library", "Preferences", ".CDSE")})
+  testthat::skip_if_not(dir.exists(creds_path))
   creds <- retrieve_cdse_credentials()
   # Set environment variables for this test from already stored creds
   if (!is.null(creds)) {
