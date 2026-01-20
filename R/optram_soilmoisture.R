@@ -16,7 +16,8 @@
 #'  \code{\link[rOPTRAM]{optram_wetdry_coefficients}}. Typically a new image date,
 #'   (possibly an image that was not used for preparing the model),
 #'   will be referenced in the \code{img_date} parameter.
-#'   The resulting soil moisture raster is saved to \code{output_dir}.
+#'   The resulting soil moisture raster, representing Volumetric Water Content,
+#'   is saved to \code{output_dir}.
 #'
 #' Three trapezoid models are offered through the trapezoid_method option:
 #'   either "linear", "exponential", or "polynomial". (set using \code{\link[rOPTRAM]{optram_options}})
@@ -94,6 +95,8 @@ optram_calculate_soil_moisture <- function(
     message("No coefficients file, Exiting...")
     return(NULL)
   }
+  porosity <- getOption("optram.porosity")
+  if (is.na(porosity)) {porosity == 1.0}
 
   # All OK, continue...
   sm_files <- list()
@@ -112,18 +115,19 @@ optram_calculate_soil_moisture <- function(
               linear = linear_soil_moisture(coeffs, VI, STR),
               exponential = exponential_soil_moisture(coeffs, VI, STR),
               polynomial = polynomial_soil_moisture(coeffs, VI, STR))
-    if (is.null(W)) {
+    VWC <- W * porosity
+    if (is.null(VWC)) {
       message("No soil moisture raster created. Exiting...")
       return(NULL)
     }
     outfile <- file.path(output_dir, paste0("soil_moisture_",
                                             Date, "_", Tile, ".tif"))
-    terra::writeRaster(W, outfile, NAflag=-9999.0, overwrite=TRUE)
+    terra::writeRaster(VWC, outfile, NAflag=-9999.0, overwrite=TRUE)
     sm_files[[length(sm_files)+1]] <- outfile
   }
   if (length(sm_files) > 1) {
     message("Multiple tiles created: \n",
             sm_files)
   }
-  return(W)
+  return(VWC)
 }

@@ -39,7 +39,8 @@ This function is used after preparing the OPTRAM model coefficients with:
 \code{\link[rOPTRAM]{optram_wetdry_coefficients}}. Typically a new image date,
 (possibly an image that was not used for preparing the model),
 will be referenced in the \code{img_date} parameter.
-The resulting soil moisture raster is saved to \code{output_dir}.
+The resulting soil moisture raster, representing Volumetric Water Content,
+is saved to \code{output_dir}.
 
 Three trapezoid models are offered through the trapezoid_method option:
 either "linear", "exponential", or "polynomial". (set using \code{\link[rOPTRAM]{optram_options}})

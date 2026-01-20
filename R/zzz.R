@@ -29,7 +29,8 @@
     optram.overwrite = FALSE, # whether to re-download previously acquired images
     optram.save_img_list = FALSE, # whether to save the list of available images
     optram.resolution = 10, # What output resolution (10, 20, or 60)
-    optram.area_cover = 99.0 # Only use images that cover at least area-cover percent of aoi
+    optram.area_cover = 99.0, # Only use images that cover at least area-cover percent of aoi
+    optram.porosity = 0.4 # Default porosity value for calculating VWC
   )
 
   op <- options()
