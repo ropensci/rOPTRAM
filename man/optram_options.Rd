@@ -25,7 +25,7 @@ and allows users to set new values for each option.
 When no new option name or value is specified,
 a list of currently defined options is printed.
 
-{rOPTRAM} defines the following options at startup
+\code{rOPTRAM} defines the following options at startup
 \tabular{lll}{
 opt_name     \tab default  \tab other possible values \cr
 ---------------- \tab---------------\tab ------------------- \cr
