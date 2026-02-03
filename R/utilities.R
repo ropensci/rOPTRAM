@@ -55,6 +55,7 @@
 #'  save_img_list   \tab  FALSE \tab Set to TRUE to save list of available images to RDS file. \cr
 #'  resolution   \tab  10 \tab Choose resolution of downloaded Sentinel images, 10m, 20m or 60m \cr
 #'  area_cover   \tab  99.0 \tab Use only images that cover at least area_cover % of AOI \cr
+#'  porosity \tab 0.4 \tab Soil porosity value applied to OPTRAM output to get VWC \cr
 #'}
 optram_options <- function(opt_name = NULL, opt_value=NULL,
                            show_opts = TRUE) {
@@ -89,7 +90,8 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
                  "trapezoid_method", "SWIR_band", "max_tbl_size",
                  "rm.low.vi", "rm.hi.str", "plot_colors", "feature_col",
                  "edge_points", "only_vi_str", "tileid", "scm_mask",
-                 "overwrite", "save_img_list", "resolution", "area_cover")
+                 "overwrite", "save_img_list", "resolution", "area_cover",
+                 "porosity")
   if (opt_name %in% opt_names) {
     # Setup conditions for each option name
     cond_func <- switch(opt_name,
@@ -158,6 +160,10 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
               "area_cover" = function(opt_value) {
                 return(is.numeric(opt_value) & opt_value <= 100.0 & opt_value >= 0)
               },
+              "porosity" = function(opt_value) {
+                return((is.numeric(opt_value) & opt_value >0 & opt_value < 1.0) |
+                         is.na(opt_value))
+              }
       )
     msg <- ifelse(cond_func(opt_value),
                   add_new_option(opt_name, opt_value),

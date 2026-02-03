@@ -8,13 +8,7 @@ vignette: >
 bibliography: "references.bib"
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  message = FALSE,
-  comment = "#>"
-)
-```
+
 
 ## Introduction  <img align="right" width="100" height="100" src="images/rOPTRAM_logo.jpg">
 
@@ -47,7 +41,8 @@ That recommended R package {CDSE} interfaces with the Copernicus DataSpace Ecosy
 Both methods require [registering](https://dataspace.copernicus.eu/) on the Copernicus DataSpace
 
 
-```{r setup, results='hide'}
+
+``` r
 remotes::install_github("ropensci/rOPTRAM")
 library(rOPTRAM)
 ls(getNamespace('rOPTRAM'))
@@ -60,29 +55,128 @@ library("jsonlite")
 
 The {rOPTRAM} package is controlled by several options, set automatically when the package first loads. These defaults can be viewed by running the function `optram_options()` without arguments:
 
-```{r options}
+
+``` r
 optram_options()
+#> "area_cover = 99"
+#> "edge_points = TRUE"
+#> "feature_col = ID"
+#> "max_cloud = 12"
+#> "max_tbl_size = 1e+06"
+#> "only_vi_str = FALSE"
+#> "overwrite = FALSE"
+#> "period = full"
+#> "plot_colors = no"
+#> "porosity = 0.4"
+#> "remote = scihub"
+#> "resolution = 10"
+#> "rm.hi.str = FALSE"
+#> "rm.low.vi = FALSE"
+#> "save_img_list = FALSE"
+#> "scm_mask = TRUE"
+#> "SWIR_band = 11"
+#> "tileid = NA"
+#> "trapezoid_method = linear"
+#> "veg_index = NDVI"
+#> "vi_step = 0.005"
 ```
 
 Users can override any of the defaults by calling this function with alternative values for the options. For example, Sentinel images are downloaded, by default for all available image dates between the specified `from_date` and `to_date`. Users can, instead, choose to download images only for a specific season as follows:
 
-```{r options-1}
+
+``` r
 optram_options("period", "seasonal")
+#> "area_cover = 99"
+#> "edge_points = TRUE"
+#> "feature_col = ID"
+#> "max_cloud = 12"
+#> "max_tbl_size = 1e+06"
+#> "only_vi_str = FALSE"
+#> "overwrite = FALSE"
+#> "period = seasonal"
+#> "plot_colors = no"
+#> "porosity = 0.4"
+#> "remote = scihub"
+#> "resolution = 10"
+#> "rm.hi.str = FALSE"
+#> "rm.low.vi = FALSE"
+#> "save_img_list = FALSE"
+#> "scm_mask = TRUE"
+#> "SWIR_band = 11"
+#> "tileid = NA"
+#> "trapezoid_method = linear"
+#> "veg_index = NDVI"
+#> "vi_step = 0.005"
 ```
 Now, only images between the day/month of `from_date` and day/month of `to_date` will be acquired, but for all years in the date range.
 
 
 Three trapezoid fitting functions are implemented in {rOPTRAM}. The default is "linear", but users can change as follows:
 
-```{r options-2}
+
+``` r
 optram_options("trapezoid_method", "polynomial")
+#> "area_cover = 99"
+#> "edge_points = TRUE"
+#> "feature_col = ID"
+#> "max_cloud = 12"
+#> "max_tbl_size = 1e+06"
+#> "only_vi_str = FALSE"
+#> "overwrite = FALSE"
+#> "period = seasonal"
+#> "plot_colors = no"
+#> "porosity = 0.4"
+#> "remote = scihub"
+#> "resolution = 10"
+#> "rm.hi.str = FALSE"
+#> "rm.low.vi = FALSE"
+#> "save_img_list = FALSE"
+#> "scm_mask = TRUE"
+#> "SWIR_band = 11"
+#> "tileid = NA"
+#> "trapezoid_method = polynomial"
+#> "veg_index = NDVI"
+#> "vi_step = 0.005"
 ```
 
-The default trapezoid plot shows a scatter plot cloud of vegetation index values vs SWIR Transformed Reflectance, where all points have a uniform color. This plot can be improved by coloring the points by their density within the scatterplot. This is accomplished by choosing to set the option "plot_colors" to "colors":
+The default trapezoid plot shows a scatter plot cloud of vegetation index values vs SWIR Transformed Reflectance, where all points have a uniform color. This plot can be improved by coloring the points by their density within the scatterplot. This is accomplished by choosing to set the option "plot_colors" to "density":
 
-```{r options-3}
-optram_options("plot_colors", "colors")
+
+``` r
+optram_options("plot_colors", "density")
+#> "area_cover = 99"
+#> "edge_points = TRUE"
+#> "feature_col = ID"
+#> "max_cloud = 12"
+#> "max_tbl_size = 1e+06"
+#> "only_vi_str = FALSE"
+#> "overwrite = FALSE"
+#> "period = seasonal"
+#> "plot_colors = density"
+#> "porosity = 0.4"
+#> "remote = scihub"
+#> "resolution = 10"
+#> "rm.hi.str = FALSE"
+#> "rm.low.vi = FALSE"
+#> "save_img_list = FALSE"
+#> "scm_mask = TRUE"
+#> "SWIR_band = 11"
+#> "tileid = NA"
+#> "trapezoid_method = polynomial"
+#> "veg_index = NDVI"
+#> "vi_step = 0.005"
 ```
+
+The porosity parameter refers to soil porosity over the study area. This parameter is used to scale the rOPTRAM output to Volumetric Water Content values. For sandy soils without organic content, a value of 0.4 is appropriate. Clay and clay/loam soils with high organic content have higher porosity and users should set this option appropriately. Some typical values appear in the table below.
+
+
+``` r
+knitr::include_graphics("images/soil_porosity.png")
+```
+<img width="500" src="images/soil_porosity.png">
+
+![reference](https://doi.org/10.1029/WR014i004p00601)
+
 
 ## Main wrapper function
 
@@ -92,7 +186,8 @@ Registration on Copernicus DataSpace was done in advance, and the OAuth credenti
 
 Downloaded Sentinel-2 images are saved to `S2_output_dir`. For this example, outputs are saved to `tempdir()`
 
-```{r wrapper, warning=FALSE, message=FALSE, results='hide'}
+
+``` r
 from_date <- "2022-05-01"
 to_date <- "2023-04-30"
 output_dir <- tempdir()
@@ -102,30 +197,51 @@ optram_options("veg_index", "NDVI")
 optram_options("trapezoid_method", "linear")
 ```
 
-```{r wrapper-2, warning=FALSE, message=FALSE}
+
+``` r
 rmse <- optram(aoi,
               from_date, to_date,
               S2_output_dir = output_dir,
               data_output_dir = output_dir)
-knitr::kable(rmse, caption = "Trapezoid coefficients")
+#> [1] "RMSE for fitted trapezoid:"
+#>    RMSE.wet  RMSE.dry
+#> 1 0.2747341 0.1407656
 ```
+
+``` r
+knitr::kable(rmse, caption = "Trapezoid coefficients", format = "html")
+```
+
+|RMSE.wet|RMSE.dry|
+|-------:|-------:|
+|0.2747|3|0.14076|
+
 
 ### Show trapezoid plot
 
-```{r plot-prepare, warning=FALSE, output=FALSE}
+
+``` r
 edges_df <- read.csv(file.path(output_dir, "trapezoid_edges_lin.csv"))
 df_file <- file.path(output_dir, "VI_STR_data.rds")
 full_df <- readRDS(df_file)
 pl <- plot_vi_str_cloud(full_df, edges_df)
+```
+
+
+``` r
 pl <- pl + ggplot2::ggtitle("Lachish area trapezoid plot",
                             subtitle = "linear fitted")
 ggplot2::ggsave(file.path(output_dir, "trapezoid_lachish_linear.png"),
                 width = 18, height = 12, units = "cm")
 ```
 
-```{r plot-trap}
+
+``` r
 knitr::include_graphics("images/trapezoid_lachish_linear.png")
 ```
+
+<img width="600" src="images/trapezoid_lachish_linear.png">
+
 
 ## Step by step
 
@@ -138,7 +254,8 @@ knitr::include_graphics("images/trapezoid_lachish_linear.png")
   - and the option to remove outlier STR values
   - Get trapezoid coefficients from the scatterplot of VI-STR pixels
 
-```{r stepbystep, warning=FALSE, message=FALSE}
+
+``` r
 # Using the same dates, and aoi as previous example
 s2_file_list <- optram_acquire_s2(aoi,
                             from_date, to_date,
@@ -151,14 +268,15 @@ full_df <- optram_ndvi_str(STR_list, VI_list,
                            output_dir = output_dir)
 rmse <- optram_wetdry_coefficients(full_df,
                                    output_dir = output_dir)
-knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges")
+knitr::kable(rmse, caption = "RMSE of fitted trapezoid edges", format = "html")
 ```
 
 ## Soil Moisture Estimate
 
 ### Use trapezoid coefficients, VI, and STR rasters to derive soil moisture grid
 
-```{r soil-moisture}
+
+``` r
 img_date <- "2023-01-10"   # After a rain
 VI_dir <- file.path(output_dir, "NDVI")
 STR_dir <- file.path(output_dir, "STR")
@@ -169,7 +287,8 @@ SM <- optram_calculate_soil_moisture(img_date, VI_dir, STR_dir,
 
 ### Soil moisture plot
 
-```{r sm-plot}
+
+``` r
 library("viridis")
 library("terra")
 names(SM) <- "Lachish soil moisture"
@@ -177,8 +296,10 @@ SM[terra::values(SM) < 0] <- 0
 
 terra::plot(SM, col = rev(viridis::viridis(25)), smooth = TRUE,
             main = "Soil moisture map")
-```
+``
 
-```{r sm-plot-1}
+``` r
 knitr::include_graphics("images/sm-plot.png")
 ```
+
+<img width="600" src="images/sm-plot.png">
