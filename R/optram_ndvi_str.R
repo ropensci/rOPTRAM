@@ -80,9 +80,12 @@ optram_ndvi_str <- function(STR_list, VI_list,
     if (rm.hi.str) {
       # Calculate inter quartile range, and set all STR values
       # above (1.5 * IQR) to NA
-      STR_q <- stats::quantile(STR_1_df, probs = c(0.25, 0.75), na.rm = TRUE)
-      STR_IQR <- STR_q[2] - STR_q[1]
-      STR_1_df$STR[STR_1_df$STR >= STR_IQR*1.5] <- NA
+      #STR_q <- stats::quantile(STR_1_df, probs = c(0.25, 0.75), na.rm = TRUE)
+      #STR_IQR <- STR_q[2] - STR_q[1]
+      STR_q3 <- stats::quantile(STR_1_df, probs = 0.75, na.rm = TRUE)
+      STR_IQR <- stats::IQR(STR_1_df$STR)
+      cutoff <- STR_q3 + 1.5 * STR_IQR
+      STR_1_df$STR[STR_1_df$STR >= cutoff] <- NA
     }
     # Add the Feature_ID if it exists
     if (!is.null(ID_df)) {

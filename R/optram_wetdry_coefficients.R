@@ -224,10 +224,12 @@ plot_vi_str_cloud <- function(
   x_min <- 0.0
   x_max <- max(plot_df$VI, na.rm = TRUE)
   # STR (y) axis limits
-  y_min <- 0.1
+  y_min <- 0.05
   # Set max using median and (2 * IQR) as in outlier detection
-  str_q3 <- stats::quantile(plot_df$STR, 0.9, na.rm = TRUE)
-  y_max <- str_q3 + stats::IQR(plot_df$STR, na.rm = TRUE) * 3
+  #str_q3 <- stats::quantile(plot_df$STR, 0.9, na.rm = TRUE)
+  #y_max <- str_q3 + stats::IQR(plot_df$STR, na.rm = TRUE) * 3
+  # Set max using 0.98 quantile
+  y_max <- stats::quantile(plot_df$STR, 0.98, na.rm = TRUE)
 
   # Start plot
   if (plot_colors %in% c("no", "none")) { # Default uniform green points
