@@ -101,8 +101,6 @@ optram_ndvi_str <- function(STR_list, VI_list,
       return(NULL)}
 
     VI <- terra::rast(VI_f)
-    # Revert to original scale
-    # VI <- VI/10000.0  **NOT necessary in CDSE!**
     VI_1_df <- terra::as.data.frame(VI, xy=TRUE, na.rm = FALSE)
     names(VI_1_df) <- c("x", "y", "VI")
 

@@ -15,7 +15,8 @@ function setup() {
 function evaluatePixel(sample) {
     var value = sample.B11;
     if (value != 0) {
-      str = 10000 * (1 - value)**2 / (2*value);
+      v = value / 10000
+      str = ((1 - v)**2) / (2*v);
     } else {
       str = 0
     };

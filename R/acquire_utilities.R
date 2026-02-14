@@ -178,7 +178,7 @@ acquire_scihub <- function(
 
   res <- as.numeric(getOption("optram.resolution"))
   # Retrieve the images in BOA,STR and VI formats
-  get_result_list <- function(scrpt, s_dir, rescale = TRUE){
+  get_result_list <- function(scrpt, s_dir){
     result_list <- lapply(1:nrow(img_list), function(d){
         img <- img_list[d,]
         time_range <- as.Date(img$acquisitionDate)
@@ -199,12 +199,8 @@ acquire_scihub <- function(
                                      mask = TRUE,
                                      resolution = c(res,res),
                                      token = tok)
-          # evalscripts return INT16, scaled by 10000
-          # Rescale back to range (-1.0, 1.0)
-          # But not for BOA
-          if (rescale) {
-            result_rast <- result_rast / 10000
-          }
+          # Rescale is now implemented in evalscripts
+          # (But not for BOA)
           terra::writeRaster(result_rast, raster_file, overwrite = TRUE)
         }
         return(raster_file)
@@ -213,15 +209,12 @@ acquire_scihub <- function(
   }
   if (!only_vi_str) {
     result_boa <- get_result_list(script_file_boa,
-                                  result_folder_boa,
-                                  rescale = FALSE)
+                                  result_folder_boa)
   }
   result_str <- get_result_list(script_file_str,
-                                result_folder_str,
-                                rescale = TRUE)
+                                result_folder_str)
   result_vi <- get_result_list(script_file_vi,
-                               result_folder_vi,
-                               rescale = TRUE)
+                               result_folder_vi)
 
   if (length(result_str) == 0) {
     warning("No STR rasters found! Check dates, tileid, cloud cover...")
