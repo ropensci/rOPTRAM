@@ -95,10 +95,6 @@ optram_ndvi_str <- function(STR_list, VI_list,
     VI_1_df <- terra::as.data.frame(VI, xy=TRUE, na.rm = FALSE)
     names(VI_1_df) <- c("x", "y", "VI")
 
-    if (rm.low.vi) {
-      # Apply rm.low.vi parameter, set VI to NA when values <= 0.005
-       VI_1_df$VI[VI_1_df$VI <= 0.005]  <- NA
-    }
     # Join two DF's and keep only sampled number of rows
     df_1 <- dplyr::inner_join(VI_1_df, STR_1_df,
                               by = c("x", "y"), keep = FALSE)
@@ -112,17 +108,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     df_1['Tile'] <- date_tile[3]
     # Get month, for plotting "season trajectory" option in scatterplot
     df_1['Month'] <- format(df_1$Timestamp, "%m")
-    # Remove rows with NA in VI or STR columns
-    df_1 <- df_1[stats::complete.cases(df_1[3:4]),]
 
-    # Now make sure we are below the max_tbl_size
-    if (nrow(df_1) > (max_tbl_size / length(STR_list))) {
-      # Set sample size as:
-      # maximum table / number of dates in date range
-      samp_size <- max_tbl_size / length(STR_list)
-      idx <- sample(nrow(df_1), samp_size)
-      df_1 <- df_1[idx,]
-    }
     return(df_1)
   })
   full_df <- do.call(rbind, df_list)
@@ -137,7 +123,22 @@ optram_ndvi_str <- function(STR_list, VI_list,
     cutoff <- STR_q3 + 1.5 * STR_IQR
     full_df$STR[full_df$STR >= cutoff] <- NA
   }
+  # and also low VI values
+  if (rm.low.vi) {
+    # Apply rm.low.vi parameter, set VI to NA when values <= 0.005
+    full_df$VI[full_df$VI <= 0.005]  <- NA
+  }
+  # Remove rows with NA in VI or STR columns
+  full_df <- full_df[stats::complete.cases(full_df[3:4]),]
 
+  # Finally, Now make sure we are below the max_tbl_size
+  if (nrow(full_df) > max_tbl_size) {
+    # Set sample size as:
+    # maximum table / number of dates in date range
+    samp_size <- max_tbl_size
+    idx <- sample(nrow(full_df), max_tbl_size)
+    full_df <- full_df[idx,]
+  }
   df_file <- file.path(output_dir, "VI_STR_data.rds")
   saveRDS(full_df, df_file)
   message("Saved: ", nrow(full_df), " rows of VI-STR data to: ", df_file)
