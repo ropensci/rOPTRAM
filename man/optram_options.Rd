@@ -36,7 +36,7 @@ max_cloud  \tab 12 \tab between 0 and 100 \cr
 vi_step    \tab 0.005  \tab usually between 0.01 and 0.001 \cr
 trapezoid_method \tab "linear"  \tab "polynomial" or "exponential" \cr
 SWIR_band  \tab 11    \tab 12 \cr
-max_tbl_size \tab 1e+6  \tab depends on computer resources \cr
+max_tbl_size \tab 1e+6  \tab depends on computer resources, default 1e6, minimum: 1e4 \cr
 rm.low.vi   \tab FALSE \tab TRUE \cr
 rm.hi.str   \tab FALSE \tab TRUE \cr
 plot_colors \tab "no"  \tab "no" = uniform green color for all points \cr

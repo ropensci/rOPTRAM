@@ -77,16 +77,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # keep NA's so that number of rows in STR and VI stay synchronized
     STR_1_df <- terra::as.data.frame(STR, xy=TRUE, na.rm = FALSE)
     names(STR_1_df) <- c("x", "y", "STR")
-    if (rm.hi.str) {
-      # Calculate inter quartile range, and set all STR values
-      # above (1.5 * IQR) to NA
-      #STR_q <- stats::quantile(STR_1_df, probs = c(0.25, 0.75), na.rm = TRUE)
-      #STR_IQR <- STR_q[2] - STR_q[1]
-      STR_q3 <- stats::quantile(STR_1_df$STR, probs = 0.75, na.rm = TRUE)
-      STR_IQR <- stats::IQR(STR_1_df$STR)
-      cutoff <- STR_q3 + 1.5 * STR_IQR
-      STR_1_df$STR[STR_1_df$STR >= cutoff] <- NA
-    }
+
     # Add the Feature_ID if it exists
     if (!is.null(ID_df)) {
       STR_1_df <- dplyr::inner_join(STR_1_df, ID_df,
@@ -135,6 +126,17 @@ optram_ndvi_str <- function(STR_list, VI_list,
     return(df_1)
   })
   full_df <- do.call(rbind, df_list)
+
+  # Now, with all df_list merged into one, remove high STR values
+  if (rm.hi.str) {
+    # Calculate inter quartile range, and set all STR values
+    # above (1.5 * IQR) to NA
+    # message("Applying rm.hi.str")
+    STR_q3 <- stats::quantile(full_df$STR, probs = 0.75, na.rm = TRUE)
+    STR_IQR <- stats::IQR(full_df$STR, na.rm = TRUE)
+    cutoff <- STR_q3 + 1.5 * STR_IQR
+    full_df$STR[full_df$STR >= cutoff] <- NA
+  }
 
   df_file <- file.path(output_dir, "VI_STR_data.rds")
   saveRDS(full_df, df_file)
