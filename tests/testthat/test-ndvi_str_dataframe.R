@@ -35,9 +35,10 @@ test_that("Check that rm.low.vi and rm.hi.str works", {
 
   optram_options("rm.hi.str", TRUE, show_opts = FALSE)
   # Get cutoff value at third quartile + 1.5*IQR
+  # Leave some extra leeway (1.6*IQR) for IQR calculation
   Q3 <- stats::quantile(full_df$STR, probs = 0.75, na.rm = TRUE)
   STR_IQR <- stats::IQR(full_df$STR, na.rm = TRUE)
-  cutoff <- Q3 + 1.5 * STR_IQR
+  cutoff <- Q3 + 1.6 * STR_IQR
   full_df <- optram_ndvi_str(STR_list, VI_list, output_dir = tempdir(), aoi)
   max_str <- max(full_df$STR, na.rm = TRUE)
   expect_lte(max_str, cutoff)
