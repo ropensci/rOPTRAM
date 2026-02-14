@@ -1,4 +1,22 @@
 
+rOPTRAM 0.3.2 (2026-02-14)
+=========================
+
+### New Features
+
+    * Bumps to version 0.3.2.
+
+### BUG FIXES
+
+    * The evalfunction that calculates STR now rescales raw Sentinel-2 values 
+    within the script, rather than after the STR function. 
+    * When setting `rm.hi.str` the option was applied for each input raster separately.
+    This allowed for a case when one raster had very high values,
+    those values would be included in the final VI-STR table,
+    even though they would be above the high STR if the cutoff was calculated
+    for the whole table. This is fixed, such that high STR are removed 
+    after merging all raster values.
+
 rOPTRAM 0.3.1 (2025-06-10)
 =========================
 
