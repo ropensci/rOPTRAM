@@ -68,5 +68,5 @@ test_that("Check that empty NDVI raster returns NULL", {
                                  "lachish.gpkg", package = "rOPTRAM"))
   expect_message(
     optram_ndvi_str(STR_list, VI_list, output_dir = output_dir, aoi),
-    "Skipping date")
+    "Skipping image")
 })

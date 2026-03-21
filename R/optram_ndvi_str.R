@@ -84,13 +84,13 @@ optram_ndvi_str <- function(STR_list, VI_list,
       return(NULL)
     } else if (all(!file.exists(VI_f))) {
       return(NULL)
-      }
+    }
     VI <- terra::rast(VI_f)
 
     # If either raster is totally empty, return NULL
     if ( ! (terra::global(VI, "anynotNA") &
             terra::global(STR, "anynotNA") ) )  {
-      message("Skipping date: ", unique_str, " due to empty raster")
+      message("Skipping image: ", unique_str, " due to empty raster")
       return(NULL)
     }
 
@@ -109,6 +109,13 @@ optram_ndvi_str <- function(STR_list, VI_list,
     if (rm.low.vi) {
       # Apply rm.low.vi parameter, set VI to NA when values <= 0.005
       df_1$VI[df_1$VI <= 0.005]  <- NA
+      # Remove these rows with NA in VI columns
+      df_1 <- df_1[stats::complete.cases(df_1[3:4]),]
+    }
+    # Make sure some rows are left
+    if (nrow(df_1) == 0) {
+      message("Skipping image: ", unique_str, " no VI-STR values left")
+      return(NULL)
     }
     # Add the Feature_ID if it exists
     if (!is.null(ID_df)) {
@@ -118,8 +125,9 @@ optram_ndvi_str <- function(STR_list, VI_list,
 
     # Remove rows with NA in VI or STR columns
     df_1 <- df_1[stats::complete.cases(df_1[3:4]),]
-    # Make sure some rows are left
-    if (is.null(nrow(df_1))) {
+    # Again make sure some rows are left
+    if (is.null(nrow(df_1)) | (nrow(df_1) == 0 )) {
+      message("Skipping image: ", unique_str, " no VI-STR values left")
       return(NULL)
     }
 
