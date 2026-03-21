@@ -23,6 +23,8 @@
 #' This parameter sets a total size of data.frame from the \code{max_tbl_size}
 #' parameter, together with the number of image time slots in the time range.
 #'
+#' All rows in the data.frame where either NDVI or STR are NA are removed.
+#'
 #' In some cases (i.e. water surfaces) NDVI can have values
 #' below zero. These pixels can be removed from the trapezoid
 #' by setting \code{rm.low.vi}
@@ -74,9 +76,6 @@ optram_ndvi_str <- function(STR_list, VI_list,
   df_list <- lapply(STR_list, function(f){
     # Read STR raster and convert to data.frame,
     STR <- terra::rast(f)
-    # keep NA's so that number of rows in STR and VI stay synchronized
-    STR_1_df <- terra::as.data.frame(STR, xy=TRUE, na.rm = FALSE)
-    names(STR_1_df) <- c("x", "y", "STR")
 
     # Also get the vegetation index raster for this date/tileid
     unique_str <- gsub("STR_", "", basename(f))
@@ -84,9 +83,21 @@ optram_ndvi_str <- function(STR_list, VI_list,
     if (length(VI_f) == 0) {
       return(NULL)
     } else if (all(!file.exists(VI_f))) {
-      return(NULL)}
-
+      return(NULL)
+      }
     VI <- terra::rast(VI_f)
+
+    # If either raster is totally empty, return NULL
+    if ( ! (terra::global(VI, "anynotNA") &
+            terra::global(STR, "anynotNA") ) )  {
+      return(NULL)
+    }
+
+    # Now get pixel values from both
+    # keep NA's so that number of rows in STR and VI stay synchronized
+    STR_1_df <- terra::as.data.frame(STR, xy=TRUE, na.rm = FALSE)
+    names(STR_1_df) <- c("x", "y", "STR")
+
     VI_1_df <- terra::as.data.frame(VI, xy=TRUE, na.rm = FALSE)
     names(VI_1_df) <- c("x", "y", "VI")
 
@@ -106,6 +117,10 @@ optram_ndvi_str <- function(STR_list, VI_list,
 
     # Remove rows with NA in VI or STR columns
     df_1 <- df_1[stats::complete.cases(df_1[3:4]),]
+    # Make sure some rows are left
+    if (nrow(df_1) == 0) {
+      return(NULL)
+    }
 
     # Now make sure we are below the max_tbl_size
     max_size_1 <- max_tbl_size / length(STR_list)

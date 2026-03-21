@@ -38,6 +38,8 @@ the number of data points can overrun the computation resources.
 This parameter sets a total size of data.frame from the \code{max_tbl_size}
 parameter, together with the number of image time slots in the time range.
 
+All rows in the data.frame where either NDVI or STR are NA are removed.
+
 In some cases (i.e. water surfaces) NDVI can have values
 below zero. These pixels can be removed from the trapezoid
 by setting \code{rm.low.vi}
