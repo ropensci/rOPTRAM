@@ -57,3 +57,16 @@ test_that("Check that max_tbl_size works", {
   full_df <- optram_ndvi_str(STR_list, VI_list, output_dir = output_dir, aoi)
   expect_lte(nrow(full_df), getOption("optram.max_tbl_size"))
 })
+
+test_that("Check that empty NDVI raster returns NULL", {
+  VI_list <- list.files(system.file("extdata", "NDVI1", package = "rOPTRAM"),
+                        full.names = TRUE)
+  STR_list <- list.files(system.file("extdata", "STR1", package = "rOPTRAM"),
+                         full.names = TRUE)
+  output_dir <- tempdir()
+  aoi <- sf::st_read(system.file("extdata",
+                                 "lachish.gpkg", package = "rOPTRAM"))
+  expect_message(
+    optram_ndvi_str(STR_list, VI_list, output_dir = output_dir, aoi),
+    "Skipping date")
+})

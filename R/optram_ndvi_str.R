@@ -90,6 +90,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # If either raster is totally empty, return NULL
     if ( ! (terra::global(VI, "anynotNA") &
             terra::global(STR, "anynotNA") ) )  {
+      message("Skipping date: ", unique_str, " due to empty raster")
       return(NULL)
     }
 
@@ -118,7 +119,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
     # Remove rows with NA in VI or STR columns
     df_1 <- df_1[stats::complete.cases(df_1[3:4]),]
     # Make sure some rows are left
-    if (nrow(df_1) == 0) {
+    if (is.null(nrow(df_1))) {
       return(NULL)
     }
 

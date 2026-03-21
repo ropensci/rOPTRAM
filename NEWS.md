@@ -1,4 +1,19 @@
+rOPTRAM 0.3.3 (2026-03-21)
+=========================
 
+### New Features
+
+    * Bumps to version 0.3.3.
+
+### BUG FIXES
+
+    * A test was added to identify and remove NDVI or STR rasters
+    that are totally empty. This can happen, for example, in a region that is
+    covered by snow on some image dates. The Copernicus SCM masking will block out
+    all pixels, leaving the whole raster with values of NA. This case is now
+    accounted for, and those image dates are skipped.
+    
+    
 rOPTRAM 0.3.2 (2026-02-14)
 =========================
 
