@@ -129,15 +129,18 @@ acquire_scihub <- function(
     return(NULL)
   }
 
-  str_script <- paste0("STR", as.character(SWIR_band), ".js")
   if (use_scm_mask) {
+    boa_script <- "BOA_masked.js"
     vi_script <- paste0(veg_index, "_masked.js")
+    str_script <- paste0("STR", as.character(SWIR_band), "_masked.js")
   } else {
+    boa_script <- "BOA.js"
     vi_script <- paste0(veg_index, ".js")
+    str_script <- paste0("STR", as.character(SWIR_band), ".js")
   }
 
   # Retrieve the necessary scripts
-  script_file_boa <- system.file("scripts", "BOA.js", package = "rOPTRAM")
+  script_file_boa <- system.file("scripts", boa_script, package = "rOPTRAM")
   script_file_str <- system.file("scripts", str_script, package = "rOPTRAM")
   script_file_vi <- system.file("scripts", vi_script, package = "rOPTRAM")
 
