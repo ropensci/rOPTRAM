@@ -1,5 +1,5 @@
 
-test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
+test_that("optram_ndvi_str() creates output_dir, saves DF file, and returns data.frame", {
   VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
                         full.names = TRUE)
   STR_list <- list.files(system.file("extdata", "STR", package = "rOPTRAM"),
@@ -12,13 +12,21 @@ test_that("optram_ndvi_str() creates output_dir and returns data.frame", {
   expect_equal(ncol(res), 7)
   # With Feature_ID, another column is created,
   # but only if optram_colors = "feature"
-  optram_options("plot_colors", "feature")
+  optram_options("plot_colors", "feature", show_opts = FALSE)
+  optram_options("vi_str_format", "rds", show_opts = FALSE)
   aoi <- sf::st_read(system.file("extdata",
                                  "lachish.gpkg", package = "rOPTRAM"))
   res <- optram_ndvi_str(STR_list, VI_list, aoi=aoi, output_dir = output_dir)
   expect_true(inherits(res, "data.frame"))
   expect_gte(ncol(res), 7)
   expect_true(dir.exists(output_dir))
+  df_file <- file.path(output_dir, "VI_STR_data.rds")
+  expect_true(file.exists(df_file))
+
+  optram_options("vi_str_format", "parquet", show_opts = FALSE)
+  res <- optram_ndvi_str(STR_list, VI_list, aoi=aoi, output_dir = output_dir)
+  df_file <- file.path(output_dir, "VI_STR_data.parquet")
+  expect_true(file.exists(df_file))
 })
 
 test_that("Check that rm.low.vi and rm.hi.str works", {

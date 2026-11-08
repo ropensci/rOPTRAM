@@ -56,6 +56,7 @@
 #'  resolution   \tab  10 \tab Choose resolution of downloaded Sentinel images, 10m, 20m or 60m \cr
 #'  area_cover   \tab  99.0 \tab Use only images that cover at least area_cover % of AOI \cr
 #'  porosity \tab 0.4 \tab Soil porosity value applied to OPTRAM output to get VWC \cr
+#'  vi_str_format  \tab  "rds"  \tab Choose format for saving VI_STR_data table, either "rds" or "parquet"
 #'}
 optram_options <- function(opt_name = NULL, opt_value=NULL,
                            show_opts = TRUE) {
@@ -91,7 +92,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
                  "rm.low.vi", "rm.hi.str", "plot_colors", "feature_col",
                  "edge_points", "only_vi_str", "tileid", "scm_mask",
                  "overwrite", "save_img_list", "resolution", "area_cover",
-                 "porosity")
+                 "porosity", "vi_str_format")
   if (opt_name %in% opt_names) {
     # Setup conditions for each option name
     cond_func <- switch(opt_name,
@@ -163,6 +164,9 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
               "porosity" = function(opt_value) {
                 return((is.numeric(opt_value) & opt_value >0 & opt_value < 1.0) |
                          is.na(opt_value))
+              },
+              "vi_str_format" = function(opt_value) {
+                return((is.character(opt_value) & opt_value %in% c("rds", "parquet")))
               }
       )
     msg <- ifelse(cond_func(opt_value),

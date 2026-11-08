@@ -58,6 +58,7 @@ save_img_list   \tab  FALSE \tab Set to TRUE to save list of available images to
 resolution   \tab  10 \tab Choose resolution of downloaded Sentinel images, 10m, 20m or 60m \cr
 area_cover   \tab  99.0 \tab Use only images that cover at least area_cover \% of AOI \cr
 porosity \tab 0.4 \tab Soil porosity value applied to OPTRAM output to get VWC \cr
+vi_str_format  \tab  "rds"  \tab Choose format for saving VI_STR_data table, either "rds" or "parquet"
 }
 }
 \examples{

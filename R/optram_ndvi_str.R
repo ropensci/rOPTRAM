@@ -33,6 +33,12 @@
 #' The vegetation index column is named "NDVI" even though it can represent
 #' other vegetation indices, such as SAVI, or MSAVI.
 #'
+#' The data.frame of VI_STR values is saved in \code{output_dir}.
+#' The format of this database file is user configurable by choosing one of two options,
+#' either RDS (the default) or parquet for further analysis in a python workflow.
+#' The format is set using \code{optram_options()} i.e.:
+#' \code{optram_options("vi_str_format", "parquet")
+#'
 #' @examples
 #' VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
 #'         pattern = ".tif$", full.names = TRUE)
@@ -48,7 +54,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
 
   # Avoid "no visible binding for global variable" NOTE
   date_str <- STR <- STR_1_df <- STR_df_file <- NULL
-  ID_df <- VI_df_list <- VI_df_1 <- NULL
+  ID_df <- VI_df_list <- VI_df_1 <- VI_STR_format <- NULL
 
   if (length(STR_list) == 0 || length(VI_list) == 0) {
     message("No raster files in directories")
@@ -169,8 +175,22 @@ optram_ndvi_str <- function(STR_list, VI_list,
   # and Remove those rows
   full_df <- full_df[stats::complete.cases(full_df[3:4]),]
 
-  df_file <- file.path(output_dir, "VI_STR_data.rds")
-  saveRDS(full_df, df_file)
+  # Save data.frame to disk
+  vi_str_format <- getOption("optram.vi_str_format")
+  if(vi_str_format == "rds") {
+     df_file <- file.path(output_dir, "VI_STR_data.rds")
+     saveRDS(full_df, df_file)
+  } else if (vi_str_format == "parquet" &
+             requireNamespace("nanoparquet", quietly == TRUE) {
+     df_file <- file.path(output_dir, "VI_STR_data.parquet")
+     nanoparquet::parquet_options(write_arrow_metadata = TRUE,
+                                  use_arrow_metadata = TRUE)
+     nanoparquet.write_parquet(x = full_df, file = df_file,
+                               compression = "gzip")
+  } else {
+      message("The nanoparquet package is required for:" vi_str_format, "\n Please install it and rerun the optram_ndvi_str() function.")
+      return(NULL)
+  }
   message("Saved: ", nrow(full_df), " rows of VI-STR data to: ", df_file)
 
   return(full_df)

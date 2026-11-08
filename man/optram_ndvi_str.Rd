@@ -47,6 +47,12 @@ option to TRUE.
 
 The vegetation index column is named "NDVI" even though it can represent
 other vegetation indices, such as SAVI, or MSAVI.
+
+The data.frame of VI_STR values is saved in \code{output_dir}.
+The format of this database file is user configurable by choosing one of two options,
+either RDS (the default) or parquet for further analysis in a python workflow.
+The format is set using \code{optram_options()} i.e.:
+\code{optram_options("vi_str_format", "parquet")
 }
 \examples{
 VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
