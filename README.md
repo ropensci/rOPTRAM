@@ -116,7 +116,8 @@ transformed reflectance.
 #### optram_ndvi_str()
 
 Collects all pixel values from both the vegetation index and STR
-rasters, for all acquisition dates, and saves into a data.frame
+rasters, for all acquisition dates, and saves into a data.frame.
+The data.frame is saved to the user-defined output directory for further analysis. The output format can be either `RDS` (the default) or `parquet`. Users who intend to run further analysis is python can set the output format to parquet using the `optram_options()` function, thus enabling smooth sharing of the table of NDVI and STR values.
 
 Returns: the full data.frame
 
