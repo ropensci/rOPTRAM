@@ -69,7 +69,7 @@ optram_options <- function(opt_name = NULL, opt_value=NULL,
         short_name <- sub(pattern = "optram.",
                           replacement = "",
                           x = names(optram_opts)[i])
-        opt_1 <- paste(short_name, "=", optram_opts[i][[1]])
+        opt_1 <- paste(short_name, ",", optram_opts[i][[1]])
         print(opt_1)}
   }
 

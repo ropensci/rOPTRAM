@@ -11,7 +11,7 @@ optram_ndvi_str(STR_list, VI_list, output_dir = tempdir(), aoi = NULL)
 
 \item{VI_list, }{list of paths to NDVI raster files}
 
-\item{output_dir, }{string, path to save data.frames (in RDS format)}
+\item{output_dir, }{string, path to save data.frames (in RDS or parquet format)}
 
 \item{aoi, }{{sf} POLYGON or MULTIPOLYGON,
 must have a numeric column named "ID" for coloring trapezoid points by features
@@ -52,7 +52,7 @@ The data.frame of VI_STR values is saved in \code{output_dir}.
 The format of this database file is user configurable by choosing one of two options,
 either RDS (the default) or parquet for further analysis in a python workflow.
 The format is set using \code{optram_options()} i.e.:
-\code{optram_options("vi_str_format", "parquet")
+\code{optram_options("vi_str_format", "parquet")}
 }
 \examples{
 VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),

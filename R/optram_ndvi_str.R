@@ -5,7 +5,7 @@
 #' (as input for the \code{\link[rOPTRAM]{optram_wetdry_coefficients}} function)
 #' @param STR_list, list of paths to STR raster files
 #' @param VI_list, list of paths to NDVI raster files
-#' @param output_dir, string, path to save data.frames (in RDS format)
+#' @param output_dir, string, path to save data.frames (in RDS or parquet format)
 #' @param aoi, {sf} POLYGON or MULTIPOLYGON,
 #'  must have a numeric column named "ID" for coloring trapezoid points by features
 #'  Default NULL, (no coloring)
@@ -37,7 +37,7 @@
 #' The format of this database file is user configurable by choosing one of two options,
 #' either RDS (the default) or parquet for further analysis in a python workflow.
 #' The format is set using \code{optram_options()} i.e.:
-#' \code{optram_options("vi_str_format", "parquet")
+#' \code{optram_options("vi_str_format", "parquet")}
 #'
 #' @examples
 #' VI_list <- list.files(system.file("extdata", "NDVI", package = "rOPTRAM"),
@@ -54,7 +54,7 @@ optram_ndvi_str <- function(STR_list, VI_list,
 
   # Avoid "no visible binding for global variable" NOTE
   date_str <- STR <- STR_1_df <- STR_df_file <- NULL
-  ID_df <- VI_df_list <- VI_df_1 <- VI_STR_format <- NULL
+  ID_df <- VI_df_list <- VI_df_1 <- vi_str_format <- NULL
 
   if (length(STR_list) == 0 || length(VI_list) == 0) {
     message("No raster files in directories")
@@ -181,14 +181,14 @@ optram_ndvi_str <- function(STR_list, VI_list,
      df_file <- file.path(output_dir, "VI_STR_data.rds")
      saveRDS(full_df, df_file)
   } else if (vi_str_format == "parquet" &
-             requireNamespace("nanoparquet", quietly == TRUE) {
+             requireNamespace("nanoparquet", quietly = TRUE)) {
      df_file <- file.path(output_dir, "VI_STR_data.parquet")
      nanoparquet::parquet_options(write_arrow_metadata = TRUE,
                                   use_arrow_metadata = TRUE)
-     nanoparquet.write_parquet(x = full_df, file = df_file,
-                               compression = "gzip")
+     nanoparquet::write_parquet(x = full_df, file = df_file,
+                                compression = "gzip")
   } else {
-      message("The nanoparquet package is required for:" vi_str_format, "\n Please install it and rerun the optram_ndvi_str() function.")
+      message("The nanoparquet package is required for:", vi_str_format, "\n Please install it and rerun the optram_ndvi_str() function.")
       return(NULL)
   }
   message("Saved: ", nrow(full_df), " rows of VI-STR data to: ", df_file)

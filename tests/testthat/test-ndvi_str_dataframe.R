@@ -23,10 +23,12 @@ test_that("optram_ndvi_str() creates output_dir, saves DF file, and returns data
   df_file <- file.path(output_dir, "VI_STR_data.rds")
   expect_true(file.exists(df_file))
 
-  optram_options("vi_str_format", "parquet", show_opts = FALSE)
-  res <- optram_ndvi_str(STR_list, VI_list, aoi=aoi, output_dir = output_dir)
-  df_file <- file.path(output_dir, "VI_STR_data.parquet")
-  expect_true(file.exists(df_file))
+  if (requireNamespace("nanoparquet", quietly = TRUE)) {
+      optram_options("vi_str_format", "parquet", show_opts = FALSE)
+      res <- optram_ndvi_str(STR_list, VI_list, aoi=aoi, output_dir = output_dir)
+      df_file <- file.path(output_dir, "VI_STR_data.parquet")
+      expect_true(file.exists(df_file))
+  }
 })
 
 test_that("Check that rm.low.vi and rm.hi.str works", {

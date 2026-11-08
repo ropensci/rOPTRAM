@@ -44,7 +44,7 @@ Suggests:
     openeo,
     CDSE,
     jsonlite,
-    qpdf
+    qpdf,
     nanoparquet
 Config/testthat/edition: 3
 VignetteBuilder: knitr
