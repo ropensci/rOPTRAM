@@ -1,3 +1,11 @@
+rOPTRAM 0.3.3 (2026-11-09)
+=========================
+
+### New Features
+
+    * Adds option to save VI_STR data.frame as parquet file. This enables smooth interoperability with python workflows.
+    
+    
 rOPTRAM 0.3.3 (2026-03-21)
 =========================
 
