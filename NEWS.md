@@ -1,10 +1,11 @@
-rOPTRAM 0.3.3 (2026-11-09)
+rOPTRAM 0.3.4 (2026-11-09)
 =========================
 
 ### New Features
 
     * Adds option to save VI_STR data.frame as parquet file. This enables smooth interoperability with python workflows.
-    
+    * Adds functions to plot monthly transects for one season/year, and to prepare the extents of these transects over a multiyear period, as an indication of drought.
+    * Bumps to version 0.3.4
     
 rOPTRAM 0.3.3 (2026-03-21)
 =========================
