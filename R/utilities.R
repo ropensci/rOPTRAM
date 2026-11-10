@@ -253,7 +253,7 @@ check_date_string <- function(from_string, to_string) {
 #' @return vi_rast, SpatRaster of vegetation index
 #' @examples
 #' img_stk <- terra::rast(system.file("extdata", "BOA",
-#'          "BOA_2023-01-20_T36RXV.tif", package = "rOPTRAM"))
+#'          "BOA_2022-12-11_T36RXV.tif", package = "rOPTRAM"))
 #' vi <- calculate_vi(img_stk)
 
 calculate_vi <- function(img_stk,
