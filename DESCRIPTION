@@ -33,7 +33,8 @@ Imports:
     sf,
     stats,
     terra (>= 1.8.21),
-    utils
+    utils,
+    lubridate
 Suggests:
     geojsonio,
     lwgeom,

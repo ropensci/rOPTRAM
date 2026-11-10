@@ -4,7 +4,7 @@
 \alias{plot_transect}
 \title{Prepare plot of transect line}
 \usage{
-plot_transect(from_date, to_date, output_dir)
+plot_transect(from_date, to_date, output_dir, save = TRUE)
 }
 \arguments{
 \item{from_date, }{string, Date for start of season, formatted as 'YYYY-MM-DD'.}
@@ -14,6 +14,8 @@ plot_transect(from_date, to_date, output_dir)
 \item{output_dir, }{string, Full path to rOPTRAM Output_dir,
 which contains subdirectories of STR and VI image files.
 These directories are prepared and populated in advance by \code{optram_acquire_s2()}}
+
+\item{save, }{boolean, If TRUE (default) then save plot to output_dir.}
 }
 \value{
 ggplot2 plot
