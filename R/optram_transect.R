@@ -1,31 +1,29 @@
 #' @title Prepare plot of transect line
 #' @description Calculates monthly median of both NDVI and STR,
-#' and plots these median points.
-#' Typically over one season/year.
-#' A bounding box enclosing all monthly points is added to the plot.
+#' and plots these median points typically over one season/year.
 #'
 #' @param from_date, string, Date for start of season, formatted as 'YYYY-MM-DD'.
 #' @param to_date, string, Date for end of season.
-#' @param output_dir, string, Full path to rOPTRAM Output_dir,
-#' which contains subdirectories of STR and VI image files.
-#' These directories are prepared and populated in advance by `optram_acquire_s2()`
-#' @param save, boolean, If TRUE (default) then save plot to output_dir.
-#' @return ggplot2 plot
+#' @param output_dir, string, Full path to rOPTRAM Output_dir, which contains subdirectories of STR and VI image files.
+#' @return data.frame, monthly values of median NDVI, STR with month and year
 #' @export
 #'
 #' @examples
 #' Output <- file.path(system.file(package = "rOPTRAM"), "extdata")
-#' pl = plot_transect(from_date = "2022-11-01", to_date = "2023-10-01", output_dir = Output)
-#' pl
+#' df <- prepare_transect(from_date = "2022-11-01",
+#' to_date = "2023-10-01", output_dir = Output)
+#' (colnames(df))
+#' print(paste("Returned: ", nrow(df), " rows"))
 #'
 #' @note
 #' This function relies on previously downloaded images for preparing an `rOPTRAM` model.
 #' This would normally be done with the `optram_acquire_s2()` function,
-#' or the wrapper function `optram()`. The downloaded VI and STR images are stored in: `output_dir/NDVI` and `output_dir/STR`. The transect plot is saved as a png file into `output_dir` and the ggplot2 object is returned for additional styling, etc.
-#'
-plot_transect <- function(from_date, to_date, output_dir, save = TRUE) {
+#' or the wrapper function `optram()`. The downloaded VI and STR images would have been stored in: `output_dir/NDVI` and `output_dir/STR`.
+#' The returned data.frame contains a column 'Year' which is the year of `to_date`. So if the time period between `from_date` and `to_date` spans a meterological season, then the Year column shows the end of the time period.
+#' 
+prepare_transect <- function(from_date, to_date, output_dir) {
   # Prepare data.frame of all raster images between chosen dates
-  Month_name <- pt.x <- pt.y <- y <- NULL
+  Month_name <- NULL
   all_rasts <- list()
   all_medians <- list()
   index_names <- c("x", "y")
@@ -90,11 +88,38 @@ plot_transect <- function(from_date, to_date, output_dir, save = TRUE) {
     df <- do.call(cbind, all_medians)
     # Remove second 'Month' column
     df <- df[,-c(4,6)]
-    df <- df[c("Month", "Month_name", 'x', 'y')]
+    df['Year'] <- lubridate::year(lubridate::as_date(to_date)) 
+    df <- df[c("Month", "Month_name", 'x', 'y', 'Year')]
   }
+  return(df)
+}
 
-  # Now plot
-  df$Month = factor(df$Month)
+
+
+#' @title Plot of transect line
+#' @description Plots lines between points of median NDVI and STR typically over one season/year. A bounding box enclosing all monthly points is added to the plot.
+#'
+#' @param df, data.frame, Output from the `prepare_transect()` function.
+#' @param from_date, string, Date for start of season, formatted as 'YYYY-MM-DD'.
+#' @param to_date, string, Date for end of season.
+#' @param output_dir, string, Full path to rOPTRAM Output_dir, which contains subdirectories of STR and VI image files.
+#' These directories are prepared and populated in advance by `optram_acquire_s2()`
+#' @param save, boolean, If TRUE (default) then save plot to output_dir.
+#' @return ggplot2 plot
+#' @export
+#'
+#' @examples
+#' Output <- file.path(system.file(package = "rOPTRAM"), "extdata")
+#' fr <- "2022-11-01"
+#' to <- "2023-10-01"
+#' df <- prepare_transect(fr,to, output_dir = Output)
+#' pl = plot_transect(df, fr, to, output_dir = temp_dir(), save = FALSE)
+#'
+#' @note
+#' This function relies on previously run `prepare_transects()` to prepare data.frame of median values of NDVI and STR. The transect plot is saved as a png file into `output_dir` and the ggplot2 object is returned for additional styling, etc.
+#'
+plot_transect <- function(df, from_date, to_date, output_dir, save = TRUE) {
+  Month_name <- pt.x <- pt.y <- x <- y <- NULL
   df$Month_name = factor(df$Month_name, levels = (month.abb))
 
   # Prepare bounding box
@@ -122,6 +147,57 @@ plot_transect <- function(from_date, to_date, output_dir, save = TRUE) {
   if (save) {
     ggsave(plot = pl, filename = file.path(
       output_dir, paste0("transect_", from_date, "_", to_date, ".png")))
+  } else {
+      print(pl)
   }
   return(pl)
+}
+
+
+#' @title Prepare transects for multiyear time span
+#' @description Compiles sizes (diagonal, area) of transects
+#' from monthly median of both NDVI and STR. Sizes are saved to csv file.
+#' @param from_date, string, Date for start of time span, formatted as 'YYYY-MM-DD'.
+#' @param to_date, string, Date for end of season.
+#' @param output_dir, string, Full path to rOPTRAM Output_dir,
+#' which contains subdirectories of STR and VI image files. These directories were prepared and populated in advance by `optram_acquire_s2()`
+#' @param show, boolean, if TRUE (default) then print the table of sizes.
+#' @return transect_sizes, data.frame containing the sizes of transects for each year.
+#' @export
+#'
+#' @examples
+#' Output <- file.path(system.file(package = "rOPTRAM"), "extdata")
+#' tr = compile_transect_sizes(from_date = "2022-11-01", to_date = "2023-10-01", output_dir = Output)
+#'
+#' @note
+#' This function relies on previously downloaded images for preparing an `rOPTRAM` model.
+#' This would normally be done with the `optram_acquire_s2()` function,
+#' or the wrapper function `optram()`. The downloaded VI and STR images are stored in: `output_dir/NDVI` and `output_dir/STR`.  The saved csv file contains three measures for each transect. A bounding box is derived which encloses all yearly transect points, then three measures are returned: diagonal length, area of bounding box, and perimeter length.
+#' 
+compile_transect_sizes <- function(from_date, to_date, output_dir, show = TRUE) {
+    from_yrs <- seq.Date(from_date, to_date, by = '1 year')
+    tr_list <- lapply(from_yrs, function(fr) {
+        to <- fr + lubridate::years(1)
+        yr <- lubridate::year(to)
+        df <- prepare_transect(fr, to, output_dir)
+        # Prepare bounding box corners
+        llx = min(df$x)
+        lly = min(df$y)
+        urx = max(df$x)
+        ury = max(df$y)
+
+        diag <- sqrt((urx - llx)^2 + (ury - lly)^2)
+        area <- (urx - llx) * (ury - lly)
+        perim <- 2 * (urx - llx) + 2 * (ury - lly)
+        tr_1 <- data.frame("Year" = yr, "Diagonal" = diag,
+                           "Area" = area, "Perim" = perim)
+        return(tr_1)
+    })
+    transect_sizes <- do.call(rbind, tr_list)
+    tr_file <- paste0("transect_sizes_", from_date, "_", to_date, ".csv")
+    utils::write.csv(transect_sizes, file.path(output_dir, tr_file))
+    if (show) {
+        print(paste("Transect sizes saved to: ", file.path(output_dir, tr_file)))
+        }
+    return(transect_sizes)
 }

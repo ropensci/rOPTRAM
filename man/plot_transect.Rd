@@ -2,17 +2,18 @@
 % Please edit documentation in R/optram_transect.R
 \name{plot_transect}
 \alias{plot_transect}
-\title{Prepare plot of transect line}
+\title{Plot of transect line}
 \usage{
-plot_transect(from_date, to_date, output_dir, save = TRUE)
+plot_transect(df, from_date, to_date, output_dir, save = TRUE)
 }
 \arguments{
+\item{df, }{data.frame, Output from the \code{prepare_transect()} function.}
+
 \item{from_date, }{string, Date for start of season, formatted as 'YYYY-MM-DD'.}
 
 \item{to_date, }{string, Date for end of season.}
 
-\item{output_dir, }{string, Full path to rOPTRAM Output_dir,
-which contains subdirectories of STR and VI image files.
+\item{output_dir, }{string, Full path to rOPTRAM Output_dir, which contains subdirectories of STR and VI image files.
 These directories are prepared and populated in advance by \code{optram_acquire_s2()}}
 
 \item{save, }{boolean, If TRUE (default) then save plot to output_dir.}
@@ -21,19 +22,16 @@ These directories are prepared and populated in advance by \code{optram_acquire_
 ggplot2 plot
 }
 \description{
-Calculates monthly median of both NDVI and STR,
-and plots these median points.
-Typically over one season/year.
-A bounding box enclosing all monthly points is added to the plot.
+Plots lines between points of median NDVI and STR typically over one season/year. A bounding box enclosing all monthly points is added to the plot.
 }
 \note{
-This function relies on previously downloaded images for preparing an \code{rOPTRAM} model.
-This would normally be done with the \code{optram_acquire_s2()} function,
-or the wrapper function \code{optram()}. The downloaded VI and STR images are stored in: \code{output_dir/NDVI} and \code{output_dir/STR}. The transect plot is saved as a png file into \code{output_dir} and the ggplot2 object is returned for additional styling, etc.
+This function relies on previously run \code{prepare_transects()} to prepare data.frame of median values of NDVI and STR. The transect plot is saved as a png file into \code{output_dir} and the ggplot2 object is returned for additional styling, etc.
 }
 \examples{
 Output <- file.path(system.file(package = "rOPTRAM"), "extdata")
-pl = plot_transect(from_date = "2022-11-01", to_date = "2023-10-01", output_dir = Output)
-pl
+fr <- "2022-11-01"
+to <- "2023-10-01"
+df <- prepare_transect(fr,to, output_dir = Output)
+pl = plot_transect(df, fr, to, output_dir = temp_dir(), save = FALSE)
 
 }
