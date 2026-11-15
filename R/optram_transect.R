@@ -1,6 +1,5 @@
-#' @title Prepare plot of transect line
-#' @description Calculates monthly median of both NDVI and STR,
-#' and plots these median points typically over one season/year.
+#' @title Prepare data.frame for plot of transect line
+#' @description Calculates monthly median of both NDVI and STR, over one season
 #'
 #' @param from_date, string, Date for start of season, formatted as 'YYYY-MM-DD'.
 #' @param to_date, string, Date for end of season.
@@ -90,8 +89,8 @@ prepare_transect <- function(from_date, to_date, output_dir) {
     df <- df[,-c(4,6)]
     df['Year'] <- lubridate::year(lubridate::as_date(to_date)) 
     df <- df[c("Month", "Month_name", 'x', 'y', 'Year')]
+    return(df)    
   }
-  return(df)
 }
 
 

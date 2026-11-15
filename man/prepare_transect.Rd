@@ -2,7 +2,7 @@
 % Please edit documentation in R/optram_transect.R
 \name{prepare_transect}
 \alias{prepare_transect}
-\title{Prepare plot of transect line}
+\title{Prepare data.frame for plot of transect line}
 \usage{
 prepare_transect(from_date, to_date, output_dir)
 }
@@ -17,8 +17,7 @@ prepare_transect(from_date, to_date, output_dir)
 data.frame, monthly values of median NDVI, STR with month and year
 }
 \description{
-Calculates monthly median of both NDVI and STR,
-and plots these median points typically over one season/year.
+Calculates monthly median of both NDVI and STR, over one season
 }
 \note{
 This function relies on previously downloaded images for preparing an \code{rOPTRAM} model.
