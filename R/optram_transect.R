@@ -174,7 +174,9 @@ plot_transect <- function(df, from_date, to_date, output_dir, save = TRUE) {
 #' or the wrapper function `optram()`. The downloaded VI and STR images are stored in: `output_dir/NDVI` and `output_dir/STR`.  The saved csv file contains three measures for each transect. A bounding box is derived which encloses all yearly transect points, then three measures are returned: diagonal length, area of bounding box, and perimeter length.
 #' 
 compile_transect_sizes <- function(from_date, to_date, output_dir, show = TRUE) {
-    from_yrs <- seq.Date(from_date, to_date, by = '1 year')
+    fr_dt <- lubridate::as_date(from_date)
+    to_dt <- lubridate::as_date(to_date)
+    from_yrs <- seq.Date(fr_dt, to_dt, by = '1 year')
     tr_list <- lapply(from_yrs, function(fr) {
         to <- fr + lubridate::years(1)
         yr <- lubridate::year(to)
